@@ -319,7 +319,7 @@ def main():
     parser.add_argument("--emotion", help="情绪：挑逗、忧郁、神秘、开心、高冷、温柔、自信、俏皮")
     parser.add_argument("--makeup", help="妆容：韩妆、欧美妆、烟熏妆、玻璃妆等")
     parser.add_argument("--art-style", help="艺术风格：王家卫、韩剧、电影感、ins风等")
-    parser.add_argument("--appid", help="公众号 AppID（默认：善顾的路）")
+    parser.add_argument("--appid", help="公众号 AppID（默认：三更愿）")
     parser.add_argument("--title", "-t", help="文章标题（自动生成默认）")
     parser.add_argument("--caption", help="一句话介绍（自动生成默认）")
     parser.add_argument("--test", action="store_true", help="测试模式：只生成不发布")

@@ -59,7 +59,7 @@ ADVANCED_SCENES = {
     "秋日森林": "autumn forest, falling golden leaves, warm sunlight through trees, nostalgic atmosphere, rich warm tones",
 
     # 城市场景
-    " rooftop 夜景": "city rooftop at night, skyline lights, bokeh city lights, urban atmosphere, dark sky with stars",
+    "rooftop夜景": "city rooftop at night, skyline lights, bokeh city lights, urban atmosphere, dark sky with stars",
     "地铁": "subway station, modern interior, fluorescent lighting, urban mood, cinematic depth",
     "咖啡厅": "vintage coffee shop, warm interior lighting, cozy atmosphere, blurred background patrons",
     "豪华酒店": "luxury hotel room, elegant interior, warm ambient light, sophisticated atmosphere",
