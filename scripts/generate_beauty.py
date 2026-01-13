@@ -417,7 +417,7 @@ def generate_ultimate_series_v4(count: int = 3, params: dict = None) -> dict:
         },
         {
             "name": "全身魅力",
-            "pose": "full body shot S-curve silhouette confident smile sunlight rim light dress flowing dynamic beauty feminine charm"
+            "pose": "full body shot elegant pose hands visible natural gesture confident smile sunlight rim light dress flowing dynamic beauty feminine charm complete fingers detailed"
         }
     ]
 
