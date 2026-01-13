@@ -1,0 +1,54 @@
+{
+  "api": {
+    "endpoint": "https://ark.cn-beijing.volces.com/api/v3/images/generations",
+    "model": "doubao-seedream-4-5-251128",
+    "api_key_env": "DOUBAO_API_KEY",
+    "default_api_key": "a26f05b1-4025-4d66-a43d-ea3a64b267cf"
+  },
+  "default_params": {
+    "size": "2k",
+    "response_format": "url",
+    "watermark": false,
+    "stream": false
+  },
+  "retry": {
+    "max_attempts": 3,
+    "delay_seconds": 3
+  },
+  "supported_sizes": [
+    "1k",
+    "2k",
+    "4k",
+    "1024x1024",
+    "512x512"
+  ],
+  "quality_enhancers": {
+    "common": [
+      "8K分辨率",
+      "电影级画质",
+      "细腻肤质",
+      "真实光影",
+      "专业色彩调校"
+    ],
+    "portrait": [
+      "眼神光",
+      "自然妆容",
+      "浅景深"
+    ],
+    "street": [
+      "生动抓拍感",
+      "城市氛围",
+      "真实质感"
+    ],
+    "fashion": [
+      "视觉冲击力",
+      "锐利对焦",
+      "高级感"
+    ],
+    "emotional": [
+      "眼神故事感",
+      "氛围营造",
+      "情感张力"
+    ]
+  }
+}
