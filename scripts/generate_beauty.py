@@ -29,7 +29,13 @@ LOGS_DIR = SKILL_DIR / "logs"
 # API 配置
 API_ENDPOINT = "https://ark.cn-beijing.volces.com/api/v3/images/generations"
 API_MODEL = "doubao-seedream-4-5-251128"
-API_KEY = os.environ.get("DOUBAO_API_KEY", "a26f05b1-4025-4d66-a43d-ea3a64b267cf")
+API_KEY = os.environ.get("DOUBAO_API_KEY")
+
+# 检查 API Key
+if not API_KEY:
+    print("错误: 未设置 DOUBAO_API_KEY 环境变量")
+    print("请运行: export DOUBAO_API_KEY='your-api-key'")
+    sys.exit(1)
 
 # 确保目录存在
 LOGS_DIR.mkdir(parents=True, exist_ok=True)

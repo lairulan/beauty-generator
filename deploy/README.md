@@ -119,8 +119,8 @@ tail -f ~/beauty-generator/logs/cron_*.log
 
 确保 `~/.bashrc` 中有：
 ```bash
-export DOUBAO_API_KEY="a26f05b1-4025-4d66-a43d-ea3a64b267cf"
-export WECHAT_API_KEY="xhs_4abcfb085d38aeb676ba5eb1ebc205c0"
+export DOUBAO_API_KEY="your-doubao-api-key"
+export WECHAT_API_KEY="your-wechat-api-key"
 ```
 
 重新加载：

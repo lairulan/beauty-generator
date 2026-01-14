@@ -83,10 +83,10 @@ beauty-generator/
 
 ```bash
 # 豆包图像生成 API
-export DOUBAO_API_KEY="a26f05b1-4025-4d66-a43d-ea3a64b267cf"
+export DOUBAO_API_KEY="your-doubao-api-key"
 
 # 微绿流量宝 API（公众号发布）
-export WECHAT_API_KEY="xhs_4abcfb085d38aeb676ba5eb1ebc205c0"
+export WECHAT_API_KEY="your-wechat-api-key"
 ```
 
 ---

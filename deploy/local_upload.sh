@@ -56,12 +56,17 @@ fi
 
 # 上传并设置环境变量
 echo "  🔑 配置环境变量..."
-ssh $SERVER_USER@$SERVER_IP "cat >> ~/.bashrc << 'EOF'
-
-# 美女生成器环境变量
-export DOUBAO_API_KEY=\"a26f05b1-4025-4d66-a43d-ea3a64b267cf\"
-export WECHAT_API_KEY=\"xhs_4abcfb085d38aeb676ba5eb1ebc205c0\"
-EOF"
+echo "  ⚠️  请手动在服务器上设置环境变量："
+echo "     export DOUBAO_API_KEY=\"your-doubao-api-key\""
+echo "     export WECHAT_API_KEY=\"your-wechat-api-key\""
+echo ""
+echo "  或者取消注释下面的代码并填入实际的 API keys"
+# ssh $SERVER_USER@$SERVER_IP "cat >> ~/.bashrc << 'EOF'
+#
+# # 美女生成器环境变量
+# export DOUBAO_API_KEY=\"your-doubao-api-key\"
+# export WECHAT_API_KEY=\"your-wechat-api-key\"
+# EOF"
 
 # 设置脚本权限
 ssh $SERVER_USER@$SERVER_IP "chmod +x ~/beauty-generator/scripts/*.py"

@@ -1,6 +1,6 @@
 ---
 name: beauty-generator
-description: This skill should be used when the user asks to "generate beauty", "生成美女", "画一个美女", "美女图片", "每日美女", "今日美女", "发布美女", "create beauty image", or wants to generate realistic photography style beauty images using Doubao Seedream model. Supports daily intelligent generation with scene/atmosphere control, emotion/makeup/art style customization, and WeChat official account publishing.
+description: Generate realistic beauty photography using Doubao Seedream model. Supports scene/atmosphere control, emotion/makeup/art style customization, and WeChat publishing. Use when user asks to generate beauty images ("生成美女", "每日美女", "发布美女").
 ---
 
 # Beauty Generator - 美女图像生成 V4.0.1 ULTIMATE
@@ -131,8 +131,8 @@ python3 ~/.claude/skills/beauty-generator/scripts/publish_wechat.py --test --cou
 
 环境变量：
 ```bash
-export DOUBAO_API_KEY="a26f05b1-4025-4d66-a43d-ea3a64b267cf"
-export WECHAT_API_KEY="xhs_4abcfb085d38aeb676ba5eb1ebc205c0"
+export DOUBAO_API_KEY="your-doubao-api-key"
+export WECHAT_API_KEY="your-wechat-api-key"
 ```
 
 ## 文件结构
@@ -197,32 +197,8 @@ launchctl load ~/Library/LaunchAgents/com.beautygenerator.autopublish.plist
 launchctl start com.beautygenerator.autopublish
 ```
 
-## 版本历史
+## 版本信息
 
-### v4.0.1 ULTIMATE (2026-01-13) 🆕
-- **移除本地存储**: 不再下载保存图片到本地
-- **简化输出**: 只返回在线图片URL，直接供使用
-- **GitHub Actions**: 支持完全免费的云端定时任务
+当前版本：**v4.0.1 ULTIMATE** (2026-01-13)
 
-### v4.0 ULTIMATE (2026-01-12)
-- **场景氛围系统**: 15+ 种高级场景选择
-- **情绪精准控制**: 8 种情绪表达
-- **妆容风格系统**: 8 种专业妆容
-- **艺术风格选择**: 8 种艺术风格
-- **光影大师级控制**: 8 种专业光影方案
-- **图生图技术**: 使用参考图确保人物一致性
-
-### v3.0 ULTRA (2026-01-12)
-- **Midjourney 风格 prompt**: 专业级 prompt 结构
-- **顶级人物描述**: 更精准的特征刻画
-- **增强质感描述**: 毛孔级细节
-
-### v2.0 (2026-01-12)
-- **图生图功能**: 使用参考图提升一致性
-- **增强 prompt**: 更性感、更具吸引力
-
-### v1.0 (2026-01-12)
-- 初始版本
-- 每日智能生成
-- 人物一致性系统
-- 每周主题轮换
+完整版本历史请查看 [CHANGELOG.md](CHANGELOG.md)
