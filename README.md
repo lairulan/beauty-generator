@@ -1,4 +1,4 @@
-# Beauty Generator V4.0 ULTIMATE
+# Beauty Generator V4.1.0
 
 > 专业写实摄影风格美女图像生成助手 + 精准控制系统 + 公众号自动发布
 
@@ -210,7 +210,7 @@ beauty-generator/
 
 ## 版本
 
-**V4.0 ULTIMATE** - 2026-01-12 (Final)
+**V4.1.0** - 2026-01-14
 
 ### 核心功能
 - ✅ 场景氛围系统: 15+ 种高级场景

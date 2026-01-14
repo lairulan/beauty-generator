@@ -3,7 +3,7 @@ name: beauty-generator
 description: Generate realistic beauty photography using Doubao Seedream model. Supports scene/atmosphere control, emotion/makeup/art style customization, and WeChat publishing. Use when user asks to generate beauty images ("生成美女", "每日美女", "发布美女").
 ---
 
-# Beauty Generator - 美女图像生成 V4.0.1 ULTIMATE
+# Beauty Generator - 美女图像生成 V4.1.0
 
 专业写实摄影风格美女图像生成助手，基于豆包 Seedream 图像生成模型。
 
