@@ -273,7 +273,7 @@ def generate_daily_images(count: int = 3, style: str = "") -> list:
     ]
 
     if style:
-        cmd.extend(["--theme", style])
+        cmd.extend(["--style", style])
 
     result = subprocess.run(
         cmd,
