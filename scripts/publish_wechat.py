@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 """
 公众号发布脚本
-将生成的美女图片发布到公众号草稿箱（小绿书形式）
+将生成的艺术写真发布到公众号草稿箱（小绿书形式）
+V2.0 - 使用 OpenRouter (Gemini) 生成高质量艺术写真
 """
 
 import argparse
@@ -17,7 +18,7 @@ from pathlib import Path
 SCRIPT_DIR = Path(__file__).parent.absolute()
 SKILL_DIR = SCRIPT_DIR.parent
 CONFIG_DIR = SKILL_DIR / "config"
-GENERATE_SCRIPT = SKILL_DIR / "scripts" / "generate.py"
+ARTISTIC_GENERATE_SCRIPT = SKILL_DIR / "scripts" / "generate_artistic.py"
 BEAUTY_GENERATE_SCRIPT = SKILL_DIR / "scripts" / "generate_beauty.py"
 
 # API 配置
@@ -258,42 +259,45 @@ def publish_to_wechat(
     return result
 
 
-def generate_daily_images(count: int = 3, style: str = "") -> list:
+def generate_daily_images(count: int = 1, style: str = "", use_artistic: bool = True) -> list:
     """
-    生成多张一致性人物图片
-    使用 generate_beauty.py 确保人物一致性和高质量
+    生成艺术写真图片
+    V2.0: 默认使用 OpenRouter (Gemini) 生成高质量艺术写真
     """
-    print(f"\n🎨 正在生成 {count} 张一致性人物图片...")
-    print("🎭 人物特征将保持一致，仅改变姿态和角度")
+    if use_artistic:
+        print(f"\n🎨 正在使用 OpenRouter (Gemini) 生成 {count} 张艺术写真...")
+        print("✨ 高质量真人摄影风格，更性感更吸引眼球")
 
-    # 调用美女生成脚本 V4.0
-    cmd = [
-        "python3", str(BEAUTY_GENERATE_SCRIPT),
-        "--count", str(count)
-    ]
+        cmd = [
+            "python3", str(ARTISTIC_GENERATE_SCRIPT),
+            "--count", str(count)
+        ]
+    else:
+        print(f"\n🎨 正在使用豆包生成 {count} 张美女图片...")
+        cmd = [
+            "python3", str(BEAUTY_GENERATE_SCRIPT),
+            "--count", str(count)
+        ]
 
-    if style:
-        cmd.extend(["--style", style])
+        if style:
+            cmd.extend(["--style", style])
 
     result = subprocess.run(
         cmd,
         capture_output=True,
         text=True,
-        timeout=300,  # 5分钟超时（3张图）
+        timeout=300,  # 5分钟超时
         env=os.environ
     )
 
     images = []
 
     # 解析输出，提取图片 URL
-    # generate_beauty.py 输出格式:
-    #   1. 极致特写
-    #      https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/...
     import re
     lines = result.stdout.split("\n")
     for line in lines:
         # 查找包含 http 的行
-        if "http" in line and ("ark-content" in line or "doubao" in line):
+        if "http" in line:
             urls = re.findall(r'https?://[^\s\)]+', line)
             images.extend(urls)
 
@@ -303,18 +307,18 @@ def generate_daily_images(count: int = 3, style: str = "") -> list:
     else:
         print(f"  ⚠️  生成过程有异常，返回码: {result.returncode}")
         if result.stderr:
-            print(f"  错误: {result.stderr}")
+            print(f"  错误: {result.stderr[:500]}")
 
     return images
 
 
 def main():
     parser = argparse.ArgumentParser(
-        description="每日美女图 - 发布到公众号"
+        description="每日艺术写真 - 发布到公众号"
     )
 
-    parser.add_argument("--count", "-c", type=int, default=3, help="生成图片数量（默认3张）")
-    parser.add_argument("--style", "-s", help="风格描述")
+    parser.add_argument("--count", "-c", type=int, default=1, help="生成图片数量（默认1张）")
+    parser.add_argument("--style", "-s", help="风格描述（仅豆包模式有效）")
     parser.add_argument("--scene", help="场景：雨夜、樱花雨、赛博朋克、咖啡厅等")
     parser.add_argument("--emotion", help="情绪：挑逗、忧郁、神秘、开心、高冷、温柔、自信、俏皮")
     parser.add_argument("--makeup", help="妆容：韩妆、欧美妆、烟熏妆、玻璃妆等")
@@ -324,6 +328,7 @@ def main():
     parser.add_argument("--caption", help="一句话介绍（自动生成默认）")
     parser.add_argument("--test", action="store_true", help="测试模式：只生成不发布")
     parser.add_argument("--type", choices=["news", "newspic"], default="newspic", help="文章类型")
+    parser.add_argument("--use-doubao", action="store_true", help="使用豆包模型（默认使用 OpenRouter）")
 
     args = parser.parse_args()
 
@@ -338,7 +343,7 @@ def main():
 
     # 生成标题
     if not args.title:
-        args.title = f"📸 每日美女 | {weekday_str}"
+        args.title = f"📸 每日写真 | {weekday_str}"
 
     # 智能生成一句话介绍（根据场景、情绪等参数）
     if not args.caption:
@@ -360,7 +365,8 @@ def main():
     print("=" * 50)
 
     # 生成图片
-    images = generate_daily_images(args.count, args.style)
+    use_artistic = not args.use_doubao
+    images = generate_daily_images(args.count, args.style, use_artistic=use_artistic)
 
     if len(images) == 0:
         print("❌ 没有成功生成任何图片")

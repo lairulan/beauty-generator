@@ -1,4 +1,4 @@
-name: 每日美女生成发布
+name: 每日艺术写真发布
 
 on:
   # 定时触发已迁移到 Cloudflare Workers，确保精确执行
@@ -29,13 +29,15 @@ jobs:
         run: |
           python3 -m pip install --upgrade pip
 
-      - name: 生成并发布美女图片
+      - name: 生成并发布艺术写真
         env:
-          DOUBAO_API_KEY: ${{ secrets.DOUBAO_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          IMGBB_API_KEY: ${{ secrets.IMGBB_API_KEY }}
           WECHAT_API_KEY: ${{ secrets.WECHAT_API_KEY }}
+          DOUBAO_API_KEY: ${{ secrets.DOUBAO_API_KEY }}
         run: |
           cd scripts
-          python3 publish_wechat.py --count 3
+          python3 publish_wechat.py --count 1
 
       - name: 记录日志
         if: always()

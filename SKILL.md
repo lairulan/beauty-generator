@@ -1,38 +1,26 @@
 ---
 name: beauty-generator
-description: Generate realistic beauty photography using Doubao Seedream model. Supports scene/atmosphere control, emotion/makeup/art style customization, and WeChat publishing. Use when user asks to generate beauty images ("生成美女", "每日美女", "发布美女").
+description: Generate realistic beauty photography using OpenRouter (Gemini) or Doubao Seedream model. Supports artistic portrait style, scene/atmosphere control, emotion/makeup/art style customization, and WeChat publishing. Use when user asks to generate beauty images ("生成美女", "每日美女", "发布美女", "艺术写真").
 ---
 
-# Beauty Generator - 美女图像生成 V5.0
+# Beauty Generator - 艺术写真生成 V2.0
 
-专业写实摄影风格东方美女图像生成助手，基于豆包 Seedream 图像生成模型。
+高质量真人艺术写真生成助手，支持 OpenRouter (Gemini) 和豆包模型。
 
 ## 功能特点
 
-- **智能随机系统**: 从丰富元素库随机组合，确保每次生成都有新鲜感
-- **严格东方美女**: 强制生成中国/东亚面孔，排除西方特征
-- **在线图片**: 返回豆包云URL，可直接使用
-- **人物一致性**: 每日3张图片保持同一人物特征，仅改变姿态/角度
-- **图生图技术**: 使用第一张图作为参考，提升后续图片一致性
+- **高质量写真**: 使用 OpenRouter (Gemini) 生成更真实、更性感的艺术写真
+- **每日一张精品**: 默认每天生成一张高质量写真，更吸引眼球
+- **双模型支持**: 可选择使用 OpenRouter 或豆包模型
 - **公众号发布**: 一键发布到公众号草稿箱（小绿书格式）
 - **定时发布**: 每天 20:00 自动发布到公众号草稿箱
 
-## 🆕 V5.0 智能随机系统
+## 🆕 V2.0 更新
 
-### 人物风格 (6 种)
-- 甜美系、清纯系、御姐系、知性系、冷艳系、性感系
-
-### 场景类型 (4 种)
-- 自然、城市、室内、特殊
-
-### 穿搭风格 (6 种)
-- 优雅、性感、清新、时尚、古典、运动
-
-### 表情类型 (5 种)
-- 微笑、性感、冷艳、忧郁、自信
-
-### 光影类型 (3 种)
-- 自然光、影棚、氛围
+- 默认使用 OpenRouter (Gemini) 生成图片
+- 更高质量的真人摄影风格
+- 更性感、更吸引眼球的艺术写真
+- 每日生成一张精品（可调整数量）
 
 ## 触发词
 
@@ -40,52 +28,52 @@ description: Generate realistic beauty photography using Doubao Seedream model. 
 - "生成美女"、"画一个美女"、"美女图片"
 - "每日美女"、"今日美女"
 - "发布美女"、"发布今日美女"
+- "艺术写真"、"生成写真"
 - 或类似表达
 
 ## 快速使用
 
 ### 基础使用
 ```bash
-# 完全随机生成（推荐）
-python3 ~/.claude/skills/beauty-generator/scripts/generate_beauty.py
+# 生成艺术写真（使用 OpenRouter/Gemini）
+python3 ~/.claude/skills/beauty-generator/scripts/generate_artistic.py
 
-# 生成指定数量
+# 生成多张
+python3 ~/.claude/skills/beauty-generator/scripts/generate_artistic.py --count 3
+
+# 预览 Prompt
+python3 ~/.claude/skills/beauty-generator/scripts/generate_artistic.py --preview
+```
+
+### 使用豆包模型（备用）
+```bash
 python3 ~/.claude/skills/beauty-generator/scripts/generate_beauty.py --count 3
-```
-
-### 指定风格
-```bash
-# 指定人物风格
-python3 ~/.claude/skills/beauty-generator/scripts/generate_beauty.py --style "御姐系"
-
-# 指定场景和穿搭
-python3 ~/.claude/skills/beauty-generator/scripts/generate_beauty.py --style "甜美系" --scene "自然" --outfit "清新"
-```
-
-### 查看所有选项
-```bash
-python3 ~/.claude/skills/beauty-generator/scripts/generate_beauty.py --list-options
-```
-
-### 预览 Prompt
-```bash
-python3 ~/.claude/skills/beauty-generator/scripts/generate_beauty.py --preview
 ```
 
 ### 公众号发布
 ```bash
-# 发布到公众号
-python3 ~/.claude/skills/beauty-generator/scripts/publish_wechat.py --count 3
+# 发布到公众号（默认使用 OpenRouter）
+python3 ~/.claude/skills/beauty-generator/scripts/publish_wechat.py --count 1
+
+# 使用豆包模型发布
+python3 ~/.claude/skills/beauty-generator/scripts/publish_wechat.py --use-doubao --count 3
 
 # 测试模式（只生成不发布）
-python3 ~/.claude/skills/beauty-generator/scripts/publish_wechat.py --test --count 3
+python3 ~/.claude/skills/beauty-generator/scripts/publish_wechat.py --test --count 1
 ```
 
 ## API 配置
 
 环境变量：
 ```bash
+# OpenRouter (主要)
+export OPENROUTER_API_KEY="your-openrouter-api-key"
+export IMGBB_API_KEY="your-imgbb-api-key"
+
+# 豆包 (备用)
 export DOUBAO_API_KEY="your-doubao-api-key"
+
+# 公众号发布
 export WECHAT_API_KEY="your-wechat-api-key"
 ```
 
@@ -99,13 +87,14 @@ beauty-generator/
 ├── .github/workflows/          # GitHub Actions
 ├── deploy/                     # 部署脚本
 ├── scripts/
-│   ├── generate_beauty.py      # V5.0 主生成脚本
+│   ├── generate_artistic.py    # 🆕 V2.0 艺术写真生成
+│   ├── generate_beauty.py      # 豆包模式生成
 │   ├── publish_wechat.py       # 公众号发布脚本
 │   ├── auto_publish.py         # 本地定时发布
 │   └── config_cron.sh          # cron 配置
 ├── config/
 │   ├── api.json                # API配置
-│   └── prompt_library.json     # 🆕 Prompt 元素库
+│   └── prompt_library.json     # Prompt 元素库
 └── logs/                       # 运行日志
 ```
 
@@ -113,13 +102,11 @@ beauty-generator/
 
 **每天 20:00 自动发布到「三更愿」公众号草稿箱**
 
-推荐使用 GitHub Actions（免费、无需服务器）：
-```bash
-bash deploy/github_deploy.sh
-```
+使用 Cloudflare Workers + GitHub Actions 实现精确定时触发。
 
 ## 版本信息
 
-当前版本：**v5.0** (2026-01-16)
+当前版本：**v2.0** (2026-01-19)
 
-完整版本历史请查看 [CHANGELOG.md](CHANGELOG.md)
+- V2.0: 改用 OpenRouter (Gemini) 生成高质量艺术写真
+- V1.x: 使用豆包模型生成美女图片
