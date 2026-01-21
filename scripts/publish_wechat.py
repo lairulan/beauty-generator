@@ -306,6 +306,9 @@ def generate_daily_images(count: int = 1, style: str = "", use_artistic: bool = 
         print(f"  ✅ 成功生成 {len(images)} 张图片")
     else:
         print(f"  ⚠️  生成过程有异常，返回码: {result.returncode}")
+        # 输出 stdout 和 stderr 便于调试
+        if result.stdout:
+            print(f"  输出: {result.stdout[-1000:]}")
         if result.stderr:
             print(f"  错误: {result.stderr[:500]}")
 
