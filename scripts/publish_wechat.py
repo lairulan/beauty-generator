@@ -292,14 +292,18 @@ def generate_daily_images(count: int = 1, style: str = "", use_artistic: bool = 
 
     images = []
 
-    # 解析输出，提取图片 URL
+    # 解析输出，提取图片 URL（只提取 imgbb 图床的 URL）
     import re
     lines = result.stdout.split("\n")
     for line in lines:
-        # 查找包含 http 的行
-        if "http" in line:
-            urls = re.findall(r'https?://[^\s\)]+', line)
+        # 只匹配 imgbb 图床的 URL，避免误匹配其他 URL
+        if "i.ibb.co" in line or "ibb.co" in line:
+            urls = re.findall(r'https?://[^\s\)]+ibb\.co[^\s\)]*', line)
             images.extend(urls)
+
+    # 限制图片数量为请求的数量
+    if len(images) > count:
+        images = images[:count]
 
     # 显示生成结果
     if result.returncode == 0:
