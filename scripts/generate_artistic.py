@@ -302,6 +302,15 @@ def generate_image_openrouter(prompt: str, retry: int = 3, retry_delay: int = 5)
             }
             log(f"未提取到图片: {json.dumps(result, ensure_ascii=False)[:500]}", "WARN")
 
+        except urllib.error.HTTPError as e:
+            # 捕获 HTTP 错误并读��响应体
+            error_body = ""
+            try:
+                error_body = e.read().decode('utf-8')
+            except:
+                pass
+            last_error = {"success": False, "error": f"HTTP {e.code}: {error_body[:500]}", "attempt": attempt + 1}
+            log(f"HTTP错误 {e.code}: {error_body[:500]}", "ERROR")
         except urllib.error.URLError as e:
             last_error = {"success": False, "error": f"网络错误: {str(e)}", "attempt": attempt + 1}
             log(f"网络错误: {e}", "ERROR")
