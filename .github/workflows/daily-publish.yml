@@ -3,9 +3,13 @@ name: 每日艺术写真发布
 on:
   # 定时触发已迁移到 Cloudflare Workers，确保精确执行
   # 原 schedule: cron: '0 12 * * *' (每天 20:00 北京时间)
-  # 现在通过 Cloudflare Workers Cron Triggers 调用 workflow_dispatch
+  # 现在通过 Cloudflare Workers Cron Triggers 调用 repository_dispatch
 
-  # 支持手动触发和外部调用
+  # 支持 Cloudflare Worker 通过 repository_dispatch 触发
+  repository_dispatch:
+    types: [daily-beauty]
+
+  # 支持手动触发
   workflow_dispatch:
 
   # 可选：推送代码时测试
