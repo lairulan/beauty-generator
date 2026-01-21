@@ -29,7 +29,7 @@ LOGS_DIR = SKILL_DIR / "logs"
 
 # API 配置
 OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
-OPENROUTER_IMAGE_MODEL = "google/gemini-2.5-flash-preview-05-20:image-generation"
+OPENROUTER_IMAGE_MODEL = "google/gemini-3-pro-image-preview-20251120"
 IMGBB_API_URL = "https://api.imgbb.com/1/upload"
 
 # 创建 SSL 上下文
