@@ -29,7 +29,7 @@ LOGS_DIR = SKILL_DIR / "logs"
 
 # API 配置
 OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
-OPENROUTER_IMAGE_MODEL = "google/gemini-2.5-flash-preview-05-20"
+OPENROUTER_IMAGE_MODEL = "google/gemini-2.5-flash-preview-05-20:image-generation"
 IMGBB_API_URL = "https://api.imgbb.com/1/upload"
 
 # 创建 SSL 上下文
@@ -222,6 +222,7 @@ def generate_image_openrouter(prompt: str, retry: int = 3, retry_delay: int = 5)
         payload = {
             "model": OPENROUTER_IMAGE_MODEL,
             "messages": [{"role": "user", "content": f"Generate an image: {prompt}"}],
+            "modalities": ["image", "text"],
             "max_tokens": 4096
         }
 
