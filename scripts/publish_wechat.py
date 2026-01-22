@@ -26,7 +26,7 @@ API_BASE = "https://wx.limyai.com/api/openapi"
 WECHAT_API_KEY = os.environ.get("WECHAT_API_KEY")
 
 # 公众号配置
-DEFAULT_APPID = "wx287cdb9d78a498aa"  # 三更愿
+DEFAULT_APPID = "wx287cdb9d78a498aa"  # 三更熟
 
 
 def get_api_key():
@@ -52,7 +52,7 @@ def make_request(endpoint, data=None):
     ]
 
     try:
-        result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
         return json.loads(result.stdout)
     except subprocess.TimeoutExpired:
         return {"success": False, "error": "请求超时"}
@@ -335,7 +335,7 @@ def main():
     parser.add_argument("--caption", help="一句话介绍（自动生成默认）")
     parser.add_argument("--test", action="store_true", help="测试模式：只生成不发布")
     parser.add_argument("--type", choices=["news", "newspic"], default="newspic", help="文章类型")
-    parser.add_argument("--use-doubao", action="store_true", help="使用豆包模型（默认使用 OpenRouter）")
+    parser.add_argument("--use-openrouter", action="store_true", help="使用 OpenRouter 模型（默认使用豆包4k）")
 
     args = parser.parse_args()
 
@@ -372,7 +372,7 @@ def main():
     print("=" * 50)
 
     # 生成图片
-    use_artistic = not args.use_doubao
+    use_artistic = args.use_openrouter
     images = generate_daily_images(args.count, args.style, use_artistic=use_artistic)
 
     if len(images) == 0:
