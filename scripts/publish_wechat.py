@@ -283,13 +283,20 @@ def generate_daily_images(
 
         images = []
 
-        # 解析输出，提取图片 URL（只提取 imgbb 图床的 URL）
+        # 解析输出，提取图片 URL
+        # 支持两种来源：
+        # 1. imgbb 图床 (OpenRouter 模式): i.ibb.co
+        # 2. 豆包 API 直接返回: ark.cn-beijing.volces.com
         import re
         lines = result.stdout.split("\n")
         for line in lines:
-            # 只匹配 imgbb 图床的 URL，避免误匹配其他 URL
+            # imgbb 图床 URL (OpenRouter 上传的)
             if "i.ibb.co" in line or "ibb.co" in line:
                 urls = re.findall(r'https?://[^\s\)]+ibb\.co[^\s\)]*', line)
+                images.extend(urls)
+            # 豆包 API 直接返回的 URL
+            elif "volces.com" in line:
+                urls = re.findall(r'https?://[^\s\)]+volces\.com[^\s\)]*', line)
                 images.extend(urls)
 
         # 限制图片数量为请求的数量

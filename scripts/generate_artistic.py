@@ -303,7 +303,7 @@ def generate_image_openrouter(prompt: str, retry: int = 3, retry_delay: int = 5)
             log(f"未提取到图片: {json.dumps(result, ensure_ascii=False)[:500]}", "WARN")
 
         except urllib.error.HTTPError as e:
-            # 捕获 HTTP 错误并读��响应体
+            # 捕获 HTTP 错误并读取响应体
             error_body = ""
             try:
                 error_body = e.read().decode('utf-8')

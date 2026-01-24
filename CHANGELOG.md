@@ -1,5 +1,17 @@
 # 版本历史
 
+## v5.1 (2026-01-24) 🔧
+
+### Bug 修复
+- **修复豆包回退模式**: URL 提取逻辑现在同时支持 imgbb 和 volces.com 两种图床
+- **修复重复触发**: 禁用 GitHub Actions 原生 schedule，统一由 Cloudflare Workers 触发
+- **增强去重检查**: 去重逻辑现在也检查 `workflow_dispatch` 事件，彻底避免重复发布
+
+### 代码清理
+- 修复 `generate_artistic.py` 中的乱码注释
+
+---
+
 ## v5.0 (2026-01-16) 🎨
 
 ### 智能随机 Prompt 系统
