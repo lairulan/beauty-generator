@@ -79,7 +79,7 @@ git push -u origin main
 ### 自动运行
 
 默认通过 Cloudflare Workers 触发 `repository_dispatch`，同时启用 GitHub Actions `schedule` 作为备份。
-为避免重复执行，工作流内已加入当日成功运行去重逻辑。
+为避免重复执行，工作流内已加入当日成功运行去重逻辑，并把执行记录写入 `workflow_logs/actions_runs.md`。
 
 ### 手动触发
 
