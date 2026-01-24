@@ -6,7 +6,7 @@
     "default_api_key": "a26f05b1-4025-4d66-a43d-ea3a64b267cf"
   },
   "default_params": {
-    "size": "2k",
+    "size": "4k",
     "response_format": "url",
     "watermark": false,
     "stream": false

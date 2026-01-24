@@ -259,20 +259,84 @@ def publish_to_wechat(
     return result
 
 
-def generate_daily_images(count: int = 1, style: str = "", use_artistic: bool = True) -> list:
+def generate_daily_images(
+    count: int = 1,
+    style: str = "",
+    use_artistic: bool = True,
+    allow_fallback: bool = True
+) -> list:
     """
     生成艺术写真图片
     V2.0: 默认使用 OpenRouter (Gemini) 生成高质量艺术写真
     """
-    if use_artistic:
-        print(f"\n🎨 正在使用 OpenRouter (Gemini) 生成 {count} 张艺术写真...")
-        print("✨ 高质量真人摄影风格，更性感更吸引眼球")
+    has_openrouter = bool(os.environ.get("OPENROUTER_API_KEY")) and bool(os.environ.get("IMGBB_API_KEY"))
+    has_doubao = bool(os.environ.get("DOUBAO_API_KEY"))
 
-        cmd = [
-            "python3", str(ARTISTIC_GENERATE_SCRIPT),
-            "--count", str(count)
-        ]
-    else:
+    def run_generate(cmd: list, label: str) -> list:
+        result = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            timeout=300,  # 5分钟超时
+            env=os.environ
+        )
+
+        images = []
+
+        # 解析输出，提取图片 URL（只提取 imgbb 图床的 URL）
+        import re
+        lines = result.stdout.split("\n")
+        for line in lines:
+            # 只匹配 imgbb 图床的 URL，避免误匹配其他 URL
+            if "i.ibb.co" in line or "ibb.co" in line:
+                urls = re.findall(r'https?://[^\s\)]+ibb\.co[^\s\)]*', line)
+                images.extend(urls)
+
+        # 限制图片数量为请求的数量
+        if len(images) > count:
+            images = images[:count]
+
+        # 显示生成结果
+        if result.returncode == 0:
+            print(f"  ✅ 成功生成 {len(images)} 张图片")
+        else:
+            print(f"  ⚠️  {label} 生成过程有异常，返回码: {result.returncode}")
+            # 输出 stdout 和 stderr 便于调试
+            if result.stdout:
+                print(f"  输出: {result.stdout[-1000:]}")
+            if result.stderr:
+                print(f"  错误: {result.stderr[:500]}")
+
+        return images
+
+    if use_artistic:
+        if not has_openrouter:
+            if not allow_fallback:
+                print("❌ 缺少 OPENROUTER_API_KEY 或 IMGBB_API_KEY，无法使用 OpenRouter")
+                return []
+            print("⚠️  缺少 OPENROUTER_API_KEY 或 IMGBB_API_KEY，改用豆包生成")
+            use_artistic = False
+        else:
+            print(f"\n🎨 正在使用 OpenRouter (Gemini) 生成 {count} 张艺术写真...")
+            print("✨ 高质量真人摄影风格，更性感更吸引眼球")
+
+            cmd = [
+                "python3", str(ARTISTIC_GENERATE_SCRIPT),
+                "--count", str(count)
+            ]
+            images = run_generate(cmd, "OpenRouter")
+
+            if images or not allow_fallback:
+                return images
+
+            print("⚠️  OpenRouter 生成失败，改用豆包生成")
+            use_artistic = False
+
+    if not use_artistic:
+        if not has_doubao:
+            print("❌ 缺少 DOUBAO_API_KEY，无法使用豆包生成")
+            return []
+
         print(f"\n🎨 正在使用豆包生成 {count} 张美女图片...")
         cmd = [
             "python3", str(BEAUTY_GENERATE_SCRIPT),
@@ -282,41 +346,9 @@ def generate_daily_images(count: int = 1, style: str = "", use_artistic: bool = 
         if style:
             cmd.extend(["--style", style])
 
-    result = subprocess.run(
-        cmd,
-        capture_output=True,
-        text=True,
-        timeout=300,  # 5分钟超时
-        env=os.environ
-    )
+        return run_generate(cmd, "豆包")
 
-    images = []
-
-    # 解析输出，提取图片 URL（只提取 imgbb 图床的 URL）
-    import re
-    lines = result.stdout.split("\n")
-    for line in lines:
-        # 只匹配 imgbb 图床的 URL，避免误匹配其他 URL
-        if "i.ibb.co" in line or "ibb.co" in line:
-            urls = re.findall(r'https?://[^\s\)]+ibb\.co[^\s\)]*', line)
-            images.extend(urls)
-
-    # 限制图片数量为请求的数量
-    if len(images) > count:
-        images = images[:count]
-
-    # 显示生成结果
-    if result.returncode == 0:
-        print(f"  ✅ 成功生成 {len(images)} 张图片")
-    else:
-        print(f"  ⚠️  生成过程有异常，返回码: {result.returncode}")
-        # 输出 stdout 和 stderr 便于调试
-        if result.stdout:
-            print(f"  输出: {result.stdout[-1000:]}")
-        if result.stderr:
-            print(f"  错误: {result.stderr[:500]}")
-
-    return images
+    return []
 
 
 def main():
@@ -330,12 +362,12 @@ def main():
     parser.add_argument("--emotion", help="情绪：挑逗、忧郁、神秘、开心、高冷、温柔、自信、俏皮")
     parser.add_argument("--makeup", help="妆容：韩妆、欧美妆、烟熏妆、玻璃妆等")
     parser.add_argument("--art-style", help="艺术风格：王家卫、韩剧、电影感、ins风等")
-    parser.add_argument("--appid", help="公众号 AppID（默认：三更愿）")
+    parser.add_argument("--appid", help="公众号 AppID（默认：三更熟）")
     parser.add_argument("--title", "-t", help="文章标题（自动生成默认）")
     parser.add_argument("--caption", help="一句话介绍（自动生成默认）")
     parser.add_argument("--test", action="store_true", help="测试模式：只生成不发布")
     parser.add_argument("--type", choices=["news", "newspic"], default="newspic", help="文章类型")
-    parser.add_argument("--use-openrouter", action="store_true", help="使用 OpenRouter 模型（默认使用豆包4k）")
+    parser.add_argument("--use-openrouter", action="store_true", help="强制使用 OpenRouter（不回退豆包）")
 
     args = parser.parse_args()
 
@@ -372,8 +404,12 @@ def main():
     print("=" * 50)
 
     # 生成图片
-    use_artistic = args.use_openrouter
-    images = generate_daily_images(args.count, args.style, use_artistic=use_artistic)
+    images = generate_daily_images(
+        args.count,
+        args.style,
+        use_artistic=True,
+        allow_fallback=not args.use_openrouter
+    )
 
     if len(images) == 0:
         print("❌ 没有成功生成任何图片")

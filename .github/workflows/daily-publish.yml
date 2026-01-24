@@ -41,7 +41,7 @@ jobs:
           DOUBAO_API_KEY: ${{ secrets.DOUBAO_API_KEY }}
         run: |
           cd scripts
-          python3 publish_wechat.py --count 1 --use-openrouter
+          python3 publish_wechat.py --count 1
 
       - name: 记录日志
         if: always()

@@ -302,7 +302,7 @@ def generate_image(prompt: str, negative_prompt: str, reference_url: str = None)
         "model": API_MODEL,
         "prompt": prompt,
         "negative_prompt": negative_prompt,
-        "size": "2k",
+        "size": "4k",
         "response_format": "url",
         "watermark": False
     }

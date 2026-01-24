@@ -5,20 +5,20 @@ description: Generate realistic beauty photography using OpenRouter (Gemini) or 
 
 # Beauty Generator - 艺术写真生成 V2.0
 
-高质量真人艺术写真生成助手，支持 OpenRouter (Gemini) 和豆包模型。
+高质量真人艺术写真生成助手，支持 OpenRouter (Gemini) 和豆包模型（默认优先 OpenRouter，失败回退豆包）。
 
 ## 功能特点
 
-- **高质量写真**: 使用 OpenRouter (Gemini) 生成更真实、更性感的艺术写真
-- **每日一张精品**: 默认每天生成一张高质量写真，更吸引眼球
-- **双模型支持**: 可选择使用 OpenRouter 或豆包模型
+- **高质量写真**: 优先使用 OpenRouter (Gemini) 生成更真实的艺术写真
+- **每日一张精品**: 默认每天生成一张写真，更吸引眼球
+- **双模型支持**: 优先 OpenRouter，失败自动回退豆包
 - **公众号发布**: 一键发布到公众号草稿箱（小绿书格式）
 - **定时发布**: 每天 20:00 自动发布到公众号草稿箱
 
 ## 🆕 V2.0 更新
 
-- 默认使用 OpenRouter (Gemini) 生成图片
-- 更高质量的真人摄影风格
+- 默认优先 OpenRouter (Gemini) 生成图片，失败自动回退豆包
+- OpenRouter 获取更高质量真人摄影风格
 - 更性感、更吸引眼球的艺术写真
 - 每日生成一张精品（可调整数量）
 
@@ -35,28 +35,28 @@ description: Generate realistic beauty photography using OpenRouter (Gemini) or 
 
 ### 基础使用
 ```bash
-# 生成艺术写真（使用 OpenRouter/Gemini）
+# 仅生成（OpenRouter）
 python3 ~/.claude/skills/beauty-generator/scripts/generate_artistic.py
 
-# 生成多张
+# 仅生成（豆包）
+python3 ~/.claude/skills/beauty-generator/scripts/generate_beauty.py
+```
+
+### 使用 OpenRouter（可选）
+```bash
 python3 ~/.claude/skills/beauty-generator/scripts/generate_artistic.py --count 3
 
 # 预览 Prompt
 python3 ~/.claude/skills/beauty-generator/scripts/generate_artistic.py --preview
 ```
 
-### 使用豆包模型（备用）
-```bash
-python3 ~/.claude/skills/beauty-generator/scripts/generate_beauty.py --count 3
-```
-
 ### 公众号发布
 ```bash
-# 发布到公众号（默认使用 OpenRouter）
+# 发布到公众号（默认优先 OpenRouter，失败回退豆包）
 python3 ~/.claude/skills/beauty-generator/scripts/publish_wechat.py --count 1
 
-# 使用豆包模型发布
-python3 ~/.claude/skills/beauty-generator/scripts/publish_wechat.py --use-doubao --count 3
+# 强制使用 OpenRouter（不回退豆包）
+python3 ~/.claude/skills/beauty-generator/scripts/publish_wechat.py --use-openrouter --count 1
 
 # 测试模式（只生成不发布）
 python3 ~/.claude/skills/beauty-generator/scripts/publish_wechat.py --test --count 1
@@ -66,11 +66,11 @@ python3 ~/.claude/skills/beauty-generator/scripts/publish_wechat.py --test --cou
 
 环境变量：
 ```bash
-# OpenRouter (主要)
+# OpenRouter (优先)
 export OPENROUTER_API_KEY="your-openrouter-api-key"
 export IMGBB_API_KEY="your-imgbb-api-key"
 
-# 豆包 (备用)
+# 豆包 (回退)
 export DOUBAO_API_KEY="your-doubao-api-key"
 
 # 公众号发布
@@ -100,7 +100,7 @@ beauty-generator/
 
 ## 定时发布
 
-**每天 20:00 自动发布到「三更愿」公众号草稿箱**
+**每天 20:00 自动发布到「三更熟」公众号草稿箱**
 
 使用 Cloudflare Workers + GitHub Actions 实现精确定时触发。
 
@@ -108,5 +108,5 @@ beauty-generator/
 
 当前版本：**v2.0** (2026-01-19)
 
-- V2.0: 改用 OpenRouter (Gemini) 生成高质量艺术写真
+- V2.0: 支持 OpenRouter (Gemini) 高质量艺术写真
 - V1.x: 使用豆包模型生成美女图片
