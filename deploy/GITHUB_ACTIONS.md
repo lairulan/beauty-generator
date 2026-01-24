@@ -54,12 +54,14 @@ git push -u origin main
 1. 访问你的 GitHub 仓库
 2. 点击 **Settings** → **Secrets and variables** → **Actions**
 3. 点击 **New repository secret**
-4. 添加以下两个 secrets：
+4. 添加以下 secrets：
 
 | Name | Secret |
 |------|--------|
-| `DOUBAO_API_KEY` | `a26f05b1-4025-4d66-a43d-ea3a64b267cf` |
-| `WECHAT_API_KEY` | `xhs_4abcfb085d38aeb676ba5eb1ebc205c0` |
+| `OPENROUTER_API_KEY` | `your-openrouter-api-key` |
+| `IMGBB_API_KEY` | `your-imgbb-api-key` |
+| `DOUBAO_API_KEY` | `your-doubao-api-key` |
+| `WECHAT_API_KEY` | `your-wechat-api-key` |
 
 ---
 
@@ -76,7 +78,8 @@ git push -u origin main
 
 ### 自动运行
 
-每天 **20:00**（北京时间）自动运行，无需任何操作。
+默认通过 Cloudflare Workers 触发 `repository_dispatch`，GitHub Actions 内置定时已注释。
+如需 GitHub 直接定时运行，请在 `.github/workflows/daily-publish.yml` 中启用 `schedule`。
 
 ### 手动触发
 
@@ -117,6 +120,8 @@ schedule:
 ```yaml
 - name: 生成并发布美女图片
   env:
+    OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+    IMGBB_API_KEY: ${{ secrets.IMGBB_API_KEY }}
     DOUBAO_API_KEY: ${{ secrets.DOUBAO_API_KEY }}
     WECHAT_API_KEY: ${{ secrets.WECHAT_API_KEY }}
   run: |
