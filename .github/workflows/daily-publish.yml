@@ -4,6 +4,8 @@ on:
   # 定时触发已迁移到 Cloudflare Workers，确保精确执行
   # 原 schedule: cron: '0 12 * * *' (每天 20:00 北京时间)
   # 现在通过 Cloudflare Workers Cron Triggers 调用 repository_dispatch
+  schedule:
+    - cron: '0 12 * * *' # UTC 12:00 = 北京时间 20:00
 
   # 支持 Cloudflare Worker 通过 repository_dispatch 触发
   repository_dispatch:
@@ -19,6 +21,12 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    concurrency:
+      group: daily-beauty-${{ github.ref }}
+      cancel-in-progress: true
+    permissions:
+      actions: read
+      contents: read
 
     steps:
       - name: 检出代码
@@ -33,7 +41,38 @@ jobs:
         run: |
           python3 -m pip install --upgrade pip
 
+      - name: 检查当日是否已执行成功
+        id: dedup
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const toBjDate = (iso) => {
+              const ms = new Date(iso).getTime() + 8 * 3600 * 1000;
+              return new Date(ms).toISOString().slice(0, 10);
+            };
+
+            const nowBjDate = toBjDate(new Date().toISOString());
+            const { data } = await github.rest.actions.listWorkflowRuns({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'daily-publish.yml',
+              per_page: 30
+            });
+
+            const already = data.workflow_runs.some(run => {
+              if (run.id === context.runId) return false;
+              if (run.conclusion !== 'success') return false;
+              if (!['schedule', 'repository_dispatch'].includes(run.event)) return false;
+              return toBjDate(run.created_at) === nowBjDate;
+            });
+
+            core.setOutput('skip', already ? 'true' : 'false');
+            if (already) {
+              core.info(`已存在当日成功运行（${nowBjDate}），本次跳过。`);
+            }
+
       - name: 生成并发布艺术写真
+        if: steps.dedup.outputs.skip != 'true'
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           IMGBB_API_KEY: ${{ secrets.IMGBB_API_KEY }}
