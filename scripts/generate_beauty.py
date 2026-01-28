@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-美女生成 V5.0 - 智能随机 Prompt 系统
+美女生成 V6.0 - 纯文生图 4K 高清系统
 - 从丰富的元素库中随机组合
 - 确保每次生成都有新鲜感
 - 严格东方美女风格
 - 基于 Civitai/Stable Diffusion 社区最佳实践
+- 使用 4K 分辨率纯文生图，不再使用图生图（避免质量降低）
 """
 
 import argparse
@@ -46,7 +47,7 @@ def log(message: str, level: str = "INFO"):
     log_msg = f"[{timestamp}] [{level}] {message}"
     print(log_msg)
 
-    log_file = LOGS_DIR / f"v5-{datetime.now().strftime('%Y%m%d')}.log"
+    log_file = LOGS_DIR / f"v6-{datetime.now().strftime('%Y%m%d')}.log"
     with open(log_file, "a", encoding="utf-8") as f:
         f.write(log_msg + "\n")
 
@@ -296,20 +297,22 @@ class SmartPromptGenerator:
 
 
 def generate_image(prompt: str, negative_prompt: str, reference_url: str = None) -> dict:
-    """调用 API 生成图片"""
+    """调用 API 生成图片（纯文生图，不使用图生图）"""
 
     payload = {
         "model": API_MODEL,
         "prompt": prompt,
         "negative_prompt": negative_prompt,
-        "size": "4k",
+        "size": "4k",  # 使用 4K 分辨率以获得更清晰的图片
         "response_format": "url",
-        "watermark": False
+        "watermark": False,
+        "quality": "hd"  # 添加高清质量参数
     }
 
-    if reference_url:
-        payload["image"] = reference_url
-        log("📎 使用图生图模式")
+    # 移除图生图逻辑，每次都使用文生图
+    # if reference_url:
+    #     payload["image"] = reference_url
+    #     log("📎 使用图生图模式")
 
     ssl_context = ssl._create_unverified_context()
 
@@ -346,7 +349,7 @@ def generate_series(count: int = 3,
     """生成系列图片"""
 
     print("=" * 70)
-    print("🎨 美女生成 V5.0 - 智能随机 Prompt 系统")
+    print("🎨 美女生成 V6.0 - 纯文生图 4K 高清系统")
     print("=" * 70)
 
     # 加载元素库
@@ -366,13 +369,12 @@ def generate_series(count: int = 3,
     pose_types = ["特写", "半身", "全身", "动态"]
 
     images = []
-    reference_url = None
     negative_prompt = generator.get_negative_prompt()
 
     print(f"\n🚫 Negative Prompt: {negative_prompt[:80]}...")
 
     print("\n" + "=" * 70)
-    print(f"🎨 开始生成 {count} 张图片...")
+    print(f"🎨 开始生成 {count} 张图片（纯文生图，4K 高清）...")
     print("=" * 70)
 
     for i in range(count):
@@ -393,19 +395,15 @@ def generate_series(count: int = 3,
         print(f"   表情: {styling.get('expression_type', '随机')} | 光影: {scene.get('lighting_type', '随机')}")
         print(f"   Prompt: {prompt[:100]}...")
 
-        # 第一张文生图，后续图生图
-        use_reference = (i > 0) and (reference_url is not None)
-
+        # 移除图生图逻辑，每次都用文生图生成独立的高清图片
         result = generate_image(
             prompt,
             negative_prompt,
-            reference_url if use_reference else None
+            reference_url=None  # 不使用参考图，纯文生图
         )
 
         if result["success"]:
             url = result["url"]
-            if i == 0:
-                reference_url = url
 
             images.append({
                 "index": i + 1,
@@ -469,7 +467,7 @@ def list_options(library: dict):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="美女生成 V5.0 - 智能随机 Prompt 系统"
+        description="美女生成 V6.0 - 纯文生图 4K 高清系统"
     )
 
     parser.add_argument("--count", "-c", type=int, default=3, help="生成数量 (默认: 3)")

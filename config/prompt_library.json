@@ -3,19 +3,19 @@
   "description": "增强版 Prompt 元素库 - 基于 Civitai、Stable Diffusion 社区最佳实践",
 
   "base_quality": [
-    "RAW photo, masterpiece, best quality, ultra detailed, 8K UHD, DSLR",
-    "masterpiece, best quality, ultra realistic, 8k resolution, photorealistic",
-    "professional photography, masterpiece, ultra high resolution, RAW photo",
-    "cinematic photo, masterpiece, best quality, hyper-detailed, 8K HDR",
-    "award-winning photography, masterpiece, ultra detailed, film grain, Fujifilm XT3"
+    "RAW photo, masterpiece, best quality, ultra detailed, 8K UHD, DSLR, ultra high resolution, ultra sharp, crystal clear, extremely detailed, professional photography",
+    "masterpiece, best quality, ultra realistic, 8k resolution, photorealistic, hyper realistic, ultra sharp focus, high definition, extreme detail",
+    "professional photography, masterpiece, ultra high resolution 8K, RAW photo, super sharp, perfectly focused, maximum detail, crystal clear quality",
+    "cinematic photo, masterpiece, best quality, hyper-detailed, 8K HDR, ultra crisp, razor sharp focus, photorealistic perfection",
+    "award-winning photography, masterpiece, ultra detailed, film grain, Fujifilm XT3, ultra high definition, maximum clarity, perfect sharpness"
   ],
 
   "asian_identity": [
-    "East Asian Chinese young woman, Asian facial features, Asian beauty",
-    "beautiful Chinese woman, delicate Asian features, oriental beauty",
-    "gorgeous East Asian girl, Chinese facial structure, natural Asian beauty",
-    "stunning Asian woman, Chinese heritage, elegant oriental features",
-    "young Chinese beauty, refined Asian facial features, porcelain skin"
+    "East Asian Chinese young woman aged 18-30, Asian facial features, Asian beauty, youthful appearance",
+    "beautiful Chinese woman aged 20-28, delicate Asian features, oriental beauty, fresh young face",
+    "gorgeous East Asian girl 18-25 years old, Chinese facial structure, natural Asian beauty, youthful glow",
+    "stunning Asian woman in her early twenties, Chinese heritage, elegant oriental features, young and vibrant",
+    "young Chinese beauty aged 22-28, refined Asian facial features, porcelain skin, youthful radiance"
   ],
 
   "face_types": {
@@ -267,11 +267,11 @@
   },
 
   "enhancement_keywords": [
-    "award-winning photo, professional photography, magazine cover quality",
-    "skin texture visible, pores detail, eyelash detail, hair strands detail",
-    "perfect composition, rule of thirds, visual balance, color harmony",
-    "post-processing, color grading, professional retouching, polished",
-    "sharp focus on eyes, catchlight, detailed iris, expressive"
+    "award-winning photo, professional photography, magazine cover quality, ultra high resolution, maximum sharpness",
+    "skin texture visible, pores detail, eyelash detail, hair strands detail, ultra crisp, razor sharp",
+    "perfect composition, rule of thirds, visual balance, color harmony, crystal clear clarity",
+    "post-processing, color grading, professional retouching, polished, hyper detailed, 8K quality",
+    "sharp focus on eyes, catchlight, detailed iris, expressive, perfectly focused, ultra sharp detail"
   ],
 
   "negative_prompts": {
