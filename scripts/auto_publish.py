@@ -35,26 +35,16 @@ def log(message: str, level: str = "INFO"):
 
 def check_api_keys():
     """检查 API 密钥是否配置"""
-    openrouter_key = os.environ.get("OPENROUTER_API_KEY")
-    imgbb_key = os.environ.get("IMGBB_API_KEY")
     doubao_key = os.environ.get("DOUBAO_API_KEY")
     wechat_key = os.environ.get("WECHAT_API_KEY")
+
+    if not doubao_key:
+        log("❌ DOUBAO_API_KEY 未设置", "ERROR")
+        return False
 
     if not wechat_key:
         log("❌ WECHAT_API_KEY 未设置", "ERROR")
         return False
-
-    has_openrouter = bool(openrouter_key) and bool(imgbb_key)
-    has_doubao = bool(doubao_key)
-
-    if not has_openrouter and not has_doubao:
-        log("❌ 未设置可用的图片生成密钥（需要 OPENROUTER_API_KEY+IMGBB_API_KEY 或 DOUBAO_API_KEY）", "ERROR")
-        return False
-
-    if not has_openrouter:
-        log("⚠️  未设置 OPENROUTER_API_KEY 或 IMGBB_API_KEY，将使用豆包生成")
-    elif not has_doubao:
-        log("⚠️  未设置 DOUBAO_API_KEY，OpenRouter 失败时无法回退")
 
     log("✅ API 密钥检查通过")
     return True
@@ -105,12 +95,12 @@ def auto_publish():
     log(f"🔑 关键词: {', '.join(today_info['keywords'])}")
 
     # 调用发布脚本
-    log(f"🎯 开始生成 3 张图片并发布到公众号...")
+    log(f"🎯 开始生成 1 张 4K 高清图片并发布到公众号...")
 
     try:
         cmd = [
             "python3", str(PUBLISH_SCRIPT),
-            "--count", "3",
+            "--count", "1",
             "--type", "newspic"
         ]
 

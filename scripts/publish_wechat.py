@@ -2,8 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 公众号发布脚本
-将生成的艺术写真发布到公众号草稿箱（小绿书形式）
-V2.0 - 使用 OpenRouter (Gemini) 生成高质量艺术写真
+将生成的美女图片发布到公众号草稿箱（小绿书形式）
 """
 
 import argparse
@@ -18,7 +17,7 @@ from pathlib import Path
 SCRIPT_DIR = Path(__file__).parent.absolute()
 SKILL_DIR = SCRIPT_DIR.parent
 CONFIG_DIR = SKILL_DIR / "config"
-ARTISTIC_GENERATE_SCRIPT = SKILL_DIR / "scripts" / "generate_artistic.py"
+GENERATE_SCRIPT = SKILL_DIR / "scripts" / "generate.py"
 BEAUTY_GENERATE_SCRIPT = SKILL_DIR / "scripts" / "generate_beauty.py"
 
 # API 配置
@@ -52,7 +51,7 @@ def make_request(endpoint, data=None):
     ]
 
     try:
-        result = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
         return json.loads(result.stdout)
     except subprocess.TimeoutExpired:
         return {"success": False, "error": "请求超时"}
@@ -259,112 +258,63 @@ def publish_to_wechat(
     return result
 
 
-def generate_daily_images(
-    count: int = 1,
-    style: str = "",
-    use_artistic: bool = True,
-    allow_fallback: bool = True
-) -> list:
+def generate_daily_images(count: int = 3, style: str = "") -> list:
     """
-    生成艺术写真图片
-    V2.0: 默认使用 OpenRouter (Gemini) 生成高质量艺术写真
+    生成多张一致性人物图片
+    使用 generate_beauty.py 确保人物一致性和高质量
     """
-    has_openrouter = bool(os.environ.get("OPENROUTER_API_KEY")) and bool(os.environ.get("IMGBB_API_KEY"))
-    has_doubao = bool(os.environ.get("DOUBAO_API_KEY"))
+    print(f"\n🎨 正在生成 {count} 张一致性人物图片...")
+    print("🎭 人物特征将保持一致，仅改变姿态和角度")
 
-    def run_generate(cmd: list, label: str) -> list:
-        result = subprocess.run(
-            cmd,
-            capture_output=True,
-            text=True,
-            timeout=300,  # 5分钟超时
-            env=os.environ
-        )
+    # 调用美女生成脚本 V4.0
+    cmd = [
+        "python3", str(BEAUTY_GENERATE_SCRIPT),
+        "--count", str(count)
+    ]
 
-        images = []
+    if style:
+        cmd.extend(["--style", style])
 
-        # 解析输出，提取图片 URL
-        # 支持两种来源：
-        # 1. imgbb 图床 (OpenRouter 模式): i.ibb.co
-        # 2. 豆包 API 直接返回: ark.cn-beijing.volces.com
-        import re
-        lines = result.stdout.split("\n")
-        for line in lines:
-            # imgbb 图床 URL (OpenRouter 上传的)
-            if "i.ibb.co" in line or "ibb.co" in line:
-                urls = re.findall(r'https?://[^\s\)]+ibb\.co[^\s\)]*', line)
-                images.extend(urls)
-            # 豆包 API 直接返回的 URL
-            elif "volces.com" in line:
-                urls = re.findall(r'https?://[^\s\)]+volces\.com[^\s\)]*', line)
-                images.extend(urls)
+    result = subprocess.run(
+        cmd,
+        capture_output=True,
+        text=True,
+        timeout=300,  # 5分钟超时（3张图）
+        env=os.environ
+    )
 
-        # 限制图片数量为请求的数量
-        if len(images) > count:
-            images = images[:count]
+    images = []
 
-        # 显示生成结果
-        if result.returncode == 0:
-            print(f"  ✅ 成功生成 {len(images)} 张图片")
-        else:
-            print(f"  ⚠️  {label} 生成过程有异常，返回码: {result.returncode}")
-            # 输出 stdout 和 stderr 便于调试
-            if result.stdout:
-                print(f"  输出: {result.stdout[-1000:]}")
-            if result.stderr:
-                print(f"  错误: {result.stderr[:500]}")
+    # 解析输出，提取图片 URL
+    # generate_beauty.py 输出格式:
+    #   1. 极致特写
+    #      https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/...
+    import re
+    lines = result.stdout.split("\n")
+    for line in lines:
+        # 查找包含 http 的行
+        if "http" in line and ("ark-content" in line or "doubao" in line):
+            urls = re.findall(r'https?://[^\s\)]+', line)
+            images.extend(urls)
 
-        return images
+    # 显示生成结果
+    if result.returncode == 0:
+        print(f"  ✅ 成功生成 {len(images)} 张图片")
+    else:
+        print(f"  ⚠️  生成过程有异常，返回码: {result.returncode}")
+        if result.stderr:
+            print(f"  错误: {result.stderr}")
 
-    if use_artistic:
-        if not has_openrouter:
-            if not allow_fallback:
-                print("❌ 缺少 OPENROUTER_API_KEY 或 IMGBB_API_KEY，无法使用 OpenRouter")
-                return []
-            print("⚠️  缺少 OPENROUTER_API_KEY 或 IMGBB_API_KEY，改用豆包生成")
-            use_artistic = False
-        else:
-            print(f"\n🎨 正在使用 OpenRouter (Gemini) 生成 {count} 张艺术写真...")
-            print("✨ 高质量真人摄影风格，更性感更吸引眼球")
-
-            cmd = [
-                "python3", str(ARTISTIC_GENERATE_SCRIPT),
-                "--count", str(count)
-            ]
-            images = run_generate(cmd, "OpenRouter")
-
-            if images or not allow_fallback:
-                return images
-
-            print("⚠️  OpenRouter 生成失败，改用豆包生成")
-            use_artistic = False
-
-    if not use_artistic:
-        if not has_doubao:
-            print("❌ 缺少 DOUBAO_API_KEY，无法使用豆包生成")
-            return []
-
-        print(f"\n🎨 正在使用豆包生成 {count} 张美女图片...")
-        cmd = [
-            "python3", str(BEAUTY_GENERATE_SCRIPT),
-            "--count", str(count)
-        ]
-
-        if style:
-            cmd.extend(["--style", style])
-
-        return run_generate(cmd, "豆包")
-
-    return []
+    return images
 
 
 def main():
     parser = argparse.ArgumentParser(
-        description="每日艺术写真 - 发布到公众号"
+        description="每日美女图 - 发布到公众号"
     )
 
     parser.add_argument("--count", "-c", type=int, default=1, help="生成图片数量（默认1张）")
-    parser.add_argument("--style", "-s", help="风格描述（仅豆包模式有效）")
+    parser.add_argument("--style", "-s", help="风格描述")
     parser.add_argument("--scene", help="场景：雨夜、樱花雨、赛博朋克、咖啡厅等")
     parser.add_argument("--emotion", help="情绪：挑逗、忧郁、神秘、开心、高冷、温柔、自信、俏皮")
     parser.add_argument("--makeup", help="妆容：韩妆、欧美妆、烟熏妆、玻璃妆等")
@@ -374,7 +324,6 @@ def main():
     parser.add_argument("--caption", help="一句话介绍（自动生成默认）")
     parser.add_argument("--test", action="store_true", help="测试模式：只生成不发布")
     parser.add_argument("--type", choices=["news", "newspic"], default="newspic", help="文章类型")
-    parser.add_argument("--use-openrouter", action="store_true", help="强制使用 OpenRouter（不回退豆包）")
 
     args = parser.parse_args()
 
@@ -389,7 +338,7 @@ def main():
 
     # 生成标题
     if not args.title:
-        args.title = f"📸 每日写真 | {weekday_str}"
+        args.title = f"📸 每日美女 | {weekday_str}"
 
     # 智能生成一句话介绍（根据场景、情绪等参数）
     if not args.caption:
@@ -411,12 +360,7 @@ def main():
     print("=" * 50)
 
     # 生成图片
-    images = generate_daily_images(
-        args.count,
-        args.style,
-        use_artistic=True,
-        allow_fallback=not args.use_openrouter
-    )
+    images = generate_daily_images(args.count, args.style)
 
     if len(images) == 0:
         print("❌ 没有成功生成任何图片")
@@ -448,12 +392,21 @@ def main():
         article_type=args.type
     )
 
-    if result.get("success") or result.get("code") == "SUCCESS":
+    # 打印详细的API响应用于调试
+    print(f"\n🔍 API响应: {json.dumps(result, ensure_ascii=False)}")
+
+    # 修复：只有明确成功才算成功
+    if result.get("success") is True or result.get("code") == "SUCCESS":
         print("✅ 发布成功！")
         print(f"📱 请到公众号后台查看草稿箱")
         return 0
     else:
-        print(f"❌ 发布失败: {result.get('error', result)}")
+        error_msg = result.get("error", "未知错误")
+        error_code = result.get("code", "")
+        print(f"❌ 发布失败: {error_msg}")
+        if error_code:
+            print(f"   错误代码: {error_code}")
+        print(f"   完整响应: {result}")
         return 1
 
 
