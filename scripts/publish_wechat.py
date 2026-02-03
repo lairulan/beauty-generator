@@ -254,6 +254,11 @@ def publish_to_wechat(
         "articleType": article_type
     }
 
+
+    # 小绿书模式需要明确提供图片URL列表
+    if article_type == "newspic" and images:
+        image_urls = [img_url for img_url, _ in images]
+        data["mainImages"] = image_urls
     result = make_request("wechat-publish", data)
     return result
 
