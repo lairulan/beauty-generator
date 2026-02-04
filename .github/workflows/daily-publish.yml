@@ -1,15 +1,14 @@
 name: 每日艺术写真发布
 
 on:
-  # 定时触发已完全迁移到 Cloudflare Workers，确保精确执行
-  # 原 schedule 已禁用，避免双重触发
-  # schedule:
-  #   - cron: '0 12 * * *' # UTC 12:00 = 北京时间 20:00
+  # 定时任务：每天 19:30 北京时间 (UTC 11:30) - 作为备用触发
+  schedule:
+    - cron: '30 11 * * *'
 
   # Cloudflare Worker 通过 workflow_dispatch 触发
   workflow_dispatch:
 
-  # 支持 repository_dispatch 触发（备用）
+  # 支持 repository_dispatch 触发（来自 Cloudflare Worker）
   repository_dispatch:
     types: [daily-beauty]
 
