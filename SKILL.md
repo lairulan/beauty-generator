@@ -1,6 +1,9 @@
 ---
 name: beauty-generator
+version: 2.0.0
 description: Generate realistic beauty photography using OpenRouter (Gemini) or Doubao Seedream model. Supports artistic portrait style, scene/atmosphere control, emotion/makeup/art style customization, and WeChat publishing. Use when user asks to generate beauty images ("生成美女", "每日美女", "发布美女", "艺术写真").
+author: rulanlai
+tags: [image-generation, beauty, wechat, openrouter, doubao]
 ---
 
 # Beauty Generator - 艺术写真生成 V2.0

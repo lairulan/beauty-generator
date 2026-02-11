@@ -86,6 +86,9 @@ def get_default_library() -> dict:
         "skin_textures": [
             "flawless porcelain skin, visible pores, natural skin texture, healthy glow"
         ],
+        "body_types": [
+            "slim elegant figure, graceful proportions, model-like silhouette"
+        ],
         "outfits": {
             "优雅": ["elegant silk evening gown, flowing fabric"],
             "清新": ["white cotton sundress with floral embroidery"]
@@ -111,6 +114,9 @@ def get_default_library() -> dict:
         "camera_settings": [
             "85mm f/1.2 lens, ultra shallow depth of field, creamy bokeh"
         ],
+        "art_styles": {
+            "电影感": ["cinematic color grading, film grain, movie still aesthetic, dramatic"]
+        },
         "enhancement_keywords": [
             "award-winning photo, professional photography, magazine cover quality"
         ],
@@ -125,11 +131,11 @@ def get_default_library() -> dict:
 class SmartPromptGenerator:
     """智能 Prompt 生成器"""
 
-    def __init__(self, library: dict):
+    def __init__(self, library: dict, seed: int = None):
         self.library = library
-        # 使用时间戳确保每次运行都不同
-        self.seed = int(time.time() * 1000) % 1000000
-        random.seed(self.seed)
+        # 默认使用时间戳确保每次运行都不同
+        self.seed = seed if seed is not None else int(time.time() * 1000) % 1000000
+        self.rng = random.Random(self.seed)
         log(f"🎲 随机种子: {self.seed}")
 
     def pick_random(self, items: list, count: int = 1) -> list:
@@ -137,13 +143,13 @@ class SmartPromptGenerator:
         if not items:
             return []
         count = min(count, len(items))
-        return random.sample(items, count)
+        return self.rng.sample(items, count)
 
     def pick_one(self, items: list) -> str:
         """随机选择一个"""
         if not items:
             return ""
-        return random.choice(items)
+        return self.rng.choice(items)
 
     def pick_from_dict(self, d: dict, key: str = None) -> tuple:
         """从字典中随机选择，返回 (key, value)"""
@@ -152,7 +158,7 @@ class SmartPromptGenerator:
         if key and key in d:
             values = d[key]
         else:
-            key = random.choice(list(d.keys()))
+            key = self.rng.choice(list(d.keys()))
             values = d[key]
 
         if isinstance(values, list):
@@ -172,11 +178,15 @@ class SmartPromptGenerator:
         # 肤质
         skin = self.pick_one(self.library.get("skin_textures", []))
 
+        # 体态
+        body = self.pick_one(self.library.get("body_types", []))
+
         return {
             "style": face_key,
             "face": face_desc,
             "hair": hair,
-            "skin": skin
+            "skin": skin,
+            "body": body
         }
 
     def generate_scene(self, scene_type: str = None) -> dict:
@@ -236,6 +246,8 @@ class SmartPromptGenerator:
             parts.append(character["skin"])
         if character.get("hair"):
             parts.append(character["hair"])
+        if character.get("body"):
+            parts.append(character["body"])
 
         # 4. 穿搭和表情
         if styling is None:
@@ -265,11 +277,16 @@ class SmartPromptGenerator:
         if camera:
             parts.append(camera)
 
-        # 8. 增强关键词
+        # 8. 艺术风格
+        _, art_style = self.pick_from_dict(self.library.get("art_styles", {}))
+        if art_style:
+            parts.append(art_style)
+
+        # 9. 增强关键词
         enhancements = self.pick_random(self.library.get("enhancement_keywords", []), 2)
         parts.extend(enhancements)
 
-        # 9. 自定义元素
+        # 10. 自定义元素
         if custom_elements:
             parts.extend(custom_elements)
 
@@ -281,7 +298,7 @@ class SmartPromptGenerator:
 
         return prompt
 
-    def get_negative_prompt(self) -> str:
+    def get_negative_prompt(self, pose_type: str = None) -> str:
         """获取负面提示词"""
         neg = self.library.get("negative_prompts", {})
         parts = []
@@ -293,7 +310,14 @@ class SmartPromptGenerator:
         if neg.get("quality"):
             parts.append(neg["quality"])
 
-        return ", ".join(parts)
+        prompt = ", ".join(parts)
+        if pose_type == "特写":
+            # 特写构图允许 close up / cropped
+            tokens = [t.strip() for t in prompt.split(",")]
+            tokens = [t for t in tokens if t not in {"close up", "cropped"}]
+            prompt = ", ".join(tokens)
+
+        return prompt
 
 
 def generate_image(prompt: str, negative_prompt: str, reference_url: str = None) -> dict:
@@ -356,8 +380,10 @@ def generate_series(count: int = 3,
     library = load_prompt_library()
     generator = SmartPromptGenerator(library)
 
-    # 生成统一的人物特征（保持一致性）
-    character = generator.generate_character(style)
+    # 生成统一的人物特征（保持一致性，按日期稳定）
+    daily_seed = int(date.today().strftime("%Y%m%d"))
+    stable_generator = SmartPromptGenerator(library, seed=daily_seed)
+    character = stable_generator.generate_character(style)
 
     print(f"\n📅 日期: {date.today()}")
     print(f"\n👤 人物特征:")
@@ -370,7 +396,6 @@ def generate_series(count: int = 3,
 
     images = []
     negative_prompt = generator.get_negative_prompt()
-
     print(f"\n🚫 Negative Prompt: {negative_prompt[:80]}...")
 
     print("\n" + "=" * 70)
@@ -380,7 +405,19 @@ def generate_series(count: int = 3,
     for i in range(count):
         # 每张图使用不同的场景、穿搭、姿势
         scene = generator.generate_scene(scene_type)
-        styling = generator.generate_styling(outfit_style)
+        if outfit_style:
+            resolved_outfit_style = outfit_style
+        else:
+            scene_outfit_map = {
+                "自然": ["清新", "古典", "运动"],
+                "城市": ["时尚", "优雅", "性感"],
+                "室内": ["优雅", "性感", "清新"],
+                "特殊": ["性感", "古典", "时尚"]
+            }
+            candidates = scene_outfit_map.get(scene.get("type", ""), [])
+            resolved_outfit_style = generator.pick_one(candidates) if candidates else None
+
+        styling = generator.generate_styling(resolved_outfit_style)
         pose_type = pose_types[i % len(pose_types)]
 
         prompt = generator.build_prompt(
@@ -394,6 +431,9 @@ def generate_series(count: int = 3,
         print(f"   场景: {scene.get('type', '随机')} | 穿搭: {styling.get('outfit_style', '随机')}")
         print(f"   表情: {styling.get('expression_type', '随机')} | 光影: {scene.get('lighting_type', '随机')}")
         print(f"   Prompt: {prompt[:100]}...")
+
+        # 根据姿势调整负面提示词
+        negative_prompt = generator.get_negative_prompt(pose_type)
 
         # 移除图生图逻辑，每次都用文生图生成独立的高清图片
         result = generate_image(
@@ -444,6 +484,10 @@ def list_options(library: dict):
     for key in library.get("face_types", {}).keys():
         print(f"   • {key}")
 
+    print("\n🧍 体态类型:")
+    for item in library.get("body_types", []):
+        print(f"   • {item[:40]}...")
+
     print("\n🏞️  场景类型 (--scene):")
     for key in library.get("scenes", {}).keys():
         print(f"   • {key}")
@@ -458,6 +502,10 @@ def list_options(library: dict):
 
     print("\n💡 光影类型:")
     for key in library.get("lighting", {}).keys():
+        print(f"   • {key}")
+
+    print("\n🎞️  艺术风格:")
+    for key in library.get("art_styles", {}).keys():
         print(f"   • {key}")
 
     print("\n📷 姿势类型:")
@@ -505,9 +553,8 @@ def main():
             )
             print(f"\n【{pose_type}】")
             print(prompt)
-
-        print(f"\n【Negative Prompt】")
-        print(generator.get_negative_prompt())
+            print(f"\n【Negative Prompt - {pose_type}】")
+            print(generator.get_negative_prompt(pose_type))
 
         return 0
 
