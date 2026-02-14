@@ -31,12 +31,6 @@ API_ENDPOINT = "https://ark.cn-beijing.volces.com/api/v3/images/generations"
 API_MODEL = "doubao-seedream-4-5-251128"
 API_KEY = os.environ.get("DOUBAO_API_KEY")
 
-# 检查 API Key
-if not API_KEY:
-    print("错误: 未设置 DOUBAO_API_KEY 环境变量")
-    print("请运行: export DOUBAO_API_KEY='your-api-key'")
-    sys.exit(1)
-
 # 确保目录存在
 LOGS_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -64,66 +58,260 @@ def load_prompt_library() -> dict:
 
 
 def get_default_library() -> dict:
-    """内置默认元素库"""
+    """内置默认元素库（从 generate_artistic.py 高质量元素库补充）"""
     return {
         "base_quality": [
             "RAW photo, masterpiece, best quality, ultra detailed, 8K UHD, DSLR",
-            "masterpiece, best quality, ultra realistic, 8k resolution, photorealistic"
+            "masterpiece, best quality, ultra realistic, 8k resolution, photorealistic",
+            "professional photography, masterpiece, ultra high resolution 8K, RAW photo, super sharp",
+            "cinematic photo, masterpiece, best quality, hyper-detailed, 8K HDR, ultra crisp",
+            "award-winning photography, masterpiece, ultra detailed, film grain, Fujifilm XT3"
         ],
         "asian_identity": [
             "East Asian Chinese young woman, Asian facial features, Asian beauty",
-            "beautiful Chinese woman, delicate Asian features, oriental beauty"
+            "beautiful Chinese woman, delicate Asian features, oriental beauty",
+            "gorgeous East Asian girl, Chinese facial structure, natural Asian beauty",
+            "stunning Asian woman in her early twenties, Chinese heritage, elegant oriental features",
+            "young Chinese beauty, refined Asian facial features, porcelain skin"
         ],
         "face_types": {
-            "甜美系": ["sweet innocent face, round cheeks, bright sparkling eyes"],
-            "清纯系": ["pure innocent face, clear bright eyes, natural beauty"],
-            "御姐系": ["mature elegant face, sharp jawline, sophisticated features"]
+            "甜美系": [
+                "sweet innocent face, round cheeks, bright sparkling eyes, cherry lips, dimples when smiling",
+                "baby face, cute round eyes, small nose, natural pink lips, youthful glow",
+                "adorable face, aegyo sal, gradient lips, innocent expression, glowing skin"
+            ],
+            "清纯系": [
+                "pure innocent face, clear bright eyes, natural beauty, fresh clean look",
+                "girl-next-door face, natural features, minimal makeup look, clear skin",
+                "fresh-faced beauty, dewy skin, natural brows, innocent gaze"
+            ],
+            "御姐系": [
+                "mature elegant face, sharp jawline, sophisticated features, intense gaze",
+                "queen-like features, high cheekbones, defined brows, powerful presence",
+                "fierce beautiful face, strong bone structure, captivating eyes, confident expression"
+            ],
+            "知性系": [
+                "intellectual beauty, refined features, wise gentle eyes, elegant expression",
+                "sophisticated face, graceful features, thoughtful gaze, cultured appearance",
+                "classic beauty, timeless features, intelligent eyes, poised expression"
+            ],
+            "冷艳系": [
+                "cold beauty, sharp features, icy gaze, mysterious allure, pale skin",
+                "aloof gorgeous face, sculpted features, distant expression, ethereal beauty",
+                "frost queen features, piercing eyes, perfect bone structure, cool elegance"
+            ],
+            "性感系": [
+                "seductive face, full lips, bedroom eyes, sultry expression, flawless skin",
+                "alluring features, smoldering gaze, pouty lips, sensual charm",
+                "glamorous face, defined cheekbones, smokey eyes, irresistible beauty"
+            ]
         },
         "hair_styles": [
             "long silky black hair flowing in wind, glossy healthy shine",
-            "shoulder-length dark brown hair with subtle waves"
+            "shoulder-length dark brown hair with subtle waves, natural movement",
+            "elegant updo with loose face-framing tendrils, sophisticated style",
+            "sleek straight black hair, mirror-like shine, razor-cut ends",
+            "soft romantic curls, chestnut brown, bouncy volume",
+            "messy beach waves, sun-kissed highlights, effortless style",
+            "high ponytail, sleek and polished, face-lifting effect",
+            "bob cut with blunt bangs, modern chic, face-framing",
+            "long layered hair with curtain bangs, soft feminine look",
+            "half-up half-down style, romantic braids, ethereal beauty"
         ],
         "skin_textures": [
-            "flawless porcelain skin, visible pores, natural skin texture, healthy glow"
+            "flawless porcelain skin, visible pores, natural skin texture, healthy glow",
+            "dewy glass skin, luminous complexion, subtle skin details, radiant",
+            "creamy smooth skin, natural texture, soft focus, photorealistic",
+            "honey-toned skin, warm undertones, healthy natural glow, detailed texture",
+            "milky white skin, translucent quality, delicate texture, ethereal glow"
         ],
         "body_types": [
-            "slim elegant figure, graceful proportions, model-like silhouette"
+            "slim elegant figure, graceful proportions, model-like silhouette",
+            "petite delicate frame, feminine curves, youthful figure",
+            "tall slender body, long legs, elegant posture, statuesque",
+            "fit toned body, healthy athletic build, graceful strength",
+            "soft feminine curves, hourglass silhouette, elegant proportions"
         ],
         "outfits": {
-            "优雅": ["elegant silk evening gown, flowing fabric"],
-            "清新": ["white cotton sundress with floral embroidery"]
+            "优雅": [
+                "elegant silk evening gown, flowing fabric, subtle shimmer",
+                "sophisticated cocktail dress, classic cut, refined elegance",
+                "designer blazer with matching skirt, professional chic",
+                "cashmere sweater with pearl accessories, understated luxury"
+            ],
+            "性感": [
+                "form-fitting red dress with subtle slit, alluring elegance",
+                "black lace top with silk camisole underneath, sophisticated sexy",
+                "off-shoulder sweater dress, showing collarbone, cozy sensual",
+                "satin slip dress, delicate straps, elegant curves"
+            ],
+            "清新": [
+                "white cotton sundress with floral embroidery, fresh innocent",
+                "light blue oversized shirt, effortless casual, girl-next-door",
+                "pastel cardigan with white tee, soft feminine layers",
+                "linen midi skirt with simple blouse, natural aesthetic"
+            ],
+            "时尚": [
+                "designer trench coat, street style chic, fashion-forward",
+                "leather jacket with vintage band tee, edgy cool",
+                "high-waisted jeans with crop top, trendy casual",
+                "oversized blazer as dress, power dressing, modern"
+            ],
+            "古典": [
+                "traditional cheongsam qipao, intricate embroidery, cultural elegance",
+                "modern hanfu-inspired dress, flowing sleeves, ethereal",
+                "vintage-style tea dress, retro feminine, timeless charm"
+            ],
+            "运动": [
+                "yoga outfit, athletic wear, healthy lifestyle aesthetic",
+                "tennis skirt with polo top, sporty chic, preppy style",
+                "casual athleisure, matching set, comfortable elegance"
+            ]
         },
         "poses": {
-            "特写": ["extreme close-up portrait, looking directly at camera"],
-            "半身": ["upper body shot, hands near face, graceful gesture"],
-            "全身": ["full body standing pose, natural S-curve"]
+            "特写": [
+                "extreme close-up portrait, looking directly at camera, captivating gaze",
+                "face close-up, chin slightly tilted, mysterious expression",
+                "intimate portrait, eyes half-closed, dreamy sensual look",
+                "profile close-up, perfect side angle, elegant neck line visible"
+            ],
+            "半身": [
+                "upper body shot, hands near face, graceful gesture",
+                "waist-up portrait, one hand touching hair, natural pose",
+                "elegant seated pose, hands in lap, refined posture",
+                "leaning forward slightly, engaging expression, dynamic composition"
+            ],
+            "全身": [
+                "full body standing pose, weight on one leg, natural S-curve",
+                "walking pose, hair and clothes in motion, dynamic energy",
+                "seated cross-legged, relaxed elegant posture, approachable",
+                "leaning against wall, casual confident stance, editorial style"
+            ],
+            "动态": [
+                "hair flipping in motion, dynamic movement, frozen moment",
+                "twirling in dress, fabric flowing, joyful energy",
+                "reaching up gracefully, elongated silhouette, dancer-like",
+                "looking back over shoulder, mysterious allure, dynamic angle"
+            ]
         },
         "expressions": {
-            "微笑": ["gentle natural smile, eyes crinkled with joy"],
-            "性感": ["sultry gaze, lips slightly parted"]
+            "微笑": [
+                "gentle natural smile, eyes crinkled with joy, warm genuine",
+                "subtle mysterious smile, Mona Lisa expression, intriguing",
+                "bright cheerful smile, showing teeth, infectious happiness"
+            ],
+            "性感": [
+                "sultry gaze, lips slightly parted, smoldering intensity",
+                "bedroom eyes, seductive half-smile, alluring charm",
+                "confident sexy smirk, direct eye contact, magnetic presence"
+            ],
+            "冷艳": [
+                "icy cold stare, emotionless beauty, intimidating elegance",
+                "aloof distant expression, untouchable aura, mysterious",
+                "piercing intense gaze, strong silent type, powerful presence"
+            ],
+            "忧郁": [
+                "melancholic gaze, wistful expression, poetic sadness",
+                "thoughtful distant look, introspective mood, emotional depth"
+            ],
+            "自信": [
+                "confident direct gaze, empowered expression, boss energy",
+                "self-assured smile, knowing look, powerful feminine",
+                "fierce determined expression, unstoppable energy, inspiring"
+            ]
         },
         "scenes": {
-            "自然": ["cherry blossom garden, pink petals falling"],
-            "城市": ["Tokyo neon-lit street at night, urban glamour"],
-            "室内": ["sunlit bedroom, morning light through sheer curtains"]
+            "自然": [
+                "cherry blossom garden, pink petals falling, spring romance",
+                "golden wheat field at sunset, warm summer glow, pastoral beauty",
+                "misty bamboo forest, zen atmosphere, oriental mystique",
+                "seaside at golden hour, waves gently lapping, peaceful serenity",
+                "autumn maple forest, red and gold leaves, nostalgic warmth",
+                "lavender field in Provence, purple haze, dreamy romantic"
+            ],
+            "城市": [
+                "Tokyo neon-lit street at night, urban glamour, cyberpunk vibe",
+                "Parisian cafe terrace, vintage charm, romantic atmosphere",
+                "New York rooftop at sunset, skyline backdrop, metropolitan chic",
+                "Shanghai Bund at blue hour, city lights, modern luxury",
+                "rainy city street, reflections on wet pavement, cinematic mood",
+                "luxury hotel lobby, marble and gold, sophisticated elegance"
+            ],
+            "室内": [
+                "sunlit bedroom, morning light through sheer curtains, intimate warmth",
+                "cozy coffee shop corner, warm ambient lighting, lifestyle aesthetic",
+                "minimalist studio, clean white background, professional setting",
+                "vintage library, leather books, intellectual atmosphere",
+                "luxury bathroom, marble surfaces, spa-like serenity",
+                "art gallery, white walls, sophisticated cultural setting"
+            ],
+            "特殊": [
+                "underwater photography, flowing fabric, dreamlike surreal",
+                "mirror reflection scene, double image, artistic composition",
+                "behind sheer fabric, mysterious silhouette, sensual artistic",
+                "in falling rain, water droplets, emotional dramatic",
+                "surrounded by flowers, botanical beauty, nature goddess"
+            ]
         },
         "lighting": {
-            "自然光": ["golden hour sunlight, warm orange glow, magical atmosphere"],
-            "影棚": ["professional studio softbox, clean even lighting"]
+            "自然光": [
+                "golden hour sunlight, warm orange glow, magical atmosphere, lens flare",
+                "soft diffused daylight, even illumination, natural skin tones",
+                "blue hour twilight, cool tones, city lights beginning to glow",
+                "dappled sunlight through leaves, natural patterns, organic beauty"
+            ],
+            "影棚": [
+                "professional studio softbox, clean even lighting, fashion magazine quality",
+                "Rembrandt lighting, dramatic shadow on cheek, classic portrait",
+                "butterfly lighting, glamorous old Hollywood, flattering shadows",
+                "rim lighting with hair light, subject separation, ethereal glow"
+            ],
+            "氛围": [
+                "neon lights, colorful glow, cyberpunk atmosphere, vibrant",
+                "candlelight warm glow, intimate romantic, soft flickering",
+                "fairy lights bokeh, magical sparkle, dreamy atmosphere",
+                "dramatic chiaroscuro, strong contrast, emotional depth"
+            ]
         },
         "camera_settings": [
-            "85mm f/1.2 lens, ultra shallow depth of field, creamy bokeh"
+            "85mm f/1.2 lens, ultra shallow depth of field, creamy bokeh",
+            "50mm f/1.4 lens, natural perspective, classic portrait",
+            "135mm f/2 lens, compressed background, beautiful subject isolation",
+            "35mm f/1.8 lens, environmental portrait, context and subject",
+            "100mm f/2.8 macro lens, extreme detail, skin texture visible"
         ],
         "art_styles": {
-            "电影感": ["cinematic color grading, film grain, movie still aesthetic, dramatic"]
+            "电影感": [
+                "cinematic color grading, film grain, movie still aesthetic, dramatic",
+                "Wong Kar-wai style, saturated colors, melancholic romance, neon",
+                "Korean drama aesthetic, soft romantic filter, dreamy pastel"
+            ],
+            "时尚": [
+                "Vogue magazine editorial, high fashion, sophisticated elegance",
+                "Harper's Bazaar style, avant-garde fashion, artistic",
+                "Instagram influencer aesthetic, warm tones, lifestyle aspirational"
+            ],
+            "艺术": [
+                "fine art portrait, painterly quality, museum-worthy",
+                "Renaissance painting inspired, classical beauty, timeless"
+            ],
+            "复古": [
+                "90s film photography, nostalgic grain, vintage color cast",
+                "Polaroid instant photo aesthetic, retro charm, authentic",
+                "old Hollywood glamour, black and white option, timeless elegance"
+            ]
         },
         "enhancement_keywords": [
-            "award-winning photo, professional photography, magazine cover quality"
+            "award-winning photo, professional photography, magazine cover quality, ultra high resolution",
+            "skin texture visible, pores detail, eyelash detail, hair strands detail, ultra crisp",
+            "perfect composition, rule of thirds, visual balance, color harmony",
+            "post-processing, color grading, professional retouching, polished, hyper detailed",
+            "sharp focus on eyes, catchlight, detailed iris, expressive, perfectly focused"
         ],
         "negative_prompts": {
-            "standard": "(deformed, bad anatomy, disfigured:1.3), ugly, duplicate, morbid",
-            "asian_focused": "Western face, Caucasian features, European features, blonde hair, blue eyes",
-            "quality": "low quality, worst quality, jpeg artifacts, blurry"
+            "standard": "(deformed, bad anatomy, disfigured:1.3), ugly, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck",
+            "asian_focused": "Western face, Caucasian features, European features, blonde hair, blue eyes, green eyes, high nose bridge, deep-set eyes, non-Asian features",
+            "quality": "low quality, worst quality, jpeg artifacts, pixelated, blurry, out of focus, poorly lit, overexposed, underexposed, amateur photography"
         }
     }
 
@@ -372,6 +560,13 @@ def generate_series(count: int = 3,
                     outfit_style: str = None) -> dict:
     """生成系列图片"""
 
+    global API_KEY
+    API_KEY = os.environ.get("DOUBAO_API_KEY")
+    if not API_KEY:
+        print("错误: 未设置 DOUBAO_API_KEY 环境变量")
+        print("请运行: export DOUBAO_API_KEY='your-api-key'")
+        return {"success": False, "count": 0, "total": count, "character": {}, "images": []}
+
     print("=" * 70)
     print("🎨 美女生成 V6.0 - 纯文生图 4K 高清系统")
     print("=" * 70)
@@ -514,6 +709,8 @@ def list_options(library: dict):
 
 
 def main():
+    global API_KEY
+
     parser = argparse.ArgumentParser(
         description="美女生成 V6.0 - 纯文生图 4K 高清系统"
     )
@@ -529,6 +726,17 @@ def main():
 
     # 加载元素库
     library = load_prompt_library()
+
+    if args.list_options:
+        list_options(library)
+        return 0
+
+    # 检查 API Key（预览和列表模式不需要）
+    API_KEY = os.environ.get("DOUBAO_API_KEY")
+    if not API_KEY and not args.preview:
+        print("错误: 未设置 DOUBAO_API_KEY 环境变量")
+        print("请运行: export DOUBAO_API_KEY='your-api-key'")
+        return 1
 
     if args.list_options:
         list_options(library)

@@ -19,6 +19,7 @@ SKILL_DIR = SCRIPT_DIR.parent
 CONFIG_DIR = SKILL_DIR / "config"
 GENERATE_SCRIPT = SKILL_DIR / "scripts" / "generate.py"
 BEAUTY_GENERATE_SCRIPT = SKILL_DIR / "scripts" / "generate_beauty.py"
+ARTISTIC_GENERATE_SCRIPT = SKILL_DIR / "scripts" / "generate_artistic.py"
 
 # API 配置
 API_BASE = "https://wx.limyai.com/api/openapi"
@@ -263,52 +264,99 @@ def publish_to_wechat(
     return result
 
 
+def _extract_image_urls(output: str) -> list:
+    """从脚本输出中提取图片 URL（支持豆包、imgbb 等多种来源）"""
+    import re
+    images = []
+    for line in output.split("\n"):
+        if "http" not in line:
+            continue
+        # 匹配所有已知图片 URL 来源
+        if any(domain in line for domain in [
+            "ark-content", "doubao", "volces.com",  # 豆包
+            "imgbb", "i.ibb.co", "ibb.co",          # imgbb 图床
+            "imgur.com",                              # imgur
+        ]):
+            urls = re.findall(r'https?://[^\s\)\]"\']+', line)
+            images.extend(urls)
+    return images
+
+
 def generate_daily_images(count: int = 3, style: str = "") -> list:
     """
     生成多张一致性人物图片
-    使用 generate_beauty.py 确保人物一致性和高质量
+    优先使用豆包（generate_beauty.py），失败时自动 fallback 到 OpenRouter（generate_artistic.py）
     """
-    print(f"\n🎨 正在生成 {count} 张一致性人物图片...")
+    import re
+
+    images = []
+
+    # === 第一优先：豆包 (generate_beauty.py) ===
+    print(f"\n🎨 [豆包] 正在生成 {count} 张一致性人物图片...")
     print("🎭 人物特征将保持一致，仅改变姿态和角度")
 
-    # 调用美女生成脚本 V4.0
     cmd = [
         "python3", str(BEAUTY_GENERATE_SCRIPT),
         "--count", str(count)
     ]
-
     if style:
         cmd.extend(["--style", style])
 
-    result = subprocess.run(
-        cmd,
-        capture_output=True,
-        text=True,
-        timeout=300,  # 5分钟超时（3张图）
-        env=os.environ
-    )
+    try:
+        result = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            timeout=300,
+            env=os.environ
+        )
+        images = _extract_image_urls(result.stdout)
 
-    images = []
+        if result.returncode == 0 and len(images) > 0:
+            print(f"  ✅ [豆包] 成功生成 {len(images)} 张图片")
+            return images
 
-    # 解析输出，提取图片 URL
-    # generate_beauty.py 输出格式:
-    #   1. 极致特写
-    #      https://ark-content-generation-v2-cn-beijing.tos-cn-beijing.volces.com/...
-    import re
-    lines = result.stdout.split("\n")
-    for line in lines:
-        # 查找包含 http 的行
-        if "http" in line and ("ark-content" in line or "doubao" in line):
-            urls = re.findall(r'https?://[^\s\)]+', line)
-            images.extend(urls)
-
-    # 显示生成结果
-    if result.returncode == 0:
-        print(f"  ✅ 成功生成 {len(images)} 张图片")
-    else:
-        print(f"  ⚠️  生成过程有异常，返回码: {result.returncode}")
+        # 豆包失败，打印原因
+        print(f"  ⚠️  [豆包] 生成失败（返回码: {result.returncode}, 图片数: {len(images)}）")
         if result.stderr:
-            print(f"  错误: {result.stderr}")
+            # 只打印前 500 字符避免刷屏
+            print(f"  错误: {result.stderr[:500]}")
+
+    except subprocess.TimeoutExpired:
+        print("  ⚠️  [豆包] 生成超时")
+    except Exception as e:
+        print(f"  ⚠️  [豆包] 生成异常: {e}")
+
+    # === Fallback：OpenRouter (generate_artistic.py) ===
+    print(f"\n🔄 [Fallback] 切换到 OpenRouter (Gemini) 生成 {count} 张图片...")
+
+    cmd_fallback = [
+        "python3", str(ARTISTIC_GENERATE_SCRIPT),
+        "--count", str(count)
+    ]
+
+    try:
+        result_fallback = subprocess.run(
+            cmd_fallback,
+            capture_output=True,
+            text=True,
+            timeout=600,  # OpenRouter 可能更慢，给 10 分钟
+            env=os.environ
+        )
+        images = _extract_image_urls(result_fallback.stdout)
+
+        if result_fallback.returncode == 0 and len(images) > 0:
+            print(f"  ✅ [OpenRouter] 成功生成 {len(images)} 张图片")
+            return images
+
+        print(f"  ❌ [OpenRouter] 也失败了（返回码: {result_fallback.returncode}, 图片数: {len(images)}）")
+        if result_fallback.stderr:
+            print(f"  错误: {result_fallback.stderr[:500]}")
+
+    except subprocess.TimeoutExpired:
+        print("  ❌ [OpenRouter] 生成超时")
+    except Exception as e:
+        print(f"  ❌ [OpenRouter] 生成异常: {e}")
 
     return images
 
