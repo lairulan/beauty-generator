@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-美女生成 V6.0 - 纯文生图 4K 高清系统
+美女生成 V7.0 - 双引擎高清生成系统
+- Google Imagen 4 Ultra 主力 + 豆包 Seedream 备选
 - 从丰富的元素库中随机组合
 - 确保每次生成都有新鲜感
 - 严格东方美女风格
-- 基于 Civitai/Stable Diffusion 社区最佳实践
-- 使用 4K 分辨率纯文生图，不再使用图生图（避免质量降低）
+- 性感系专属：写真集姿势 + 丰满曲线体态 + 专属服装
 """
 
 import argparse
@@ -585,6 +585,10 @@ def generate_image_google(prompt: str) -> dict:
 
 def generate_image_doubao(prompt: str, negative_prompt: str) -> dict:
     """调用豆包 Seedream API 生成图片"""
+    doubao_key = os.environ.get("DOUBAO_API_KEY")
+    if not doubao_key:
+        return {"success": False, "error": "DOUBAO_API_KEY 未设置"}
+
     payload = {
         "model": API_MODEL,
         "prompt": prompt,
@@ -602,7 +606,7 @@ def generate_image_doubao(prompt: str, negative_prompt: str) -> dict:
             data=data,
             headers={
                 'Content-Type': 'application/json',
-                'Authorization': f'Bearer {API_KEY}'
+                'Authorization': f'Bearer {doubao_key}'
             },
             method='POST'
         )
@@ -617,7 +621,7 @@ def generate_image_doubao(prompt: str, negative_prompt: str) -> dict:
         return {"success": False, "error": str(e)}
 
 
-def generate_image(prompt: str, negative_prompt: str, reference_url: str = None) -> dict:
+def generate_image(prompt: str, negative_prompt: str) -> dict:
     """生成图片：优先 Google Imagen 4 Ultra，失败后降级到豆包 Seedream"""
 
     # 优先尝试 Google Imagen 4 Ultra
@@ -641,15 +645,12 @@ def generate_series(count: int = 3,
                     outfit_style: str = None) -> dict:
     """生成系列图片"""
 
-    global API_KEY
-    API_KEY = os.environ.get("DOUBAO_API_KEY")
-    if not API_KEY:
-        print("错误: 未设置 DOUBAO_API_KEY 环境变量")
-        print("请运行: export DOUBAO_API_KEY='your-api-key'")
+    if not os.environ.get("GOOGLE_API_KEY") and not os.environ.get("DOUBAO_API_KEY"):
+        print("错误: 请设置 GOOGLE_API_KEY 或 DOUBAO_API_KEY 环境变量")
         return {"success": False, "count": 0, "total": count, "character": {}, "images": []}
 
     print("=" * 70)
-    print("🎨 美女生成 V6.0 - 纯文生图 4K 高清系统")
+    print("🎨 美女生成 V7.0 - 双引擎高清生成系统")
     print("=" * 70)
 
     # 加载元素库
@@ -727,8 +728,7 @@ def generate_series(count: int = 3,
         # 移除图生图逻辑，每次都用文生图生成独立的高清图片
         result = generate_image(
             prompt,
-            negative_prompt,
-            reference_url=None  # 不使用参考图，纯文生图
+            negative_prompt
         )
 
         if result["success"]:
@@ -803,10 +803,8 @@ def list_options(library: dict):
 
 
 def main():
-    global API_KEY
-
     parser = argparse.ArgumentParser(
-        description="美女生成 V6.0 - 纯文生图 4K 高清系统"
+        description="美女生成 V7.0 - 双引擎高清生成系统"
     )
 
     parser.add_argument("--count", "-c", type=int, default=3, help="生成数量 (默认: 3)")
@@ -826,15 +824,11 @@ def main():
         return 0
 
     # 检查 API Key（预览和列表模式不需要）
-    API_KEY = os.environ.get("DOUBAO_API_KEY")
-    if not API_KEY and not args.preview:
-        print("错误: 未设置 DOUBAO_API_KEY 环境变量")
-        print("请运行: export DOUBAO_API_KEY='your-api-key'")
+    if not args.preview and not os.environ.get("GOOGLE_API_KEY") and not os.environ.get("DOUBAO_API_KEY"):
+        print("错误: 请设置 GOOGLE_API_KEY 或 DOUBAO_API_KEY 环境变量")
+        print("Google: export GOOGLE_API_KEY='your-api-key'")
+        print("豆包:   export DOUBAO_API_KEY='your-api-key'")
         return 1
-
-    if args.list_options:
-        list_options(library)
-        return 0
 
     if args.preview:
         generator = SmartPromptGenerator(library)
