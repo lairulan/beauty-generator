@@ -26,10 +26,14 @@ SKILL_DIR = SCRIPT_DIR.parent
 CONFIG_DIR = SKILL_DIR / "config"
 LOGS_DIR = SKILL_DIR / "logs"
 
-# API 配置
+# API 配置 - 豆包
 API_ENDPOINT = "https://ark.cn-beijing.volces.com/api/v3/images/generations"
 API_MODEL = "doubao-seedream-4-5-251128"
 API_KEY = os.environ.get("DOUBAO_API_KEY")
+
+# API 配置 - Google Imagen
+GOOGLE_IMAGEN_ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-ultra-generate-001:predict"
+IMGBB_UPLOAD_ENDPOINT = "https://api.imgbb.com/1/upload"
 
 # 确保目录存在
 LOGS_DIR.mkdir(parents=True, exist_ok=True)
@@ -512,25 +516,85 @@ class SmartPromptGenerator:
         return prompt
 
 
-def generate_image(prompt: str, negative_prompt: str, reference_url: str = None) -> dict:
-    """调用 API 生成图片（纯文生图，不使用图生图）"""
+def upload_to_imgbb(base64_data: str) -> dict:
+    """上传 base64 图片数据到 imgbb，返回图片 URL"""
+    import urllib.parse
+    imgbb_key = os.environ.get("IMGBB_API_KEY")
+    if not imgbb_key:
+        return {"success": False, "error": "IMGBB_API_KEY 未设置"}
 
+    ssl_context = ssl._create_unverified_context()
+    try:
+        form_data = urllib.parse.urlencode({"image": base64_data}).encode("utf-8")
+        req = urllib.request.Request(
+            f"{IMGBB_UPLOAD_ENDPOINT}?key={imgbb_key}",
+            data=form_data,
+            method="POST"
+        )
+        with urllib.request.urlopen(req, context=ssl_context, timeout=60) as response:
+            result = json.loads(response.read().decode("utf-8"))
+            if result.get("success"):
+                return {"success": True, "url": result["data"]["url"]}
+            return {"success": False, "error": f"imgbb 返回: {result}"}
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+
+
+def generate_image_google(prompt: str) -> dict:
+    """调用 Google Imagen 4 Ultra 生成图片，结果上传到 imgbb 返回 URL"""
+    import base64
+    google_key = os.environ.get("GOOGLE_API_KEY")
+    if not google_key:
+        return {"success": False, "error": "GOOGLE_API_KEY 未设置"}
+
+    endpoint = f"{GOOGLE_IMAGEN_ENDPOINT}?key={google_key}"
+    payload = {
+        "instances": [{"prompt": prompt}],
+        "parameters": {"sampleCount": 1, "aspectRatio": "3:4"}
+    }
+
+    ssl_context = ssl._create_unverified_context()
+    try:
+        data = json.dumps(payload).encode("utf-8")
+        req = urllib.request.Request(
+            endpoint,
+            data=data,
+            headers={"Content-Type": "application/json"},
+            method="POST"
+        )
+        with urllib.request.urlopen(req, context=ssl_context, timeout=120) as response:
+            result = json.loads(response.read().decode("utf-8"))
+
+        predictions = result.get("predictions", [])
+        if not predictions:
+            return {"success": False, "error": "Google API 无返回图片"}
+
+        b64_data = predictions[0].get("bytesBase64Encoded", "")
+        if not b64_data:
+            return {"success": False, "error": "Google API 返回数据为空"}
+
+        log("  📤 上传到 imgbb...")
+        upload_result = upload_to_imgbb(b64_data)
+        if upload_result["success"]:
+            return {"success": True, "url": upload_result["url"]}
+        return {"success": False, "error": f"imgbb 上传失败: {upload_result['error']}"}
+
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+
+
+def generate_image_doubao(prompt: str, negative_prompt: str) -> dict:
+    """调用豆包 Seedream API 生成图片"""
     payload = {
         "model": API_MODEL,
         "prompt": prompt,
         "negative_prompt": negative_prompt,
-        "size": "2K",  # 使用 2K 分辨率（Seedream API 标准格式，大写K）
+        "size": "2K",
         "response_format": "url",
         "watermark": False
     }
 
-    # 移除图生图逻辑，每次都使用文生图
-    # if reference_url:
-    #     payload["image"] = reference_url
-    #     log("📎 使用图生图模式")
-
     ssl_context = ssl._create_unverified_context()
-
     try:
         data = json.dumps(payload).encode('utf-8')
         req = urllib.request.Request(
@@ -542,19 +606,33 @@ def generate_image(prompt: str, negative_prompt: str, reference_url: str = None)
             },
             method='POST'
         )
-
         with urllib.request.urlopen(req, context=ssl_context, timeout=90) as response:
             if response.status == 200:
                 response_data = response.read().decode('utf-8')
                 data = json.loads(response_data)
-
                 if "data" in data and len(data["data"]) > 0:
                     return {"success": True, "url": data["data"][0].get("url")}
-
-        return {"success": False, "error": "API 响应异常"}
-
+        return {"success": False, "error": "豆包 API 响应异常"}
     except Exception as e:
         return {"success": False, "error": str(e)}
+
+
+def generate_image(prompt: str, negative_prompt: str, reference_url: str = None) -> dict:
+    """生成图片：优先 Google Imagen 4 Ultra，失败后降级到豆包 Seedream"""
+
+    # 优先尝试 Google Imagen 4 Ultra
+    google_key = os.environ.get("GOOGLE_API_KEY")
+    if google_key:
+        log("  🌐 [Google] 尝试 Imagen 4 Ultra...")
+        result = generate_image_google(prompt)
+        if result["success"]:
+            log("  ✅ [Google] 生成成功")
+            return result
+        log(f"  ⚠️  [Google] 失败: {result.get('error')}，降级到豆包...")
+
+    # 降级到豆包 Seedream
+    log("  🎨 [豆包] 使用 Seedream 生成...")
+    return generate_image_doubao(prompt, negative_prompt)
 
 
 def generate_series(count: int = 3,
@@ -615,6 +693,7 @@ def generate_series(count: int = 3,
                 character["body"] = generator.pick_one(sexy_body_list)
         else:
             scene = generator.generate_scene(scene_type)
+            pose_type = pose_types[i % len(pose_types)]
             if outfit_style:
                 resolved_outfit_style = outfit_style
             else:
@@ -628,7 +707,6 @@ def generate_series(count: int = 3,
                 resolved_outfit_style = generator.pick_one(candidates) if candidates else None
 
         styling = generator.generate_styling(resolved_outfit_style)
-        pose_type = pose_types[i % len(pose_types)]
 
         prompt = generator.build_prompt(
             character=character,
