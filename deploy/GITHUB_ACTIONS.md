@@ -58,7 +58,6 @@ git push -u origin main
 
 | Name | Secret |
 |------|--------|
-| `OPENROUTER_API_KEY` | `your-openrouter-api-key` |
 | `IMGBB_API_KEY` | `your-imgbb-api-key` |
 | `DOUBAO_API_KEY` | `your-doubao-api-key` |
 | `WECHAT_API_KEY` | `your-wechat-api-key` |
@@ -120,7 +119,6 @@ schedule:
 ```yaml
 - name: 生成并发布美女图片
   env:
-    OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
     IMGBB_API_KEY: ${{ secrets.IMGBB_API_KEY }}
     DOUBAO_API_KEY: ${{ secrets.DOUBAO_API_KEY }}
     WECHAT_API_KEY: ${{ secrets.WECHAT_API_KEY }}

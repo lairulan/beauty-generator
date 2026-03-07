@@ -161,7 +161,6 @@ python3 ~/.claude/skills/beauty-generator/scripts/publish_wechat.py --count 3
 python3 ~/.claude/skills/beauty-generator/scripts/publish_wechat.py --test --count 3
 
 # 强制使用 OpenRouter（不回退豆包）
-python3 ~/.claude/skills/beauty-generator/scripts/publish_wechat.py --use-openrouter --count 3
 
 # 手动执行自动发布脚本
 python3 ~/.claude/skills/beauty-generator/scripts/auto_publish.py
@@ -185,7 +184,6 @@ python3 ~/.claude/skills/beauty-generator/scripts/auto_publish.py
 ### 环境变量配置
 ```bash
 # OpenRouter 图像生成 API（优先）
-export OPENROUTER_API_KEY="your-openrouter-api-key"
 export IMGBB_API_KEY="your-imgbb-api-key"
 
 # 豆包图像生成 API（回退）

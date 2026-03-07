@@ -73,13 +73,12 @@ jobs:
       - name: 生成并发布艺术写真
         if: steps.dedup.outputs.skip != 'true'
         env:
-          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           IMGBB_API_KEY: ${{ secrets.IMGBB_API_KEY }}
           WECHAT_API_KEY: ${{ secrets.WECHAT_API_KEY }}
           DOUBAO_API_KEY: ${{ secrets.DOUBAO_API_KEY }}
         run: |
           cd scripts
-          python3 publish_wechat.py --count 1
+          python3 publish_wechat.py --count 1 --style 性感系 --emotion 挑逗
 
       - name: 记录日志
         if: always()

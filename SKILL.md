@@ -1,29 +1,27 @@
 ---
 name: beauty-generator
-version: 2.0.0
-description: Generate realistic beauty photography using OpenRouter (Gemini) or Doubao Seedream model. Supports artistic portrait style, scene/atmosphere control, emotion/makeup/art style customization, and WeChat publishing. Use when user asks to generate beauty images ("生成美女", "每日美女", "发布美女", "艺术写真").
+version: 3.0.0
+description: Generate realistic beauty photography using Doubao Seedream model. Supports artistic portrait style, scene/atmosphere control, emotion/makeup/art style customization, and WeChat publishing. Use when user asks to generate beauty images ("生成美女", "每日美女", "发布美女", "艺术写真").
 author: rulanlai
-tags: [image-generation, beauty, wechat, openrouter, doubao]
+tags: [image-generation, beauty, wechat, doubao]
 ---
 
-# Beauty Generator - 艺术写真生成 V2.0
+# Beauty Generator - 艺术写真生成 V3.0
 
-高质量真人艺术写真生成助手，支持 OpenRouter (Gemini) 和豆包模型（默认优先 OpenRouter，失败回退豆包）。
+高质量真人艺术写真生成助手，使用豆包 Seedream 模型。
 
 ## 功能特点
 
-- **高质量写真**: 优先使用 OpenRouter (Gemini) 生成更真实的艺术写真
+- **高质量写真**: 使用豆包 Seedream 生成真实的艺术写真
 - **每日一张精品**: 默认每天生成一张写真，更吸引眼球
-- **双模型支持**: 优先 OpenRouter，失败自动回退豆包
 - **公众号发布**: 一键发布到公众号草稿箱（小绿书格式）
 - **定时发布**: 每天 20:00 自动发布到公众号草稿箱
 
-## 🆕 V2.0 更新
+## 🆕 V3.0 更新
 
-- 默认优先 OpenRouter (Gemini) 生成图片，失败自动回退豆包
-- OpenRouter 获取更高质量真人摄影风格
-- 更性感、更吸引眼球的艺术写真
-- 每日生成一张精品（可调整数量）
+- 改用豆包 API,移除 OpenRouter 依赖
+- 简化 API 配置,只需一个 DOUBAO_API_KEY
+- 更稳定的图片生成体验
 
 ## 触发词
 
@@ -38,28 +36,14 @@ tags: [image-generation, beauty, wechat, openrouter, doubao]
 
 ### 基础使用
 ```bash
-# 仅生成（OpenRouter）
-python3 ~/.claude/skills/beauty-generator/scripts/generate_artistic.py
-
-# 仅生成（豆包）
-python3 ~/.claude/skills/beauty-generator/scripts/generate_beauty.py
-```
-
-### 使用 OpenRouter（可选）
-```bash
-python3 ~/.claude/skills/beauty-generator/scripts/generate_artistic.py --count 3
-
-# 预览 Prompt
-python3 ~/.claude/skills/beauty-generator/scripts/generate_artistic.py --preview
+# 生成图片
+python3 ~/.claude/skills/beauty-generator/scripts/generate_beauty.py --count 3
 ```
 
 ### 公众号发布
 ```bash
-# 发布到公众号（默认优先 OpenRouter，失败回退豆包）
+# 发布到公众号
 python3 ~/.claude/skills/beauty-generator/scripts/publish_wechat.py --count 1
-
-# 强制使用 OpenRouter（不回退豆包）
-python3 ~/.claude/skills/beauty-generator/scripts/publish_wechat.py --use-openrouter --count 1
 
 # 测试模式（只生成不发布）
 python3 ~/.claude/skills/beauty-generator/scripts/publish_wechat.py --test --count 1
@@ -69,11 +53,7 @@ python3 ~/.claude/skills/beauty-generator/scripts/publish_wechat.py --test --cou
 
 环境变量：
 ```bash
-# OpenRouter (优先)
-export OPENROUTER_API_KEY="your-openrouter-api-key"
-export IMGBB_API_KEY="your-imgbb-api-key"
-
-# 豆包 (回退)
+# 豆包 API (图片生成)
 export DOUBAO_API_KEY="your-doubao-api-key"
 
 # 公众号发布
@@ -90,8 +70,7 @@ beauty-generator/
 ├── .github/workflows/          # GitHub Actions
 ├── deploy/                     # 部署脚本
 ├── scripts/
-│   ├── generate_artistic.py    # 🆕 V2.0 艺术写真生成
-│   ├── generate_beauty.py      # 豆包模式生成
+│   ├── generate_beauty.py      # 豆包图片生成
 │   ├── publish_wechat.py       # 公众号发布脚本
 │   ├── auto_publish.py         # 本地定时发布
 │   └── config_cron.sh          # cron 配置
@@ -109,8 +88,8 @@ beauty-generator/
 
 ## 版本信息
 
-当前版本：**v5.1** (2026-01-24)
+当前版本：**v3.0** (2026-02-16)
 
-- V5.1: 修复豆包回退模式、重复触发问题
-- V2.0: 支持 OpenRouter (Gemini) 高质量艺术写真
+- V3.0: 移除 OpenRouter 依赖,专用豆包 API
+- V2.x: 支持 OpenRouter fallback
 - V1.x: 使用豆包模型生成美女图片

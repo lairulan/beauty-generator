@@ -6,7 +6,6 @@
 
 1. **检查环境变量**  
    - 发布必需：`WECHAT_API_KEY`  
-   - 生成优先：`OPENROUTER_API_KEY` + `IMGBB_API_KEY`  
    - 回退备用：`DOUBAO_API_KEY`
 2. **生成图片**  
    - 优先调用 `generate_artistic.py`（OpenRouter）  

@@ -515,10 +515,9 @@ def generate_image(prompt: str, negative_prompt: str, reference_url: str = None)
         "model": API_MODEL,
         "prompt": prompt,
         "negative_prompt": negative_prompt,
-        "size": "4k",  # 使用 4K 分辨率以获得更清晰的图片
+        "size": "2K",  # 使用 2K 分辨率（Seedream API 标准格式，大写K）
         "response_format": "url",
-        "watermark": False,
-        "quality": "hd"  # 添加高清质量参数
+        "watermark": False
     }
 
     # 移除图生图逻辑，每次都使用文生图
@@ -599,18 +598,25 @@ def generate_series(count: int = 3,
 
     for i in range(count):
         # 每张图使用不同的场景、穿搭、姿势
-        scene = generator.generate_scene(scene_type)
-        if outfit_style:
-            resolved_outfit_style = outfit_style
+        # 性感系风格：固定偏向室内/城市场景，穿搭锁定性感
+        if style == "性感系":
+            sexy_scenes = ["室内", "城市"]
+            resolved_scene_type = generator.pick_one(sexy_scenes) if not scene_type else scene_type
+            scene = generator.generate_scene(resolved_scene_type)
+            resolved_outfit_style = outfit_style if outfit_style else "性感"
         else:
-            scene_outfit_map = {
-                "自然": ["清新", "古典", "运动"],
-                "城市": ["时尚", "优雅", "性感"],
-                "室内": ["优雅", "性感", "清新"],
-                "特殊": ["性感", "古典", "时尚"]
-            }
-            candidates = scene_outfit_map.get(scene.get("type", ""), [])
-            resolved_outfit_style = generator.pick_one(candidates) if candidates else None
+            scene = generator.generate_scene(scene_type)
+            if outfit_style:
+                resolved_outfit_style = outfit_style
+            else:
+                scene_outfit_map = {
+                    "自然": ["清新", "古典", "运动"],
+                    "城市": ["时尚", "优雅", "性感"],
+                    "室内": ["优雅", "性感", "清新"],
+                    "特殊": ["性感", "古典", "时尚"]
+                }
+                candidates = scene_outfit_map.get(scene.get("type", ""), [])
+                resolved_outfit_style = generator.pick_one(candidates) if candidates else None
 
         styling = generator.generate_styling(resolved_outfit_style)
         pose_type = pose_types[i % len(pose_types)]

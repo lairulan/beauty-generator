@@ -243,6 +243,10 @@ def publish_to_wechat(
             if caption:
                 content_lines.append(f"\n{caption}\n")
 
+        # 末尾加话题标签和互动引导
+        content_lines.append("\n#每日美女 #写真 #人像摄影 #国风美女 #今日心动")
+        content_lines.append("\n你最喜欢哪种风格？评论区告诉我 👇")
+
         content_md = "\n".join(content_lines)
     else:
         content_md = content
@@ -285,13 +289,13 @@ def _extract_image_urls(output: str) -> list:
 def generate_daily_images(count: int = 3, style: str = "") -> list:
     """
     生成多张一致性人物图片
-    优先使用豆包（generate_beauty.py），失败时自动 fallback 到 OpenRouter（generate_artistic.py）
+    使用豆包 API (generate_beauty.py)
     """
     import re
 
     images = []
 
-    # === 第一优先：豆包 (generate_beauty.py) ===
+    # 使用豆包生成
     print(f"\n🎨 [豆包] 正在生成 {count} 张一致性人物图片...")
     print("🎭 人物特征将保持一致，仅改变姿态和角度")
 
@@ -317,46 +321,15 @@ def generate_daily_images(count: int = 3, style: str = "") -> list:
             return images
 
         # 豆包失败，打印原因
-        print(f"  ⚠️  [豆包] 生成失败（返回码: {result.returncode}, 图片数: {len(images)}）")
+        print(f"  ❌ [豆包] 生成失败（返回码: {result.returncode}, 图片数: {len(images)}）")
         if result.stderr:
             # 只打印前 500 字符避免刷屏
             print(f"  错误: {result.stderr[:500]}")
 
     except subprocess.TimeoutExpired:
-        print("  ⚠️  [豆包] 生成超时")
+        print("  ❌ [豆包] 生成超时")
     except Exception as e:
-        print(f"  ⚠️  [豆包] 生成异常: {e}")
-
-    # === Fallback：OpenRouter (generate_artistic.py) ===
-    print(f"\n🔄 [Fallback] 切换到 OpenRouter (Gemini) 生成 {count} 张图片...")
-
-    cmd_fallback = [
-        "python3", str(ARTISTIC_GENERATE_SCRIPT),
-        "--count", str(count)
-    ]
-
-    try:
-        result_fallback = subprocess.run(
-            cmd_fallback,
-            capture_output=True,
-            text=True,
-            timeout=600,  # OpenRouter 可能更慢，给 10 分钟
-            env=os.environ
-        )
-        images = _extract_image_urls(result_fallback.stdout)
-
-        if result_fallback.returncode == 0 and len(images) > 0:
-            print(f"  ✅ [OpenRouter] 成功生成 {len(images)} 张图片")
-            return images
-
-        print(f"  ❌ [OpenRouter] 也失败了（返回码: {result_fallback.returncode}, 图片数: {len(images)}）")
-        if result_fallback.stderr:
-            print(f"  错误: {result_fallback.stderr[:500]}")
-
-    except subprocess.TimeoutExpired:
-        print("  ❌ [OpenRouter] 生成超时")
-    except Exception as e:
-        print(f"  ❌ [OpenRouter] 生成异常: {e}")
+        print(f"  ❌ [豆包] 生成异常: {e}")
 
     return images
 
@@ -434,8 +407,17 @@ def main():
 
     print(f"\n📤 正在发布到公众号...")
 
-    # 构建图片和说明配对
-    image_pairs = [(img, args.caption if i == 0 else "") for i, img in enumerate(images)]
+    # 构建图片和说明配对 - 每张图配独立的随机配文
+    image_pairs = []
+    for i, img in enumerate(images):
+        if i == 0:
+            caption = args.caption  # 第一张用主配文
+        else:
+            caption = generate_smart_caption(
+                scene=args.scene or "",
+                emotion=args.emotion or ""
+            )
+        image_pairs.append((img, caption))
 
     result = publish_to_wechat(
         appid=appid,

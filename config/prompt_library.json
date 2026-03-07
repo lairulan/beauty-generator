@@ -45,9 +45,11 @@
       "frost queen features, piercing eyes, perfect bone structure, cool elegance"
     ],
     "性感系": [
-      "seductive face, full lips, bedroom eyes, sultry expression, flawless skin",
-      "alluring features, smoldering gaze, pouty lips, sensual charm",
-      "glamorous face, defined cheekbones, smokey eyes, irresistible beauty"
+      "seductive face, heavy-lidded almond eyes, full voluptuous lips, high cheekbones, smoldering intensity",
+      "alluring face, sultry deep-set eyes, pouty glossy lips, perfect bone structure, irresistible sensual charm",
+      "glamorous face, smoky eyes, defined cheekbones, parted moist lips, magnetic fatal attraction",
+      "captivating beauty, bedroom eyes, sculpted jawline, seductive expression, dangerously attractive",
+      "enchanting face, half-lidded seductive gaze, cherry lips slightly parted, flawless silk skin, devastating allure"
     ]
   },
 
@@ -90,10 +92,13 @@
       "cashmere sweater with pearl accessories, understated luxury"
     ],
     "性感": [
-      "form-fitting red dress with subtle slit, alluring elegance",
-      "black lace top with silk camisole underneath, sophisticated sexy",
-      "off-shoulder sweater dress, showing collarbone, cozy sensual",
-      "satin slip dress, delicate straps, elegant curves"
+      "form-fitting red bodycon dress with deep V-neckline, showing collarbone, elegant curves",
+      "black lace lingerie-inspired top with high-waisted trousers, sophisticated sexy",
+      "off-shoulder silk dress, showing smooth shoulders, sensual drape",
+      "sheer chiffon blouse with satin camisole, layered intimate elegance",
+      "tight-fitting qipao with side slits, traditional yet alluring",
+      "velvet mini dress, plunging neckline, luxurious sensual texture",
+      "crop top with high-waisted leather skirt, confident bold style"
     ],
     "清新": [
       "white cotton sundress with floral embroidery, fresh innocent",
@@ -275,7 +280,7 @@
   ],
 
   "negative_prompts": {
-    "standard": "(deformed iris, deformed pupils, semi-realistic, cgi, 3d, render, sketch, cartoon, drawing, anime:1.4), text, close up, cropped, out of frame, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck",
+    "standard": "deformed iris, deformed pupils, semi-realistic, cgi, 3d render, sketch, cartoon, drawing, anime, text, watermark, out of frame, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck",
     "asian_focused": "Western face, Caucasian features, European features, blonde hair, blue eyes, green eyes, high nose bridge, deep-set eyes, freckles, pale pink skin, non-Asian features, mixed race",
     "quality": "low quality, worst quality, jpeg artifacts, pixelated, blurry, out of focus, poorly lit, overexposed, underexposed, amateur photography"
   }
