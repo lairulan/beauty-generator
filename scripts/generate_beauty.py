@@ -411,14 +411,18 @@ class SmartPromptGenerator:
                      scene: dict = None,
                      styling: dict = None,
                      pose_type: str = None,
-                     custom_elements: list = None) -> str:
+                     custom_elements: list = None,
+                     style: str = None) -> str:
         """构建完整的 Prompt"""
 
         parts = []
 
-        # 1. 基础质量词
+        # 1. 基础质量词 + 写真集定向（性感系专用）
         quality = self.pick_one(self.library.get("base_quality", []))
-        parts.append(quality)
+        if style == "性感系":
+            parts.append("glamorous sensual beauty photography, alluring feminine charm, photobook style, " + quality)
+        else:
+            parts.append(quality)
 
         # 2. 强制东方美女身份
         asian_id = self.pick_one(self.library.get("asian_identity", []))
@@ -598,12 +602,17 @@ def generate_series(count: int = 3,
 
     for i in range(count):
         # 每张图使用不同的场景、穿搭、姿势
-        # 性感系风格：固定偏向室内/城市场景，穿搭锁定性感
+        # 性感系风格：固定偏向室内/城市场景，穿搭锁定性感，使用写真姿势和性感体态
         if style == "性感系":
             sexy_scenes = ["室内", "城市"]
             resolved_scene_type = generator.pick_one(sexy_scenes) if not scene_type else scene_type
             scene = generator.generate_scene(resolved_scene_type)
             resolved_outfit_style = outfit_style if outfit_style else "性感"
+            pose_type = "写真"
+            # 性感体态：使用专属的丰满曲线描述
+            sexy_body_list = generator.library.get("body_types_sexy", [])
+            if sexy_body_list:
+                character["body"] = generator.pick_one(sexy_body_list)
         else:
             scene = generator.generate_scene(scene_type)
             if outfit_style:
@@ -625,7 +634,8 @@ def generate_series(count: int = 3,
             character=character,
             scene=scene,
             styling=styling,
-            pose_type=pose_type
+            pose_type=pose_type,
+            style=style
         )
 
         print(f"\n📸 图片 {i+1}/{count} - {pose_type}")

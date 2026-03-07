@@ -84,6 +84,14 @@
     "soft feminine curves, hourglass silhouette, elegant proportions"
   ],
 
+  "body_types_sexy": [
+    "voluptuous hourglass figure, full round bust, cinched narrow waist, wide curvaceous hips, perfectly proportioned feminine body",
+    "gorgeous curvy body, large shapely bust, tiny waist, full rounded hips, long toned legs, magazine-worthy silhouette",
+    "sensational figure, ample chest, defined waist curve, generous hips and buttocks, smooth flawless skin, alluring proportions",
+    "stunning feminine physique, full perky bust, sculpted waist, round lifted buttocks, shapely thighs, seductive body line",
+    "breathtaking curves, deep cleavage visible, nipped waist, voluptuous hips, long slender legs, irresistible body contour"
+  ],
+
   "outfits": {
     "优雅": [
       "elegant silk evening gown, flowing fabric, subtle shimmer",
@@ -92,13 +100,13 @@
       "cashmere sweater with pearl accessories, understated luxury"
     ],
     "性感": [
-      "form-fitting red bodycon dress with deep V-neckline, showing collarbone, elegant curves",
-      "black lace lingerie-inspired top with high-waisted trousers, sophisticated sexy",
-      "off-shoulder silk dress, showing smooth shoulders, sensual drape",
-      "sheer chiffon blouse with satin camisole, layered intimate elegance",
-      "tight-fitting qipao with side slits, traditional yet alluring",
-      "velvet mini dress, plunging neckline, luxurious sensual texture",
-      "crop top with high-waisted leather skirt, confident bold style"
+      "skin-tight red mini dress with plunging V-neckline, cleavage visible, hugging every curve, thigh-high hemline",
+      "black bodycon dress, deep back cutout, side slit revealing long legs, second-skin fit highlighting bust and hips",
+      "white silk slip dress, thin spaghetti straps, figure-hugging, revealing natural curves and silhouette",
+      "form-fitting qipao with high side slits to waist, form-revealing, showcasing hourglass figure",
+      "halter crop top with bare midriff, matching micro skirt, exposed toned abs and long legs",
+      "sheer lace bodysuit, strategic coverage, revealing body contours, worn under high-waisted satin skirt",
+      "off-shoulder bodycon with ruched fabric, emphasizing bust and hip curves, elegant yet provocative"
     ],
     "清新": [
       "white cotton sundress with floral embroidery, fresh innocent",
@@ -148,6 +156,14 @@
       "twirling in dress, fabric flowing, joyful energy",
       "reaching up gracefully, elongated silhouette, dancer-like",
       "looking back over shoulder, mysterious allure, dynamic angle"
+    ],
+    "写真": [
+      "full body side pose, arching back slightly, showcasing bust and hip curves, hands on waist",
+      "lying on bed, propped on elbows, looking at camera seductively, body curves highlighted",
+      "sitting with legs crossed, leaning back on hands, body fully visible, confident sensual",
+      "standing with one hand on hip, slight twist at waist, accentuating hourglass silhouette",
+      "kneeling pose, back arched, hair falling forward, curves emphasized from side angle",
+      "leaning against wall with hip pushed out, hands above head, full body S-curve visible"
     ]
   },
 
