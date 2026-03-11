@@ -20,6 +20,15 @@ import ssl
 from datetime import date, datetime
 from pathlib import Path
 
+
+def _get_ssl_context():
+    """获取 SSL context：优先使用系统证书，失败则回退到不验证"""
+    try:
+        ctx = ssl.create_default_context()
+        return ctx
+    except Exception:
+        return ssl._create_unverified_context()
+
 # 脚本目录
 SCRIPT_DIR = Path(__file__).parent.absolute()
 SKILL_DIR = SCRIPT_DIR.parent
@@ -523,7 +532,7 @@ def upload_to_imgbb(base64_data: str) -> dict:
     if not imgbb_key:
         return {"success": False, "error": "IMGBB_API_KEY 未设置"}
 
-    ssl_context = ssl._create_unverified_context()
+    ssl_context = _get_ssl_context()
     try:
         form_data = urllib.parse.urlencode({"image": base64_data}).encode("utf-8")
         req = urllib.request.Request(
@@ -553,7 +562,7 @@ def generate_image_google(prompt: str) -> dict:
         "parameters": {"sampleCount": 1, "aspectRatio": "3:4"}
     }
 
-    ssl_context = ssl._create_unverified_context()
+    ssl_context = _get_ssl_context()
     try:
         data = json.dumps(payload).encode("utf-8")
         req = urllib.request.Request(
@@ -598,7 +607,7 @@ def generate_image_doubao(prompt: str, negative_prompt: str) -> dict:
         "watermark": False
     }
 
-    ssl_context = ssl._create_unverified_context()
+    ssl_context = _get_ssl_context()
     try:
         data = json.dumps(payload).encode('utf-8')
         req = urllib.request.Request(

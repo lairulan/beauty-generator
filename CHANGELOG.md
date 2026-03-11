@@ -1,5 +1,25 @@
 # 版本历史
 
+## v8.0 (2026-03-11) - 全面优化
+
+### 触发机制优化
+- **解决双重触发浪费**: schedule 延后到 UTC 12:00 (北京 20:00)，给 CF Worker 30 分钟缓冲
+- **风格轮换机制**: 按星期自动切换 6 种风格，告别每天「性感系+挑逗」的单调
+
+### 代码质量
+- **移除 curl 依赖**: `publish_wechat.py` 的 `make_request()` 改用原生 `urllib.request`
+- **SSL 安全修复**: `generate_beauty.py` 优先使用系统 SSL 证书，仅在不可用时回退到不验证
+
+### 日志优化
+- **按月分文件**: `actions_runs.md` 改为 `actions_runs_YYYY-MM.md`，防止无限膨胀
+- **风格记录**: 日志中记录每次使用的风格/情绪参数
+
+### 文档同步
+- **版本号统一**: SKILL.md / WORKFLOW.md / CHANGELOG.md 全部升级到 v8.0
+- **架构更新**: WORKFLOW.md 反映真实的双引擎 (Google Imagen 4 Ultra + 豆包) 架构
+
+---
+
 ## v5.1 (2026-01-24) 🔧
 
 ### Bug 修复

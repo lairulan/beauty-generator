@@ -1,9 +1,9 @@
 name: 每日艺术写真发布
 
 on:
-  # 定时任务：每天 19:30 北京时间 (UTC 11:30) - 作为备用触发
+  # 备用触发：UTC 12:00 (北京时间 20:00)，给 CF Worker 30 分钟缓冲
   schedule:
-    - cron: '30 11 * * *'
+    - cron: '0 12 * * *'
 
   # Cloudflare Worker 通过 workflow_dispatch 触发
   workflow_dispatch:
@@ -11,10 +11,6 @@ on:
   # 支持 repository_dispatch 触发（来自 Cloudflare Worker）
   repository_dispatch:
     types: [daily-beauty]
-
-  # 可选：推送代码时测试
-  # push:
-  #   branches: [ main ]
 
 jobs:
   publish:
@@ -60,7 +56,6 @@ jobs:
             const already = data.workflow_runs.some(run => {
               if (run.id === context.runId) return false;
               if (run.conclusion !== 'success') return false;
-              // 检查所有自动触发的事件类型
               if (!['schedule', 'repository_dispatch', 'workflow_dispatch'].includes(run.event)) return false;
               return toBjDate(run.created_at) === nowBjDate;
             });
@@ -69,6 +64,25 @@ jobs:
             if (already) {
               core.info(`已存在当日成功运行（${nowBjDate}），本次跳过。`);
             }
+
+      - name: 计算今日风格
+        if: steps.dedup.outputs.skip != 'true'
+        id: style
+        run: |
+          # 星期风格轮换：0=周日 1=周一 ... 6=周六
+          DOW=$(TZ=Asia/Shanghai date +%w)
+          case $DOW in
+            0) STYLE="清纯系"; EMOTION="温柔" ;;   # 周日 - 温暖治愈
+            1) STYLE="性感系"; EMOTION="挑逗" ;;   # 周一 - 性感开场
+            2) STYLE="甜美系"; EMOTION="俏皮" ;;   # 周二 - 甜美活泼
+            3) STYLE="知性系"; EMOTION="自信" ;;   # 周三 - 知性优雅
+            4) STYLE="冷艳系"; EMOTION="神秘" ;;   # 周四 - 冷艳高冷
+            5) STYLE="御姐系"; EMOTION="高冷" ;;   # 周五 - 御姐气场
+            6) STYLE="性感系"; EMOTION="挑逗" ;;   # 周六 - 周末性感
+          esac
+          echo "style=$STYLE" >> $GITHUB_OUTPUT
+          echo "emotion=$EMOTION" >> $GITHUB_OUTPUT
+          echo "今日风格: $STYLE / $EMOTION (星期$DOW)"
 
       - name: 生成并发布艺术写真
         if: steps.dedup.outputs.skip != 'true'
@@ -79,7 +93,9 @@ jobs:
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
         run: |
           cd scripts
-          python3 publish_wechat.py --count 1 --style 性感系 --emotion 挑逗
+          python3 publish_wechat.py --count 1 \
+            --style "${{ steps.style.outputs.style }}" \
+            --emotion "${{ steps.style.outputs.emotion }}"
 
       - name: 记录日志
         if: always()
@@ -96,18 +112,26 @@ jobs:
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           SKIPPED: ${{ steps.dedup.outputs.skip }}
           JOB_STATUS: ${{ job.status }}
+          DAILY_STYLE: ${{ steps.style.outputs.style }}
+          DAILY_EMOTION: ${{ steps.style.outputs.emotion }}
         run: |
           set -e
           mkdir -p workflow_logs
           TS=$(TZ=Asia/Shanghai date '+%Y-%m-%d %H:%M:%S')
+          MONTH=$(TZ=Asia/Shanghai date '+%Y-%m')
+          LOG_FILE="workflow_logs/actions_runs_${MONTH}.md"
           if [ "$SKIPPED" = "true" ]; then
             STATUS="skipped"
           else
             STATUS="$JOB_STATUS"
           fi
-          echo "- ${TS} | ${STATUS} | event=${RUN_EVENT} | run=${RUN_NUMBER} | ${RUN_URL}" >> workflow_logs/actions_runs.md
+          STYLE_INFO=""
+          if [ -n "$DAILY_STYLE" ]; then
+            STYLE_INFO=" | style=${DAILY_STYLE}/${DAILY_EMOTION}"
+          fi
+          echo "- ${TS} | ${STATUS} | event=${RUN_EVENT}${STYLE_INFO} | run=${RUN_NUMBER} | ${RUN_URL}" >> "$LOG_FILE"
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add workflow_logs/actions_runs.md
+          git add workflow_logs/
           git commit -m "记录工作流执行日志 (run ${RUN_NUMBER})" || exit 0
           git push

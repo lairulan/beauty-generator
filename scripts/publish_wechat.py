@@ -9,7 +9,10 @@ import argparse
 import json
 import os
 import subprocess
+import ssl
 import sys
+import urllib.error
+import urllib.request
 from datetime import datetime, date
 from pathlib import Path
 
@@ -43,21 +46,27 @@ def make_request(endpoint, data=None):
         return {"success": False, "error": "环境变量 WECHAT_API_KEY 未设置"}
 
     url = f"{API_BASE}/{endpoint}"
-
-    cmd = [
-        "curl", "-s", "-X", "POST", url,
-        "-H", f"X-API-Key: {api_key}",
-        "-H", "Content-Type: application/json",
-        "-d", json.dumps(data or {}, ensure_ascii=False)
-    ]
+    payload = json.dumps(data or {}, ensure_ascii=False).encode("utf-8")
 
     try:
-        result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
-        return json.loads(result.stdout)
-    except subprocess.TimeoutExpired:
-        return {"success": False, "error": "请求超时"}
-    except json.JSONDecodeError as e:
-        return {"success": False, "error": f"响应解析失败: {result.stdout}"}
+        req = urllib.request.Request(
+            url,
+            data=payload,
+            headers={
+                "X-API-Key": api_key,
+                "Content-Type": "application/json"
+            },
+            method="POST"
+        )
+        with urllib.request.urlopen(req, timeout=30) as response:
+            return json.loads(response.read().decode("utf-8"))
+    except urllib.error.HTTPError as e:
+        body = e.read().decode("utf-8", errors="replace")
+        return {"success": False, "error": f"HTTP {e.code}: {body[:200]}"}
+    except urllib.error.URLError as e:
+        return {"success": False, "error": f"连接失败: {e.reason}"}
+    except json.JSONDecodeError:
+        return {"success": False, "error": "响应 JSON 解析失败"}
     except Exception as e:
         return {"success": False, "error": str(e)}
 
