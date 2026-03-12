@@ -1,10 +1,6 @@
 name: 每日艺术写真发布
 
 on:
-  # 备用触发：UTC 12:00 (北京时间 20:00)，给 CF Worker 30 分钟缓冲
-  schedule:
-    - cron: '0 12 * * *'
-
   # Cloudflare Worker 通过 workflow_dispatch 触发
   workflow_dispatch:
 
@@ -35,49 +31,19 @@ jobs:
         run: |
           python3 -m pip install --upgrade pip
 
-      - name: 检查当日是否已执行成功
-        id: dedup
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const toBjDate = (iso) => {
-              const ms = new Date(iso).getTime() + 8 * 3600 * 1000;
-              return new Date(ms).toISOString().slice(0, 10);
-            };
-
-            const nowBjDate = toBjDate(new Date().toISOString());
-            const { data } = await github.rest.actions.listWorkflowRuns({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: 'daily-publish.yml',
-              per_page: 30
-            });
-
-            const already = data.workflow_runs.some(run => {
-              if (run.id === context.runId) return false;
-              if (run.conclusion !== 'success') return false;
-              if (!['schedule', 'repository_dispatch', 'workflow_dispatch'].includes(run.event)) return false;
-              return toBjDate(run.created_at) === nowBjDate;
-            });
-
-            core.setOutput('skip', already ? 'true' : 'false');
-            if (already) {
-              core.info(`已存在当日成功运行（${nowBjDate}），本次跳过。`);
-            }
-
       - name: 计算今日风格
-        if: steps.dedup.outputs.skip != 'true'
         id: style
         run: |
           # 星期风格轮换：0=周日 1=周一 ... 6=周六
+          # 全暖色性感系：去掉冷艳/知性/御姐等冷感风格
           DOW=$(TZ=Asia/Shanghai date +%w)
           case $DOW in
-            0) STYLE="清纯系"; EMOTION="温柔" ;;   # 周日 - 温暖治愈
+            0) STYLE="清纯系"; EMOTION="温柔" ;;   # 周日 - 清纯温柔
             1) STYLE="性感系"; EMOTION="挑逗" ;;   # 周一 - 性感开场
             2) STYLE="甜美系"; EMOTION="俏皮" ;;   # 周二 - 甜美活泼
-            3) STYLE="知性系"; EMOTION="自信" ;;   # 周三 - 知性优雅
-            4) STYLE="冷艳系"; EMOTION="神秘" ;;   # 周四 - 冷艳高冷
-            5) STYLE="御姐系"; EMOTION="高冷" ;;   # 周五 - 御姐气场
+            3) STYLE="甜美系"; EMOTION="微笑" ;;   # 周三 - 甜美温暖
+            4) STYLE="性感系"; EMOTION="性感" ;;   # 周四 - 性感魅惑
+            5) STYLE="清纯系"; EMOTION="微笑" ;;   # 周五 - 清纯甜笑
             6) STYLE="性感系"; EMOTION="挑逗" ;;   # 周六 - 周末性感
           esac
           echo "style=$STYLE" >> $GITHUB_OUTPUT
@@ -85,7 +51,6 @@ jobs:
           echo "今日风格: $STYLE / $EMOTION (星期$DOW)"
 
       - name: 生成并发布艺术写真
-        if: steps.dedup.outputs.skip != 'true'
         env:
           IMGBB_API_KEY: ${{ secrets.IMGBB_API_KEY }}
           WECHAT_API_KEY: ${{ secrets.WECHAT_API_KEY }}
@@ -110,7 +75,6 @@ jobs:
           RUN_ID: ${{ github.run_id }}
           RUN_NUMBER: ${{ github.run_number }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-          SKIPPED: ${{ steps.dedup.outputs.skip }}
           JOB_STATUS: ${{ job.status }}
           DAILY_STYLE: ${{ steps.style.outputs.style }}
           DAILY_EMOTION: ${{ steps.style.outputs.emotion }}
@@ -120,8 +84,8 @@ jobs:
           TS=$(TZ=Asia/Shanghai date '+%Y-%m-%d %H:%M:%S')
           MONTH=$(TZ=Asia/Shanghai date '+%Y-%m')
           LOG_FILE="workflow_logs/actions_runs_${MONTH}.md"
-          if [ "$SKIPPED" = "true" ]; then
-            STATUS="skipped"
+          if [ "$JOB_STATUS" = "success" ]; then
+            STATUS="success"
           else
             STATUS="$JOB_STATUS"
           fi
