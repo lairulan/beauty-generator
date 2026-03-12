@@ -701,6 +701,31 @@ def generate_series(count: int = 3,
             sexy_body_list = generator.library.get("body_types_sexy", [])
             if sexy_body_list:
                 character["body"] = generator.pick_one(sexy_body_list)
+        # 国风系：固定国风场景+国风穿搭
+        elif style == "国风系":
+            resolved_scene_type = scene_type if scene_type else "国风"
+            scene = generator.generate_scene(resolved_scene_type)
+            resolved_outfit_style = outfit_style if outfit_style else "国风"
+            pose_type = generator.pick_one(["半身", "全身", "动态"])
+        # 职场系：固定职场场景+职场穿搭
+        elif style == "职场系":
+            resolved_scene_type = scene_type if scene_type else "职场"
+            scene = generator.generate_scene(resolved_scene_type)
+            resolved_outfit_style = outfit_style if outfit_style else "职场"
+            pose_type = generator.pick_one(["半身", "特写", "全身"])
+        # 生活场景系：固定居家场景+居家穿搭
+        elif style == "生活场景系":
+            resolved_scene_type = scene_type if scene_type else "居家"
+            scene = generator.generate_scene(resolved_scene_type)
+            resolved_outfit_style = outfit_style if outfit_style else "居家"
+            pose_type = generator.pick_one(["半身", "特写", "写真"])
+        # 邻家女孩系：街头/自然场景+邻家穿搭
+        elif style == "邻家女孩系":
+            girl_next_door_scenes = ["街头", "自然", "城市"]
+            resolved_scene_type = scene_type if scene_type else generator.pick_one(girl_next_door_scenes)
+            scene = generator.generate_scene(resolved_scene_type)
+            resolved_outfit_style = outfit_style if outfit_style else "邻家"
+            pose_type = generator.pick_one(["半身", "全身", "动态"])
         else:
             scene = generator.generate_scene(scene_type)
             pose_type = pose_types[i % len(pose_types)]
@@ -711,7 +736,11 @@ def generate_series(count: int = 3,
                     "自然": ["清新", "古典", "运动"],
                     "城市": ["时尚", "优雅", "性感"],
                     "室内": ["优雅", "性感", "清新"],
-                    "特殊": ["性感", "古典", "时尚"]
+                    "特殊": ["性感", "古典", "时尚"],
+                    "国风": ["国风", "古典"],
+                    "居家": ["居家", "清新"],
+                    "街头": ["邻家", "清新", "时尚"],
+                    "职场": ["职场", "优雅"]
                 }
                 candidates = scene_outfit_map.get(scene.get("type", ""), [])
                 resolved_outfit_style = generator.pick_one(candidates) if candidates else None
@@ -817,7 +846,7 @@ def main():
     )
 
     parser.add_argument("--count", "-c", type=int, default=3, help="生成数量 (默认: 3)")
-    parser.add_argument("--style", "-s", help="人物风格: 甜美系, 清纯系, 御姐系, 知性系, 冷艳系, 性感系")
+    parser.add_argument("--style", "-s", help="人物风格: 甜美系, 清纯系, 性感系, 邻家女孩系, 国风系, 职场系, 生活场景系")
     parser.add_argument("--scene", help="场景类型: 自然, 城市, 室内, 特殊")
     parser.add_argument("--outfit", "-o", help="穿搭风格: 优雅, 性感, 清新, 时尚, 古典, 运动")
     parser.add_argument("--list-options", "-l", action="store_true", help="列出所有可用选项")

@@ -35,16 +35,16 @@ jobs:
         id: style
         run: |
           # 星期风格轮换：0=周日 1=周一 ... 6=周六
-          # 全暖色性感系：去掉冷艳/知性/御姐等冷感风格
+          # 7日7风格：贴近生活、温暖性感、男性审美优化
           DOW=$(TZ=Asia/Shanghai date +%w)
           case $DOW in
-            0) STYLE="清纯系"; EMOTION="温柔" ;;   # 周日 - 清纯温柔
-            1) STYLE="性感系"; EMOTION="挑逗" ;;   # 周一 - 性感开场
-            2) STYLE="甜美系"; EMOTION="俏皮" ;;   # 周二 - 甜美活泼
-            3) STYLE="甜美系"; EMOTION="微笑" ;;   # 周三 - 甜美温暖
-            4) STYLE="性感系"; EMOTION="性感" ;;   # 周四 - 性感魅惑
-            5) STYLE="清纯系"; EMOTION="微笑" ;;   # 周五 - 清纯甜笑
-            6) STYLE="性感系"; EMOTION="挑逗" ;;   # 周六 - 周末性感
+            0) STYLE="邻家女孩系"; EMOTION="温柔" ;;   # 周日 - 邻家亲切
+            1) STYLE="性感系"; EMOTION="挑逗" ;;     # 周一 - 性感开场
+            2) STYLE="甜美系"; EMOTION="俏皮" ;;     # 周二 - 甜美活泼
+            3) STYLE="国风系"; EMOTION="温柔" ;;     # 周三 - 古典韵味
+            4) STYLE="职场系"; EMOTION="自信" ;;     # 周四 - 职场诱惑
+            5) STYLE="生活场景系"; EMOTION="微笑" ;; # 周五 - 居家温馨
+            6) STYLE="清纯系"; EMOTION="性感" ;;     # 周六 - 纯欲周末
           esac
           echo "style=$STYLE" >> $GITHUB_OUTPUT
           echo "emotion=$EMOTION" >> $GITHUB_OUTPUT
