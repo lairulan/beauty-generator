@@ -1,19 +1,19 @@
 ---
 name: beauty-generator
-version: 8.0.0
-description: Generate realistic beauty photography with dual-engine (Google Imagen 4 Ultra + Doubao Seedream). Supports style rotation, scene/emotion control, and WeChat auto-publishing. Use when user asks to generate beauty images ("生成美女", "每日美女", "发布美女", "艺术写真").
+version: 9.0.0
+description: Generate realistic beauty photography with dual-engine (Google Imagen 4 Ultra + Doubao Seedream 4.5). 7-day style rotation (性感/甜美/国风/职场/生活场景/清纯/邻家), scene/emotion control, and WeChat auto-publishing. Use when user asks to generate beauty images ("生成美女", "每日美女", "发布美女", "艺术写真").
 author: rulanlai
 tags: [image-generation, beauty, wechat, google-imagen, doubao]
 ---
 
-# Beauty Generator - 艺术写真生成 V8.0
+# Beauty Generator - 艺术写真生成 V9.0
 
 高质量真人艺术写真生成助手，双引擎架构：Google Imagen 4 Ultra (主力) + 豆包 Seedream 4.5 (回退)。
 
 ## 功能特点
 
-- **双引擎生成**: Google Imagen 4 Ultra 优先，豆包 Seedream 自动回退
-- **风格轮换**: 按星期自动切换 6 种风格（性感/甜美/知性/冷艳/御姐/清纯）
+- **双引擎生成**: Google Imagen 4 Ultra 优先，豆包 Seedream 4.5 自动回退
+- **7日风格轮换**: 性感/甜美/国风/职场/生活场景/清纯/邻家，全面偏暖性感
 - **智能 Prompt**: 从丰富元素库随机组合，严格东方美女
 - **公众号发布**: 一键发布到「三更熟」公众号草稿箱（小绿书格式）
 - **定时发布**: 每天 19:30 自动触发（CF Worker → GitHub Actions）
@@ -49,9 +49,9 @@ export WECHAT_API_KEY="..."   # 微信公众号 API
 
 ## 定时发布
 
-每天 19:30 由 Cloudflare Worker 触发 GitHub Actions，UTC 20:00 作为备用。
-按星期自动轮换风格，避免审美疲劳。
+每天 19:30 由 Cloudflare Worker 触发 GitHub Actions（仅 repository_dispatch，无 schedule 备用）。
+7日风格轮换：周一性感→周二甜美→周三国风→周四职场→周五居家→周六纯欲→周日邻家。
 
 ## 版本信息
 
-当前版本：**v8.0** (2026-03-11)
+当前版本：**v9.0.0** (2026-03-12)
