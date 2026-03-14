@@ -74,18 +74,18 @@ def get_default_library() -> dict:
     """内置默认元素库（从 generate_artistic.py 高质量元素库补充）"""
     return {
         "base_quality": [
-            "RAW photo, masterpiece, best quality, ultra detailed, 8K UHD, DSLR",
-            "masterpiece, best quality, ultra realistic, 8k resolution, photorealistic",
-            "professional photography, masterpiece, ultra high resolution 8K, RAW photo, super sharp",
-            "cinematic photo, masterpiece, best quality, hyper-detailed, 8K HDR, ultra crisp",
-            "award-winning photography, masterpiece, ultra detailed, film grain, Fujifilm XT3"
+            "Candid photograph taken on a Sony A7IV, natural ambient light, unretouched skin",
+            "Documentary-style portrait, shot on Fujifilm X-T5, film simulation, available light only",
+            "Street photography portrait, captured mid-moment, shallow depth of field, Leica Q3",
+            "Natural light portrait, shot through a window, soft diffused shadows, Canon R5",
+            "Lifestyle photograph, relaxed candid moment, gentle bokeh background, Nikon Z8"
         ],
         "asian_identity": [
-            "East Asian Chinese young woman, Asian facial features, Asian beauty",
-            "beautiful Chinese woman, delicate Asian features, oriental beauty",
-            "gorgeous East Asian girl, Chinese facial structure, natural Asian beauty",
-            "stunning Asian woman in her early twenties, Chinese heritage, elegant oriental features",
-            "young Chinese beauty, refined Asian facial features, porcelain skin"
+            "Chinese woman in her early twenties",
+            "young East Asian woman, Chinese",
+            "twenty-something Chinese woman",
+            "young woman with Chinese features",
+            "East Asian woman, early twenties"
         ],
         "face_types": {
             "甜美系": [
@@ -315,16 +315,16 @@ def get_default_library() -> dict:
             ]
         },
         "enhancement_keywords": [
-            "award-winning photo, professional photography, magazine cover quality, ultra high resolution",
-            "skin texture visible, pores detail, eyelash detail, hair strands detail, ultra crisp",
-            "perfect composition, rule of thirds, visual balance, color harmony",
-            "post-processing, color grading, professional retouching, polished, hyper detailed",
-            "sharp focus on eyes, catchlight, detailed iris, expressive, perfectly focused"
+            "a few stray hairs catching the light, slight asymmetry in smile, one earring slightly tilted",
+            "faint laugh lines around eyes, barely visible freckle near nose, natural skin unevenness",
+            "fabric wrinkle near elbow, a crease in the shirt collar, wind-blown strand across cheek",
+            "subtle motion blur on fingertips, slight squint from sunlight, genuine unposed moment",
+            "visible collarbone shadow, natural under-eye texture, tiny beauty mark on jawline"
         ],
         "negative_prompts": {
-            "standard": "(deformed, bad anatomy, disfigured:1.3), ugly, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck",
-            "asian_focused": "Western face, Caucasian features, European features, blonde hair, blue eyes, green eyes, high nose bridge, deep-set eyes, non-Asian features",
-            "quality": "low quality, worst quality, jpeg artifacts, pixelated, blurry, out of focus, poorly lit, overexposed, underexposed, amateur photography"
+            "standard": "deformed, bad anatomy, disfigured, ugly, extra fingers, mutated hands, extra limbs, missing limbs, fused fingers, too many fingers, long neck",
+            "asian_focused": "Western face, Caucasian features, blonde hair, blue eyes, green eyes, non-Asian features",
+            "quality": "3D render, CGI, digital art, illustration, painting, cartoon, anime, plastic skin, airbrushed, over-retouched, wax figure, doll-like, uncanny valley, symmetrical face, too perfect, flawless porcelain, studio backdrop, stock photo, watermark"
         }
     }
 
@@ -487,11 +487,21 @@ class SmartPromptGenerator:
         if art_style:
             parts.append(art_style)
 
-        # 9. 增强关键词
-        enhancements = self.pick_random(self.library.get("enhancement_keywords", []), 2)
+        # 9. 真实感瑕疵锚点（只选1条，避免堆叠）
+        enhancements = self.pick_random(self.library.get("enhancement_keywords", []), 1)
         parts.extend(enhancements)
 
-        # 10. 自定义元素
+        # 10. 反AI锚点
+        realism_anchors = [
+            "shot on location, not a studio composite",
+            "no retouching, no airbrushing, natural imperfections",
+            "photograph indistinguishable from editorial magazine outtake",
+            "real person, real environment, unedited candid capture",
+            "authentic moment, untouched colors, organic light falloff"
+        ]
+        parts.append(self.pick_one(realism_anchors))
+
+        # 11. 自定义元素
         if custom_elements:
             parts.extend(custom_elements)
 
