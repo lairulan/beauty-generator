@@ -29,7 +29,7 @@ API_BASE = "https://wx.limyai.com/api/openapi"
 WECHAT_API_KEY = os.environ.get("WECHAT_API_KEY")
 
 # 公众号配置
-DEFAULT_APPID = "wx287cdb9d78a498aa"  # 三更熟
+DEFAULT_APPID = os.environ.get("WECHAT_APP_ID", "")  # 三更熟
 
 
 def get_api_key():

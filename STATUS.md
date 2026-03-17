@@ -11,7 +11,7 @@
 - 仓库：https://github.com/lairulan/beauty-generator.git
 - 触发：CF Worker UTC 11:30 → repository_dispatch + schedule cron UTC 12:00 兜底
 - API：Google Imagen 4 Ultra (主力) + 豆包 Seedream 4.5 (回退) + imgbb (图床)
-- 发布：三更熟公众号 (AppID: wx287cdb9d78a498aa)
+- 发布：三更熟公众号 (AppID: ${WECHAT_APP_ID})
 
 ## 已知问题
 - CF Worker 偶尔触发失败（3/10、3/11、3/13），已恢复 schedule cron 兜底
