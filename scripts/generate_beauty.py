@@ -538,9 +538,11 @@ def _get_ssl_context():
 
 def _call_ai_gateway(prompt: str, model: str = DEFAULT_MODEL, retry: int = 3) -> dict:
     """调用 AI Gateway 生成图片，返回 base64 数据"""
-    api_key = os.environ.get("AI_GATEWAY_API_KEY")
+    api_key = (os.environ.get("AI_GATEWAY_API_KEY")
+               or os.environ.get("OPENROUTER_API_KEY")
+               or os.environ.get("GOOGLE_API_KEY"))
     if not api_key:
-        return {"success": False, "error": "AI_GATEWAY_API_KEY 未设置"}
+        return {"success": False, "error": "AI_GATEWAY_API_KEY / OPENROUTER_API_KEY / GOOGLE_API_KEY 均未设置"}
 
     payload = {
         "model": model,
@@ -660,7 +662,7 @@ def generate_series(count: int = 3,
                     outfit_style: str = None) -> dict:
     """生成系列图片"""
 
-    if not os.environ.get("AI_GATEWAY_API_KEY"):
+    if not (os.environ.get("AI_GATEWAY_API_KEY") or os.environ.get("OPENROUTER_API_KEY") or os.environ.get("GOOGLE_API_KEY")):
         print("错误: 请设置 AI_GATEWAY_API_KEY 环境变量")
         return {"success": False, "count": 0, "total": count, "character": {}, "images": []}
 
@@ -868,9 +870,8 @@ def main():
         return 0
 
     # 检查 API Key（预览和列表模式不需要）
-    if not args.preview and not os.environ.get("AI_GATEWAY_API_KEY"):
+    if not args.preview and not (os.environ.get("AI_GATEWAY_API_KEY") or os.environ.get("OPENROUTER_API_KEY") or os.environ.get("GOOGLE_API_KEY")):
         print("错误: 请设置 AI_GATEWAY_API_KEY 环境变量")
-        print("export AI_GATEWAY_API_KEY='your-api-key'")
         return 1
 
     if args.preview:
