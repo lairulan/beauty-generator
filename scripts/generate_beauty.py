@@ -15,7 +15,11 @@ import os
 import random
 import sys
 import time
-import subprocess
+import base64
+import ssl
+import tempfile
+import urllib.parse
+import urllib.request
 from datetime import date, datetime
 from pathlib import Path
 
@@ -26,10 +30,11 @@ SKILL_DIR = SCRIPT_DIR.parent
 CONFIG_DIR = SKILL_DIR / "config"
 LOGS_DIR = SKILL_DIR / "logs"
 
-# 中央生图脚本路径
-CENTRAL_SCRIPT = os.path.expanduser("~/.claude/skills/generate-image/scripts/generate_image.py")
+# AI Gateway 配置
+AI_GATEWAY_BASE = "https://ai-gateway.happycapy.ai/api/v1"
+DEFAULT_MODEL = "google/gemini-3-pro-image-preview"
 
-# IMGBB 上传 (保留用于本地降级)
+# IMGBB 上传
 IMGBB_UPLOAD_ENDPOINT = "https://api.imgbb.com/1/upload"
 
 # 确保目录存在
@@ -523,57 +528,130 @@ class SmartPromptGenerator:
         return prompt
 
 
-def call_central_generate(prompt: str, upload_imgbb: bool = True, retry: int = 3) -> dict:
-    """调用中央生图脚本生成图片（AI Gateway + IMGBB）"""
-    cmd = [
-        sys.executable, CENTRAL_SCRIPT,
-        prompt,
-        "--json",
-        "--retry", str(retry)
-    ]
-    if upload_imgbb:
-        cmd.append("--upload-imgbb")
-
+def _get_ssl_context():
+    """获取 SSL context"""
     try:
-        result = subprocess.run(cmd, capture_output=True, text=True, timeout=180)
-        stdout = result.stdout.strip()
-        if not stdout:
-            return {"success": False, "error": f"中央脚本无输出. stderr: {result.stderr[:500]}"}
+        return ssl.create_default_context()
+    except Exception:
+        return ssl._create_unverified_context()
 
-        # 从输出末尾解析 JSON（前面可能有日志行）
-        lines = stdout.split('\n')
-        json_lines = []
-        for line in reversed(lines):
-            json_lines.insert(0, line)
-            if line.strip().startswith('{'):
-                break
 
-        data = json.loads('\n'.join(json_lines))
-        if data.get("success"):
-            return {"success": True, "url": data.get("imgbb_url") or data.get("url")}
-        return data
-    except json.JSONDecodeError:
-        return {"success": False, "error": "JSON 解析失败"}
-    except subprocess.TimeoutExpired:
-        return {"success": False, "error": "生图超时"}
+def _call_ai_gateway(prompt: str, model: str = DEFAULT_MODEL, retry: int = 3) -> dict:
+    """调用 AI Gateway 生成图片，返回 base64 数据"""
+    api_key = os.environ.get("AI_GATEWAY_API_KEY")
+    if not api_key:
+        return {"success": False, "error": "AI_GATEWAY_API_KEY 未设置"}
+
+    payload = {
+        "model": model,
+        "prompt": prompt,
+        "response_format": "b64_json",
+        "n": 1
+    }
+
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {api_key}",
+        "Origin": "https://trickle.so",
+        "User-Agent": "Mozilla/5.0 (compatible; AI-Gateway-Client/1.0)"
+    }
+
+    ctx = _get_ssl_context()
+    last_error = None
+
+    for attempt in range(1, retry + 1):
+        try:
+            data = json.dumps(payload).encode("utf-8")
+            req = urllib.request.Request(
+                f"{AI_GATEWAY_BASE}/images/generations",
+                data=data, headers=headers, method="POST"
+            )
+            with urllib.request.urlopen(req, context=ctx, timeout=120) as resp:
+                result = json.loads(resp.read().decode("utf-8"))
+
+            items = result.get("data", [])
+            if not items:
+                last_error = "API 无返回图片数据"
+                continue
+
+            b64_data = items[0].get("b64_json", "")
+            if not b64_data:
+                last_error = "返回数据为空"
+                continue
+
+            return {"success": True, "b64_data": b64_data}
+
+        except Exception as e:
+            last_error = str(e)
+            if attempt < retry:
+                import time as _t
+                _t.sleep(2 * attempt)
+
+    return {"success": False, "error": f"重试 {retry} 次后失败: {last_error}"}
+
+
+def _upload_to_imgbb(b64_data: str) -> dict:
+    """上传 base64 图片到 IMGBB，返回永久 URL"""
+    imgbb_key = os.environ.get("IMGBB_API_KEY")
+    if not imgbb_key:
+        return {"success": False, "error": "IMGBB_API_KEY 未设置"}
+
+    ctx = _get_ssl_context()
+    try:
+        # 写入临时文件避免 "Argument list too long"
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.txt', delete=False) as tmp:
+            tmp.write(b64_data)
+            tmp_path = tmp.name
+
+        try:
+            with open(tmp_path, 'r') as f:
+                image_data = f.read()
+            form_data = urllib.parse.urlencode({"image": image_data}).encode("utf-8")
+        finally:
+            os.unlink(tmp_path)
+
+        req = urllib.request.Request(
+            f"{IMGBB_UPLOAD_ENDPOINT}?key={imgbb_key}",
+            data=form_data, method="POST"
+        )
+        with urllib.request.urlopen(req, context=ctx, timeout=60) as resp:
+            result = json.loads(resp.read().decode("utf-8"))
+            if result.get("success"):
+                return {"success": True, "url": result["data"]["url"]}
+            return {"success": False, "error": f"IMGBB 返回异常: {result}"}
     except Exception as e:
         return {"success": False, "error": str(e)}
 
 
 def generate_image(prompt: str, negative_prompt: str = "") -> dict:
-    """通过中央生图引擎生成图片（AI Gateway Gemini Pro）"""
-    # 将 negative prompt 融入正向 prompt 的约束描述
+    """生成图片：AI Gateway Gemini Pro + IMGBB 上传"""
     full_prompt = prompt
     if negative_prompt:
         full_prompt += f". Must avoid: {negative_prompt}"
 
-    log("  [中央引擎] 调用 AI Gateway 生成...")
-    result = call_central_generate(full_prompt)
-    if result["success"]:
-        log("  [中央引擎] 生成成功")
-    else:
-        log(f"  [中央引擎] 失败: {result.get('error')}")
-    return result
+    log(f"  [AI Gateway] 调用 {DEFAULT_MODEL} 生成...")
+    gen_result = _call_ai_gateway(full_prompt)
+    if not gen_result["success"]:
+        log(f"  [AI Gateway] 失败: {gen_result.get('error')}")
+        return gen_result
+
+    # 上传到 IMGBB
+    log("  [IMGBB] 上传图床...")
+    upload_result = _upload_to_imgbb(gen_result["b64_data"])
+    if upload_result["success"]:
+        log("  [IMGBB] 上传成功")
+        return {"success": True, "url": upload_result["url"]}
+
+    # IMGBB 失败时保存到本地作为降级
+    log(f"  [IMGBB] 上传失败: {upload_result.get('error')}，保存本地文件")
+    try:
+        local_path = LOGS_DIR / f"beauty_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+        image_bytes = base64.b64decode(gen_result["b64_data"])
+        with open(local_path, "wb") as f:
+            f.write(image_bytes)
+        return {"success": True, "url": f"file://{local_path}"}
+    except Exception as e:
+        return {"success": False, "error": f"本地保存也失败: {e}"}
 
 
 def generate_series(count: int = 3,

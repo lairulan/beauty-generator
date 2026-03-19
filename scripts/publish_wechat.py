@@ -29,7 +29,7 @@ API_BASE = "https://wx.limyai.com/api/openapi"
 WECHAT_API_KEY = os.environ.get("WECHAT_API_KEY")
 
 # 公众号配置
-DEFAULT_APPID = os.environ.get("WECHAT_APP_ID", "wx287cdb9d78a498aa")  # 三更熟
+DEFAULT_APPID = "wx287cdb9d78a498aa"  # 三更熟
 
 
 def get_api_key():
@@ -331,14 +331,13 @@ def _extract_image_urls(output: str) -> list:
 def generate_daily_images(count: int = 3, style: str = "") -> list:
     """
     生成多张一致性人物图片
-    使用豆包 API (generate_beauty.py)
+    使用 AI Gateway Gemini Pro (generate_beauty.py)
     """
     import re
 
     images = []
 
-    # 使用豆包生成
-    print(f"\n🎨 [豆包] 正在生成 {count} 张一致性人物图片...")
+    print(f"\n🎨 [AI Gateway] 正在生成 {count} 张一致性人物图片...")
     print("🎭 人物特征将保持一致，仅改变姿态和角度")
 
     cmd = [
@@ -359,19 +358,17 @@ def generate_daily_images(count: int = 3, style: str = "") -> list:
         images = _extract_image_urls(result.stdout)
 
         if result.returncode == 0 and len(images) > 0:
-            print(f"  ✅ [豆包] 成功生成 {len(images)} 张图片")
+            print(f"  ✅ [AI Gateway] 成功生成 {len(images)} 张图片")
             return images
 
-        # 豆包失败，打印原因
-        print(f"  ❌ [豆包] 生成失败（返回码: {result.returncode}, 图片数: {len(images)}）")
+        print(f"  ❌ [AI Gateway] 生成失败（返回码: {result.returncode}, 图片数: {len(images)}）")
         if result.stderr:
-            # 只打印前 500 字符避免刷屏
             print(f"  错误: {result.stderr[:500]}")
 
     except subprocess.TimeoutExpired:
-        print("  ❌ [豆包] 生成超时")
+        print("  ❌ [AI Gateway] 生成超时")
     except Exception as e:
-        print(f"  ❌ [豆包] 生成异常: {e}")
+        print(f"  ❌ [AI Gateway] 生成异常: {e}")
 
     return images
 
