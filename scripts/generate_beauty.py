@@ -54,7 +54,7 @@ def log(message: str, level: str = "INFO"):
     log_msg = f"[{timestamp}] [{level}] {message}"
     print(log_msg)
 
-    log_file = LOGS_DIR / f"v6-{datetime.now().strftime('%Y%m%d')}.log"
+    log_file = LOGS_DIR / f"v7-{datetime.now().strftime('%Y%m%d')}.log"
     with open(log_file, "a", encoding="utf-8") as f:
         f.write(log_msg + "\n")
 
@@ -117,6 +117,26 @@ def get_default_library() -> dict:
                 "seductive face, full lips, bedroom eyes, sultry expression, flawless skin",
                 "alluring features, smoldering gaze, pouty lips, sensual charm",
                 "glamorous face, defined cheekbones, smokey eyes, irresistible beauty"
+            ],
+            "邻家女孩系": [
+                "girl-next-door face, natural unfiltered beauty, warm genuine smile, approachable charm",
+                "friendly natural face, soft features, bright cheerful eyes, effortless everyday beauty",
+                "cute wholesome face, natural rosy cheeks, warm brown eyes, authentic smile showing teeth"
+            ],
+            "国风系": [
+                "classical Chinese beauty face, willow-leaf eyebrows, phoenix eyes, cherry red lips, elegant oval face",
+                "ancient Chinese court beauty, delicate features, almond-shaped eyes, jade-like skin, refined noble elegance",
+                "traditional Eastern beauty, graceful serene expression, porcelain complexion, timeless oriental allure"
+            ],
+            "职场系": [
+                "confident professional beauty, sharp intelligent eyes, subtle makeup, glossy lips, powerful yet feminine",
+                "sophisticated office beauty, defined brows, light smoky eyes, coral lipstick, radiating competence",
+                "elegant business beauty, minimal chic makeup, confident direct gaze, professional glamour"
+            ],
+            "生活场景系": [
+                "natural relaxed face, bare-faced beauty with dewy skin, sleepy morning eyes, intimate warm expression",
+                "cozy homebody beauty, minimal skincare glow, lazy smile, soft drowsy eyes, effortlessly attractive",
+                "everyday goddess face, natural no-makeup look, warm gentle expression, comfortable intimate beauty"
             ]
         },
         "hair_styles": [
@@ -144,6 +164,13 @@ def get_default_library() -> dict:
             "tall slender body, long legs, elegant posture, statuesque",
             "fit toned body, healthy athletic build, graceful strength",
             "soft feminine curves, hourglass silhouette, elegant proportions"
+        ],
+        "body_types_sexy": [
+            "voluptuous hourglass figure, full round bust, cinched narrow waist, wide curvaceous hips",
+            "gorgeous curvy body, large shapely bust, tiny waist, full rounded hips, long toned legs",
+            "sensational figure, ample chest, defined waist curve, generous hips, smooth flawless skin",
+            "stunning feminine physique, full perky bust, sculpted waist, round lifted buttocks, shapely thighs",
+            "breathtaking curves, nipped waist, voluptuous hips, long slender legs, irresistible body contour"
         ],
         "outfits": {
             "优雅": [
@@ -179,6 +206,26 @@ def get_default_library() -> dict:
                 "yoga outfit, athletic wear, healthy lifestyle aesthetic",
                 "tennis skirt with polo top, sporty chic, preppy style",
                 "casual athleisure, matching set, comfortable elegance"
+            ],
+            "国风": [
+                "elegant traditional cheongsam qipao with side slit, intricate silk embroidery, body-hugging fit, warm rich red or emerald green",
+                "flowing modern hanfu dress with wide sleeves, delicate floral pattern, ethereal fairy-like elegance, soft pastel colors",
+                "modern Chinese-style dress with mandarin collar, form-fitting silk fabric, subtle gold embroidery"
+            ],
+            "职场": [
+                "fitted white blouse with top button undone revealing collarbone, high-waisted pencil skirt, sheer stockings, stiletto heels",
+                "tailored blazer over silk camisole, slim-fit trousers, delicate necklace, confident corporate chic",
+                "elegant secretary look, crisp shirt with rolled sleeves, tight pencil skirt, reading glasses"
+            ],
+            "居家": [
+                "oversized boyfriend shirt barely covering thighs, messy morning hair, bare legs, cozy intimate warmth",
+                "silk pajama set with lace trim, soft satin catching warm light, relaxed sensual comfort",
+                "cotton crop top and soft shorts, casual Sunday morning look, natural effortless beauty"
+            ],
+            "邻家": [
+                "simple white tee tucked into denim shorts, casual sneakers, natural effortless style",
+                "light sundress with thin straps, small crossbody bag, sandals, girl-you-meet-at-the-park vibe",
+                "striped casual shirt, jeans rolled at ankle, minimal accessories, fresh natural college-girl look"
             ]
         },
         "poses": {
@@ -205,6 +252,12 @@ def get_default_library() -> dict:
                 "twirling in dress, fabric flowing, joyful energy",
                 "reaching up gracefully, elongated silhouette, dancer-like",
                 "looking back over shoulder, mysterious allure, dynamic angle"
+            ],
+            "写真": [
+                "full body side pose, arching back slightly, showcasing curves, hands on waist",
+                "sitting with legs crossed, leaning back on hands, body fully visible, confident sensual",
+                "standing with one hand on hip, slight twist at waist, accentuating silhouette",
+                "leaning against wall with hip pushed out, hands above head, full body S-curve visible"
             ]
         },
         "expressions": {
@@ -264,6 +317,26 @@ def get_default_library() -> dict:
                 "behind sheer fabric, mysterious silhouette, sensual artistic",
                 "in falling rain, water droplets, emotional dramatic",
                 "surrounded by flowers, botanical beauty, nature goddess"
+            ],
+            "国风": [
+                "traditional Chinese garden with pavilion and koi pond, cherry blossoms falling, warm golden afternoon light",
+                "ancient Chinese palace courtyard, red pillars and golden tiles, warm lantern glow, elegant imperial setting",
+                "misty mountain landscape with bamboo forest, ancient stone bridge, morning mist with warm sun"
+            ],
+            "居家": [
+                "cozy sunlit bedroom, morning golden light through sheer curtains, messy white sheets, warm intimate atmosphere",
+                "modern kitchen with warm pendant lights, marble counter, morning coffee steam, homey comfortable feeling",
+                "living room with large window, soft afternoon sunlight, cozy sofa with throw blanket, warm domestic scene"
+            ],
+            "街头": [
+                "sunny neighborhood sidewalk, dappled tree shadows, warm afternoon light, everyday street scene",
+                "local coffee shop exterior, warm golden hour, outdoor seating, casual relaxed atmosphere",
+                "university campus walkway, autumn leaves, warm sunlight, youthful vibrant setting"
+            ],
+            "职场": [
+                "modern office with floor-to-ceiling windows, city skyline view, warm afternoon light, sleek corporate interior",
+                "elegant executive office, mahogany desk, warm desk lamp, leather chair, professional sophisticated setting",
+                "trendy co-working space, natural light, green plants, warm modern minimalist office design"
             ]
         },
         "lighting": {

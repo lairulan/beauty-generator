@@ -1,27 +1,28 @@
 {
-  "api": {
-    "endpoint": "https://ark.cn-beijing.volces.com/api/v3/images/generations",
-    "model": "doubao-seedream-4-5-251128",
-    "api_key_env": "DOUBAO_API_KEY",
-    "default_api_key": ""
-  },
-  "default_params": {
-    "size": "4k",
-    "response_format": "url",
-    "watermark": false,
-    "stream": false
+  "description": "仅供参考，实际参数由 generate_beauty.py 硬编码控制",
+  "engines": {
+    "primary": {
+      "name": "Google Imagen 4 Ultra",
+      "model": "imagen-4.0-ultra-generate-001",
+      "api_key_env": "GOOGLE_API_KEY",
+      "aspect_ratio": "3:4",
+      "output_format": "base64",
+      "upload": "imgbb"
+    },
+    "fallback": {
+      "name": "Doubao Seedream 4.5",
+      "endpoint": "https://ark.cn-beijing.volces.com/api/v3/images/generations",
+      "model": "doubao-seedream-4-5-251128",
+      "api_key_env": "DOUBAO_API_KEY",
+      "size": "2K",
+      "response_format": "url",
+      "supports_negative_prompt": true
+    }
   },
   "retry": {
     "max_attempts": 3,
     "delay_seconds": 3
   },
-  "supported_sizes": [
-    "1k",
-    "2k",
-    "4k",
-    "1024x1024",
-    "512x512"
-  ],
   "quality_enhancers": {
     "common": [
       "8K分辨率",

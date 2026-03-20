@@ -331,7 +331,7 @@ def _extract_image_urls(output: str) -> list:
 def generate_daily_images(count: int = 3, style: str = "") -> list:
     """
     生成多张一致性人物图片
-    使用 AI Gateway Gemini Pro (generate_beauty.py)
+    使用双引擎 (Google Imagen 4 Ultra + Doubao Seedream 4.5)
     """
     import re
 
