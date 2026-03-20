@@ -337,7 +337,7 @@ def generate_daily_images(count: int = 3, style: str = "") -> list:
 
     images = []
 
-    print(f"\n🎨 [AI Gateway] 正在生成 {count} 张一致性人物图片...")
+    print(f"\n🎨 [豆包] 正在生成 {count} 张一致性人物图片...")
     print("🎭 人物特征将保持一致，仅改变姿态和角度")
 
     cmd = [
@@ -358,17 +358,17 @@ def generate_daily_images(count: int = 3, style: str = "") -> list:
         images = _extract_image_urls(result.stdout)
 
         if result.returncode == 0 and len(images) > 0:
-            print(f"  ✅ [AI Gateway] 成功生成 {len(images)} 张图片")
+            print(f"  ✅ [豆包] 成功生成 {len(images)} 张图片")
             return images
 
-        print(f"  ❌ [AI Gateway] 生成失败（返回码: {result.returncode}, 图片数: {len(images)}）")
+        print(f"  ❌ [豆包] 生成失败（返回码: {result.returncode}, 图片数: {len(images)}）")
         if result.stderr:
             print(f"  错误: {result.stderr[:500]}")
 
     except subprocess.TimeoutExpired:
-        print("  ❌ [AI Gateway] 生成超时")
+        print("  ❌ [豆包] 生成超时")
     except Exception as e:
-        print(f"  ❌ [AI Gateway] 生成异常: {e}")
+        print(f"  ❌ [豆包] 生成异常: {e}")
 
     return images
 

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-美女生成 V8.0 - 中央引擎高清生成系统
-- 通过中央生图引擎（AI Gateway Gemini Pro + IMGBB）
+美女生成 V7.0 - 双引擎高清生成系统
+- Google Imagen 4 Ultra 主力 + 豆包 Seedream 备选
 - 从丰富的元素库中随机组合
 - 确保每次生成都有新鲜感
 - 严格东方美女风格
@@ -15,14 +15,19 @@ import os
 import random
 import sys
 import time
-import base64
-import ssl
-import tempfile
-import urllib.parse
 import urllib.request
+import ssl
 from datetime import date, datetime
 from pathlib import Path
 
+
+def _get_ssl_context():
+    """获取 SSL context：优先使用系统证书，失败则回退到不验证"""
+    try:
+        ctx = ssl.create_default_context()
+        return ctx
+    except Exception:
+        return ssl._create_unverified_context()
 
 # 脚本目录
 SCRIPT_DIR = Path(__file__).parent.absolute()
@@ -30,11 +35,13 @@ SKILL_DIR = SCRIPT_DIR.parent
 CONFIG_DIR = SKILL_DIR / "config"
 LOGS_DIR = SKILL_DIR / "logs"
 
-# AI Gateway 配置
-AI_GATEWAY_BASE = "https://ai-gateway.happycapy.ai/api/v1"
-DEFAULT_MODEL = "google/gemini-3-pro-image-preview"
+# API 配置 - 豆包
+API_ENDPOINT = "https://ark.cn-beijing.volces.com/api/v3/images/generations"
+API_MODEL = "doubao-seedream-4-5-251128"
+API_KEY = os.environ.get("DOUBAO_API_KEY")
 
-# IMGBB 上传
+# API 配置 - Google Imagen
+GOOGLE_IMAGEN_ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-ultra-generate-001:predict"
 IMGBB_UPLOAD_ENDPOINT = "https://api.imgbb.com/1/upload"
 
 # 确保目录存在
@@ -528,132 +535,127 @@ class SmartPromptGenerator:
         return prompt
 
 
-def _get_ssl_context():
-    """获取 SSL context"""
-    try:
-        return ssl.create_default_context()
-    except Exception:
-        return ssl._create_unverified_context()
-
-
-def _call_ai_gateway(prompt: str, model: str = DEFAULT_MODEL, retry: int = 3) -> dict:
-    """调用 AI Gateway 生成图片，返回 base64 数据"""
-    api_key = (os.environ.get("AI_GATEWAY_API_KEY")
-               or os.environ.get("OPENROUTER_API_KEY")
-               or os.environ.get("GOOGLE_API_KEY"))
-    if not api_key:
-        return {"success": False, "error": "AI_GATEWAY_API_KEY / OPENROUTER_API_KEY / GOOGLE_API_KEY 均未设置"}
-
-    payload = {
-        "model": model,
-        "prompt": prompt,
-        "response_format": "b64_json",
-        "n": 1
-    }
-
-    headers = {
-        "Content-Type": "application/json",
-        "Authorization": f"Bearer {api_key}",
-        "Origin": "https://trickle.so",
-        "User-Agent": "Mozilla/5.0 (compatible; AI-Gateway-Client/1.0)"
-    }
-
-    ctx = _get_ssl_context()
-    last_error = None
-
-    for attempt in range(1, retry + 1):
-        try:
-            data = json.dumps(payload).encode("utf-8")
-            req = urllib.request.Request(
-                f"{AI_GATEWAY_BASE}/images/generations",
-                data=data, headers=headers, method="POST"
-            )
-            with urllib.request.urlopen(req, context=ctx, timeout=120) as resp:
-                result = json.loads(resp.read().decode("utf-8"))
-
-            items = result.get("data", [])
-            if not items:
-                last_error = "API 无返回图片数据"
-                continue
-
-            b64_data = items[0].get("b64_json", "")
-            if not b64_data:
-                last_error = "返回数据为空"
-                continue
-
-            return {"success": True, "b64_data": b64_data}
-
-        except Exception as e:
-            last_error = str(e)
-            if attempt < retry:
-                import time as _t
-                _t.sleep(2 * attempt)
-
-    return {"success": False, "error": f"重试 {retry} 次后失败: {last_error}"}
-
-
-def _upload_to_imgbb(b64_data: str) -> dict:
-    """上传 base64 图片到 IMGBB，返回永久 URL"""
+def upload_to_imgbb(base64_data: str) -> dict:
+    """上传 base64 图片数据到 imgbb，返回图片 URL"""
+    import urllib.parse
     imgbb_key = os.environ.get("IMGBB_API_KEY")
     if not imgbb_key:
         return {"success": False, "error": "IMGBB_API_KEY 未设置"}
 
-    ctx = _get_ssl_context()
+    ssl_context = _get_ssl_context()
     try:
-        # 写入临时文件避免 "Argument list too long"
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.txt', delete=False) as tmp:
-            tmp.write(b64_data)
-            tmp_path = tmp.name
-
-        try:
-            with open(tmp_path, 'r') as f:
-                image_data = f.read()
-            form_data = urllib.parse.urlencode({"image": image_data}).encode("utf-8")
-        finally:
-            os.unlink(tmp_path)
-
+        form_data = urllib.parse.urlencode({"image": base64_data}).encode("utf-8")
         req = urllib.request.Request(
             f"{IMGBB_UPLOAD_ENDPOINT}?key={imgbb_key}",
-            data=form_data, method="POST"
+            data=form_data,
+            method="POST"
         )
-        with urllib.request.urlopen(req, context=ctx, timeout=60) as resp:
-            result = json.loads(resp.read().decode("utf-8"))
+        with urllib.request.urlopen(req, context=ssl_context, timeout=60) as response:
+            result = json.loads(response.read().decode("utf-8"))
             if result.get("success"):
                 return {"success": True, "url": result["data"]["url"]}
-            return {"success": False, "error": f"IMGBB 返回异常: {result}"}
+            return {"success": False, "error": f"imgbb 返回: {result}"}
     except Exception as e:
         return {"success": False, "error": str(e)}
 
 
-def generate_image(prompt: str, negative_prompt: str = "") -> dict:
-    """生成图片：AI Gateway Gemini Pro + IMGBB 上传"""
-    full_prompt = prompt
-    if negative_prompt:
-        full_prompt += f". Must avoid: {negative_prompt}"
+def generate_image_google(prompt: str) -> dict:
+    """调用 Google Imagen 4 Ultra 生成图片，结果上传到 imgbb 返回 URL"""
+    import base64
+    google_key = os.environ.get("GOOGLE_API_KEY")
+    if not google_key:
+        return {"success": False, "error": "GOOGLE_API_KEY 未设置"}
 
-    log(f"  [AI Gateway] 调用 {DEFAULT_MODEL} 生成...")
-    gen_result = _call_ai_gateway(full_prompt)
-    if not gen_result["success"]:
-        log(f"  [AI Gateway] 失败: {gen_result.get('error')}")
-        return gen_result
+    endpoint = f"{GOOGLE_IMAGEN_ENDPOINT}?key={google_key}"
+    payload = {
+        "instances": [{"prompt": prompt}],
+        "parameters": {"sampleCount": 1, "aspectRatio": "3:4"}
+    }
 
-    # 上传到 IMGBB
-    log("  [IMGBB] 上传图床...")
-    upload_result = _upload_to_imgbb(gen_result["b64_data"])
-    if upload_result["success"]:
-        log("  [IMGBB] 上传成功")
-        return {"success": True, "url": upload_result["url"]}
-
-    # IMGBB 失败时保存到本地作为降级
-    log(f"  [IMGBB] 上传失败: {upload_result.get('error')}，保存本地文件")
+    ssl_context = _get_ssl_context()
     try:
-        local_path = LOGS_DIR / f"beauty_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
-        image_bytes = base64.b64decode(gen_result["b64_data"])
-        with open(local_path, "wb") as f:
-            f.write(image_bytes)
-        return {"success": True, "url": f"file://{local_path}"}
+        data = json.dumps(payload).encode("utf-8")
+        req = urllib.request.Request(
+            endpoint,
+            data=data,
+            headers={"Content-Type": "application/json"},
+            method="POST"
+        )
+        with urllib.request.urlopen(req, context=ssl_context, timeout=120) as response:
+            result = json.loads(response.read().decode("utf-8"))
+
+        predictions = result.get("predictions", [])
+        if not predictions:
+            return {"success": False, "error": "Google API 无返回图片"}
+
+        b64_data = predictions[0].get("bytesBase64Encoded", "")
+        if not b64_data:
+            return {"success": False, "error": "Google API 返回数据为空"}
+
+        log("  📤 上传到 imgbb...")
+        upload_result = upload_to_imgbb(b64_data)
+        if upload_result["success"]:
+            return {"success": True, "url": upload_result["url"]}
+        return {"success": False, "error": f"imgbb 上传失败: {upload_result['error']}"}
+
     except Exception as e:
-        return {"success": False, "error": f"本地保存也失败: {e}"}
+        return {"success": False, "error": str(e)}
+
+
+def generate_image_doubao(prompt: str, negative_prompt: str) -> dict:
+    """调用豆包 Seedream API 生成图片"""
+    doubao_key = os.environ.get("DOUBAO_API_KEY")
+    if not doubao_key:
+        return {"success": False, "error": "DOUBAO_API_KEY 未设置"}
+
+    payload = {
+        "model": API_MODEL,
+        "prompt": prompt,
+        "negative_prompt": negative_prompt,
+        "size": "2K",
+        "response_format": "url",
+        "watermark": False
+    }
+
+    ssl_context = _get_ssl_context()
+    try:
+        data = json.dumps(payload).encode('utf-8')
+        req = urllib.request.Request(
+            API_ENDPOINT,
+            data=data,
+            headers={
+                'Content-Type': 'application/json',
+                'Authorization': f'Bearer {doubao_key}'
+            },
+            method='POST'
+        )
+        with urllib.request.urlopen(req, context=ssl_context, timeout=90) as response:
+            if response.status == 200:
+                response_data = response.read().decode('utf-8')
+                data = json.loads(response_data)
+                if "data" in data and len(data["data"]) > 0:
+                    return {"success": True, "url": data["data"][0].get("url")}
+        return {"success": False, "error": "豆包 API 响应异常"}
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+
+
+def generate_image(prompt: str, negative_prompt: str) -> dict:
+    """生成图片：优先 Google Imagen 4 Ultra，失败后降级到豆包 Seedream"""
+
+    # 优先尝试 Google Imagen 4 Ultra
+    google_key = os.environ.get("GOOGLE_API_KEY")
+    if google_key:
+        log("  🌐 [Google] 尝试 Imagen 4 Ultra...")
+        result = generate_image_google(prompt)
+        if result["success"]:
+            log("  ✅ [Google] 生成成功")
+            return result
+        log(f"  ⚠️  [Google] 失败: {result.get('error')}，降级到豆包...")
+
+    # 降级到豆包 Seedream
+    log("  🎨 [豆包] 使用 Seedream 生成...")
+    return generate_image_doubao(prompt, negative_prompt)
 
 
 def generate_series(count: int = 3,
@@ -662,12 +664,12 @@ def generate_series(count: int = 3,
                     outfit_style: str = None) -> dict:
     """生成系列图片"""
 
-    if not (os.environ.get("AI_GATEWAY_API_KEY") or os.environ.get("OPENROUTER_API_KEY") or os.environ.get("GOOGLE_API_KEY")):
-        print("错误: 请设置 AI_GATEWAY_API_KEY 环境变量")
+    if not os.environ.get("GOOGLE_API_KEY") and not os.environ.get("DOUBAO_API_KEY"):
+        print("错误: 请设置 GOOGLE_API_KEY 或 DOUBAO_API_KEY 环境变量")
         return {"success": False, "count": 0, "total": count, "character": {}, "images": []}
 
     print("=" * 70)
-    print("🎨 美女生成 V8.0 - 中央引擎高清生成系统")
+    print("🎨 美女生成 V7.0 - 双引擎高清生成系统")
     print("=" * 70)
 
     # 加载元素库
@@ -850,7 +852,7 @@ def list_options(library: dict):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="美女生成 V8.0 - 中央引擎高清生成系统"
+        description="美女生成 V7.0 - 双引擎高清生成系统"
     )
 
     parser.add_argument("--count", "-c", type=int, default=3, help="生成数量 (默认: 3)")
@@ -870,8 +872,10 @@ def main():
         return 0
 
     # 检查 API Key（预览和列表模式不需要）
-    if not args.preview and not (os.environ.get("AI_GATEWAY_API_KEY") or os.environ.get("OPENROUTER_API_KEY") or os.environ.get("GOOGLE_API_KEY")):
-        print("错误: 请设置 AI_GATEWAY_API_KEY 环境变量")
+    if not args.preview and not os.environ.get("GOOGLE_API_KEY") and not os.environ.get("DOUBAO_API_KEY"):
+        print("错误: 请设置 GOOGLE_API_KEY 或 DOUBAO_API_KEY 环境变量")
+        print("Google: export GOOGLE_API_KEY='your-api-key'")
+        print("豆包:   export DOUBAO_API_KEY='your-api-key'")
         return 1
 
     if args.preview:
