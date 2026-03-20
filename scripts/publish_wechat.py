@@ -337,8 +337,7 @@ def generate_daily_images(count: int = 3, style: str = "") -> list:
 
     images = []
 
-    print(f"\n🎨 [豆包] 正在生成 {count} 张一致性人物图片...")
-    print("🎭 人物特征将保持一致，仅改变姿态和角度")
+    print(f"\n🎨 [双引擎] 正在生成 {count} 张图片 (Google Imagen → 豆包 fallback)...")
 
     cmd = [
         "python3", str(BEAUTY_GENERATE_SCRIPT),
@@ -355,20 +354,30 @@ def generate_daily_images(count: int = 3, style: str = "") -> list:
             timeout=300,
             env=os.environ
         )
+
+        # 打印生成脚本的关键日志（引擎选择、提示词摘要等）
+        if result.stdout:
+            for line in result.stdout.split("\n"):
+                # 打印引擎信息、人物特征、关键状态
+                if any(kw in line for kw in ["[Google]", "[豆包]", "👤", "风格:", "脸型:", "Prompt:", "随机种子", "✅", "❌", "⚠️", "降级"]):
+                    print(f"  {line.strip()}")
+
         images = _extract_image_urls(result.stdout)
 
         if result.returncode == 0 and len(images) > 0:
-            print(f"  ✅ [豆包] 成功生成 {len(images)} 张图片")
+            print(f"  ✅ 成功生成 {len(images)} 张图片")
             return images
 
-        print(f"  ❌ [豆包] 生成失败（返回码: {result.returncode}, 图片数: {len(images)}）")
+        print(f"  ❌ 生成失败（返回码: {result.returncode}, 图片数: {len(images)}）")
         if result.stderr:
             print(f"  错误: {result.stderr[:500]}")
+        if result.stdout and not images:
+            print(f"  完整输出: {result.stdout[-500:]}")
 
     except subprocess.TimeoutExpired:
-        print("  ❌ [豆包] 生成超时")
+        print("  ❌ 生成超时 (300s)")
     except Exception as e:
-        print(f"  ❌ [豆包] 生成异常: {e}")
+        print(f"  ❌ 生成异常: {e}")
 
     return images
 

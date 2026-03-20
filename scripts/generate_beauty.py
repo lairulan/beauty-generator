@@ -90,13 +90,21 @@ def get_default_library() -> dict:
         "face_types": {
             "甜美系": [
                 "sweet innocent face, round cheeks, bright sparkling eyes, cherry lips, dimples when smiling",
-                "baby face, cute round eyes, small nose, natural pink lips, youthful glow",
-                "adorable face, aegyo sal, gradient lips, innocent expression, glowing skin"
+                "baby face, cute round eyes, small button nose, natural pink lips, youthful glow",
+                "adorable face, aegyo sal, gradient lips, innocent expression, glowing skin",
+                "heart-shaped face, big doe eyes, delicate pointed chin, peach-tinted lips, tiny beauty mark near mouth",
+                "oval face with soft jawline, crescent-moon smile eyes, natural flush on apple cheeks, petal-soft lips",
+                "petite face with high forehead, bright almond eyes, button nose with slight upturn, cupid-bow lips",
+                "soft diamond face, twinkling starry eyes, small straight nose, natural gradient blush, sweet tooth-gap smile"
             ],
             "清纯系": [
                 "pure innocent face, clear bright eyes, natural beauty, fresh clean look",
-                "girl-next-door face, natural features, minimal makeup look, clear skin",
-                "fresh-faced beauty, dewy skin, natural brows, innocent gaze"
+                "fresh-faced beauty, dewy skin, natural brows, innocent gaze",
+                "youthful pristine face, clear luminous skin, natural pink lips slightly parted, gentle captivating eyes",
+                "delicate porcelain face, wide clear eyes with long natural lashes, barely-there makeup, school-girl innocence",
+                "serene oval face, calm deep brown eyes, straight nose, bare lips with natural rose tint, quiet beauty",
+                "clean minimalist face, sharp yet soft features, clear single-eyelid eyes, thin natural brows, literary goddess",
+                "gentle round face, large sparkling eyes, small nose bridge, natural dewy lips, heart-skip beauty"
             ],
             "御姐系": [
                 "mature elegant face, sharp jawline, sophisticated features, intense gaze",
@@ -114,29 +122,49 @@ def get_default_library() -> dict:
                 "frost queen features, piercing eyes, perfect bone structure, cool elegance"
             ],
             "性感系": [
-                "seductive face, full lips, bedroom eyes, sultry expression, flawless skin",
-                "alluring features, smoldering gaze, pouty lips, sensual charm",
-                "glamorous face, defined cheekbones, smokey eyes, irresistible beauty"
+                "seductive face, heavy-lidded almond eyes, full voluptuous lips, high cheekbones, smoldering intensity",
+                "alluring features, sultry deep-set eyes, pouty glossy lips, perfect bone structure, sensual charm",
+                "glamorous face, smoky eyes, defined cheekbones, parted moist lips, magnetic attraction",
+                "captivating beauty, bedroom eyes, sculpted jawline, seductive expression, dangerously attractive",
+                "enchanting face, half-lidded seductive gaze, cherry lips slightly parted, devastating allure",
+                "fierce fox-face beauty, upswept cat eyes, sharp nose, bold red lips, lethal hot-cold combination",
+                "mature sensual face, knowing eyes with golden shimmer, strong brow bone, full wine-stained lips"
             ],
             "邻家女孩系": [
                 "girl-next-door face, natural unfiltered beauty, warm genuine smile, approachable charm",
-                "friendly natural face, soft features, bright cheerful eyes, effortless everyday beauty",
-                "cute wholesome face, natural rosy cheeks, warm brown eyes, authentic smile showing teeth"
+                "friendly natural face, soft features, bright cheerful eyes, light freckles across nose, everyday beauty",
+                "cute wholesome face, natural rosy cheeks, warm brown eyes, authentic smile showing teeth",
+                "adorable everyday face, minimal makeup, natural skin glow, playful innocent eyes, coffee-shop beauty",
+                "sun-kissed casual face, crinkled laugh lines, slightly windblown hair, outdoor active girl charm",
+                "youthful college-girl face, clear skin with tiny moles, wire-frame glasses, studious cute appeal",
+                "cheerful tomboy-ish face, short layered hair, bright toothy grin, healthy outdoorsy complexion"
             ],
             "国风系": [
                 "classical Chinese beauty face, willow-leaf eyebrows, phoenix eyes, cherry red lips, elegant oval face",
                 "ancient Chinese court beauty, delicate features, almond-shaped eyes, jade-like skin, refined noble elegance",
-                "traditional Eastern beauty, graceful serene expression, porcelain complexion, timeless oriental allure"
+                "traditional Eastern beauty, graceful serene expression, porcelain complexion, timeless oriental allure",
+                "poetic Chinese beauty, gentle curved brows, clear luminous eyes, subtle rouge, classical warm charm",
+                "Tang Dynasty full-moon face, arched moth brows, small rosebud mouth, plump fair skin, imperial beauty",
+                "Song Dynasty scholar-beauty, slender face, distant poetic gaze, elegant long nose, understated grace",
+                "Jiangnan watertown beauty, misty dreamy eyes, delicate chin, pale skin like fresh snow, gentle melancholy"
             ],
             "职场系": [
                 "confident professional beauty, sharp intelligent eyes, subtle makeup, glossy lips, powerful yet feminine",
                 "sophisticated office beauty, defined brows, light smoky eyes, coral lipstick, radiating competence",
-                "elegant business beauty, minimal chic makeup, confident direct gaze, professional glamour"
+                "corporate goddess face, polished flawless skin, knowing smile, captivating gaze, boss-level beauty",
+                "elegant business beauty, minimal chic makeup, confident direct gaze, professional glamour",
+                "sharp-featured career woman, angular jawline, penetrating dark eyes, matte nude lips, ice-queen aura",
+                "youthful professional face, bright eager eyes behind trendy glasses, light blush, ambitious energy",
+                "poised manager beauty, symmetrical features, arched brows, mauve lips, quiet authority expression"
             ],
             "生活场景系": [
                 "natural relaxed face, bare-faced beauty with dewy skin, sleepy morning eyes, intimate warm expression",
                 "cozy homebody beauty, minimal skincare glow, lazy smile, soft drowsy eyes, effortlessly attractive",
-                "everyday goddess face, natural no-makeup look, warm gentle expression, comfortable intimate beauty"
+                "everyday goddess face, natural no-makeup look, warm gentle expression, comfortable intimate beauty",
+                "domestic beauty, fresh washed face, natural skin texture visible, warm sleepy smile",
+                "post-shower fresh face, damp hair framing face, clean bare skin, relaxed half-smile, steamy warmth",
+                "lazy weekend face, slightly puffy morning eyes, messy bun coming undone, oversized collar exposing shoulder",
+                "cooking-at-home beauty, flour-dusted cheek, tied-back hair with loose strands, focused concentrated look"
             ]
         },
         "hair_styles": [
@@ -749,10 +777,8 @@ def generate_series(count: int = 3,
     library = load_prompt_library()
     generator = SmartPromptGenerator(library)
 
-    # 生成统一的人物特征（保持一致性，按日期稳定）
-    daily_seed = int(date.today().strftime("%Y%m%d"))
-    stable_generator = SmartPromptGenerator(library, seed=daily_seed)
-    character = stable_generator.generate_character(style)
+    # 每次生成全新随机人物（不再用日期种子，确保每天都是不同的人）
+    character = generator.generate_character(style)
 
     print(f"\n📅 日期: {date.today()}")
     print(f"\n👤 人物特征:")
