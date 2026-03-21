@@ -75,259 +75,140 @@ def make_request(endpoint, data=None):
         return {"success": False, "error": str(e)}
 
 
-def generate_smart_caption(scene: str = "", emotion: str = "", makeup: str = "", art_style: str = "") -> str:
-    """
-    智能生成配文 - 根据图片参数动态生成
-    不再受星期几限制，完全随机且与图片内容匹配
-    """
+def generate_caption_from_meta(meta: dict) -> str:
+    """基于图片元数据动态生成配文（与图片内容贴合）
 
-    # 大型配文库 - 按情绪和场景分类
-    captions = {
-        "挑逗": [
-            "一眼心动，再沦陷。",
-            "迷人无需多言，看就够了。",
-            "眼神会说话，你听到了吗？",
-            "危险又迷人的距离。",
-            "这一刻的吸引力，致命。",
-            "风情万种，不过如此。",
-            "不用刻意，就很勾人。",
-            "撩人于无形之中。",
-            "美，是种武器。",
-            "这眼神，藏不住。",
-            "近一点，再近一点。",
-            "你的心跳，我听见了。",
-            "刚好撞进你的眼睛里。",
-            "那种感觉，叫心动。",
-            "妩媚，是天生的。",
-            "一颦一笑，皆是陷阱。",
-            "回眸一笑，万劫不复。",
-            "魅力这种东西，藏不住。",
-            "若无其事，最是勾人。",
-            "眼角眉梢，全是故事。",
-            "这一刻，时间停了。",
-            "靠近，是本能。",
-            "撩得恰到好处。",
-            "那种气场，天生的。",
-            "低眉浅笑，胜过千言。",
-            "明知是陷阱，还是跳。",
-            "美到让人语塞。",
-            "风情，不动声色地弥漫。",
-            "这种吸引力，无解。",
-            "骨子里的妩媚。",
-            "令人窒息的存在感。",
-            "越看越上头。",
-            "让人移不开眼。",
-            "这眼神会放电。",
-            "撩人于无意之间，才最厉害。",
-            "一眼，就输了。",
-            "心跳加速，无法自控。",
-            "这种美，带着温度。",
-            "不经意间的回眸，杀伤力极强。",
-            "妩媚不是刻意的，是流淌的。",
-            "这一帧，值得反复看。",
-        ],
-        "忧郁": [
-            "孤独是华丽的。",
-            "温柔里藏着忧伤。",
-            "安静中，故事在流淌。",
-            "眼中有海，心中有故事。",
-            "淡然，是最好的伪装。",
-            "有些话，不用说。",
-            "沉默，也是一种表达。",
-            "雨天的心事，特别重。",
-            "微微低头，藏起所有情绪。",
-            "窗外的光，照不进心里。",
-            "故事太长，不知从何说起。",
-            "一个人的风景，也很好看。",
-            "忧伤也可以很美。",
-            "月光下的侧脸，写满心事。",
-            "安静，是最温柔的倔强。",
-            "不说话的时候，最想你。",
-            "落叶知秋，我知你。"
-        ],
-        "神秘": [
-            "看不透，才最迷人。",
-            "眼神里，藏着故事。",
-            "若即若离，最是抓人。",
-            "谜一样的存在。",
-            "保持距离，更有魅力。",
-            "猜不透的谜题。",
-            "越神秘，越想靠近。",
-            "半遮半掩，欲言又止。",
-            "雾里看花的朦胧感。",
-            "暗夜玫瑰，幽香暗涌。",
-            "不可触碰的禁忌美。",
-            "影子比本人更迷人。",
-            "解不开的谜，才值得追。",
-            "深邃如星空，让人想探索。",
-            "每一次对视，都像一个悬念。"
-        ],
-        "开心": [
-            "笑容是最好的滤镜。",
-            "今天的快乐超标了。",
-            "阳光下的笑容，治愈一切。",
-            "笑着，就很美。",
-            "心情写在脸上。",
-            "元气满满的一天。",
-            "今天也很开心呀。",
-            "快乐的人，自带光环。",
-            "笑起来眼睛弯弯的。",
-            "好心情，是最好的化妆品。",
-            "甜甜的笑，融化了整个冬天。",
-            "生活很甜，和你一样。",
-            "嘴角上扬，世界都亮了。",
-            "收集阳光，分享快乐。",
-            "今日份微笑，请签收。",
-            "开心是会传染的。"
-        ],
-        "高冷": [
-            "不讨好，自有光芒。",
-            "高冷，也是一种温度。",
-            "疏离感刚刚好。",
-            "无需刻意，就很酷。",
-            "气场全开。",
-            "距离产生美。",
-            "生人勿近的气场。",
-            "冷到极致，反而迷人。",
-            "不需要温度，也能发光。",
-            "清冷如月，遥不可及。",
-            "孤傲如雪，纯净如冰。",
-            "眼神清冷，气质凛冽。",
-            "不屑解释的从容。",
-            "一个眼神，足以说明一切。",
-            "冰山之下，藏着火焰。",
-            "拒人千里之外，却让人念念不忘。"
-        ],
-        "温柔": [
-            "温柔了岁月，惊艳了时光。",
-            "岁月静好，温柔相伴。",
-            "温暖，是最好的滤镜。",
-            "柔软中，自有力量。",
-            "温柔了整个世界。",
-            "安静的美好。",
-            "如沐春风的温柔。",
-            "眉眼弯弯，温柔如水。",
-            "轻声细语，也很动听。",
-            "温柔是一种力量，不是软弱。",
-            "春风十里，不如你的温柔。",
-            "被温柔以待的感觉。",
-            "你笑起来，像春天。",
-            "温暖如初，岁月如歌。",
-            "月光轻柔，像你的眼神。",
-            "世界很硬，但你很软。",
-            "慢慢来，温柔最有力量。"
-        ],
-        "自信": [
-            "无需定义，只做自己。",
-            "从容，是最大的魅力。",
-            "自信，是最好的妆容。",
-            "光芒万丈，无需多言。",
-            "做自己的风景。",
-            "不被定义的自由。",
-            "本色出演，就足够好。",
-            "我就是我，不一样的烟火。",
-            "底气十足，步步生风。",
-            "眼里有光，心中有路。",
-            "不必仰望谁，你就是风景。",
-            "越努力，越幸运，越自信。",
-            "气场这东西，与生俱来。",
-            "内心强大，才是真正的美。",
-            "站在这里，就是最好的证明。",
-            "从容不迫，才是真正的优雅。"
-        ],
-        "俏皮": [
-            "今天也很可爱呢。",
-            "甜度满分，超标了。",
-            "元气少女上线。",
-            "可爱，是挡不住的。",
-            "今天的可爱值爆表。",
-            "俏皮一下，很开心。",
-            "活泼是天性。",
-            "鬼马精灵，古灵精怪。",
-            "卖个萌，你能拿我怎样。",
-            "甜到你了吗？",
-            "比心，接住了吗？",
-            "嘻嘻，被你发现了。",
-            "调皮是我的本色。",
-            "可可爱爱，没有脑袋。",
-            "眨眨眼，整个世界都是我的。",
-            "可爱不是装的，是天生的。"
-        ],
-        # 通用配文（无特定情绪）
-        "通用": [
-            "今日份心动瞬间。",
-            "美好，值得被记录。",
-            "每一帧都是心动。",
-            "定格此刻的美好。",
-            "遇见，就是最好的开始。",
-            "时光不语，却给了答案。",
-            "安静地发光。",
-            "美好从不缺席。",
-            "今日份美好已送达。",
-            "被光选中的一天。"
-        ],
-        # 场景配文
-        "雨夜": [
-            "雨夜，最适合想念。",
-            "霓虹灯下的孤单。",
-            "雨中，故事在发生。",
-            "潮湿的情绪，被雨淋湿。",
-            "雨夜，别有一番风味。",
-            "湿漉漉的温柔。"
-        ],
-        "樱花雨": [
-            "花瓣雨，落满心头。",
-            "樱花树下的约定。",
-            "粉色，是春天的告白。",
-            "落花时节，又逢君。",
-            "樱花雨，浪漫了时光。",
-            "每一片都是心事。"
-        ],
-        "黄昏海滩": [
-            "黄昏时，在海边想你。",
-            "日落时分，温柔了世界。",
-            "海边的黄昏，黄金时刻。",
-            "阳光与海，最好的组合。",
-            "黄昏，海风，心事。",
-            "此刻，刚刚好。"
-        ],
-        "赛博朋克": [
-            "霓虹灯下的未来感。",
-            "赛博朋克的浪漫。",
-            "未来的样子，想象不到。",
-            "科技与美，完美融合。",
-            "霓虹闪烁的夜晚。",
-            "未来已来。"
-        ],
-        "咖啡厅": [
-            "咖啡时光，慢下来。",
-            "咖啡香里，故事发酵。",
-            "一杯咖啡，一下午。",
-            "咖啡厅，偷得浮生半日闲。",
-            "温暖，从一杯咖啡开始。",
-            "慢生活，刚刚好。"
-        ]
-    }
-
+    meta 结构: {scene_type, outfit_style, expression_type, lighting_type, art_style}
+    """
     import random
 
-    # 根据传入的参数选择配文
-    if emotion and emotion in captions:
-        # 优先使用情绪配文
-        return random.choice(captions[emotion])
-    elif scene == "雨夜":
-        return random.choice(captions["雨夜"])
-    elif scene == "樱花雨":
-        return random.choice(captions["樱花雨"])
-    elif scene == "黄昏海滩":
-        return random.choice(captions["黄昏海滩"])
-    elif scene == "赛博朋克":
-        return random.choice(captions["赛博朋克"])
-    elif scene == "咖啡厅":
-        return random.choice(captions["咖啡厅"])
+    scene = meta.get("scene_type", "")
+    outfit = meta.get("outfit_style", "")
+    expression = meta.get("expression_type", "")
+    lighting = meta.get("lighting_type", "")
+    art = meta.get("art_style", "")
+
+    # --- 场景描写片段 ---
+    scene_phrases = {
+        "自然": ["山野间的风", "绿意盎然的画面", "大自然最好的滤镜", "清风与花香交织"],
+        "海滩": ["海风轻抚的瞬间", "浪花写下的情书", "海与天的交界处", "被海风吹乱的温柔"],
+        "花田": ["花海里的少女心事", "花瓣落满肩头", "被花包围的浪漫", "春天专属的色彩"],
+        "城市": ["城市光影中的故事", "街角的一抹亮色", "都市里的片刻宁静", "水泥森林中的柔软"],
+        "街头": ["街拍质感满分", "街角转弯遇见美好", "城市漫步的随性", "人潮中最亮眼的存在"],
+        "室内": ["窗边光影的温柔", "阳光洒进来的午后", "室内的安静时光", "光线最好的角落"],
+        "咖啡厅": ["咖啡香里的慵懒", "一杯拿铁的时光", "午后咖啡馆的邂逅", "慢下来，享受此刻"],
+        "古建筑": ["青砖黛瓦间的古典美", "时光在这里停驻", "古韵与美人相得益彰", "历史与美的对话"],
+        "特殊": ["独特氛围感拉满", "不一样的视角", "光影交错中的故事", "氛围感这一块拿捏住了"],
+    }
+
+    # --- 表情描写片段 ---
+    expr_phrases = {
+        "甜美微笑": ["甜度爆表", "笑容是最好的滤镜", "嘴角上扬的弧度刚好", "笑起来眼睛弯弯的"],
+        "优雅端庄": ["优雅是骨子里的气质", "举手投足间的从容", "美得不动声色", "端庄中透着温度"],
+        "俏皮灵动": ["古灵精怪招人爱", "灵动的眼神会说话", "元气少女上线", "可爱值已超标"],
+        "冷艳高贵": ["气场全开", "高冷中透着迷人", "疏离感刚刚好", "清冷如月的美"],
+        "性感妩媚": ["眼角眉梢全是故事", "风情万种不过如此", "这种美，带着温度", "靠近是本能"],
+        "文艺知性": ["书卷气自成风景", "知性是最高级的性感", "文艺范十足", "眉目间的故事感"],
+        "清纯自然": ["清水出芙蓉", "不施粉黛的美好", "干净得像一阵风", "最纯粹的样子"],
+    }
+
+    # --- 光影描写片段 ---
+    light_phrases = {
+        "自然光": ["自然光就是最好的打光师", "光线温柔得刚好", "阳光帮你做造型"],
+        "黄金时刻": ["黄金时刻的魔法", "夕阳把一切都镀了金", "日落是最浪漫的滤镜"],
+        "柔和室内光": ["窗边的柔光最温柔", "光影交织的安静", "被光线偏爱的角落"],
+    }
+
+    # --- 穿搭描写片段 ---
+    outfit_phrases = {
+        "优雅": ["优雅是永不过时的时尚", "精致到每一个细节"],
+        "性感": ["恰到好处的性感", "美得让人心跳加速"],
+        "清新": ["清新感扑面而来", "像春风一样舒服"],
+        "时尚": ["时尚嗅觉满分", "走在潮流前端"],
+        "古典": ["古典韵味十足", "穿越时光的美"],
+        "运动": ["活力值拉满", "运动女孩最迷人"],
+    }
+
+    # 从各维度随机选一个片段组合
+    parts = []
+
+    if scene and scene in scene_phrases:
+        parts.append(random.choice(scene_phrases[scene]))
+    elif scene:
+        parts.append(f"{scene}里的故事")
+
+    if expression and expression in expr_phrases:
+        parts.append(random.choice(expr_phrases[expression]))
+
+    if not parts:
+        if lighting and lighting in light_phrases:
+            parts.append(random.choice(light_phrases[lighting]))
+
+    if not parts:
+        if outfit and outfit in outfit_phrases:
+            parts.append(random.choice(outfit_phrases[outfit]))
+
+    # 保底：至少有一句
+    if not parts:
+        fallback = ["今日份心动瞬间", "美好值得被定格", "每一帧都是风景",
+                     "镜头里的温柔", "光影之间的故事", "被美好击中的瞬间"]
+        parts.append(random.choice(fallback))
+
+    # 组合：1-2 句，用逗号或句号连接
+    if len(parts) >= 2:
+        return f"{parts[0]}，{parts[1]}。"
     else:
-        # 使用通用配文
-        return random.choice(captions["通用"])
+        return f"{parts[0]}。"
+
+
+def generate_tags_from_meta(meta: dict) -> str:
+    """基于图片元数据动态生成话题标签"""
+    tags = ["#每日美女", "#写真"]
+
+    scene = meta.get("scene_type", "")
+    expression = meta.get("expression_type", "")
+    art = meta.get("art_style", "")
+
+    # 场景标签
+    scene_tags = {
+        "自然": "#户外写真", "海滩": "#海边", "花田": "#花海",
+        "城市": "#街拍", "街头": "#街拍", "室内": "#室内写真",
+        "咖啡厅": "#咖啡时光", "古建筑": "#国风", "特殊": "#创意摄影",
+    }
+    if scene in scene_tags:
+        tags.append(scene_tags[scene])
+
+    # 表情/风格标签
+    expr_tags = {
+        "甜美微笑": "#甜美", "优雅端庄": "#优雅", "俏皮灵动": "#元气少女",
+        "冷艳高贵": "#高冷范", "性感妩媚": "#性感", "文艺知性": "#文艺范",
+        "清纯自然": "#清纯",
+    }
+    if expression in expr_tags:
+        tags.append(expr_tags[expression])
+
+    # 艺术风格标签
+    art_tags = {
+        "电影感": "#电影感", "胶片": "#胶片质感", "日系": "#日系",
+        "ins风": "#ins风",
+    }
+    if art in art_tags:
+        tags.append(art_tags[art])
+
+    # 固定尾部标签
+    tags.append("#人像摄影")
+    tags.append("#今日心动")
+
+    return " ".join(tags[:6])  # 最多 6 个标签
+
+
+def generate_smart_caption(scene: str = "", emotion: str = "", makeup: str = "", art_style: str = "") -> str:
+    """兼容旧接口：无元数据时使用"""
+    return generate_caption_from_meta({
+        "scene_type": scene,
+        "expression_type": emotion,
+        "art_style": art_style,
+    })
 
 
 def generate_one_line_caption(style: str = "") -> str:
@@ -340,7 +221,8 @@ def publish_to_wechat(
     title: str,
     content: str,
     images: list,
-    article_type: str = "newspic"
+    article_type: str = "newspic",
+    **kwargs
 ):
     """发布到公众号草稿箱"""
 
@@ -348,14 +230,15 @@ def publish_to_wechat(
     if article_type == "newspic":
         # 构建小绿书内容 - 移除 alt text 避免"图片"文字出现
         content_lines = []
+        first_meta = {}
         for i, (img_url, caption) in enumerate(images):
-            # 使用空的 alt text，避免显示"图片"文字
             content_lines.append(f"![]({img_url})")
             if caption:
                 content_lines.append(f"\n{caption}\n")
 
-        # 末尾加话题标签
-        content_lines.append("\n#每日美女 #写真 #人像摄影 #国风美女 #今日心动")
+        # 动态标签（基于元数据或默认）
+        tags = kwargs.get("tags", "#每日美女 #写真 #人像摄影 #今日心动")
+        content_lines.append(f"\n{tags}")
 
         content_md = "\n".join(content_lines)
     else:
@@ -378,33 +261,61 @@ def publish_to_wechat(
     return result
 
 
-def _extract_image_urls(output: str) -> list:
-    """从脚本输出中提取图片 URL（支持豆包、imgbb 等多种来源）"""
+def _extract_images_with_meta(output: str) -> list:
+    """从脚本输出中提取图片 URL 和 META 元数据
+
+    返回: [(url, meta_dict), ...]
+    META 行格式: META:场景|穿搭|表情|光影|艺术风格
+    """
     import re
-    images = []
-    for line in output.split("\n"):
+    results = []
+    lines = output.split("\n")
+
+    for i, line in enumerate(lines):
         if "http" not in line:
             continue
         # 匹配所有已知图片 URL 来源
         if any(domain in line for domain in [
-            "ark-content", "doubao", "volces.com",  # 豆包
-            "imgbb", "i.ibb.co", "ibb.co",          # imgbb 图床
-            "imgur.com",                              # imgur
-            "sm.ms", "loli.net",                      # sm.ms 图床
+            "ark-content", "doubao", "volces.com",
+            "imgbb", "i.ibb.co", "ibb.co",
+            "imgur.com",
+            "sm.ms", "loli.net",
         ]):
             urls = re.findall(r'https?://[^\s\)\]"\']+', line)
-            images.extend(urls)
-    return images
+            for url in urls:
+                # 向后查找对应的 META 行
+                meta = {}
+                for j in range(i + 1, min(i + 3, len(lines))):
+                    if lines[j].strip().startswith("META:"):
+                        parts = lines[j].strip()[5:].split("|")
+                        if len(parts) >= 5:
+                            meta = {
+                                "scene_type": parts[0],
+                                "outfit_style": parts[1],
+                                "expression_type": parts[2],
+                                "lighting_type": parts[3],
+                                "art_style": parts[4],
+                            }
+                        break
+                results.append((url, meta))
+    return results
+
+
+def _extract_image_urls(output: str) -> list:
+    """兼容旧接口：只返回 URL 列表"""
+    return [url for url, _ in _extract_images_with_meta(output)]
 
 
 def generate_daily_images(count: int = 3, style: str = "", emotion: str = "") -> list:
     """
     生成多张一致性人物图片
     使用双引擎 (Google Imagen 4 Ultra + Doubao Seedream 4.5)
+
+    返回: [(url, meta_dict), ...]  meta 含 scene_type/outfit_style/expression_type/lighting_type/art_style
     """
     import re
 
-    images = []
+    images_with_meta = []
 
     print(f"\n🎨 [双引擎] 正在生成 {count} 张图片 (Google Imagen → 豆包 fallback)...")
 
@@ -429,20 +340,19 @@ def generate_daily_images(count: int = 3, style: str = "", emotion: str = "") ->
         # 打印生成脚本的关键日志（引擎选择、提示词摘要等）
         if result.stdout:
             for line in result.stdout.split("\n"):
-                # 打印引擎信息、人物特征、关键状态
-                if any(kw in line for kw in ["[Google]", "[豆包]", "👤", "风格:", "脸型:", "Prompt:", "随机种子", "✅", "❌", "⚠️", "降级", "http", "全部成功"]):
+                if any(kw in line for kw in ["[Google]", "[豆包]", "👤", "风格:", "脸型:", "Prompt:", "随机种子", "✅", "❌", "⚠️", "降级", "http", "全部成功", "META:"]):
                     print(f"  {line.strip()}")
 
-        images = _extract_image_urls(result.stdout)
+        images_with_meta = _extract_images_with_meta(result.stdout)
 
-        if result.returncode == 0 and len(images) > 0:
-            print(f"  ✅ 成功生成 {len(images)} 张图片")
-            return images
+        if result.returncode == 0 and len(images_with_meta) > 0:
+            print(f"  ✅ 成功生成 {len(images_with_meta)} 张图片")
+            return images_with_meta
 
-        print(f"  ❌ 生成失败（返回码: {result.returncode}, 图片数: {len(images)}）")
+        print(f"  ❌ 生成失败（返回码: {result.returncode}, 图片数: {len(images_with_meta)}）")
         if result.stderr:
             print(f"  错误: {result.stderr[:500]}")
-        if result.stdout and not images:
+        if result.stdout and not images_with_meta:
             print(f"  完整输出: {result.stdout[-500:]}")
 
     except subprocess.TimeoutExpired:
@@ -450,7 +360,7 @@ def generate_daily_images(count: int = 3, style: str = "", emotion: str = "") ->
     except Exception as e:
         print(f"  ❌ 生成异常: {e}")
 
-    return images
+    return images_with_meta
 
 
 def main():
@@ -504,21 +414,25 @@ def main():
         print(f"😊 情绪: {args.emotion}")
     print("=" * 50)
 
-    # 生成图片
-    images = generate_daily_images(args.count, args.style, args.emotion or "")
+    # 生成图片（返回 [(url, meta), ...]）
+    images_with_meta = generate_daily_images(args.count, args.style, args.emotion or "")
 
-    if len(images) == 0:
+    if len(images_with_meta) == 0:
         print("❌ 没有成功生成任何图片")
         return 1
 
-    print(f"\n✅ 成功生成 {len(images)} 张图片")
+    print(f"\n✅ 成功生成 {len(images_with_meta)} 张图片")
 
     # 测试模式
     if args.test:
         print("\n🧪 测试模式：不发布到公众号")
         print("\n生成的图片链接:")
-        for i, url in enumerate(images, 1):
+        for i, (url, meta) in enumerate(images_with_meta, 1):
+            caption = generate_caption_from_meta(meta) if meta else "今日份心动瞬间。"
+            tags = generate_tags_from_meta(meta) if meta else "#每日美女 #写真 #人像摄影 #今日心动"
             print(f"  {i}. {url}")
+            print(f"     配文: {caption}")
+            print(f"     标签: {tags}")
         return 0
 
     # 发布到公众号
@@ -526,24 +440,26 @@ def main():
 
     print(f"\n📤 正在发布到公众号...")
 
-    # 构建图片和说明配对 - 每张图配独立的随机配文
+    # 构建图片和说明配对 - 基于元数据动态生成配文
     image_pairs = []
-    for i, img in enumerate(images):
+    first_meta = {}
+    for i, (img_url, meta) in enumerate(images_with_meta):
         if i == 0:
-            caption = args.caption  # 第一张用主配文
-        else:
-            caption = generate_smart_caption(
-                scene=args.scene or "",
-                emotion=args.emotion or ""
-            )
-        image_pairs.append((img, caption))
+            first_meta = meta or {}
+        caption = generate_caption_from_meta(meta) if meta else generate_smart_caption()
+        image_pairs.append((img_url, caption))
+
+    # 基于第一张图的元数据生成动态标签
+    dynamic_tags = generate_tags_from_meta(first_meta) if first_meta else "#每日美女 #写真 #人像摄影 #今日心动"
+    print(f"🏷️ 标签: {dynamic_tags}")
 
     result = publish_to_wechat(
         appid=appid,
         title=args.title,
         content="",
         images=image_pairs,
-        article_type=args.type
+        article_type=args.type,
+        tags=dynamic_tags
     )
 
     # 打印详细的API响应用于调试

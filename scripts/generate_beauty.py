@@ -619,7 +619,8 @@ class SmartPromptGenerator:
             scene = self.generate_scene()
 
         camera = self.pick_one(self.library.get("camera_settings", []))
-        _, art_style = self.pick_from_dict(self.library.get("art_styles", {}))
+        art_key, art_style = self.pick_from_dict(self.library.get("art_styles", {}))
+        self._last_art_style_key = art_key
         enhancement = self.pick_one(self.library.get("enhancement_keywords", []))
 
         # --- 组装自然语言段落 ---
@@ -1045,6 +1046,9 @@ def generate_series(count: int = 3,
                 "pose_type": pose_type,
                 "scene_type": scene.get("type"),
                 "outfit_style": styling.get("outfit_style"),
+                "expression_type": styling.get("expression_type"),
+                "lighting_type": scene.get("lighting_type"),
+                "art_style": getattr(generator, '_last_art_style_key', ''),
                 "url": url
             })
             log(f"  完成!")
@@ -1183,6 +1187,7 @@ def main():
         for img in result["images"]:
             print(f"  {img['index']}. [{img['pose_type']}] {img['scene_type']} | {img['outfit_style']}")
             print(f"     {img['url']}")
+            print(f"     META:{img.get('scene_type','')}|{img.get('outfit_style','')}|{img.get('expression_type','')}|{img.get('lighting_type','')}|{img.get('art_style','')}")
         return 0
     else:
         print(f"\n部分失败 ({result['count']}/{result['total']})")
