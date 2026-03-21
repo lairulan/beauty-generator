@@ -58,7 +58,11 @@ def make_request(endpoint, data=None):
             },
             method="POST"
         )
-        with urllib.request.urlopen(req, timeout=30) as response:
+        # TODO: 临时跳过 SSL 验证（wx.limyai.com 证书过期），恢复后删除 ssl_ctx
+        ssl_ctx = ssl.create_default_context()
+        ssl_ctx.check_hostname = False
+        ssl_ctx.verify_mode = ssl.CERT_NONE
+        with urllib.request.urlopen(req, timeout=60, context=ssl_ctx) as response:
             return json.loads(response.read().decode("utf-8"))
     except urllib.error.HTTPError as e:
         body = e.read().decode("utf-8", errors="replace")
