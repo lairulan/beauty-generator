@@ -430,7 +430,7 @@ def generate_daily_images(count: int = 3, style: str = "", emotion: str = "") ->
         if result.stdout:
             for line in result.stdout.split("\n"):
                 # 打印引擎信息、人物特征、关键状态
-                if any(kw in line for kw in ["[Google]", "[豆包]", "👤", "风格:", "脸型:", "Prompt:", "随机种子", "✅", "❌", "⚠️", "降级"]):
+                if any(kw in line for kw in ["[Google]", "[豆包]", "👤", "风格:", "脸型:", "Prompt:", "随机种子", "✅", "❌", "⚠️", "降级", "http", "全部成功"]):
                     print(f"  {line.strip()}")
 
         images = _extract_image_urls(result.stdout)
