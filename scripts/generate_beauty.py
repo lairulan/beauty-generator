@@ -527,90 +527,101 @@ class SmartPromptGenerator:
                      pose_type: str = None,
                      custom_elements: list = None,
                      style: str = None) -> str:
-        """构建完整的 Prompt"""
+        """构建 Imagen 4 Ultra 自然语言 Prompt
 
-        parts = []
+        采用自然语言句子结构替代 SD 风格的关键词堆叠，
+        更好地利用 Imagen 4 的 T5-XXL 语言理解能力。
+        结构：主体描述 → 外貌特征 → 穿搭动作 → 场景环境 → 技术风格
+        """
 
-        # 1. 基础质量词 + 写真集定向（性感系专用）
+        # --- 收集所有元素 ---
         quality = self.pick_one(self.library.get("base_quality", []))
-        if style == "性感系":
-            parts.append("glamorous sensual beauty photography, alluring feminine charm, photobook style, " + quality)
-        else:
-            parts.append(quality)
-
-        # 2. 强制东方美女身份
         asian_id = self.pick_one(self.library.get("asian_identity", []))
-        parts.append(asian_id)
 
-        # 3. 人物特征
         if character is None:
             character = self.generate_character()
-
-        if character.get("face"):
-            parts.append(character["face"])
-        if character.get("skin"):
-            parts.append(character["skin"])
-        if character.get("hair"):
-            parts.append(character["hair"])
-        if character.get("body"):
-            parts.append(character["body"])
-
-        # 4. 穿搭和表情
         if styling is None:
             styling = self.generate_styling()
 
-        if styling.get("outfit"):
-            parts.append(f"wearing {styling['outfit']}")
-        if styling.get("expression"):
-            parts.append(styling["expression"])
-
-        # 5. 姿势
         pose = self.generate_pose(pose_type)
-        if pose:
-            parts.append(pose)
 
-        # 6. 场景
         if scene is None:
             scene = self.generate_scene()
 
-        if scene.get("scene"):
-            parts.append(scene["scene"])
-        if scene.get("lighting"):
-            parts.append(scene["lighting"])
-
-        # 7. 相机设置
         camera = self.pick_one(self.library.get("camera_settings", []))
+        _, art_style = self.pick_from_dict(self.library.get("art_styles", {}))
+        enhancement = self.pick_one(self.library.get("enhancement_keywords", []))
+
+        # --- 组装自然语言段落 ---
+        sections = []
+
+        # 1. 主体描述（质量基调 + 人物身份）
+        if style == "性感系":
+            sections.append(
+                f"A glamorous sensual beauty photograph with alluring feminine charm, featuring {asian_id}"
+            )
+        else:
+            sections.append(f"{quality}, featuring {asian_id}")
+
+        # 2. 外貌特征（面容/发型/肤质/体态）
+        traits = []
+        if character.get("face"):
+            traits.append(character["face"])
+        if character.get("hair"):
+            traits.append(character["hair"])
+        if character.get("skin"):
+            traits.append(character["skin"])
+        if character.get("body"):
+            traits.append(character["body"])
+        if traits:
+            sections.append("She has " + ". ".join(traits))
+
+        # 3. 穿搭
+        if styling.get("outfit"):
+            sections.append(f"She is wearing {styling['outfit']}")
+
+        # 4. 表情
+        if styling.get("expression"):
+            sections.append(styling["expression"])
+
+        # 5. 姿势
+        if pose:
+            sections.append(pose)
+
+        # 6. 场景 + 光线（描述性短语，逗号连接即可）
+        env = []
+        if scene.get("scene"):
+            env.append(scene["scene"])
+        if scene.get("lighting"):
+            env.append(scene["lighting"])
+        if env:
+            sections.append(", ".join(env))
+
+        # 7. 相机参数
         if camera:
-            parts.append(camera)
+            sections.append(f"Shot with {camera}")
 
         # 8. 艺术风格
-        _, art_style = self.pick_from_dict(self.library.get("art_styles", {}))
         if art_style:
-            parts.append(art_style)
+            sections.append(art_style)
 
-        # 9. 真实感瑕疵锚点（只选1条，避免堆叠）
-        enhancements = self.pick_random(self.library.get("enhancement_keywords", []), 1)
-        parts.extend(enhancements)
+        # 9. 真实感增强（1条自然语言细节）
+        if enhancement:
+            sections.append(enhancement)
 
-        # 10. 反AI锚点
-        realism_anchors = [
-            "shot on location, not a studio composite",
-            "no retouching, no airbrushing, natural imperfections",
-            "photograph indistinguishable from editorial magazine outtake",
-            "real person, real environment, unedited candid capture",
-            "authentic moment, untouched colors, organic light falloff"
-        ]
-        parts.append(self.pick_one(realism_anchors))
-
-        # 11. 自定义元素
+        # 10. 自定义元素
         if custom_elements:
-            parts.extend(custom_elements)
+            sections.extend(custom_elements)
 
-        # 组合并清理
-        prompt = ", ".join(parts)
+        # --- 用句号连接各段落 ---
+        prompt = ". ".join(sections)
+
+        # 清理多余空格和标点
         while "  " in prompt:
             prompt = prompt.replace("  ", " ")
-        prompt = prompt.replace(", ,", ",").strip()
+        prompt = prompt.replace("..", ".").replace(". .", ".").strip()
+        if not prompt.endswith("."):
+            prompt += "."
 
         return prompt
 

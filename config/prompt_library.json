@@ -1,21 +1,21 @@
 {
-  "version": "2.0",
-  "description": "增强版 Prompt 元素库 - 基于 Civitai、Stable Diffusion 社区最佳实践",
+  "version": "3.0",
+  "description": "Imagen 4 Ultra 优化版 - 自然语言摄影描述风格",
 
   "base_quality": [
-    "RAW photo, masterpiece, best quality, ultra detailed, 8K UHD, DSLR, ultra high resolution, ultra sharp, crystal clear, extremely detailed, professional photography",
-    "masterpiece, best quality, ultra realistic, 8k resolution, photorealistic, hyper realistic, ultra sharp focus, high definition, extreme detail",
-    "professional photography, masterpiece, ultra high resolution 8K, RAW photo, super sharp, perfectly focused, maximum detail, crystal clear quality",
-    "cinematic photo, masterpiece, best quality, hyper-detailed, 8K HDR, ultra crisp, razor sharp focus, photorealistic perfection",
-    "award-winning photography, masterpiece, ultra detailed, film grain, Fujifilm XT3, ultra high definition, maximum clarity, perfect sharpness"
+    "A high-quality professional portrait photograph with natural skin texture and visible pores, shot in beautiful light with shallow depth of field",
+    "An editorial-quality photograph captured with a professional camera, rich detail and natural colors, magazine-worthy portrait with authentic feel",
+    "A stunning candid portrait photograph with cinematic quality, natural ambient lighting, film-like color grading and razor-sharp focus on the subject",
+    "A beautiful high-resolution photograph with professional studio quality, soft natural skin tones, perfectly composed portrait with artistic depth",
+    "An award-winning portrait photograph with lifelike detail, gentle bokeh background, warm natural tones and intimate atmosphere"
   ],
 
   "asian_identity": [
-    "East Asian Chinese young woman aged 18-30, Asian facial features, Asian beauty, youthful appearance",
-    "beautiful Chinese woman aged 20-28, delicate Asian features, oriental beauty, fresh young face",
-    "gorgeous East Asian girl 18-25 years old, Chinese facial structure, natural Asian beauty, youthful glow",
-    "stunning Asian woman in her early twenties, Chinese heritage, elegant oriental features, young and vibrant",
-    "young Chinese beauty aged 22-28, refined Asian facial features, porcelain skin, youthful radiance"
+    "a beautiful young Chinese woman in her early twenties with delicate East Asian features",
+    "a gorgeous Chinese woman aged around 22 with natural Asian beauty and youthful radiance",
+    "a stunning young East Asian woman with refined Chinese facial features and luminous skin",
+    "a captivating Chinese girl in her twenties with elegant oriental features and a fresh youthful face",
+    "a beautiful Chinese woman in her mid-twenties with soft East Asian features and porcelain complexion"
   ],
 
   "face_types": {
@@ -112,91 +112,102 @@
   ],
 
   "body_types": [
-    "perfect hourglass figure, full round bust, slim defined waist, wide curvaceous hips, long toned legs, stunning feminine proportions",
-    "gorgeous curvy body, large shapely bust, tiny cinched waist, full rounded hips, long slender legs, magazine-cover silhouette",
-    "enviable feminine physique, ample perky chest, sculpted narrow waist, generous hips, smooth flawless skin, head-turning proportions",
-    "breathtaking S-curve body, voluptuous bust, nipped waist, shapely hips and thighs, graceful long legs, irresistible body line",
-    "statuesque model figure, full firm bust, dramatically narrow waist, wide feminine hips, endless legs, runway-worthy proportions",
-    "alluring feminine silhouette, perfectly round bust, flat toned stomach, hourglass waist-to-hip ratio, long lean legs, goddess-like body",
-    "stunning curvy frame, generous bust spilling over neckline, impossibly slim waist, voluptuous hips, toned calves, jaw-dropping figure",
-    "elegant yet voluptuous body, full natural bust, defined waist curve, round lifted buttocks, shapely thighs, effortlessly sexy proportions"
+    "perfect hourglass figure, big full round breasts standing firm and perky, slim defined waist, wide curvaceous hips, long toned legs, stunning feminine proportions",
+    "gorgeous curvy body, large voluptuous breasts with natural fullness and lift, tiny cinched waist, full rounded hips, long slender legs, magazine-cover silhouette",
+    "enviable feminine physique, big perky breasts with perfect round shape pushing forward, sculpted narrow waist, generous hips, smooth flawless skin, head-turning proportions",
+    "breathtaking S-curve body, ample heavy breasts sitting high and firm on chest, nipped waist, shapely hips and thighs, graceful long legs, irresistible body line",
+    "statuesque model figure, large firm upright breasts with beautiful cleavage, dramatically narrow waist, wide feminine hips, endless legs, runway-worthy proportions",
+    "alluring feminine silhouette, full plump breasts with perfect teardrop shape, flat toned stomach, hourglass waist-to-hip ratio, long lean legs, goddess-like body",
+    "stunning curvy frame, generous overflowing breasts straining against fabric, impossibly slim waist, voluptuous hips, toned calves, jaw-dropping figure",
+    "elegant yet voluptuous body, big naturally perky breasts with soft round contour, defined waist curve, round lifted buttocks, shapely thighs, effortlessly sexy proportions",
+    "incredible feminine figure, large shapely breasts defying gravity with youthful firmness, sculpted midriff, wide hips, long smooth legs, breathtaking silhouette",
+    "goddess-tier body proportions, big bouncy breasts perfectly round and upright, impossibly tiny waist, dramatic hip curve, toned endless legs, absolute perfection"
   ],
 
   "body_types_sexy": [
-    "voluptuous hourglass figure, full round bust with deep cleavage, cinched narrow waist, wide curvaceous hips, perfectly proportioned feminine body",
-    "gorgeous curvy body, large shapely bust, tiny waist, full rounded hips, long toned legs, magazine-worthy provocative silhouette",
-    "sensational figure, ample chest pushing against fabric, defined waist curve, generous hips and round buttocks, smooth flawless skin, alluring proportions",
-    "stunning feminine physique, full perky bust with visible curves, sculpted waist, round lifted buttocks, shapely thighs, seductive body line",
-    "breathtaking curves, overflowing bust, impossibly nipped waist, voluptuous wide hips, long slender legs, irresistible body contour",
-    "dangerously curvy figure, gravity-defying bust, wasp waist, dramatic hip flare, toned thighs, the kind of body that stops traffic",
-    "phenomenal hourglass shape, full heavy bust, extreme waist definition, wide childbearing hips, long legs, every curve perfectly sculpted"
+    "voluptuous hourglass figure, huge full breasts with deep inviting cleavage, nipples subtly visible through thin fabric, cinched narrow waist, wide curvaceous hips, perfectly proportioned feminine body",
+    "gorgeous curvy body, large heavy breasts overflowing and barely contained, tiny waist, full rounded hips, long toned legs, magazine-worthy provocative silhouette",
+    "sensational figure, massive perky breasts pushing hard against tight fabric, defined waist curve, generous hips and round buttocks, smooth flawless skin, alluring proportions",
+    "stunning feminine physique, big firm breasts sitting high with prominent cleavage, sculpted waist, round lifted buttocks, shapely thighs, seductive body line",
+    "breathtaking curves, enormous overflowing bust straining against clothing, impossibly nipped waist, voluptuous wide hips, long slender legs, irresistible body contour",
+    "dangerously curvy figure, gravity-defying large breasts perfectly round and upright, wasp waist, dramatic hip flare, toned thighs, the kind of body that stops traffic",
+    "phenomenal hourglass shape, huge heavy breasts with natural bounce and lift, extreme waist definition, wide childbearing hips, long legs, every curve perfectly sculpted",
+    "jaw-dropping figure, oversized perky breasts with deep shadowed cleavage, fabric stretched to limit, ultra narrow waist, voluptuous rounded hips, absolute bombshell body"
   ],
 
   "outfits": {
     "优雅": [
-      "elegant silk evening gown, flowing fabric, subtle shimmer",
-      "sophisticated cocktail dress, classic cut, refined elegance",
-      "designer blazer with matching skirt, professional chic",
-      "cashmere sweater with pearl accessories, understated luxury"
+      "floor-length champagne silk evening gown with plunging neckline, liquid fabric draping over full breasts and clinging to waist, bare back to lower spine, light catching every curve, old Hollywood glamour",
+      "form-fitting black velvet cocktail dress, sweetheart neckline framing generous cleavage, fabric hugging bust and hips like second skin, subtle slit above knee, diamond earrings, timeless sophistication",
+      "ivory satin wrap dress with deep V crossing between breasts, thin waist tie accentuating narrow middle, skirt flowing over hips, exposed collarbone and decolletage, soft romantic elegance",
+      "sheer organza blouse over lace bralette, breasts visible through delicate layered fabric, tucked into high-waisted silk palazzo pants, pearl necklace resting on chest, refined sensuality",
+      "one-shoulder draped grecian gown in dusty rose, fabric gathered under bust lifting and framing breasts, cascading over curves to floor, bare shoulder and arm, goddess-like elegance"
     ],
     "性感": [
-      "skin-tight red mini dress with plunging V-neckline, cleavage visible, hugging every curve, thigh-high hemline",
-      "black bodycon dress, deep back cutout, side slit revealing long legs, second-skin fit highlighting bust and hips",
-      "white silk slip dress, thin spaghetti straps, figure-hugging, revealing natural curves and silhouette",
-      "form-fitting qipao with high side slits to waist, form-revealing, showcasing hourglass figure",
-      "halter crop top with bare midriff, matching micro skirt, exposed toned abs and long legs",
-      "sheer lace bodysuit, strategic coverage, revealing body contours, worn under high-waisted satin skirt",
-      "off-shoulder bodycon with ruched fabric, emphasizing bust and hip curves, elegant yet provocative"
+      "skin-tight red mini dress with deep plunging V-neckline to navel, full cleavage on display, fabric stretched taut over large breasts, hugging every curve, thigh-high hemline revealing long legs",
+      "black lace bodysuit with sheer panels, breasts visible through intricate lace pattern, high-cut legs, worn with garter belt and sheer stockings, dangerous seduction",
+      "white silk slip dress with razor-thin spaghetti straps, fabric barely containing full bust, nipple outlines visible through smooth satin, dress skimming over hips to mid-thigh, effortless sensuality",
+      "form-fitting qipao with extreme high side slit to hip, silk clinging to every curve of bust waist and hips, mandarin collar framing face, body-as-art showcasing hourglass figure",
+      "sheer mesh crop top over nothing, breasts clearly visible through transparent fabric, paired with low-rise leather mini skirt, exposed toned midriff, bold provocative confidence",
+      "deep-cut halter top with open back, fabric supporting and presenting full breasts with side-cleavage visible, micro skirt barely covering, maximum skin exposure, magazine-cover provocative",
+      "off-shoulder bodycon with ruched fabric gathering under breasts then clinging down, extreme emphasis on bust-to-waist ratio, rear zipper half-open revealing spine, elegant yet deeply provocative",
+      "oversized blazer worn on bare skin with nothing underneath, open front revealing inner curves of both breasts, cinched at waist with belt, bare legs, power-sexy editorial look"
     ],
     "清新": [
-      "white cotton sundress with floral embroidery, fresh innocent",
-      "light blue oversized shirt, effortless casual, girl-next-door",
-      "pastel cardigan with white tee, soft feminine layers",
-      "linen midi skirt with simple blouse, natural aesthetic"
+      "white cotton sundress with delicate floral embroidery, thin straps over bare shoulders, fitted bodice hugging bust with sweetheart line, flowy skirt catching breeze, sun-dappled innocence",
+      "light blue oversized linen shirt slipping off one shoulder, top buttons undone showing collarbone and hint of cleavage, tucked loosely into denim shorts, bare legs, effortless girl-next-door charm",
+      "pastel pink wrap top crossing softly over breasts with gentle gathering, paired with white linen midi skirt, natural waist definition, soft fabric catching warm light, dreamy feminine layers",
+      "cream knit camisole with thin straps, fabric draping softly over full bust showing natural shape, layered under sheer cardigan, high-waisted floral skirt, literary romantic aesthetic",
+      "off-shoulder peasant blouse in white cotton, elasticated neckline sitting below collarbones, bust pushing against gathered fabric, paired with flowing midi skirt, countryside fresh beauty"
     ],
     "时尚": [
-      "designer trench coat, street style chic, fashion-forward",
-      "leather jacket with vintage band tee, edgy cool",
-      "high-waisted jeans with crop top, trendy casual",
-      "oversized blazer as dress, power dressing, modern"
+      "oversized structured blazer worn as mini dress on bare skin, deep neckline revealing cleavage and inner breast curves, cinched with chain belt at waist, bare legs in heeled boots, editorial power dressing",
+      "cropped leather jacket over sheer mesh bodysuit, bralette visible underneath, breasts outlined through layered fabrics, high-waisted tailored trousers, edgy fashion-week street style",
+      "designer corset top in structured fabric pushing breasts up with visible cleavage, paired with wide-leg trousers, statement earrings, runway-ready bold silhouette",
+      "satin shirt tucked in with top three buttons open showing lace bra and cleavage, sleeves rolled up, high-waisted leather pencil skirt, stiletto heels, off-duty model chic",
+      "asymmetric one-shoulder knit crop top hugging bust tightly, fabric stretching over full breasts, exposed midriff, paired with high-waisted pleated skirt, avant-garde modern elegance"
     ],
     "古典": [
-      "traditional cheongsam qipao with side slit, intricate silk embroidery, figure-hugging fit accentuating curves, cultural elegance",
-      "modern hanfu-inspired dress, flowing sleeves, cinched waist sash highlighting narrow waist, ethereal fairy aesthetic",
-      "vintage-style tea dress, retro feminine silhouette, nipped waist, full skirt, timeless charm",
-      "elegant Song Dynasty-inspired wrap dress, layered silk, bust-enhancing cross-collar, refined classical beauty",
-      "republican-era student dress with lace collar, form-fitting waist, pearl buttons, nostalgic intellectual elegance"
+      "traditional silk cheongsam qipao in crimson with gold phoenix embroidery, mandarin collar to chin, body-hugging fit molded to every curve of large bust narrow waist and wide hips, high side slit to upper thigh, cultural elegance meets sensual display",
+      "modern hanfu-inspired dress with flowing water sleeves, cross-collar dipping low to frame and lift breasts with visible cleavage line, wide silk sash cinching impossibly narrow waist, ethereal fairy aesthetic with curves",
+      "vintage 1930s Shanghai-style qipao in jade green silk, cap sleeves, fabric so fitted every contour of full bust and hip curve is visible, frog-button closures along curved side seam, nostalgic sensuality",
+      "elegant Song Dynasty-inspired wrap dress in layered pale silk, deep cross-collar exposing generous decolletage and upper breast curves, ribbon waist tie lifting and separating bust, long flowing skirt, refined classical beauty",
+      "republican-era student dress with white lace Peter Pan collar, fitted navy fabric hugging full bust with visible button strain, pearl buttons down front, cinched waist, knee-length hem, intellectual sensuality meets nostalgic charm"
     ],
     "运动": [
-      "tight yoga pants and sports bra, athletic wear highlighting toned curves, healthy lifestyle aesthetic",
-      "tennis skirt with polo top, sporty chic, legs on full display, preppy athletic style",
-      "form-fitting athleisure matching set, zip-front crop top, high-waisted leggings, sporty and sexy",
-      "swimming one-piece with high-cut legs, poolside goddess, athletic yet curvaceous, sun-kissed glow",
-      "running shorts and tank top, midriff visible, toned athletic curves, energetic healthy beauty"
+      "tight sports bra in breathable mesh, full breasts compressed yet still prominent with visible shape and cleavage line, paired with high-waisted yoga leggings hugging every curve, toned midriff exposed, athletic goddess aesthetic",
+      "white tennis dress with pleated skirt, fitted bodice stretching over full bust, built-in shelf bra providing lift, legs on full display, preppy sporty-cute with feminine curves",
+      "zip-front athletic crop top half-unzipped showing deep sports-bra cleavage, matched with form-fitting cycling shorts, every muscle and curve defined, sporty yet undeniably sexy",
+      "one-piece racing swimsuit with high-cut legs and low scoop back, lycra clinging to full bust and hips, athletic yet curvaceous silhouette, poolside golden-hour glow",
+      "loose tank top with oversized armholes revealing sports bra and side-breast, fabric draping over full chest, paired with tiny running shorts showing long toned legs, sweaty post-workout glow"
     ],
     "国风": [
-      "elegant traditional cheongsam qipao with side slit, intricate silk embroidery, body-hugging fit showcasing feminine curves, warm rich red or emerald green",
-      "flowing modern hanfu dress with wide sleeves, delicate floral pattern, ethereal fairy-like elegance, soft pastel colors",
-      "modern Chinese-style dress with mandarin collar, form-fitting silk fabric, subtle gold embroidery, fusion of tradition and sensuality",
-      "traditional hanfu with layered skirts, waist-cinching ribbon, revealing collarbone, graceful classical beauty"
+      "rich crimson silk cheongsam with intricate gold dragon embroidery, body-hugging fit showcasing full bust pushing against silk, narrow waist and wide hips accentuated, high side slit revealing thigh, warm candlelight catching silk sheen",
+      "flowing modern hanfu in pale lavender with wide ethereal sleeves, deep V cross-collar revealing generous cleavage and full breast curves, silk waist ribbon pulled tight defining narrow middle, fairy-like grace with sensual undertone",
+      "modern Chinese-style dress in midnight blue with mandarin collar, form-fitting glossy silk molded to full breasts and hips, subtle peony embroidery in silver thread, short hemline showing legs, fusion of tradition and allure",
+      "layered hanfu with sheer outer robe over fitted inner garment, inner bodice hugging and lifting full bust visible through translucent silk, wide sash at waist, skirts flowing in wind, collarbone and shoulders partially exposed, dreamlike classical beauty",
+      "Tang Dynasty-inspired low-cut court dress in imperial gold, wide neckline exposing shoulders and upper breast curves in historical style, fitted bustline with push-up structure, flowing multi-layered skirt, opulent historical sensuality"
     ],
     "职场": [
-      "fitted white blouse with top button undone revealing collarbone, high-waisted pencil skirt, sheer stockings, stiletto heels, professional yet subtly alluring",
-      "tailored blazer over silk camisole, slim-fit trousers, delicate necklace, confident corporate chic with feminine touch",
-      "elegant secretary look, crisp shirt with rolled sleeves, tight pencil skirt, reading glasses on tip of nose, intelligent sexy",
-      "black bodycon work dress, subtle side slit, pearl earrings, polished professional glamour"
+      "crisp white fitted blouse with top two buttons undone, fabric stretching across full bust with visible button tension, tucked into high-waisted pencil skirt hugging hips, sheer black stockings, stiletto heels, secretary fantasy with professional polish",
+      "tailored blazer with single button at waist worn over silk camisole with lace trim, blazer framing generous cleavage, slim-fit trousers, delicate gold necklace resting between breasts, powerful corporate femininity",
+      "fitted sweater dress in charcoal cashmere, thin knit fabric showing every contour of large bust and narrow waist, knee-length with subtle back slit, reading glasses, pearl earrings, intellectual allure",
+      "black bodycon work dress with square neckline framing collarbones and upper bust, fabric tight across chest and waist, subtle side slit above knee, statement belt cinching middle, polished office goddess",
+      "silk blouse in champagne with pussy-bow tie, sheer enough to show bra outline and breast shape underneath, tucked into high-waisted wool trousers, blazer over shoulders, understated office sensuality"
     ],
     "居家": [
-      "oversized boyfriend shirt barely covering thighs, messy morning hair, bare legs, cozy intimate warmth",
-      "silk pajama set with lace trim, soft satin catching warm light, relaxed sensual comfort",
-      "cotton crop top and soft shorts, casual Sunday morning look, natural effortless beauty",
-      "knit sweater falling off one shoulder, loungewear bottoms, wrapped in blanket, cozy inviting warmth"
+      "oversized white boyfriend shirt with only middle button fastened, fabric parting to show deep cleavage and bare stomach above, shirt barely covering upper thighs, messy morning hair, bare legs, intimate bedroom warmth",
+      "silk camisole pajama set with lace-trimmed neckline, thin satin draping over full breasts showing natural shape and movement, matching shorts, soft warm lamplight catching glossy fabric, relaxed sensual comfort",
+      "loose knit sweater with wide neckline fallen completely off one shoulder, strap of lace bralette visible, sweater stretched across full bust, bare legs curled on sofa, cozy winter-evening intimacy",
+      "sheer white cotton tee worn without bra, breast shape and contours clearly visible through thin fabric, paired with tiny cotton shorts, natural morning light, effortless bedroom beauty",
+      "silk robe loosely tied at waist, one side fallen open revealing inner curve of breast and collarbone, bare legs visible below knee-length hem, damp post-shower hair, steamy bathroom mirror, private intimate moment"
     ],
     "邻家": [
-      "simple white tee tucked into denim shorts, casual sneakers, natural effortless style, approachable everyday beauty",
-      "light sundress with thin straps, small crossbody bag, sandals, girl-you-meet-at-the-park vibe",
-      "striped casual shirt, jeans rolled at ankle, minimal accessories, fresh natural college-girl look",
-      "oversized hoodie with cycling shorts, ponytail, minimal makeup, cute comfortable everyday style"
+      "simple white V-neck tee slightly too tight across full bust, fabric stretched showing breast contour, tucked into high-waisted denim shorts, white sneakers, ponytail, approachable everyday beauty with unexpected curves",
+      "light floral sundress with thin straps, fitted bodice with subtle built-in cups showing natural breast shape and slight cleavage, swaying skirt above knee, sandals, girl-at-the-park warmth",
+      "striped Breton top stretching over bust, horizontal stripes emphasizing fullness, tucked into a-line midi skirt, canvas tote bag, wind-blown hair, casual French-inspired charm with feminine figure",
+      "cropped graphic tee showing bare midriff, fitted enough to outline full bust, paired with relaxed baggy jeans riding low on hips, messy bun, effortless college-girl cool",
+      "oversized denim jacket over fitted tank top with scoop neckline showing cleavage, daisy duke shorts revealing long legs, boots, sun-kissed skin, roadtrip adventure vibes with killer figure"
     ]
   },
 
@@ -382,16 +393,16 @@
   },
 
   "enhancement_keywords": [
-    "award-winning photo, professional photography, magazine cover quality, ultra high resolution, maximum sharpness",
-    "skin texture visible, pores detail, eyelash detail, hair strands detail, ultra crisp, razor sharp",
-    "perfect composition, rule of thirds, visual balance, color harmony, crystal clear clarity",
-    "post-processing, color grading, professional retouching, polished, hyper detailed, 8K quality",
-    "sharp focus on eyes, catchlight, detailed iris, expressive, perfectly focused, ultra sharp detail"
+    "with visible skin pores and fine hair strands, authentic natural detail",
+    "with catchlight reflections in eyes and detailed iris texture",
+    "with balanced composition following rule of thirds, harmonious color palette",
+    "with professional color grading and subtle film-like tonal quality",
+    "with sharp focus on eyes and gentle background separation"
   ],
 
   "negative_prompts": {
-    "standard": "deformed iris, deformed pupils, semi-realistic, cgi, 3d render, sketch, cartoon, drawing, anime, text, watermark, out of frame, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck",
-    "asian_focused": "Western face, Caucasian features, European features, blonde hair, blue eyes, green eyes, high nose bridge, deep-set eyes, freckles, pale pink skin, non-Asian features, mixed race",
-    "quality": "low quality, worst quality, jpeg artifacts, pixelated, blurry, out of focus, poorly lit, overexposed, underexposed, amateur photography"
+    "standard": "cartoon, anime, 3d render, cgi, sketch, drawing, painting, illustration, disfigured, deformed, blurry, watermark, text, extra limbs, extra fingers, mutated hands, bad anatomy",
+    "asian_focused": "Western face, Caucasian features, European features, blonde hair, blue eyes, green eyes, non-Asian features",
+    "quality": "low quality, pixelated, overexposed, underexposed, amateur, poorly lit"
   }
 }
