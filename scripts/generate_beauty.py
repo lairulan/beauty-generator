@@ -24,7 +24,7 @@ from datetime import date, datetime
 from pathlib import Path
 
 
-VERSION = "10.0.0"
+VERSION = "11.1.0"
 
 
 def _get_ssl_context():
@@ -622,16 +622,19 @@ class SmartPromptGenerator:
         _, art_style = self.pick_from_dict(self.library.get("art_styles", {}))
         enhancement = self.pick_one(self.library.get("enhancement_keywords", []))
 
+        # --- 东方审美约束（全局强化） ---
+        eastern_constraint = "with distinctly East Asian facial features, dark hair, and dark brown eyes"
+
         # --- 组装自然语言段落 ---
         sections = []
 
-        # 1. 主体描述（质量基调 + 人物身份）
+        # 1. 主体描述（质量基调 + 人物身份 + 东方审美约束）
         if style == "性感系":
             sections.append(
-                f"A glamorous sensual beauty photograph with alluring feminine charm, featuring {asian_id}"
+                f"A glamorous sensual beauty photograph with alluring feminine charm, featuring {asian_id}, {eastern_constraint}"
             )
         else:
-            sections.append(f"{quality}, featuring {asian_id}")
+            sections.append(f"{quality}, featuring {asian_id}, {eastern_constraint}")
 
         # 2. 外貌特征（面容/发型/肤质/体态）
         traits = []
@@ -696,16 +699,14 @@ class SmartPromptGenerator:
         return prompt
 
     def get_negative_prompt(self, pose_type: str = None) -> str:
-        """获取负面提示词"""
+        """获取负面提示词（含东方审美 + 性别 + 非美学约束）"""
         neg = self.library.get("negative_prompts", {})
         parts = []
 
-        if neg.get("standard"):
-            parts.append(neg["standard"])
-        if neg.get("asian_focused"):
-            parts.append(neg["asian_focused"])
-        if neg.get("quality"):
-            parts.append(neg["quality"])
+        # 按优先级加载所有约束类别
+        for key in ["standard", "asian_focused", "gender", "non_beauty", "quality"]:
+            if neg.get(key):
+                parts.append(neg[key])
 
         prompt = ", ".join(parts)
         if pose_type == "特写":
