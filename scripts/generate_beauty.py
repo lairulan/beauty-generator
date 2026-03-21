@@ -24,7 +24,7 @@ from datetime import date, datetime
 from pathlib import Path
 
 
-VERSION = "11.1.0"
+VERSION = "12.0.0"
 
 
 def _get_ssl_context():
@@ -704,7 +704,7 @@ class SmartPromptGenerator:
         parts = []
 
         # 按优先级加载所有约束类别
-        for key in ["standard", "asian_focused", "gender", "non_beauty", "quality"]:
+        for key in ["standard", "anatomical", "asian_focused", "gender", "non_beauty", "quality"]:
             if neg.get(key):
                 parts.append(neg[key])
 

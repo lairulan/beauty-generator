@@ -1,12 +1,13 @@
 {
-  "version": "11.1",
-  "description": "Eastern Beauty Constrained - 全面东方审美约束版，移除非亚洲/非女性/非美学元素，强化负面约束",
+  "version": "12.0",
+  "description": "Artistic Eastern Beauty v12.0 - 艺术级东方美女版。强化解剖学质量（牙齿/嘴唇/眼睛/手指），升级艺术感（大师级光影/构图/色彩），清理泛泛元素，全面提升生成质量",
   "base_quality": [
-    "A high-quality professional portrait photograph with natural skin texture and visible pores, shot in beautiful light with shallow depth of field",
-    "An editorial-quality photograph captured with a professional camera, rich detail and natural colors, magazine-worthy portrait with authentic feel",
-    "A stunning candid portrait photograph with cinematic quality, natural ambient lighting, film-like color grading and razor-sharp focus on the subject",
-    "A beautiful high-resolution photograph with professional studio quality, soft natural skin tones, perfectly composed portrait with artistic depth",
-    "An award-winning portrait photograph with lifelike detail, gentle bokeh background, warm natural tones and intimate atmosphere"
+    "A masterfully composed portrait photograph with the artistic sensibility of a fine art photographer, luminous natural skin with visible pores and micro-details, painterly shallow depth of field, evocative mood and atmosphere",
+    "An award-winning editorial portrait with gallery-worthy composition, rich tonal range from deep shadows to luminous highlights, authentic natural beauty captured with artistic vision and emotional depth",
+    "A breathtaking portrait photograph with the visual poetry of a master cinematographer, exquisite interplay of light and shadow on natural skin, film-like color palette with sophisticated color harmony",
+    "A stunningly artistic portrait with museum-quality composition and lighting, razor-sharp focus on eyes revealing iris detail and catchlight, harmonious color story that elevates the subject into fine art",
+    "An emotionally resonant portrait photograph with cinematic grandeur, rich saturated colors balanced with subtle film grain, the kind of image that stops you in your tracks and lingers in memory",
+    "A hauntingly beautiful portrait with the visual depth of a Renaissance painting brought to life, soft luminous skin tones, dramatic yet flattering light sculpting facial contours, timeless artistic quality that transcends photography"
   ],
   "asian_identity": [
     "a beautiful young Chinese woman in her early twenties with delicate East Asian features",
@@ -42,9 +43,9 @@
       "serene oval face, calm deep brown eyes, straight nose, bare lips with natural rose tint, quiet understated beauty",
       "clean minimalist face, sharp yet soft features, clear single-eyelid eyes, thin natural brows, literary campus goddess vibe",
       "gentle round face, large sparkling eyes, small nose bridge, natural dewy lips, the pure beauty that makes hearts skip",
-      "natural glam makeup with soft pink dewy blush and glossy red pouty lips",
       "clear-skinned East Asian beauty with natural double eyelids, dewy complexion, subtle natural blush, youthful innocent charm",
-      "sweet campus goddess face with gentle almond eyes, small delicate nose, naturally pink lips, fresh morning dew complexion"
+      "sweet campus goddess face with gentle almond eyes, small delicate nose, naturally pink lips, fresh morning dew complexion",
+      "ethereal pure face with crystal-clear dark eyes rendered in perfect detail showing depth and light, naturally shaped brows framing gentle gaze, soft pink lips with precise definition, flawless translucent skin with visible healthy glow, understated transcendent beauty"
     ],
     "性感系": [
       "seductive face, heavy-lidded almond eyes, full voluptuous lips, high cheekbones, smoldering intensity",
@@ -54,10 +55,10 @@
       "enchanting face, half-lidded seductive gaze, cherry lips slightly parted, flawless silk skin, devastating allure",
       "fierce fox-face beauty, upswept cat eyes, sharp nose, bold red lips, lethal combination of cold and hot",
       "mature sensual face, knowing eyes with golden shimmer, strong brow bone, full lips with wine stain, experienced allure",
-      "Glass skin, soft matte finish with rosy cheeks, tiny rhinestones near eyes, sweat glistening slightly on collarbones",
       "Sultry smoky eye with dark charcoal shadow, defined arched eyebrows, and a matte nude lip; natural sun-kissed skin texture with visible pores.",
       "alluring East Asian face with smoky elongated eyes, high cheekbones, full glossy lips, sophisticated glamour",
-      "mesmerizing fox-eye Asian beauty with sharp winged liner, sculpted cheekbones, deep crimson lips, fatal attraction"
+      "mesmerizing fox-eye Asian beauty with sharp winged liner, sculpted cheekbones, deep crimson lips, fatal attraction",
+      "captivating face with perfectly rendered smoky dark eyes showing detailed iris texture and alluring depth, full well-defined lips with glossy finish and precise cupid's bow, sculpted cheekbones with flawless contour, magnetic sophisticated beauty"
     ],
     "生活场景系": [
       "natural relaxed face, bare-faced beauty with dewy skin, sleepy morning eyes, messy hair charm, intimate warm expression",
@@ -71,15 +72,13 @@
     "邻家女孩系": [
       "girl-next-door face, natural unfiltered beauty, warm genuine smile, approachable charm, no heavy makeup, relatable cuteness",
       "friendly natural face, soft features, bright cheerful eyes, light freckles across nose bridge, effortless everyday beauty",
-      "cute wholesome face, natural rosy cheeks, casual messy hair, warm brown eyes, authentic smile showing teeth",
       "adorable everyday face, minimal makeup, natural skin glow, playful innocent eyes, coffee-shop beauty vibes",
       "sun-kissed casual face, crinkled laugh lines, slightly windblown hair, natural tan, outdoor active girl charm",
       "youthful college-girl face, clear skin with tiny moles, wire-frame glasses, bright curious eyes, studious cute appeal",
-      "cheerful tomboy-ish face, short layered hair, bright toothy grin, healthy outdoorsy complexion, energetic natural charm",
-      "soft confident smile, dark brown, engaging eye contact, natural glam, rose-tinted lips, defined brows, realistic texture, warm lighting",
-      "Gentle, thoughtful, and relaxed, Very light, natural makeup",
       "friendly East Asian girl-next-door face with warm brown eyes, natural smile dimples, clear healthy skin, approachable warmth",
-      "cute everyday Asian beauty with round cheerful eyes, button nose, light natural makeup, sunshine vibes"
+      "cute everyday Asian beauty with round cheerful eyes, button nose, light natural makeup, sunshine vibes",
+      "warm approachable face with clear bright dark brown eyes perfectly rendered with visible iris detail and natural catchlights, well-proportioned natural lips with subtle rose tint, healthy clear skin with youthful glow, genuine warmth",
+      "friendly natural beauty with sparkling almond eyes showing detailed iris rings, delicate closed-lip smile creating gentle dimples, flawless even skin tone, everyday goddess next door"
     ],
     "甜美系": [
       "sweet innocent face, round cheeks, bright sparkling eyes, cherry lips, dimples when smiling, warm radiant glow",
@@ -89,10 +88,10 @@
       "oval face with soft jawline, crescent-moon smile eyes, natural flush on apple cheeks, petal-soft lips, girl-crush cuteness",
       "petite face with high forehead, bright almond eyes, button nose with slight upturn, cupid-bow lips, infectious giggle expression",
       "soft diamond face, twinkling starry eyes, small straight nose, natural gradient blush, sweet tooth-gap smile",
-      "pretty - big eyes enhanced by glasses, small nose, full lips, minimal, natural, lip gloss, cute blush",
-      "Mildly surprised/confused 'just woke up' face (eyes wide, mouth slightly open in a cute 'O'), Morning realism: texture of skin without makeup, slight pillow marks or redness",
       "adorable East Asian baby face with large sparkling eyes, apple cheeks with natural blush, cherry gradient lips, angelic sweetness",
-      "sweet Asian idol face with bright crescent-moon smile eyes, small pointed chin, peach-tinted dewy skin, heart-melting cuteness"
+      "sweet Asian idol face with bright crescent-moon smile eyes, small pointed chin, peach-tinted dewy skin, heart-melting cuteness",
+      "angelic sweet face with perfectly rendered large sparkling dark eyes showing crystalline iris detail, delicate small nose, naturally pink cupid-bow lips with flawless definition, apple cheeks with natural blush, heart-melting cuteness with anatomical perfection",
+      "adorable baby face with bright luminous double-eyelid eyes capturing light beautifully, tiny well-shaped mouth with naturally glossy lips, porcelain skin with peach undertones, idol-like sweetness"
     ],
     "职场系": [
       "confident professional beauty, sharp intelligent eyes, subtle makeup enhancing natural features, glossy lips, powerful yet feminine allure",
@@ -121,13 +120,7 @@
     "twin braids with loose strands, youthful playful charm, school-girl nostalgia",
     "wet-look slicked-back hair, editorial high fashion, sharp cheekbones exposed, fierce",
     "loose natural waves with center part, bohemian goddess, free-spirited beauty",
-    "neat, straight, wavy or elegant updo, natural and well-groomed",
-    "Long, voluminous, medium to dark brown, natural wavy texture, tousled appearance",
-    "Natural black, slightly disheveled, strands falling over forehead and cheeks",
-    "softly flowing, lightly moved by a breeze",
-    "Voluminous curls, Brunette with heavy blonde highlights (balayage), Loose, spread out around head on the surface",
     "long sleek straight hair with full straight bangs, glossy, high-fashion finish",
-    "loose, naturally wavy catching specular highlights from the flash.",
     "long glossy black hair with natural body and movement, healthy silk-like shine, classic East Asian beauty",
     "dark chocolate brown hair in soft S-wave curls, shoulder-length, Korean style layered cut with face-framing pieces",
     "jet black hair in elegant low chignon with decorative hairpin, smooth and polished, refined East Asian elegance",
@@ -142,13 +135,11 @@
     "creamy smooth skin, natural texture, soft focus, photorealistic",
     "honey-toned skin, warm undertones, healthy natural glow, detailed texture",
     "milky white skin, translucent quality, delicate texture, ethereal glow",
-    "Natural texture, matte finish",
-    "soft, glowing, subtle, natural across nose and cheeks",
     "realistic skin texture with visible pores, soft natural glow",
     "Light olive/tan complexion, realistic texture with natural sheen, no airbrushing.",
     "Pale, cool-toned porcelain complexion with zero texture. The skin reflects the flash, creating a 'mochi' or 'glass skin' effect that appears soft and translucent. High-key brightness on the T-zone.",
-    "flawless natural texture",
-    "Natural tone softly illuminated by cool light"
+    "luminous glass skin with visible fine pores and natural micro-texture, soft light catching the subtle peach fuzz on cheeks, lifelike translucency",
+    "warm honey-glow complexion with natural color variations, subtle warmth on cheekbones and nose bridge, photorealistic skin rendering with depth"
   ],
   "body_types": [
     "perfect hourglass figure with stunning feminine proportions, slim defined waist curving into graceful hips, long toned legs, the kind of silhouette that turns every head",
@@ -180,9 +171,7 @@
       "satin shirt tucked in with top buttons open revealing collarbone and lace trim, sleeves rolled up, high-waisted leather pencil skirt, stiletto heels, off-duty model chic",
       "asymmetric one-shoulder knit crop top hugging curves, exposed midriff, paired with high-waisted pleated skirt, avant-garde modern elegance",
       "tight black ribbed long-sleeve, black fitted pants, oversized black faux-fur hat,black fur wrist cuffs",
-      "white oversized knitted shirt made of soft, textured fabric",
-      "Ribbed tank top, Fitted, High-waisted",
-      "casual stylish, designed to look good in black and white"
+      "white oversized knitted shirt made of soft, textured fabric"
     ],
     "国风": [
       "rich crimson silk cheongsam with intricate gold dragon embroidery, body-hugging fit tracing every feminine curve, narrow waist accentuated, high side slit revealing thigh, warm candlelight catching silk sheen",
@@ -225,7 +214,6 @@
       "silk blouse in champagne with bow tie, elegant sheerness hinting at layers beneath, tucked into high-waisted wool trousers, blazer over shoulders, understated office sensuality",
       "Oversized blazer and loose trousers, carrying a leather clutch",
       "Dark, structured jacket or blazer, possibly pinstriped or textured fabric., Mostly obscured by shadow and foreground elements.",
-      "black long-sleeve jumpsuit/top, matching black pants, white Nike sneakers",
       "tailored slim-fit blazer in soft grey over silk camisole, matching cigarette trousers, pearl stud earrings, polished professional Asian businesswoman elegance",
       "structured wool-blend dress in deep burgundy, square neckline framing collarbones, cinched waist belt, knee-length pencil silhouette, confident corporate beauty"
     ],
@@ -247,7 +235,6 @@
       "loose knit sweater with wide neckline fallen off one shoulder, lace strap visible, bare legs curled on sofa, cozy winter-evening intimacy",
       "soft white cotton tee paired with tiny cotton shorts, natural morning light, hair still messy from sleep, effortless bedroom beauty",
       "silk robe loosely tied at waist, one side slipping to reveal collarbone and shoulder, bare legs visible below knee-length hem, damp post-shower hair, private intimate moment",
-      "pajamas, bright red",
       "Brown chunky knit sweater or cardigan, Woolen, soft, cozy",
       "soft silk kimono-style robe in blush pink loosely tied at waist, revealing slender collarbone, matching silk shorts underneath, intimate morning beauty",
       "oversized cream cashmere sweater slipping off one shoulder, paired with cozy knit shorts, bare legs tucked on sofa, warm domestic goddess"
@@ -259,9 +246,7 @@
       "cropped graphic tee showing bare midriff, paired with relaxed baggy jeans riding low on hips, messy bun, effortless college-girl cool",
       "oversized denim jacket over fitted tank top, daisy duke shorts revealing long legs, boots, sun-kissed skin, roadtrip adventure vibes",
       "oversized white sweatshirt, cloudy blue oversized combat jeans, cloudy blue neutral sneakers or Nike sneakers, white ribbed socks",
-      "full-length trousers (dark or neutral tone, relaxed or baggy), white Nike sneakers",
       "cream knit sweater, red corduroy shorts, white wool socks, tan winter boots with faux fur",
-      "white crew-neck t-shirt, dark jacket or coat with soft texture, thin chain necklace partially visible",
       "oversized cream knit sweaters slipping off shoulders, tiny black pleated skirts barely covering thighs, white knee-high socks with lace trim"
     ],
     "清新": [
@@ -271,8 +256,7 @@
       "cream knit camisole with thin straps, soft fabric draping naturally over feminine form, layered under sheer cardigan, high-waisted floral skirt, literary romantic aesthetic",
       "off-shoulder peasant blouse in white cotton, neckline sitting below collarbones, gathered fabric creating soft volume, paired with flowing midi skirt, countryside fresh beauty",
       "crisp white open-collar linen shirt with sleeves rolled to mid-forearm, slim straight indigo jeans cuffed at the ankle, clean white low-top leather sneakers, lightweight navy blazer casually draped over the back of the sofa",
-      "soft knit sweater, cozy texture, neutral light tone, simple underwear or lounge bottom, neutral color, tasteful, non-explicit, lifestyle editorial balance",
-      "Yellow garment with visible strap (sundress, swimsuit, or top)"
+      "soft knit sweater, cozy texture, neutral light tone, simple underwear or lounge bottom, neutral color, tasteful, non-explicit, lifestyle editorial balance"
     ],
     "运动": [
       "sports bra in breathable mesh paired with high-waisted yoga leggings hugging every curve, toned midriff exposed, athletic goddess aesthetic with feminine definition",
@@ -306,9 +290,7 @@
       "intimate portrait with eyes half-closed and lips parted, dreamy sensual look, soft hair falling across one eye",
       "profile close-up showing perfect jawline and elegant neck, one hand gently touching face, ear and shoulder exposed",
       "close-up from slightly above, looking up at camera with big eyes, hands framing face, vulnerable and captivating",
-      "head turned slightly to the side, face angled toward camera",
-      "close-up selfie, face filling frame",
-      "full body; gentle S-curve; hip slightly popped; front knee inward; toes pointed; hands frame face in small heart gesture near chin"
+      "head turned slightly to the side, face angled toward camera"
     ],
     "写真": [
       "lying on side propped on one elbow, body creating flowing S-curve from shoulder through waist to hip, looking at camera with smoldering intensity, every curve highlighted",
@@ -317,7 +299,6 @@
       "standing with dramatic back arch, one hand in hair, hip pushed back, extreme hourglass silhouette from side angle, sensual body line",
       "kneeling upright with back arched and hair cascading down back, hands resting on thighs, feminine form on full display, confident sensual power",
       "reclining with one knee bent up, arm draped above head, full body stretched out, every feminine curve on display from shoulder to toe, languid and inviting",
-      "Mirror selfie, holding a phone with one hand, looking slightly away from the camera",
       "body facing right, head gently turned left"
     ],
     "全身": [
@@ -327,8 +308,7 @@
       "leaning against wall with hip pushed out, one knee bent, back arched slightly, body creating natural S-shape from shoulder to ankle",
       "standing in contrapposto pose, one shoulder dropped, body twisted to accentuate feminine silhouette and hip curve, classical sculpture elegance",
       "Standing confidently in shallow water, body facing forward, head slightly turned",
-      "standing confidently with relaxed, elegant posture",
-      "Full-body mirror selfie, standing with legs slightly crossed, holding a smartphone with the flash on."
+      "standing confidently with relaxed, elegant posture"
     ]
   },
   "expressions": {
@@ -336,16 +316,13 @@
       "confident direct gaze with slight chin lift, empowered expression radiating boss energy, magnetic authority",
       "self-assured knowing smile with one eyebrow slightly raised, powerful feminine presence that commands attention",
       "fierce determined expression with intense focused eyes, unstoppable energy, inspiring and intimidating",
-      "calm,dominant-cool",
-      "calm, bold, confident, celebrity presence",
-      "calm, confident",
-      "poised confident gaze with gentle warmth, elegant posture, the self-assured beauty of a successful East Asian woman"
+      "poised confident gaze with gentle warmth, elegant posture, the self-assured beauty of a successful East Asian woman",
+      "composed regal expression with quiet inner strength radiating from luminous dark eyes, a subtle smile that speaks of self-possession and grace"
     ],
     "忧郁": [
       "melancholic gaze looking away into distance, eyes glistening with unshed tears, hauntingly beautiful sadness",
       "thoughtful distant look with lips slightly downturned, introspective mood, poetic emotional depth",
-      "lonely wistful expression gazing out window, chin resting on hand, rain-like melancholy, achingly artistic",
-      "Serene, pensive gaze looking off-camera."
+      "lonely wistful expression gazing out window, chin resting on hand, rain-like melancholy, achingly artistic"
     ],
     "性感": [
       "sultry half-lidded gaze looking directly into camera, lips slightly parted and glistening, smoldering with barely contained desire",
@@ -357,9 +334,7 @@
     "冷艳": [
       "icy piercing stare with perfectly arched brow, emotionless porcelain beauty, intimidatingly gorgeous",
       "aloof distant gaze with slightly narrowed eyes, untouchable ice-queen aura, mysteriously magnetic",
-      "sharp intense eye contact with zero warmth, jaw set in elegant defiance, dangerously beautiful",
-      "serious and mysterious",
-      "calm, serious editorial poster expression"
+      "sharp intense eye contact with zero warmth, jaw set in elegant defiance, dangerously beautiful"
     ],
     "纯欲": [
       "wide innocent doe eyes gazing at camera with slightly parted dewy lips, the perfect blend of pure and sensual, baby-face seduction",
@@ -367,24 +342,21 @@
       "innocent surprised expression with big round eyes and slightly open mouth, blushing cheeks, the allure of unaware beauty",
       "gentle sleepy half-smile with heavy eyelids, natural bare-face glow, messy hair falling across face, intimate morning-after softness",
       "shy downcast eyes with a tiny secret smile, natural flush on cheeks, looking like she was just caught thinking something naughty",
-      "calm, warm, gentle"
+      "ethereal otherworldly gaze with crystalline clear dark eyes, perfectly shaped natural lips slightly parted in innocent wonder, skin luminous like morning dew on porcelain"
     ],
     "微笑": [
       "warm genuine smile with eyes crinkled in delight, head tilted slightly, radiating approachable charm",
       "subtle mysterious Mona Lisa smile with knowing eyes, as if hiding a delicious secret",
       "bright infectious smile showing perfect teeth, eyes sparkling with playful energy",
       "soft closed-lip smile with slightly raised eyebrow, serene yet subtly flirtatious",
-      "detached cool look, lips slightly parted, gaze at reflection or camera",
-      "stunning, high-visual-impact beauty",
-      "soft smile"
+      "enchanting closed-lip smile with warmth reaching her perfectly rendered dark eyes, natural rosy lips curved in genuine contentment, creating elegant smile lines"
     ],
     "挑逗": [
       "playful wink with one eye, mischievous grin, tongue peeking at corner of mouth, teasing and irresistible",
       "looking over shoulder with a come-hither glance, lips curved in a knowing smile, daring you to follow",
       "coy shy smile while looking up through lashes, one finger touching lower lip, innocent yet devastatingly flirtatious",
       "blowing a subtle kiss at camera, eyes twinkling with playful mischief, magnetic feminine charm",
-      "head thrown back in carefree laughter exposing long neck, eyes closed in pure joy, effortlessly captivating",
-      "playful, flirty"
+      "head thrown back in carefree laughter exposing long neck, eyes closed in pure joy, effortlessly captivating"
     ]
   },
   "scenes": {
@@ -396,9 +368,9 @@
       "luxury bathroom, marble surfaces, spa-like serenity",
       "art gallery, white walls, sophisticated cultural setting",
       "Luxury hotel terrace / Seaside",
-      "basketball arena, warm arena lighting with cinematic highlights",
       "cozy indoor, plain light beige wall, no decorative distractions",
-      "elegant Chinese tea ceremony room with rosewood furniture, warm lantern glow, bamboo window blinds filtering soft light"
+      "elegant Chinese tea ceremony room with rosewood furniture, warm lantern glow, bamboo window blinds filtering soft light",
+      "elegantly lit art studio with large canvas and diffused north-facing window light, creative bohemian atmosphere with warm artistic energy"
     ],
     "国风": [
       "traditional Chinese garden with pavilion and koi pond, cherry blossoms falling, warm golden afternoon light, classical oriental atmosphere",
@@ -412,8 +384,6 @@
       "local coffee shop exterior, warm golden hour, outdoor seating, casual relaxed atmosphere",
       "university campus walkway, autumn leaves, warm sunlight, youthful vibrant setting",
       "quiet residential street, blooming flowers along fence, warm sunset glow, peaceful neighborhood",
-      "A narrow, ancient stone corridor or alleyway, likely in a Mediterranean or Middle Eastern location like Egypt or Greece., Rough-hewn beige limestone walls, uneven stone-paved floor.",
-      "street roadside",
       "Quiet after-evening blue hour (Blue Hour), Soft blue light, glowing expression, streetlights/bokeh in background",
       "charming Shanghai French Concession street with plane trees, warm afternoon light filtering through leaves, vintage European-Asian architecture",
       "trendy Tokyo Harajuku side street, colorful shopfronts, soft afternoon light, vibrant yet aesthetic urban backdrop"
@@ -426,9 +396,7 @@
       "cozy reading nook by window, fairy string lights, soft cushions, warm evening glow, relaxed homebody aesthetic",
       "mid-century brown leather sofa (slightly polished), warm beige backdrop, soft vignette for visual focus",
       "the subject’s own kitchen",
-      "bright kitchen with daylight streaming from a window, peaceful, intimate, quiet morning moment",
-      "white kitchen countertop",
-      "A modest, lived-in home kitchen, Wooden cabinets, countertop appliances, a refrigerator covered with colorful magnets and souvenirs, Soft natural daylight coming from a window, warm and slightly muted"
+      "bright kitchen with daylight streaming from a window, peaceful, intimate, quiet morning moment"
     ],
     "职场": [
       "modern office with floor-to-ceiling windows, city skyline view, warm afternoon light, sleek corporate interior",
@@ -458,8 +426,7 @@
       "lavender field in Provence, purple haze, dreamy romantic",
       "snowy winter landscape, pristine white, ethereal cold beauty",
       "Outdoor campus lawn",
-      "Dense pine forest, Tall pine trees fading into layers of mist.",
-      "Outdoor winter landscape with deep snow cover., Thick, uneven layer of snow showing soft shadows and texture., Cold, crisp, daytime winter ambiance."
+      "ethereal morning mist over a tranquil lotus pond, soft diffused light creating dreamlike atmosphere, classical Chinese waterscape poetry"
     ],
     "特殊": [
       "underwater photography, flowing fabric, dreamlike surreal",
@@ -467,8 +434,8 @@
       "behind sheer fabric, mysterious silhouette, sensual artistic",
       "in falling rain, water droplets, emotional dramatic",
       "surrounded by flowers, botanical beauty, nature goddess",
-      "Abstract Texture Surface, Weathered Slate, Layered Textiles, Shallow (Planar)",
-      "Minimalist, abstract space, Thin layer of water creating mirror-like reflections, Cool mist and light fog surrounding the subject"
+      "Minimalist, abstract space, Thin layer of water creating mirror-like reflections, Cool mist and light fog surrounding the subject",
+      "rain-streaked window glass creating abstract patterns of city lights, moody atmospheric depth, impressionistic urban nocturne"
     ]
   },
   "lighting": {
@@ -491,10 +458,10 @@
       "rim lighting with hair light, subject separation, ethereal glow",
       "high-key bright lighting, minimal shadows, fresh clean aesthetic",
       "dramatic rim lighting, strong rim light from right side, hair and right body edge illuminated, silhouette emphasis",
-      "high key lighting, soft with gentle highlights",
       "soft warm key light from the front, subtle golden rim light, light trails, motion blur glow",
       "low key, cool color temperature 4500-5500K, soft diffused light, deep shadows on face and body, subtle rim light on hair",
-      "large diffused softbox front-left at 45°, close to subject, high-key beauty, white bounce on camera-right one stop under key, soft rim from behind to lift hair texture"
+      "large diffused softbox front-left at 45°, close to subject, high-key beauty, white bounce on camera-right one stop under key, soft rim from behind to lift hair texture",
+      "split lighting with precisely controlled shadow edge falling across mid-face, one eye illuminated and one in artistic shadow, dramatic portrait mastery"
     ],
     "氛围": [
       "neon lights, colorful glow, cyberpunk atmosphere, vibrant",
@@ -505,8 +472,7 @@
       "Warm tungsten lamp + faint ambient, Side/front warm, Soft glow on cheeks and hair",
       "Mixed indoor artificial lighting., Overhead fluorescent lights providing general illumination, mixed with colorful ambient glow from the pink and blue neon signs in the background., Cool tones from the neons contrast with the neutral lighting on the subject.",
       "Soft, warm ambient artificial light, Recessed ceiling lights and prominently from the warm backlit feature in the background, A soft, golden glow enveloping the scene, creating warm tones on skin and clothing and gentle shadows.",
-      "warm ambient, cozy night-time atmosphere",
-      "Flash & Neon Mixed"
+      "warm tungsten glow mixed with cool window ambient creating dual-tone color contrast on skin, intimate mood lighting with rich shadow depth and luminous highlights on facial contours"
     ]
   },
   "camera_settings": [
@@ -517,13 +483,13 @@
     "100mm f/2.8 macro lens, extreme detail, skin texture visible",
     "wide-angle, slightly low perspective, makes the subject appear majestic and free, 16:9",
     "close-up portrait, slightly off-center, eye-level angle, smartphone front-camera style, shallow, subject in sharp focus with softly blurred background, intimate selfie-style framing",
-    "full-body portrait, 50mm, shallow, subject in sharp focus with background softly blurred, eye-level, documentary-style framing, subject centered, sheep creating subtle motion around her",
     "Eye-level, slightly behind the subject, 35mm cinematic street lens, Motion blur on passing train, Moderate, subject sharp with moving background blur, Vertical, cinematic street composition",
     "close-up portrait, ultra-realistic, high-resolution, fine tonal range, sharp on eyes and facial details, smooth background gradient",
-    "mid-length shot capturing subject from thigh to head, slightly low and front-facing, bright, focused flash illuminating the subject sharply",
     "85mm, f1.4, ultra_shallow, eyes, cinematic_freeze",
-    "middle shot, wide-angle, waist-up, seated passenger perspective with slight variation per frame",
-    "soft, warm indoor light, medium shot, slightly elevated eye-level, moderate (background slightly soft), subtle grain, slightly desaturated colors (reminiscent of film photography)"
+    "85mm f/1.2 lens at golden hour, buttery smooth bokeh with warm light orbs, subject's eyes tack-sharp with luminous catchlights",
+    "medium format 80mm equivalent, extraordinary tonal range and color depth, three-dimensional pop typical of medium format rendering",
+    "135mm f/1.8 at close range, compressed perspective melting background into abstract color wash, cinematic subject isolation",
+    "50mm f/1.4 with precise zone focusing, environmental portrait balancing subject and mood-setting context, natural perspective"
   ],
   "art_styles": {
     "电影感": [
@@ -531,15 +497,17 @@
       "Wong Kar-wai style, saturated colors, melancholic romance, neon",
       "Korean drama aesthetic, soft romantic filter, dreamy pastel",
       "cinematic noir, black and white with subtle color bleed",
-      "ultra-realistic studio portrait",
-      "Cinematic street photography, moody, atmospheric, emotional, Makoto Shinkai-esque aesthetic, high contrast between warm and cool tones, nostalgic, evocative."
+      "Cinematic street photography, moody, atmospheric, emotional, Makoto Shinkai-esque aesthetic, high contrast between warm and cool tones, nostalgic, evocative.",
+      "Chungking Express visual poetry with saturated warm tones bleeding into cool shadows, expired film aesthetic with emotional grain, neon-soaked melancholic beauty",
+      "Park Chan-wook's meticulous visual aesthetic with jewel-tone color palette, every frame composed like a baroque painting, obsessive attention to symmetry and detail"
     ],
     "艺术": [
       "fine art portrait, painterly quality, museum-worthy",
       "Renaissance painting inspired, classical beauty, timeless",
       "Japanese ukiyo-e influenced, delicate lines, oriental artistry",
       "Chic indoor lifestyle aesthetic. The scene is set in a modern living room with soft, cozy decor — neutral tones, a stylish sofa, coffee table, indoor plant, and subtle art on the wall. The overall vibe is elegant yet contemporary, matching the artistic flair of the blazer.",
-      "soft, high-quality, realistic, monochrome background, natural skin tones, confident, candid, artistic"
+      "Vermeer-inspired portrait with luminous pearl-like skin tones and soft directional light, oil painting quality with photographic precision, timeless contemplative beauty",
+      "contemporary fine art photography in the style of Zhang Jingna, ethereal dreamlike quality with meticulous attention to fabric and light interaction"
     ],
     "时尚": [
       "Vogue magazine editorial, high fashion, sophisticated elegance",
@@ -547,7 +515,7 @@
       "Instagram influencer aesthetic, warm tones, lifestyle aspirational",
       "Ultra-realistic commercial fashion photography, high-end editorial., Clean, bright, and slightly desaturated. Dominant tones are white, natural skin tones, and soft, muted greens and grays in the background. A very subtle coolness to the overall image., Extremely sharp and detailed, with high micro-contrast. Every pore and fabric weave should be discernible. Photorealistic.",
       "Ultra-realistic commercial photography, high-fashion editorial, Monochromatic, emphasizing stark blacks, whites, and grays, with a strong contrast ratio. Deep, crushed blacks and bright, luminous highlights., Extremely sharp and detailed, with exceptional micro-contrast on skin and subtle textures. A very high level of realism, almost hyperreal.",
-      "luxury_fashion_photography"
+      "Peter Lindbergh-inspired editorial with honest authentic beauty, sophisticated monochrome undertones, raw emotional connection between subject and camera"
     ],
     "复古": [
       "90s film photography, nostalgic grain, vintage color cast",
@@ -557,33 +525,38 @@
     ]
   },
   "enhancement_keywords": [
-    "with visible skin pores and fine hair strands, authentic natural detail",
-    "with catchlight reflections in eyes and detailed iris texture",
-    "with balanced composition following rule of thirds, harmonious color palette",
-    "with professional color grading and subtle film-like tonal quality",
-    "with sharp focus on eyes and gentle background separation"
+    "with perfectly rendered natural teeth and well-defined lips, detailed iris texture with visible catchlight reflections, every facial feature anatomically correct and beautifully proportioned",
+    "with masterful skin rendering showing natural pores, fine peach fuzz, and subtle color variations, eyes with crystalline clarity showing limbal ring and pupil detail",
+    "with harmonious color palette and sophisticated tonal gradation, professional-grade color grading reminiscent of high-end fashion magazine editorials",
+    "with exquisite attention to micro-details: individual eyelashes, hair strand highlights, subtle skin translucency, and natural light interaction on different textures",
+    "with gallery-worthy composition following classical proportion rules, leading lines drawing the eye to the subject, meaningful negative space creating visual breathing room",
+    "with cinematic depth achieved through precise focal plane placement, creamy bokeh transitioning from sharp subject to dreamy background, atmospheric perspective"
   ],
   "negative_prompts": {
-    "standard": "cartoon, anime, 3d render, cgi, sketch, drawing, painting, illustration, disfigured, deformed, blurry, watermark, text, extra limbs, extra fingers, mutated hands, bad anatomy, ugly, distorted face, asymmetric eyes",
-    "asian_focused": "Western face, Caucasian features, European features, blonde hair, light blonde hair, strawberry blonde, platinum blonde, ginger hair, red hair, blue eyes, green eyes, grey eyes, light-colored eyes, hazel eyes, non-Asian features, non-East-Asian, Middle Eastern, South Asian, African features, Latino features, freckles on nose bridge, strong jaw, prominent nose bridge, deep-set eyes, angular Western bone structure",
-    "quality": "low quality, pixelated, overexposed, underexposed, amateur, poorly lit, blurred, noisy, grainy, oversaturated, washed out",
+    "standard": "cartoon, anime, 3d render, cgi, sketch, drawing, painting, illustration, disfigured, deformed, blurry, watermark, text, logo, signature, extra limbs, extra fingers, mutated hands, bad anatomy, ugly, distorted face, asymmetric eyes, cross-eyed",
+    "anatomical": "bad teeth, crooked teeth, missing teeth, broken teeth, ugly teeth, oversized teeth, too many teeth, deformed teeth, yellow teeth, distorted mouth, deformed lips, uneven lips, split lip, misaligned eyes, dead eyes, floating iris, pupils different sizes, wall-eyed, strabismus, extra eye, unfocused eyes, glassy dead stare, wrong number of fingers, extra digits, fused fingers, missing fingers, deformed hands, twisted fingers, webbed fingers, claw hands, disproportionate limbs, abnormal body proportions, elongated neck",
+    "asian_focused": "Western face, Caucasian features, European features, blonde hair, light blonde hair, strawberry blonde, platinum blonde, ginger hair, red hair, blue eyes, green eyes, grey eyes, light-colored eyes, hazel eyes, non-Asian features, non-East-Asian, Middle Eastern, South Asian, African features, freckles on nose bridge, strong jaw, prominent nose bridge, deep-set eyes, angular Western bone structure",
     "gender": "male, masculine, man, boy, beard, mustache, stubble, goatee, chest hair, adam's apple, masculine jawline, broad shoulders without feminine curves",
-    "non_beauty": "injury, wound, bruise, scar, blood, swollen, dirty, messy, unkempt, horror, scary, grotesque, tattoo, face tattoo, excessive piercing, punk, goth, cyberpunk face paint"
+    "non_beauty": "injury, wound, bruise, scar, blood, swollen, dirty, messy, unkempt, horror, scary, grotesque, tattoo, face tattoo, excessive piercing, punk, goth, cyberpunk face paint",
+    "quality": "low quality, pixelated, overexposed, underexposed, amateur, poorly lit, blurred, noisy, grainy, oversaturated, washed out, jpeg artifacts, compression artifacts, motion blur on face, plastic skin, uncanny valley, artificial looking, AI-generated feel"
   },
   "eastern_aesthetic_constraints": {
-    "description": "Global constraints to ensure East Asian feminine beauty aesthetic in every generated image",
+    "description": "Global constraints to ensure East Asian feminine beauty aesthetic with anatomical quality in every generated image",
     "mandatory_traits": [
       "East Asian facial features",
       "dark hair (black, dark brown, or chestnut brown)",
-      "dark eyes (brown or dark brown)",
-      "feminine beauty"
+      "dark eyes (brown or dark brown) with detailed iris rendering",
+      "feminine beauty",
+      "anatomically correct teeth, lips, eyes, and fingers",
+      "natural proportioned facial features"
     ],
     "forbidden_traits": [
       "Western/Caucasian features",
       "blonde or light-colored hair",
       "blue, green, grey, or light-colored eyes",
       "masculine features",
-      "non-beauty elements (injuries, dirt, horror)"
+      "non-beauty elements (injuries, dirt, horror)",
+      "deformed teeth, distorted lips, crossed eyes, extra fingers"
     ]
   }
 }
