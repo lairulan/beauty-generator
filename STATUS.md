@@ -1,11 +1,18 @@
-# beauty-generator STATUS v9.1.0 — 2026-03-14
+# beauty-generator STATUS v10.0.0 — 2026-03-21
 
 ## 断点
-- 本次完成：v9.1 照片真实感大幅提升
-  - 恢复 GitHub Actions schedule cron 兜底（UTC 12:00 = 北京 20:00）
-  - prompt 去AI化改造：base_quality→真实相机描述、asian_identity 精简、enhancement→自然瑕疵、negative 新增反AI词、build_prompt 新增反AI锚点
-  - 手动补发 3/13 + 3/14（新 prompt 首测）
-- 下一步：观察今晚自动发布效果，对比新旧 prompt 图片真实感差异
+- 本次完成：v10.0 配置驱动架构重构
+  - 配置驱动架构：风格策略从 if-elif 硬编码迁移到 style_strategies.json
+  - 集中常量管理：API端点/超时/模型名/图片参数统一由 constants.json 管理
+  - 多图床容错：imgbb + sm.ms 两级图床 + 指数退避重试
+  - Bug 修复：内置备用库补全"挑逗"/"纯欲"表情定义
+  - Bug 修复：默认姿势池补全"写真"类型
+  - Bug 修复：移除冗余 negative_prompt 生成
+  - 统一日志：generate_series() 全部输出改用 log() 函数
+  - 版本号统一：所有文件版本号同步为 10.0.0
+  - 日志文件名：v7-日期.log 更新为 v10-日期.log
+  - imports 整理：urllib.parse/base64 移到文件顶部
+- 下一步：观察新架构在生产环境的稳定性，验证多图床容错机制
 
 ## 环境
 - 仓库：https://github.com/lairulan/beauty-generator.git

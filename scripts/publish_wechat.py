@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-公众号发布脚本
+公众号发布脚本 V10.0
 将生成的美女图片发布到公众号草稿箱（小绿书形式）
 """
 
@@ -390,6 +390,7 @@ def _extract_image_urls(output: str) -> list:
             "ark-content", "doubao", "volces.com",  # 豆包
             "imgbb", "i.ibb.co", "ibb.co",          # imgbb 图床
             "imgur.com",                              # imgur
+            "sm.ms", "loli.net",                      # sm.ms 图床
         ]):
             urls = re.findall(r'https?://[^\s\)\]"\']+', line)
             images.extend(urls)

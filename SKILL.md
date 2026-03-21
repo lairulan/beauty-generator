@@ -1,12 +1,12 @@
 ---
 name: beauty-generator
-version: 9.0.0
+version: 10.0.0
 description: Generate realistic beauty photography with dual-engine (Google Imagen 4 Ultra + Doubao Seedream 4.5). 7-day style rotation (性感/甜美/国风/职场/生活场景/清纯/邻家), scene/emotion control, and WeChat auto-publishing. Use when user asks to generate beauty images ("生成美女", "每日美女", "发布美女", "艺术写真").
 author: rulanlai
 tags: [image-generation, beauty, wechat, google-imagen, doubao]
 ---
 
-# Beauty Generator - 艺术写真生成 V9.0
+# Beauty Generator - 艺术写真生成 V10.0
 
 高质量真人艺术写真生成助手，双引擎架构：Google Imagen 4 Ultra (主力) + 豆包 Seedream 4.5 (回退)。
 
@@ -54,4 +54,4 @@ export WECHAT_API_KEY="..."   # 微信公众号 API
 
 ## 版本信息
 
-当前版本：**v9.0.0** (2026-03-12)
+当前版本：**v10.0.0** (2026-03-21)

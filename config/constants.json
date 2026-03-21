@@ -1,0 +1,59 @@
+{
+  "version": "10.0.0",
+  "engines": {
+    "google": {
+      "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-ultra-generate-001:predict",
+      "timeout": 120,
+      "aspect_ratio": "3:4",
+      "sample_count": 1
+    },
+    "doubao": {
+      "endpoint": "https://ark.cn-beijing.volces.com/api/v3/images/generations",
+      "model": "doubao-seedream-4-5-251128",
+      "timeout": 90,
+      "size": "2K"
+    }
+  },
+  "image_hosts": [
+    {
+      "name": "imgbb",
+      "endpoint": "https://api.imgbb.com/1/upload",
+      "timeout": 60,
+      "env_key": "IMGBB_API_KEY"
+    },
+    {
+      "name": "smms",
+      "endpoint": "https://sm.ms/api/v2/upload",
+      "timeout": 60,
+      "env_key": "SMMS_API_KEY"
+    }
+  ],
+  "retry": {
+    "max_attempts": 2,
+    "base_delay": 3
+  },
+  "generation": {
+    "default_count": 3,
+    "inter_image_delay": 2
+  },
+  "emotion_expression_map": {
+    "挑逗": "挑逗",
+    "性感": "性感",
+    "温柔": "微笑",
+    "俏皮": "挑逗",
+    "自信": "自信",
+    "高冷": "冷艳",
+    "忧郁": "忧郁",
+    "纯欲": "纯欲"
+  },
+  "scene_outfit_map": {
+    "自然": ["清新", "古典", "运动"],
+    "城市": ["时尚", "优雅", "性感"],
+    "室内": ["优雅", "性感", "清新"],
+    "特殊": ["性感", "古典", "时尚"],
+    "国风": ["国风", "古典"],
+    "居家": ["居家", "清新"],
+    "街头": ["邻家", "清新", "时尚"],
+    "职场": ["职场", "优雅"]
+  }
+}
