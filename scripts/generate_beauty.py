@@ -480,7 +480,7 @@ class SmartPromptGenerator:
         # 肤质
         skin = self.pick_one(self.library.get("skin_textures", []))
 
-        # 体态
+        # 体态 — 所有风格统一使用傲人三围的 body_types
         body = self.pick_one(self.library.get("body_types", []))
 
         return {

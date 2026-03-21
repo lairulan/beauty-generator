@@ -85,18 +85,22 @@
   },
 
   "hair_styles": [
-    "long silky black hair flowing in wind, glossy healthy shine",
-    "shoulder-length dark brown hair with subtle waves, natural movement",
-    "elegant updo with loose face-framing tendrils, sophisticated style",
-    "sleek straight black hair, mirror-like shine, razor-cut ends",
-    "soft romantic curls, chestnut brown, bouncy volume",
-    "messy beach waves, sun-kissed highlights, effortless style",
-    "high ponytail, sleek and polished, face-lifting effect",
-    "bob cut with blunt bangs, modern chic, face-framing",
-    "long layered hair with curtain bangs, soft feminine look",
-    "half-up half-down style, romantic braids, ethereal beauty",
-    "low bun with wispy strands, elegant refined look",
-    "wavy lob, textured layers, trendy modern style"
+    "long silky black hair flowing in wind, glossy healthy shine, waist-length",
+    "shoulder-length dark brown hair with subtle waves, natural movement, soft bounce",
+    "elegant updo with loose face-framing tendrils, sophisticated evening style, exposing slender neck",
+    "sleek straight black hair, mirror-like shine, razor-cut ends, hip-length cascade",
+    "soft romantic curls, chestnut brown, bouncy volume, tumbling over shoulders",
+    "messy beach waves, sun-kissed highlights, effortless style, tousled by wind",
+    "high ponytail, sleek and polished, face-lifting effect, swinging with movement",
+    "bob cut with blunt bangs, modern chic, face-framing, sharp clean lines",
+    "long layered hair with curtain bangs, soft feminine look, framing cheekbones",
+    "half-up half-down style, romantic braids, ethereal beauty, princess-like",
+    "low bun with wispy strands, elegant refined look, ballet dancer aesthetic",
+    "wavy lob, textured layers, trendy modern style, effortless volume",
+    "side-swept long hair over one shoulder, revealing neck and collarbone, glamorous asymmetry",
+    "twin braids with loose strands, youthful playful charm, school-girl nostalgia",
+    "wet-look slicked-back hair, editorial high fashion, sharp cheekbones exposed, fierce",
+    "loose natural waves with center part, bohemian goddess, free-spirited beauty"
   ],
 
   "skin_textures": [
@@ -108,19 +112,24 @@
   ],
 
   "body_types": [
-    "slim elegant figure, graceful proportions, model-like silhouette",
-    "petite delicate frame, feminine curves, youthful figure",
-    "tall slender body, long legs, elegant posture, statuesque",
-    "fit toned body, healthy athletic build, graceful strength",
-    "soft feminine curves, hourglass silhouette, elegant proportions"
+    "perfect hourglass figure, full round bust, slim defined waist, wide curvaceous hips, long toned legs, stunning feminine proportions",
+    "gorgeous curvy body, large shapely bust, tiny cinched waist, full rounded hips, long slender legs, magazine-cover silhouette",
+    "enviable feminine physique, ample perky chest, sculpted narrow waist, generous hips, smooth flawless skin, head-turning proportions",
+    "breathtaking S-curve body, voluptuous bust, nipped waist, shapely hips and thighs, graceful long legs, irresistible body line",
+    "statuesque model figure, full firm bust, dramatically narrow waist, wide feminine hips, endless legs, runway-worthy proportions",
+    "alluring feminine silhouette, perfectly round bust, flat toned stomach, hourglass waist-to-hip ratio, long lean legs, goddess-like body",
+    "stunning curvy frame, generous bust spilling over neckline, impossibly slim waist, voluptuous hips, toned calves, jaw-dropping figure",
+    "elegant yet voluptuous body, full natural bust, defined waist curve, round lifted buttocks, shapely thighs, effortlessly sexy proportions"
   ],
 
   "body_types_sexy": [
-    "voluptuous hourglass figure, full round bust, cinched narrow waist, wide curvaceous hips, perfectly proportioned feminine body",
-    "gorgeous curvy body, large shapely bust, tiny waist, full rounded hips, long toned legs, magazine-worthy silhouette",
-    "sensational figure, ample chest, defined waist curve, generous hips and buttocks, smooth flawless skin, alluring proportions",
-    "stunning feminine physique, full perky bust, sculpted waist, round lifted buttocks, shapely thighs, seductive body line",
-    "breathtaking curves, deep cleavage visible, nipped waist, voluptuous hips, long slender legs, irresistible body contour"
+    "voluptuous hourglass figure, full round bust with deep cleavage, cinched narrow waist, wide curvaceous hips, perfectly proportioned feminine body",
+    "gorgeous curvy body, large shapely bust, tiny waist, full rounded hips, long toned legs, magazine-worthy provocative silhouette",
+    "sensational figure, ample chest pushing against fabric, defined waist curve, generous hips and round buttocks, smooth flawless skin, alluring proportions",
+    "stunning feminine physique, full perky bust with visible curves, sculpted waist, round lifted buttocks, shapely thighs, seductive body line",
+    "breathtaking curves, overflowing bust, impossibly nipped waist, voluptuous wide hips, long slender legs, irresistible body contour",
+    "dangerously curvy figure, gravity-defying bust, wasp waist, dramatic hip flare, toned thighs, the kind of body that stops traffic",
+    "phenomenal hourglass shape, full heavy bust, extreme waist definition, wide childbearing hips, long legs, every curve perfectly sculpted"
   ],
 
   "outfits": {
@@ -152,14 +161,18 @@
       "oversized blazer as dress, power dressing, modern"
     ],
     "古典": [
-      "traditional cheongsam qipao, intricate embroidery, cultural elegance",
-      "modern hanfu-inspired dress, flowing sleeves, ethereal",
-      "vintage-style tea dress, retro feminine, timeless charm"
+      "traditional cheongsam qipao with side slit, intricate silk embroidery, figure-hugging fit accentuating curves, cultural elegance",
+      "modern hanfu-inspired dress, flowing sleeves, cinched waist sash highlighting narrow waist, ethereal fairy aesthetic",
+      "vintage-style tea dress, retro feminine silhouette, nipped waist, full skirt, timeless charm",
+      "elegant Song Dynasty-inspired wrap dress, layered silk, bust-enhancing cross-collar, refined classical beauty",
+      "republican-era student dress with lace collar, form-fitting waist, pearl buttons, nostalgic intellectual elegance"
     ],
     "运动": [
-      "yoga outfit, athletic wear, healthy lifestyle aesthetic",
-      "tennis skirt with polo top, sporty chic, preppy style",
-      "casual athleisure, matching set, comfortable elegance"
+      "tight yoga pants and sports bra, athletic wear highlighting toned curves, healthy lifestyle aesthetic",
+      "tennis skirt with polo top, sporty chic, legs on full display, preppy athletic style",
+      "form-fitting athleisure matching set, zip-front crop top, high-waisted leggings, sporty and sexy",
+      "swimming one-piece with high-cut legs, poolside goddess, athletic yet curvaceous, sun-kissed glow",
+      "running shorts and tank top, midriff visible, toned athletic curves, energetic healthy beauty"
     ],
     "国风": [
       "elegant traditional cheongsam qipao with side slit, intricate silk embroidery, body-hugging fit showcasing feminine curves, warm rich red or emerald green",
