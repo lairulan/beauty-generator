@@ -1,30 +1,24 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-美女生成 V10.0 - 双引擎高清生成系统
+美女生成 V7.0 - 双引擎高清生成系统
 - Google Imagen 4 Ultra 主力 + 豆包 Seedream 备选
-- 配置驱动风格策略（style_strategies.json）
-- 多图床容错上传 + 重试机制
 - 从丰富的元素库中随机组合
 - 确保每次生成都有新鲜感
 - 严格东方美女风格
+- 性感系专属：写真集姿势 + 丰满曲线体态 + 专属服装
 """
 
 import argparse
-import base64
 import json
 import os
 import random
 import sys
 import time
-import urllib.parse
 import urllib.request
 import ssl
 from datetime import date, datetime
 from pathlib import Path
-
-
-VERSION = "11.1.0"
 
 
 def _get_ssl_context():
@@ -35,94 +29,35 @@ def _get_ssl_context():
     except Exception:
         return ssl._create_unverified_context()
 
-
 # 脚本目录
 SCRIPT_DIR = Path(__file__).parent.absolute()
 SKILL_DIR = SCRIPT_DIR.parent
 CONFIG_DIR = SKILL_DIR / "config"
 LOGS_DIR = SKILL_DIR / "logs"
 
+# API 配置 - 豆包
+API_ENDPOINT = "https://ark.cn-beijing.volces.com/api/v3/images/generations"
+API_MODEL = "doubao-seedream-4-5-251128"
+API_KEY = os.environ.get("DOUBAO_API_KEY")
+
+# API 配置 - Google Imagen
+GOOGLE_IMAGEN_ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-ultra-generate-001:predict"
+IMGBB_UPLOAD_ENDPOINT = "https://api.imgbb.com/1/upload"
+
 # 确保目录存在
 LOGS_DIR.mkdir(parents=True, exist_ok=True)
 
 
-# ─── 配置加载 ───────────────────────────────────────────────
-
-def _load_json_config(filename: str) -> dict:
-    """从 config 目录加载 JSON 配置文件"""
-    path = CONFIG_DIR / filename
-    if path.exists():
-        try:
-            with open(path, "r", encoding="utf-8") as f:
-                return json.load(f)
-        except Exception:
-            pass
-    return {}
-
-
-CONSTANTS = _load_json_config("constants.json")
-STYLE_STRATEGIES = _load_json_config("style_strategies.json")
-
-# 从 CONSTANTS 读取 API 配置（硬编码值作为 fallback）
-_engines = CONSTANTS.get("engines", {})
-_google_cfg = _engines.get("google", {})
-_doubao_cfg = _engines.get("doubao", {})
-
-GOOGLE_IMAGEN_ENDPOINT = _google_cfg.get(
-    "endpoint",
-    "https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-ultra-generate-001:predict"
-)
-GOOGLE_TIMEOUT = _google_cfg.get("timeout", 120)
-GOOGLE_ASPECT_RATIO = _google_cfg.get("aspect_ratio", "3:4")
-GOOGLE_SAMPLE_COUNT = _google_cfg.get("sample_count", 1)
-
-API_ENDPOINT = _doubao_cfg.get(
-    "endpoint",
-    "https://ark.cn-beijing.volces.com/api/v3/images/generations"
-)
-API_MODEL = _doubao_cfg.get("model", "doubao-seedream-4-5-251128")
-DOUBAO_TIMEOUT = _doubao_cfg.get("timeout", 90)
-DOUBAO_SIZE = _doubao_cfg.get("size", "2K")
-
-IMAGE_HOSTS = CONSTANTS.get("image_hosts", [
-    {"name": "imgbb", "endpoint": "https://api.imgbb.com/1/upload", "timeout": 60, "env_key": "IMGBB_API_KEY"}
-])
-RETRY_CFG = CONSTANTS.get("retry", {"max_attempts": 2, "base_delay": 3})
-GENERATION_CFG = CONSTANTS.get("generation", {"default_count": 3, "inter_image_delay": 2})
-EMOTION_EXPRESSION_MAP = CONSTANTS.get("emotion_expression_map", {
-    "挑逗": "挑逗", "性感": "性感", "温柔": "微笑",
-    "俏皮": "挑逗", "自信": "自信", "高冷": "冷艳",
-    "忧郁": "忧郁", "纯欲": "纯欲"
-})
-SCENE_OUTFIT_MAP = CONSTANTS.get("scene_outfit_map", {
-    "自然": ["清新", "古典", "运动"],
-    "城市": ["时尚", "优雅", "性感"],
-    "室内": ["优雅", "性感", "清新"],
-    "特殊": ["性感", "古典", "时尚"],
-    "国风": ["国风", "古典"],
-    "居家": ["居家", "清新"],
-    "街头": ["邻家", "清新", "时尚"],
-    "职场": ["职场", "优雅"]
-})
-
-
-# ─── 日志 ────────────────────────────────────────────────────
-
 def log(message: str, level: str = "INFO"):
-    """记录日志到控制台和文件"""
+    """记录日志"""
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     log_msg = f"[{timestamp}] [{level}] {message}"
     print(log_msg)
 
-    log_file = LOGS_DIR / f"v10-{datetime.now().strftime('%Y%m%d')}.log"
-    try:
-        with open(log_file, "a", encoding="utf-8") as f:
-            f.write(log_msg + "\n")
-    except Exception:
-        pass
+    log_file = LOGS_DIR / f"v7-{datetime.now().strftime('%Y%m%d')}.log"
+    with open(log_file, "a", encoding="utf-8") as f:
+        f.write(log_msg + "\n")
 
-
-# ─── Prompt 元素库 ───────────────────────────────────────────
 
 def load_prompt_library() -> dict:
     """加载 Prompt 元素库"""
@@ -136,7 +71,7 @@ def load_prompt_library() -> dict:
 
 
 def get_default_library() -> dict:
-    """内置默认元素库（prompt_library.json 缺失时的 fallback）"""
+    """内置默认元素库（从 generate_artistic.py 高质量元素库补充）"""
     return {
         "base_quality": [
             "Candid photograph taken on a Sony A7IV, natural ambient light, unretouched skin",
@@ -155,21 +90,13 @@ def get_default_library() -> dict:
         "face_types": {
             "甜美系": [
                 "sweet innocent face, round cheeks, bright sparkling eyes, cherry lips, dimples when smiling",
-                "baby face, cute round eyes, small button nose, natural pink lips, youthful glow",
-                "adorable face, aegyo sal, gradient lips, innocent expression, glowing skin",
-                "heart-shaped face, big doe eyes, delicate pointed chin, peach-tinted lips, tiny beauty mark near mouth",
-                "oval face with soft jawline, crescent-moon smile eyes, natural flush on apple cheeks, petal-soft lips",
-                "petite face with high forehead, bright almond eyes, button nose with slight upturn, cupid-bow lips",
-                "soft diamond face, twinkling starry eyes, small straight nose, natural gradient blush, sweet tooth-gap smile"
+                "baby face, cute round eyes, small nose, natural pink lips, youthful glow",
+                "adorable face, aegyo sal, gradient lips, innocent expression, glowing skin"
             ],
             "清纯系": [
                 "pure innocent face, clear bright eyes, natural beauty, fresh clean look",
-                "fresh-faced beauty, dewy skin, natural brows, innocent gaze",
-                "youthful pristine face, clear luminous skin, natural pink lips slightly parted, gentle captivating eyes",
-                "delicate porcelain face, wide clear eyes with long natural lashes, barely-there makeup, school-girl innocence",
-                "serene oval face, calm deep brown eyes, straight nose, bare lips with natural rose tint, quiet beauty",
-                "clean minimalist face, sharp yet soft features, clear single-eyelid eyes, thin natural brows, literary goddess",
-                "gentle round face, large sparkling eyes, small nose bridge, natural dewy lips, heart-skip beauty"
+                "girl-next-door face, natural features, minimal makeup look, clear skin",
+                "fresh-faced beauty, dewy skin, natural brows, innocent gaze"
             ],
             "御姐系": [
                 "mature elegant face, sharp jawline, sophisticated features, intense gaze",
@@ -187,49 +114,29 @@ def get_default_library() -> dict:
                 "frost queen features, piercing eyes, perfect bone structure, cool elegance"
             ],
             "性感系": [
-                "seductive face, heavy-lidded almond eyes, full voluptuous lips, high cheekbones, smoldering intensity",
-                "alluring features, sultry deep-set eyes, pouty glossy lips, perfect bone structure, sensual charm",
-                "glamorous face, smoky eyes, defined cheekbones, parted moist lips, magnetic attraction",
-                "captivating beauty, bedroom eyes, sculpted jawline, seductive expression, dangerously attractive",
-                "enchanting face, half-lidded seductive gaze, cherry lips slightly parted, devastating allure",
-                "fierce fox-face beauty, upswept cat eyes, sharp nose, bold red lips, lethal hot-cold combination",
-                "mature sensual face, knowing eyes with golden shimmer, strong brow bone, full wine-stained lips"
+                "seductive face, full lips, bedroom eyes, sultry expression, flawless skin",
+                "alluring features, smoldering gaze, pouty lips, sensual charm",
+                "glamorous face, defined cheekbones, smokey eyes, irresistible beauty"
             ],
             "邻家女孩系": [
                 "girl-next-door face, natural unfiltered beauty, warm genuine smile, approachable charm",
-                "friendly natural face, soft features, bright cheerful eyes, light freckles across nose, everyday beauty",
-                "cute wholesome face, natural rosy cheeks, warm brown eyes, authentic smile showing teeth",
-                "adorable everyday face, minimal makeup, natural skin glow, playful innocent eyes, coffee-shop beauty",
-                "sun-kissed casual face, crinkled laugh lines, slightly windblown hair, outdoor active girl charm",
-                "youthful college-girl face, clear skin with tiny moles, wire-frame glasses, studious cute appeal",
-                "cheerful tomboy-ish face, short layered hair, bright toothy grin, healthy outdoorsy complexion"
+                "friendly natural face, soft features, bright cheerful eyes, effortless everyday beauty",
+                "cute wholesome face, natural rosy cheeks, warm brown eyes, authentic smile showing teeth"
             ],
             "国风系": [
                 "classical Chinese beauty face, willow-leaf eyebrows, phoenix eyes, cherry red lips, elegant oval face",
                 "ancient Chinese court beauty, delicate features, almond-shaped eyes, jade-like skin, refined noble elegance",
-                "traditional Eastern beauty, graceful serene expression, porcelain complexion, timeless oriental allure",
-                "poetic Chinese beauty, gentle curved brows, clear luminous eyes, subtle rouge, classical warm charm",
-                "Tang Dynasty full-moon face, arched moth brows, small rosebud mouth, plump fair skin, imperial beauty",
-                "Song Dynasty scholar-beauty, slender face, distant poetic gaze, elegant long nose, understated grace",
-                "Jiangnan watertown beauty, misty dreamy eyes, delicate chin, pale skin like fresh snow, gentle melancholy"
+                "traditional Eastern beauty, graceful serene expression, porcelain complexion, timeless oriental allure"
             ],
             "职场系": [
                 "confident professional beauty, sharp intelligent eyes, subtle makeup, glossy lips, powerful yet feminine",
                 "sophisticated office beauty, defined brows, light smoky eyes, coral lipstick, radiating competence",
-                "corporate goddess face, polished flawless skin, knowing smile, captivating gaze, boss-level beauty",
-                "elegant business beauty, minimal chic makeup, confident direct gaze, professional glamour",
-                "sharp-featured career woman, angular jawline, penetrating dark eyes, matte nude lips, ice-queen aura",
-                "youthful professional face, bright eager eyes behind trendy glasses, light blush, ambitious energy",
-                "poised manager beauty, symmetrical features, arched brows, mauve lips, quiet authority expression"
+                "elegant business beauty, minimal chic makeup, confident direct gaze, professional glamour"
             ],
             "生活场景系": [
                 "natural relaxed face, bare-faced beauty with dewy skin, sleepy morning eyes, intimate warm expression",
                 "cozy homebody beauty, minimal skincare glow, lazy smile, soft drowsy eyes, effortlessly attractive",
-                "everyday goddess face, natural no-makeup look, warm gentle expression, comfortable intimate beauty",
-                "domestic beauty, fresh washed face, natural skin texture visible, warm sleepy smile",
-                "post-shower fresh face, damp hair framing face, clean bare skin, relaxed half-smile, steamy warmth",
-                "lazy weekend face, slightly puffy morning eyes, messy bun coming undone, oversized collar exposing shoulder",
-                "cooking-at-home beauty, flour-dusted cheek, tied-back hair with loose strands, focused concentrated look"
+                "everyday goddess face, natural no-makeup look, warm gentle expression, comfortable intimate beauty"
             ]
         },
         "hair_styles": [
@@ -252,18 +159,18 @@ def get_default_library() -> dict:
             "milky white skin, translucent quality, delicate texture, ethereal glow"
         ],
         "body_types": [
-            "perfect hourglass figure with stunning feminine proportions, slim defined waist curving into graceful hips, long toned legs",
-            "gorgeous curvy body with naturally feminine fullness, tiny cinched waist, beautifully rounded hips, long slender legs",
-            "breathtaking S-curve body with elegant feminine lines, nipped waist flowing into shapely hips and thighs, graceful long legs",
-            "statuesque model figure with perfect feminine proportions, dramatically narrow waist, wide elegant hips, endless legs",
-            "alluring feminine silhouette with soft natural curves, flat toned stomach, perfect hourglass waist-to-hip ratio, long lean legs"
+            "slim elegant figure, graceful proportions, model-like silhouette",
+            "petite delicate frame, feminine curves, youthful figure",
+            "tall slender body, long legs, elegant posture, statuesque",
+            "fit toned body, healthy athletic build, graceful strength",
+            "soft feminine curves, hourglass silhouette, elegant proportions"
         ],
         "body_types_sexy": [
-            "voluptuous hourglass figure with generous feminine curves straining against every garment, cinched narrow waist, wide curvaceous hips",
-            "gorgeous curvy body with eye-catching feminine fullness, tiny waist creating dramatic contrast with full hips, long toned legs",
-            "sensational figure with curves that clothing can barely contain, defined waist curve, generous hips, smooth flawless skin",
-            "stunning feminine physique with captivating fullness up top, sculpted waist, shapely thighs, seductive body line",
-            "breathtaking curves with impossible proportions, nipped waist flowing into voluptuous wide hips, long slender legs"
+            "voluptuous hourglass figure, full round bust, cinched narrow waist, wide curvaceous hips",
+            "gorgeous curvy body, large shapely bust, tiny waist, full rounded hips, long toned legs",
+            "sensational figure, ample chest, defined waist curve, generous hips, smooth flawless skin",
+            "stunning feminine physique, full perky bust, sculpted waist, round lifted buttocks, shapely thighs",
+            "breathtaking curves, nipped waist, voluptuous hips, long slender legs, irresistible body contour"
         ],
         "outfits": {
             "优雅": [
@@ -363,16 +270,6 @@ def get_default_library() -> dict:
                 "sultry gaze, lips slightly parted, smoldering intensity",
                 "bedroom eyes, seductive half-smile, alluring charm",
                 "confident sexy smirk, direct eye contact, magnetic presence"
-            ],
-            "挑逗": [
-                "teasing playful look, one eyebrow slightly raised, mischievous charm",
-                "coy sideways glance, lips curving into a knowing smile, flirtatious energy",
-                "playful wink with head tilted, irresistible come-hither expression"
-            ],
-            "纯欲": [
-                "innocent yet alluring gaze, doe eyes with lips barely parted, pure temptation",
-                "wide-eyed innocence mixed with subtle sensuality, dewy fresh expression",
-                "angelic face with a hint of desire, clear bright eyes, naturally flushed cheeks"
             ],
             "冷艳": [
                 "icy cold stare, emotionless beauty, intimidating elegance",
@@ -505,8 +402,6 @@ def get_default_library() -> dict:
     }
 
 
-# ─── SmartPromptGenerator ───────────────────────────────────
-
 class SmartPromptGenerator:
     """智能 Prompt 生成器"""
 
@@ -515,7 +410,7 @@ class SmartPromptGenerator:
         # 默认使用时间戳确保每次运行都不同
         self.seed = seed if seed is not None else int(time.time() * 1000) % 1000000
         self.rng = random.Random(self.seed)
-        log(f"随机种子: {self.seed}")
+        log(f"🎲 随机种子: {self.seed}")
 
     def pick_random(self, items: list, count: int = 1) -> list:
         """从列表中随机选择"""
@@ -548,9 +443,16 @@ class SmartPromptGenerator:
 
     def generate_character(self, style: str = None) -> dict:
         """生成人物特征"""
+        # 脸型风格
         face_key, face_desc = self.pick_from_dict(self.library.get("face_types", {}), style)
+
+        # 发型
         hair = self.pick_one(self.library.get("hair_styles", []))
+
+        # 肤质
         skin = self.pick_one(self.library.get("skin_textures", []))
+
+        # 体态
         body = self.pick_one(self.library.get("body_types", []))
 
         return {
@@ -573,10 +475,10 @@ class SmartPromptGenerator:
             "lighting": light_desc
         }
 
-    def generate_styling(self, outfit_style: str = None, expression_type: str = None) -> dict:
+    def generate_styling(self, outfit_style: str = None) -> dict:
         """生成穿搭和表情"""
         outfit_key, outfit_desc = self.pick_from_dict(self.library.get("outfits", {}), outfit_style)
-        expr_key, expr_desc = self.pick_from_dict(self.library.get("expressions", {}), expression_type)
+        expr_key, expr_desc = self.pick_from_dict(self.library.get("expressions", {}))
 
         return {
             "outfit_style": outfit_key,
@@ -597,119 +499,108 @@ class SmartPromptGenerator:
                      pose_type: str = None,
                      custom_elements: list = None,
                      style: str = None) -> str:
-        """构建 Imagen 4 Ultra 自然语言 Prompt
+        """构建完整的 Prompt"""
 
-        采用自然语言句子结构替代 SD 风格的关键词堆叠，
-        更好地利用 Imagen 4 的 T5-XXL 语言理解能力。
-        结构：主体描述 -> 外貌特征 -> 穿搭动作 -> 场景环境 -> 技术风格
-        """
+        parts = []
 
-        # --- 收集所有元素 ---
+        # 1. 基础质量词 + 写真集定向（性感系专用）
         quality = self.pick_one(self.library.get("base_quality", []))
-        asian_id = self.pick_one(self.library.get("asian_identity", []))
+        if style == "性感系":
+            parts.append("glamorous sensual beauty photography, alluring feminine charm, photobook style, " + quality)
+        else:
+            parts.append(quality)
 
+        # 2. 强制东方美女身份
+        asian_id = self.pick_one(self.library.get("asian_identity", []))
+        parts.append(asian_id)
+
+        # 3. 人物特征
         if character is None:
             character = self.generate_character()
+
+        if character.get("face"):
+            parts.append(character["face"])
+        if character.get("skin"):
+            parts.append(character["skin"])
+        if character.get("hair"):
+            parts.append(character["hair"])
+        if character.get("body"):
+            parts.append(character["body"])
+
+        # 4. 穿搭和表情
         if styling is None:
             styling = self.generate_styling()
 
-        pose = self.generate_pose(pose_type)
+        if styling.get("outfit"):
+            parts.append(f"wearing {styling['outfit']}")
+        if styling.get("expression"):
+            parts.append(styling["expression"])
 
+        # 5. 姿势
+        pose = self.generate_pose(pose_type)
+        if pose:
+            parts.append(pose)
+
+        # 6. 场景
         if scene is None:
             scene = self.generate_scene()
 
-        camera = self.pick_one(self.library.get("camera_settings", []))
-        _, art_style = self.pick_from_dict(self.library.get("art_styles", {}))
-        enhancement = self.pick_one(self.library.get("enhancement_keywords", []))
-
-        # --- 东方审美约束（全局强化） ---
-        eastern_constraint = "with distinctly East Asian facial features, dark hair, and dark brown eyes"
-
-        # --- 组装自然语言段落 ---
-        sections = []
-
-        # 1. 主体描述（质量基调 + 人物身份 + 东方审美约束）
-        if style == "性感系":
-            sections.append(
-                f"A glamorous sensual beauty photograph with alluring feminine charm, featuring {asian_id}, {eastern_constraint}"
-            )
-        else:
-            sections.append(f"{quality}, featuring {asian_id}, {eastern_constraint}")
-
-        # 2. 外貌特征（面容/发型/肤质/体态）
-        traits = []
-        if character.get("face"):
-            traits.append(character["face"])
-        if character.get("hair"):
-            traits.append(character["hair"])
-        if character.get("skin"):
-            traits.append(character["skin"])
-        if character.get("body"):
-            traits.append(character["body"])
-        if traits:
-            sections.append("She has " + ". ".join(traits))
-
-        # 3. 穿搭
-        if styling.get("outfit"):
-            sections.append(f"She is wearing {styling['outfit']}")
-
-        # 4. 表情
-        if styling.get("expression"):
-            sections.append(styling["expression"])
-
-        # 5. 姿势
-        if pose:
-            sections.append(pose)
-
-        # 6. 场景 + 光线
-        env = []
         if scene.get("scene"):
-            env.append(scene["scene"])
+            parts.append(scene["scene"])
         if scene.get("lighting"):
-            env.append(scene["lighting"])
-        if env:
-            sections.append(", ".join(env))
+            parts.append(scene["lighting"])
 
-        # 7. 相机参数
+        # 7. 相机设置
+        camera = self.pick_one(self.library.get("camera_settings", []))
         if camera:
-            sections.append(f"Shot with {camera}")
+            parts.append(camera)
 
         # 8. 艺术风格
+        _, art_style = self.pick_from_dict(self.library.get("art_styles", {}))
         if art_style:
-            sections.append(art_style)
+            parts.append(art_style)
 
-        # 9. 真实感增强
-        if enhancement:
-            sections.append(enhancement)
+        # 9. 真实感瑕疵锚点（只选1条，避免堆叠）
+        enhancements = self.pick_random(self.library.get("enhancement_keywords", []), 1)
+        parts.extend(enhancements)
 
-        # 10. 自定义元素
+        # 10. 反AI锚点
+        realism_anchors = [
+            "shot on location, not a studio composite",
+            "no retouching, no airbrushing, natural imperfections",
+            "photograph indistinguishable from editorial magazine outtake",
+            "real person, real environment, unedited candid capture",
+            "authentic moment, untouched colors, organic light falloff"
+        ]
+        parts.append(self.pick_one(realism_anchors))
+
+        # 11. 自定义元素
         if custom_elements:
-            sections.extend(custom_elements)
+            parts.extend(custom_elements)
 
-        # --- 用句号连接各段落 ---
-        prompt = ". ".join(sections)
-
-        # 清理多余空格和标点
+        # 组合并清理
+        prompt = ", ".join(parts)
         while "  " in prompt:
             prompt = prompt.replace("  ", " ")
-        prompt = prompt.replace("..", ".").replace(". .", ".").strip()
-        if not prompt.endswith("."):
-            prompt += "."
+        prompt = prompt.replace(", ,", ",").strip()
 
         return prompt
 
     def get_negative_prompt(self, pose_type: str = None) -> str:
-        """获取负面提示词（含东方审美 + 性别 + 非美学约束）"""
+        """获取负面提示词"""
         neg = self.library.get("negative_prompts", {})
         parts = []
 
-        # 按优先级加载所有约束类别
-        for key in ["standard", "asian_focused", "gender", "non_beauty", "quality"]:
-            if neg.get(key):
-                parts.append(neg[key])
+        if neg.get("standard"):
+            parts.append(neg["standard"])
+        if neg.get("asian_focused"):
+            parts.append(neg["asian_focused"])
+        if neg.get("quality"):
+            parts.append(neg["quality"])
 
         prompt = ", ".join(parts)
         if pose_type == "特写":
+            # 特写构图允许 close up / cropped
             tokens = [t.strip() for t in prompt.split(",")]
             tokens = [t for t in tokens if t not in {"close up", "cropped"}]
             prompt = ", ".join(tokens)
@@ -717,20 +608,22 @@ class SmartPromptGenerator:
         return prompt
 
 
-# ─── 图床上传（多图床容错 + 重试） ────────────────────────────
+def upload_to_imgbb(base64_data: str) -> dict:
+    """上传 base64 图片数据到 imgbb，返回图片 URL"""
+    import urllib.parse
+    imgbb_key = os.environ.get("IMGBB_API_KEY")
+    if not imgbb_key:
+        return {"success": False, "error": "IMGBB_API_KEY 未设置"}
 
-def _upload_imgbb(host: dict, base64_data: str, api_key: str) -> dict:
-    """上传到 imgbb"""
     ssl_context = _get_ssl_context()
     try:
         form_data = urllib.parse.urlencode({"image": base64_data}).encode("utf-8")
         req = urllib.request.Request(
-            f"{host['endpoint']}?key={api_key}",
+            f"{IMGBB_UPLOAD_ENDPOINT}?key={imgbb_key}",
             data=form_data,
             method="POST"
         )
-        timeout = host.get("timeout", 60)
-        with urllib.request.urlopen(req, context=ssl_context, timeout=timeout) as response:
+        with urllib.request.urlopen(req, context=ssl_context, timeout=60) as response:
             result = json.loads(response.read().decode("utf-8"))
             if result.get("success"):
                 return {"success": True, "url": result["data"]["url"]}
@@ -739,81 +632,9 @@ def _upload_imgbb(host: dict, base64_data: str, api_key: str) -> dict:
         return {"success": False, "error": str(e)}
 
 
-def _upload_smms(host: dict, base64_data: str, api_key: str) -> dict:
-    """上传到 sm.ms"""
-    ssl_context = _get_ssl_context()
-    try:
-        # sm.ms 需要 multipart/form-data 格式
-        image_bytes = base64.b64decode(base64_data)
-        boundary = f"----WebKitFormBoundary{int(time.time() * 1000)}"
-        body = (
-            f"--{boundary}\r\n"
-            f'Content-Disposition: form-data; name="smfile"; filename="beauty.png"\r\n'
-            f"Content-Type: image/png\r\n\r\n"
-        ).encode("utf-8") + image_bytes + f"\r\n--{boundary}--\r\n".encode("utf-8")
-
-        req = urllib.request.Request(
-            host["endpoint"],
-            data=body,
-            headers={
-                "Content-Type": f"multipart/form-data; boundary={boundary}",
-                "Authorization": api_key
-            },
-            method="POST"
-        )
-        timeout = host.get("timeout", 60)
-        with urllib.request.urlopen(req, context=ssl_context, timeout=timeout) as response:
-            result = json.loads(response.read().decode("utf-8"))
-            if result.get("success") and result.get("data", {}).get("url"):
-                return {"success": True, "url": result["data"]["url"]}
-            # sm.ms 图片已存在时返回 images 字段
-            if result.get("images"):
-                return {"success": True, "url": result["images"]}
-            return {"success": False, "error": f"sm.ms 返回: {result.get('message', result)}"}
-    except Exception as e:
-        return {"success": False, "error": str(e)}
-
-
-def upload_image(base64_data: str) -> dict:
-    """多图床上传，按优先级尝试，每个图床支持重试"""
-    max_attempts = RETRY_CFG.get("max_attempts", 2)
-    base_delay = RETRY_CFG.get("base_delay", 3)
-
-    for host in IMAGE_HOSTS:
-        env_key = host.get("env_key", "")
-        api_key = os.environ.get(env_key)
-        if not api_key:
-            continue
-
-        host_name = host.get("name", "unknown")
-        for attempt in range(max_attempts):
-            if host_name == "imgbb":
-                result = _upload_imgbb(host, base64_data, api_key)
-            elif host_name == "smms":
-                result = _upload_smms(host, base64_data, api_key)
-            else:
-                result = {"success": False, "error": f"不支持的图床: {host_name}"}
-                break
-
-            if result["success"]:
-                if attempt > 0:
-                    log(f"    {host_name} 第 {attempt + 1} 次尝试成功")
-                return result
-
-            if attempt < max_attempts - 1:
-                delay = base_delay * (2 ** attempt)
-                log(f"    {host_name} 失败: {result.get('error', '未知')}，{delay}s 后重试...")
-                time.sleep(delay)
-
-        log(f"    {host_name} 全部 {max_attempts} 次尝试失败，尝试下一个图床...")
-
-    return {"success": False, "error": "所有图床上传失败"}
-
-
-# ─── 图片生成引擎 ────────────────────────────────────────────
-
 def generate_image_google(prompt: str) -> dict:
-    """调用 Google Imagen 4 Ultra 生成图片，结果上传到图床返回 URL"""
+    """调用 Google Imagen 4 Ultra 生成图片，结果上传到 imgbb 返回 URL"""
+    import base64
     google_key = os.environ.get("GOOGLE_API_KEY")
     if not google_key:
         return {"success": False, "error": "GOOGLE_API_KEY 未设置"}
@@ -821,10 +642,7 @@ def generate_image_google(prompt: str) -> dict:
     endpoint = f"{GOOGLE_IMAGEN_ENDPOINT}?key={google_key}"
     payload = {
         "instances": [{"prompt": prompt}],
-        "parameters": {
-            "sampleCount": GOOGLE_SAMPLE_COUNT,
-            "aspectRatio": GOOGLE_ASPECT_RATIO
-        }
+        "parameters": {"sampleCount": 1, "aspectRatio": "3:4"}
     }
 
     ssl_context = _get_ssl_context()
@@ -836,7 +654,7 @@ def generate_image_google(prompt: str) -> dict:
             headers={"Content-Type": "application/json"},
             method="POST"
         )
-        with urllib.request.urlopen(req, context=ssl_context, timeout=GOOGLE_TIMEOUT) as response:
+        with urllib.request.urlopen(req, context=ssl_context, timeout=120) as response:
             result = json.loads(response.read().decode("utf-8"))
 
         predictions = result.get("predictions", [])
@@ -847,11 +665,11 @@ def generate_image_google(prompt: str) -> dict:
         if not b64_data:
             return {"success": False, "error": "Google API 返回数据为空"}
 
-        log("  上传到图床...")
-        upload_result = upload_image(b64_data)
+        log("  📤 上传到 imgbb...")
+        upload_result = upload_to_imgbb(b64_data)
         if upload_result["success"]:
             return {"success": True, "url": upload_result["url"]}
-        return {"success": False, "error": f"图床上传失败: {upload_result['error']}"}
+        return {"success": False, "error": f"imgbb 上传失败: {upload_result['error']}"}
 
     except Exception as e:
         return {"success": False, "error": str(e)}
@@ -867,26 +685,26 @@ def generate_image_doubao(prompt: str, negative_prompt: str) -> dict:
         "model": API_MODEL,
         "prompt": prompt,
         "negative_prompt": negative_prompt,
-        "size": DOUBAO_SIZE,
+        "size": "2K",
         "response_format": "url",
         "watermark": False
     }
 
     ssl_context = _get_ssl_context()
     try:
-        data = json.dumps(payload).encode("utf-8")
+        data = json.dumps(payload).encode('utf-8')
         req = urllib.request.Request(
             API_ENDPOINT,
             data=data,
             headers={
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {doubao_key}"
+                'Content-Type': 'application/json',
+                'Authorization': f'Bearer {doubao_key}'
             },
-            method="POST"
+            method='POST'
         )
-        with urllib.request.urlopen(req, context=ssl_context, timeout=DOUBAO_TIMEOUT) as response:
+        with urllib.request.urlopen(req, context=ssl_context, timeout=90) as response:
             if response.status == 200:
-                response_data = response.read().decode("utf-8")
+                response_data = response.read().decode('utf-8')
                 data = json.loads(response_data)
                 if "data" in data and len(data["data"]) > 0:
                     return {"success": True, "url": data["data"][0].get("url")}
@@ -901,124 +719,116 @@ def generate_image(prompt: str, negative_prompt: str) -> dict:
     # 优先尝试 Google Imagen 4 Ultra
     google_key = os.environ.get("GOOGLE_API_KEY")
     if google_key:
-        log("  [Google] 尝试 Imagen 4 Ultra...")
+        log("  🌐 [Google] 尝试 Imagen 4 Ultra...")
         result = generate_image_google(prompt)
         if result["success"]:
-            log("  [Google] 生成成功")
+            log("  ✅ [Google] 生成成功")
             return result
-        log(f"  [Google] 失败: {result.get('error')}，降级到豆包...")
+        log(f"  ⚠️  [Google] 失败: {result.get('error')}，降级到豆包...")
 
     # 降级到豆包 Seedream
-    log("  [豆包] 使用 Seedream 生成...")
+    log("  🎨 [豆包] 使用 Seedream 生成...")
     return generate_image_doubao(prompt, negative_prompt)
 
-
-# ─── 风格策略 ────────────────────────────────────────────────
-
-def _apply_style_strategy(generator, style, scene_type, outfit_style,
-                          resolved_expression, character, i):
-    """根据风格策略配置生成参数
-
-    返回: (scene, pose_type, resolved_outfit, resolved_expression, character)
-    """
-    strategy = STYLE_STRATEGIES.get(style) if style else None
-
-    if not strategy:
-        # 默认逻辑：循环姿势 + 场景映射穿搭
-        scene = generator.generate_scene(scene_type)
-        default_poses = ["特写", "半身", "全身", "动态", "写真"]
-        pose_type = default_poses[i % len(default_poses)]
-        resolved_outfit = _resolve_default_outfit(generator, scene, outfit_style)
-        return scene, pose_type, resolved_outfit, resolved_expression, character
-
-    # 场景
-    scenes = strategy.get("scenes", [])
-    r_scene = scene_type or (generator.pick_one(scenes) if scenes else None)
-    scene = generator.generate_scene(r_scene)
-
-    # 姿势
-    pose_types = strategy.get("pose_types", ["半身"])
-    pose_type = generator.pick_one(pose_types)
-
-    # 穿搭：CLI 参数 > 固定值 > 随机池
-    r_outfit = outfit_style or strategy.get("outfit") or (
-        generator.pick_one(strategy["outfit_pool"]) if "outfit_pool" in strategy else None
-    )
-
-    # 表情：已有值优先 > 固定值 > 随机池
-    if not resolved_expression:
-        resolved_expression = strategy.get("expression") or (
-            generator.pick_one(strategy["expression_pool"]) if "expression_pool" in strategy else None
-        )
-
-    # 性感体态
-    if strategy.get("use_sexy_body"):
-        sexy_list = generator.library.get("body_types_sexy", [])
-        if sexy_list:
-            character = dict(character)  # 浅拷贝避免污染原始
-            character["body"] = generator.pick_one(sexy_list)
-
-    return scene, pose_type, r_outfit, resolved_expression, character
-
-
-def _resolve_default_outfit(generator, scene, outfit_style):
-    """默认风格：根据场景映射穿搭"""
-    if outfit_style:
-        return outfit_style
-    candidates = SCENE_OUTFIT_MAP.get(scene.get("type", ""), [])
-    return generator.pick_one(candidates) if candidates else None
-
-
-# ─── 系列生成 ────────────────────────────────────────────────
 
 def generate_series(count: int = 3,
                     style: str = None,
                     scene_type: str = None,
-                    outfit_style: str = None,
-                    emotion: str = None) -> dict:
+                    outfit_style: str = None) -> dict:
     """生成系列图片"""
 
     if not os.environ.get("GOOGLE_API_KEY") and not os.environ.get("DOUBAO_API_KEY"):
-        log("错误: 请设置 GOOGLE_API_KEY 或 DOUBAO_API_KEY 环境变量", "ERROR")
+        print("错误: 请设置 GOOGLE_API_KEY 或 DOUBAO_API_KEY 环境变量")
         return {"success": False, "count": 0, "total": count, "character": {}, "images": []}
 
-    log("=" * 60)
-    log(f"美女生成 V{VERSION} - 双引擎高清生成系统")
-    log("=" * 60)
+    print("=" * 70)
+    print("🎨 美女生成 V7.0 - 双引擎高清生成系统")
+    print("=" * 70)
 
     # 加载元素库
     library = load_prompt_library()
     generator = SmartPromptGenerator(library)
 
-    # 每次生成全新随机人物（不再用日期种子，确保每天都是不同的人）
-    character = generator.generate_character(style)
+    # 生成统一的人物特征（保持一致性，按日期稳定）
+    daily_seed = int(date.today().strftime("%Y%m%d"))
+    stable_generator = SmartPromptGenerator(library, seed=daily_seed)
+    character = stable_generator.generate_character(style)
 
-    log(f"日期: {date.today()}")
-    log(f"人物特征:")
-    log(f"  风格: {character.get('style', '随机')}")
-    log(f"  脸型: {character.get('face', '')[:50]}...")
-    log(f"  发型: {character.get('hair', '')[:50]}...")
+    print(f"\n📅 日期: {date.today()}")
+    print(f"\n👤 人物特征:")
+    print(f"   风格: {character.get('style', '随机')}")
+    print(f"   脸型: {character.get('face', '')[:50]}...")
+    print(f"   发型: {character.get('hair', '')[:50]}...")
 
-    # emotion -> expression 类别映射
-    resolved_expression = EMOTION_EXPRESSION_MAP.get(emotion) if emotion else None
+    # 不同姿势类型
+    pose_types = ["特写", "半身", "全身", "动态"]
 
     images = []
-    inter_delay = GENERATION_CFG.get("inter_image_delay", 2)
+    negative_prompt = generator.get_negative_prompt()
+    print(f"\n🚫 Negative Prompt: {negative_prompt[:80]}...")
 
-    log("")
-    log("=" * 60)
-    log(f"开始生成 {count} 张图片（纯文生图，4K 高清）...")
-    log("=" * 60)
+    print("\n" + "=" * 70)
+    print(f"🎨 开始生成 {count} 张图片（纯文生图，4K 高清）...")
+    print("=" * 70)
 
     for i in range(count):
-        # 通过风格策略配置生成参数
-        scene, pose_type, resolved_outfit, resolved_expression, character = \
-            _apply_style_strategy(
-                generator, style, scene_type, outfit_style,
-                resolved_expression, character, i
-            )
+        # 每张图使用不同的场景、穿搭、姿势
+        # 性感系风格：固定偏向室内/城市场景，穿搭锁定性感，使用写真姿势和性感体态
+        if style == "性感系":
+            sexy_scenes = ["室内", "城市"]
+            resolved_scene_type = generator.pick_one(sexy_scenes) if not scene_type else scene_type
+            scene = generator.generate_scene(resolved_scene_type)
+            resolved_outfit_style = outfit_style if outfit_style else "性感"
+            pose_type = "写真"
+            # 性感体态：使用专属的丰满曲线描述
+            sexy_body_list = generator.library.get("body_types_sexy", [])
+            if sexy_body_list:
+                character["body"] = generator.pick_one(sexy_body_list)
+        # 国风系：固定国风场景+国风穿搭
+        elif style == "国风系":
+            resolved_scene_type = scene_type if scene_type else "国风"
+            scene = generator.generate_scene(resolved_scene_type)
+            resolved_outfit_style = outfit_style if outfit_style else "国风"
+            pose_type = generator.pick_one(["半身", "全身", "动态"])
+        # 职场系：固定职场场景+职场穿搭
+        elif style == "职场系":
+            resolved_scene_type = scene_type if scene_type else "职场"
+            scene = generator.generate_scene(resolved_scene_type)
+            resolved_outfit_style = outfit_style if outfit_style else "职场"
+            pose_type = generator.pick_one(["半身", "特写", "全身"])
+        # 生活场景系：固定居家场景+居家穿搭
+        elif style == "生活场景系":
+            resolved_scene_type = scene_type if scene_type else "居家"
+            scene = generator.generate_scene(resolved_scene_type)
+            resolved_outfit_style = outfit_style if outfit_style else "居家"
+            pose_type = generator.pick_one(["半身", "特写", "写真"])
+        # 邻家女孩系：街头/自然场景+邻家穿搭
+        elif style == "邻家女孩系":
+            girl_next_door_scenes = ["街头", "自然", "城市"]
+            resolved_scene_type = scene_type if scene_type else generator.pick_one(girl_next_door_scenes)
+            scene = generator.generate_scene(resolved_scene_type)
+            resolved_outfit_style = outfit_style if outfit_style else "邻家"
+            pose_type = generator.pick_one(["半身", "全身", "动态"])
+        else:
+            scene = generator.generate_scene(scene_type)
+            pose_type = pose_types[i % len(pose_types)]
+            if outfit_style:
+                resolved_outfit_style = outfit_style
+            else:
+                scene_outfit_map = {
+                    "自然": ["清新", "古典", "运动"],
+                    "城市": ["时尚", "优雅", "性感"],
+                    "室内": ["优雅", "性感", "清新"],
+                    "特殊": ["性感", "古典", "时尚"],
+                    "国风": ["国风", "古典"],
+                    "居家": ["居家", "清新"],
+                    "街头": ["邻家", "清新", "时尚"],
+                    "职场": ["职场", "优雅"]
+                }
+                candidates = scene_outfit_map.get(scene.get("type", ""), [])
+                resolved_outfit_style = generator.pick_one(candidates) if candidates else None
 
-        styling = generator.generate_styling(resolved_outfit, resolved_expression)
+        styling = generator.generate_styling(resolved_outfit_style)
 
         prompt = generator.build_prompt(
             character=character,
@@ -1028,19 +838,23 @@ def generate_series(count: int = 3,
             style=style
         )
 
-        log(f"")
-        log(f"图片 {i+1}/{count} - {pose_type}")
-        log(f"  场景: {scene.get('type', '随机')} | 穿搭: {styling.get('outfit_style', '随机')}")
-        log(f"  表情: {styling.get('expression_type', '随机')} | 光影: {scene.get('lighting_type', '随机')}")
-        log(f"  Prompt: {prompt[:100]}...")
+        print(f"\n📸 图片 {i+1}/{count} - {pose_type}")
+        print(f"   场景: {scene.get('type', '随机')} | 穿搭: {styling.get('outfit_style', '随机')}")
+        print(f"   表情: {styling.get('expression_type', '随机')} | 光影: {scene.get('lighting_type', '随机')}")
+        print(f"   Prompt: {prompt[:100]}...")
 
         # 根据姿势调整负面提示词
         negative_prompt = generator.get_negative_prompt(pose_type)
 
-        result = generate_image(prompt, negative_prompt)
+        # 移除图生图逻辑，每次都用文生图生成独立的高清图片
+        result = generate_image(
+            prompt,
+            negative_prompt
+        )
 
         if result["success"]:
             url = result["url"]
+
             images.append({
                 "index": i + 1,
                 "pose_type": pose_type,
@@ -1048,19 +862,18 @@ def generate_series(count: int = 3,
                 "outfit_style": styling.get("outfit_style"),
                 "url": url
             })
-            log(f"  完成!")
+            print(f"   ✅ 完成!")
         else:
-            log(f"  失败: {result.get('error')}", "ERROR")
+            print(f"   ❌ 失败: {result.get('error')}")
 
         if i < count - 1:
-            time.sleep(inter_delay)
+            time.sleep(2)
 
     success_count = len(images)
 
-    log("")
-    log("=" * 60)
-    log(f"生成完成: {success_count}/{count}")
-    log("=" * 60)
+    print("\n" + "=" * 70)
+    print(f"✅ 生成完成: {success_count}/{count}")
+    print("=" * 70)
 
     return {
         "success": success_count == count,
@@ -1071,62 +884,54 @@ def generate_series(count: int = 3,
     }
 
 
-# ─── CLI ─────────────────────────────────────────────────────
-
 def list_options(library: dict):
     """列出所有可用选项"""
-    print("\n" + "=" * 60)
-    print(f"美女生成 V{VERSION} - 可用风格选项")
-    print("=" * 60)
+    print("\n" + "=" * 70)
+    print("🎨 可用风格选项")
+    print("=" * 70)
 
-    print("\n人物风格 (--style):")
+    print("\n👤 人物风格 (--style):")
     for key in library.get("face_types", {}).keys():
-        print(f"   - {key}")
+        print(f"   • {key}")
 
-    print("\n体态类型:")
+    print("\n🧍 体态类型:")
     for item in library.get("body_types", []):
-        print(f"   - {item[:40]}...")
+        print(f"   • {item[:40]}...")
 
-    print("\n场景类型 (--scene):")
+    print("\n🏞️  场景类型 (--scene):")
     for key in library.get("scenes", {}).keys():
-        print(f"   - {key}")
+        print(f"   • {key}")
 
-    print("\n穿搭风格 (--outfit):")
+    print("\n👗 穿搭风格 (--outfit):")
     for key in library.get("outfits", {}).keys():
-        print(f"   - {key}")
+        print(f"   • {key}")
 
-    print("\n表情类型:")
+    print("\n😊 表情类型:")
     for key in library.get("expressions", {}).keys():
-        print(f"   - {key}")
+        print(f"   • {key}")
 
-    print("\n光影类型:")
+    print("\n💡 光影类型:")
     for key in library.get("lighting", {}).keys():
-        print(f"   - {key}")
+        print(f"   • {key}")
 
-    print("\n艺术风格:")
+    print("\n🎞️  艺术风格:")
     for key in library.get("art_styles", {}).keys():
-        print(f"   - {key}")
+        print(f"   • {key}")
 
-    print("\n姿势类型:")
+    print("\n📷 姿势类型:")
     for key in library.get("poses", {}).keys():
-        print(f"   - {key}")
-
-    print("\n情绪 (--emotion):")
-    for key in EMOTION_EXPRESSION_MAP.keys():
-        print(f"   - {key} -> {EMOTION_EXPRESSION_MAP[key]}")
+        print(f"   • {key}")
 
 
 def main():
     parser = argparse.ArgumentParser(
-        description=f"美女生成 V{VERSION} - 双引擎高清生成系统"
+        description="美女生成 V7.0 - 双引擎高清生成系统"
     )
 
-    parser.add_argument("--count", "-c", type=int, default=GENERATION_CFG.get("default_count", 3),
-                        help=f"生成数量 (默认: {GENERATION_CFG.get('default_count', 3)})")
+    parser.add_argument("--count", "-c", type=int, default=3, help="生成数量 (默认: 3)")
     parser.add_argument("--style", "-s", help="人物风格: 甜美系, 清纯系, 性感系, 邻家女孩系, 国风系, 职场系, 生活场景系")
     parser.add_argument("--scene", help="场景类型: 自然, 城市, 室内, 特殊")
     parser.add_argument("--outfit", "-o", help="穿搭风格: 优雅, 性感, 清新, 时尚, 古典, 运动")
-    parser.add_argument("--emotion", "-e", help="情绪: 挑逗, 性感, 温柔, 俏皮, 自信, 高冷, 忧郁, 纯欲")
     parser.add_argument("--list-options", "-l", action="store_true", help="列出所有可用选项")
     parser.add_argument("--preview", "-p", action="store_true", help="只预览 Prompt，不生成图片")
 
@@ -1152,9 +957,9 @@ def main():
         scene = generator.generate_scene(args.scene)
         styling = generator.generate_styling(args.outfit)
 
-        print("\n" + "=" * 60)
-        print(f"Prompt 预览 (V{VERSION})")
-        print("=" * 60)
+        print("\n" + "=" * 70)
+        print("📋 Prompt 预览")
+        print("=" * 70)
 
         for pose_type in ["特写", "半身", "全身"]:
             prompt = generator.build_prompt(
@@ -1175,18 +980,17 @@ def main():
         count=args.count,
         style=args.style,
         scene_type=args.scene,
-        outfit_style=args.outfit,
-        emotion=args.emotion
+        outfit_style=args.outfit
     )
 
     if result["success"]:
-        print(f"\n全部成功！\n")
+        print("\n🎉 全部成功！\n")
         for img in result["images"]:
             print(f"  {img['index']}. [{img['pose_type']}] {img['scene_type']} | {img['outfit_style']}")
             print(f"     {img['url']}")
         return 0
     else:
-        print(f"\n部分失败 ({result['count']}/{result['total']})")
+        print(f"\n⚠️  部分失败 ({result['count']}/{result['total']})")
         return 1
 
 
