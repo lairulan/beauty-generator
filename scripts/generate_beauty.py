@@ -187,18 +187,18 @@ def get_default_library() -> dict:
             "milky white skin, translucent quality, delicate texture, ethereal glow"
         ],
         "body_types": [
-            "slim elegant figure, graceful proportions, model-like silhouette",
-            "petite delicate frame, feminine curves, youthful figure",
-            "tall slender body, long legs, elegant posture, statuesque",
-            "fit toned body, healthy athletic build, graceful strength",
-            "soft feminine curves, hourglass silhouette, elegant proportions"
+            "perfect hourglass figure with stunning feminine proportions, slim defined waist curving into graceful hips, long toned legs",
+            "gorgeous curvy body with naturally feminine fullness, tiny cinched waist, beautifully rounded hips, long slender legs",
+            "breathtaking S-curve body with elegant feminine lines, nipped waist flowing into shapely hips and thighs, graceful long legs",
+            "statuesque model figure with perfect feminine proportions, dramatically narrow waist, wide elegant hips, endless legs",
+            "alluring feminine silhouette with soft natural curves, flat toned stomach, perfect hourglass waist-to-hip ratio, long lean legs"
         ],
         "body_types_sexy": [
-            "voluptuous hourglass figure, full round bust, cinched narrow waist, wide curvaceous hips",
-            "gorgeous curvy body, large shapely bust, tiny waist, full rounded hips, long toned legs",
-            "sensational figure, ample chest, defined waist curve, generous hips, smooth flawless skin",
-            "stunning feminine physique, full perky bust, sculpted waist, round lifted buttocks, shapely thighs",
-            "breathtaking curves, nipped waist, voluptuous hips, long slender legs, irresistible body contour"
+            "voluptuous hourglass figure with generous feminine curves straining against every garment, cinched narrow waist, wide curvaceous hips",
+            "gorgeous curvy body with eye-catching feminine fullness, tiny waist creating dramatic contrast with full hips, long toned legs",
+            "sensational figure with curves that clothing can barely contain, defined waist curve, generous hips, smooth flawless skin",
+            "stunning feminine physique with captivating fullness up top, sculpted waist, shapely thighs, seductive body line",
+            "breathtaking curves with impossible proportions, nipped waist flowing into voluptuous wide hips, long slender legs"
         ],
         "outfits": {
             "优雅": [
