@@ -503,10 +503,10 @@ class SmartPromptGenerator:
             "lighting": light_desc
         }
 
-    def generate_styling(self, outfit_style: str = None) -> dict:
+    def generate_styling(self, outfit_style: str = None, expression_type: str = None) -> dict:
         """生成穿搭和表情"""
         outfit_key, outfit_desc = self.pick_from_dict(self.library.get("outfits", {}), outfit_style)
-        expr_key, expr_desc = self.pick_from_dict(self.library.get("expressions", {}))
+        expr_key, expr_desc = self.pick_from_dict(self.library.get("expressions", {}), expression_type)
 
         return {
             "outfit_style": outfit_key,
@@ -773,7 +773,8 @@ def generate_image(prompt: str, negative_prompt: str) -> dict:
 def generate_series(count: int = 3,
                     style: str = None,
                     scene_type: str = None,
-                    outfit_style: str = None) -> dict:
+                    outfit_style: str = None,
+                    emotion: str = None) -> dict:
     """生成系列图片"""
 
     if not os.environ.get("GOOGLE_API_KEY") and not os.environ.get("DOUBAO_API_KEY"):
@@ -781,7 +782,7 @@ def generate_series(count: int = 3,
         return {"success": False, "count": 0, "total": count, "character": {}, "images": []}
 
     print("=" * 70)
-    print("🎨 美女生成 V7.0 - 双引擎高清生成系统")
+    print("🎨 美女生成 V8.0 - 双引擎高清生成系统")
     print("=" * 70)
 
     # 加载元素库
@@ -796,6 +797,19 @@ def generate_series(count: int = 3,
     print(f"   风格: {character.get('style', '随机')}")
     print(f"   脸型: {character.get('face', '')[:50]}...")
     print(f"   发型: {character.get('hair', '')[:50]}...")
+
+    # emotion → expression 类别映射
+    emotion_expression_map = {
+        "挑逗": "挑逗",
+        "性感": "性感",
+        "温柔": "微笑",
+        "俏皮": "挑逗",
+        "自信": "自信",
+        "高冷": "冷艳",
+        "忧郁": "忧郁",
+        "纯欲": "纯欲",
+    }
+    resolved_expression = emotion_expression_map.get(emotion) if emotion else None
 
     # 不同姿势类型
     pose_types = ["特写", "半身", "全身", "动态"]
@@ -817,35 +831,56 @@ def generate_series(count: int = 3,
             scene = generator.generate_scene(resolved_scene_type)
             resolved_outfit_style = outfit_style if outfit_style else "性感"
             pose_type = "写真"
+            resolved_expression = resolved_expression or "性感"
             # 性感体态：使用专属的丰满曲线描述
             sexy_body_list = generator.library.get("body_types_sexy", [])
             if sexy_body_list:
                 character["body"] = generator.pick_one(sexy_body_list)
+        # 清纯系：纯欲风格 — 清新/居家穿搭 + 纯欲/性感表情 + 写真姿势
+        elif style == "清纯系":
+            pure_scenes = ["室内", "自然", "居家"]
+            resolved_scene_type = scene_type if scene_type else generator.pick_one(pure_scenes)
+            scene = generator.generate_scene(resolved_scene_type)
+            resolved_outfit_style = outfit_style if outfit_style else generator.pick_one(["清新", "居家", "邻家"])
+            pose_type = generator.pick_one(["写真", "半身", "特写"])
+            resolved_expression = resolved_expression or generator.pick_one(["纯欲", "性感", "挑逗"])
+        # 甜美系：甜美穿搭 + 挑逗/微笑表情
+        elif style == "甜美系":
+            sweet_scenes = ["自然", "城市", "室内"]
+            resolved_scene_type = scene_type if scene_type else generator.pick_one(sweet_scenes)
+            scene = generator.generate_scene(resolved_scene_type)
+            resolved_outfit_style = outfit_style if outfit_style else generator.pick_one(["清新", "时尚", "邻家"])
+            pose_type = generator.pick_one(["半身", "写真", "动态"])
+            resolved_expression = resolved_expression or generator.pick_one(["挑逗", "微笑"])
         # 国风系：固定国风场景+国风穿搭
         elif style == "国风系":
             resolved_scene_type = scene_type if scene_type else "国风"
             scene = generator.generate_scene(resolved_scene_type)
             resolved_outfit_style = outfit_style if outfit_style else "国风"
-            pose_type = generator.pick_one(["半身", "全身", "动态"])
+            pose_type = generator.pick_one(["半身", "全身", "写真"])
+            resolved_expression = resolved_expression or generator.pick_one(["性感", "冷艳"])
         # 职场系：固定职场场景+职场穿搭
         elif style == "职场系":
             resolved_scene_type = scene_type if scene_type else "职场"
             scene = generator.generate_scene(resolved_scene_type)
             resolved_outfit_style = outfit_style if outfit_style else "职场"
-            pose_type = generator.pick_one(["半身", "特写", "全身"])
+            pose_type = generator.pick_one(["半身", "写真", "全身"])
+            resolved_expression = resolved_expression or generator.pick_one(["自信", "性感"])
         # 生活场景系：固定居家场景+居家穿搭
         elif style == "生活场景系":
             resolved_scene_type = scene_type if scene_type else "居家"
             scene = generator.generate_scene(resolved_scene_type)
             resolved_outfit_style = outfit_style if outfit_style else "居家"
-            pose_type = generator.pick_one(["半身", "特写", "写真"])
+            pose_type = generator.pick_one(["写真", "半身", "特写"])
+            resolved_expression = resolved_expression or generator.pick_one(["纯欲", "性感", "挑逗"])
         # 邻家女孩系：街头/自然场景+邻家穿搭
         elif style == "邻家女孩系":
             girl_next_door_scenes = ["街头", "自然", "城市"]
             resolved_scene_type = scene_type if scene_type else generator.pick_one(girl_next_door_scenes)
             scene = generator.generate_scene(resolved_scene_type)
             resolved_outfit_style = outfit_style if outfit_style else "邻家"
-            pose_type = generator.pick_one(["半身", "全身", "动态"])
+            pose_type = generator.pick_one(["半身", "全身", "写真"])
+            resolved_expression = resolved_expression or generator.pick_one(["挑逗", "纯欲", "微笑"])
         else:
             scene = generator.generate_scene(scene_type)
             pose_type = pose_types[i % len(pose_types)]
@@ -865,7 +900,7 @@ def generate_series(count: int = 3,
                 candidates = scene_outfit_map.get(scene.get("type", ""), [])
                 resolved_outfit_style = generator.pick_one(candidates) if candidates else None
 
-        styling = generator.generate_styling(resolved_outfit_style)
+        styling = generator.generate_styling(resolved_outfit_style, resolved_expression)
 
         prompt = generator.build_prompt(
             character=character,
@@ -969,6 +1004,7 @@ def main():
     parser.add_argument("--style", "-s", help="人物风格: 甜美系, 清纯系, 性感系, 邻家女孩系, 国风系, 职场系, 生活场景系")
     parser.add_argument("--scene", help="场景类型: 自然, 城市, 室内, 特殊")
     parser.add_argument("--outfit", "-o", help="穿搭风格: 优雅, 性感, 清新, 时尚, 古典, 运动")
+    parser.add_argument("--emotion", "-e", help="情绪: 挑逗, 性感, 温柔, 俏皮, 自信, 高冷, 忧郁, 纯欲")
     parser.add_argument("--list-options", "-l", action="store_true", help="列出所有可用选项")
     parser.add_argument("--preview", "-p", action="store_true", help="只预览 Prompt，不生成图片")
 
@@ -1017,7 +1053,8 @@ def main():
         count=args.count,
         style=args.style,
         scene_type=args.scene,
-        outfit_style=args.outfit
+        outfit_style=args.outfit,
+        emotion=args.emotion
     )
 
     if result["success"]:

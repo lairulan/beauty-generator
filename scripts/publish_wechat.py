@@ -396,7 +396,7 @@ def _extract_image_urls(output: str) -> list:
     return images
 
 
-def generate_daily_images(count: int = 3, style: str = "") -> list:
+def generate_daily_images(count: int = 3, style: str = "", emotion: str = "") -> list:
     """
     生成多张一致性人物图片
     使用双引擎 (Google Imagen 4 Ultra + Doubao Seedream 4.5)
@@ -413,6 +413,8 @@ def generate_daily_images(count: int = 3, style: str = "") -> list:
     ]
     if style:
         cmd.extend(["--style", style])
+    if emotion:
+        cmd.extend(["--emotion", emotion])
 
     try:
         result = subprocess.run(
@@ -502,7 +504,7 @@ def main():
     print("=" * 50)
 
     # 生成图片
-    images = generate_daily_images(args.count, args.style)
+    images = generate_daily_images(args.count, args.style, args.emotion or "")
 
     if len(images) == 0:
         print("❌ 没有成功生成任何图片")

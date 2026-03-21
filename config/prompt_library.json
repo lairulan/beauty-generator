@@ -213,66 +213,85 @@
 
   "poses": {
     "特写": [
-      "extreme close-up portrait, looking directly at camera, captivating gaze",
-      "face close-up, chin slightly tilted, mysterious expression",
-      "intimate portrait, eyes half-closed, dreamy sensual look",
-      "profile close-up, perfect side angle, elegant neck line visible"
+      "extreme close-up portrait shot, looking directly into camera with captivating gaze, face filling the frame, every detail of eyes and lips visible",
+      "face close-up with chin slightly tilted down, looking up through lashes, mysterious and alluring expression, neck and collarbone partially visible",
+      "intimate portrait with eyes half-closed and lips parted, dreamy sensual look, soft hair falling across one eye",
+      "profile close-up showing perfect jawline and elegant neck, one hand gently touching face, ear and shoulder exposed",
+      "close-up from slightly above, looking up at camera with big eyes, hands framing face, vulnerable and captivating"
     ],
     "半身": [
-      "upper body shot, hands near face, graceful gesture",
-      "waist-up portrait, one hand touching hair, natural pose",
-      "elegant seated pose, hands in lap, refined posture",
-      "leaning forward slightly, engaging expression, dynamic composition"
+      "waist-up shot, one hand running through hair while other arm frames body, bust and waist prominently visible, natural alluring gesture",
+      "upper body portrait leaning forward toward camera, arms pressed together enhancing cleavage, engaging direct eye contact, inviting composition",
+      "seated half-body shot, one leg crossed over other, leaning back with hands behind for support, bust pushed forward, relaxed confidence",
+      "side-angle waist-up shot, body turned three-quarters toward camera, one arm across waist accentuating curves, looking over shoulder",
+      "standing half-body, both hands adjusting hair above head, arms raised exposing midriff and lifting bust, carefree sensual stretch"
     ],
     "全身": [
-      "full body standing pose, weight on one leg, natural S-curve",
-      "walking pose, hair and clothes in motion, dynamic energy",
-      "seated cross-legged, relaxed elegant posture, approachable",
-      "leaning against wall, casual confident stance, editorial style"
+      "full body standing pose, weight shifted to one hip creating dramatic S-curve, one hand on waist emphasizing hourglass figure, legs elongated",
+      "walking toward camera, hair and fabric in motion, one leg forward showing thigh through slit, dynamic confident stride",
+      "seated on edge of surface with legs crossed, leaning back on one arm, full body visible with curves on display, casual elegance",
+      "leaning against wall with hip pushed out, one knee bent, back arched slightly, body creating natural S-shape from shoulder to ankle",
+      "standing in contrapposto pose, one shoulder dropped, body twisted to show both bust profile and hip curve, classical sculpture elegance"
     ],
     "动态": [
-      "hair flipping in motion, dynamic movement, frozen moment",
-      "twirling in dress, fabric flowing, joyful energy",
-      "reaching up gracefully, elongated silhouette, dancer-like",
-      "looking back over shoulder, mysterious allure, dynamic angle"
+      "hair flipping in dramatic arc, body caught mid-motion, dress lifted by movement revealing legs, frozen sensual moment",
+      "twirling in flowing dress, fabric spiraling around curves, one leg exposed mid-spin, joyful yet seductive energy",
+      "reaching up gracefully with both arms, body fully elongated, every curve stretched and defined, dancer-like elegance",
+      "looking back over bare shoulder with body turning, hip curve and waist prominently visible, mysterious come-hither allure",
+      "caught mid-laugh throwing head back, hair flying, body relaxed and open, hand on chest, uninhibited magnetic energy"
     ],
     "写真": [
-      "full body side pose, arching back slightly, showcasing bust and hip curves, hands on waist",
-      "lying on bed, propped on elbows, looking at camera seductively, body curves highlighted",
-      "sitting with legs crossed, leaning back on hands, body fully visible, confident sensual",
-      "standing with one hand on hip, slight twist at waist, accentuating hourglass silhouette",
-      "kneeling pose, back arched, hair falling forward, curves emphasized from side angle",
-      "leaning against wall with hip pushed out, hands above head, full body S-curve visible"
+      "lying on side propped on one elbow, body creating flowing S-curve from bust through waist to hip, looking at camera with smoldering intensity, every curve highlighted",
+      "lying face-down on bed, propped up on elbows with chin on hands, legs bent up behind, bust compressed and visible from above, looking at camera seductively",
+      "sitting with knees drawn up, arms wrapped around legs, head tilted, body compact yet curves visible, intimate vulnerable beauty",
+      "standing with dramatic back arch, one hand in hair, hip pushed back, bust forward, extreme hourglass silhouette from side angle",
+      "kneeling upright with thighs apart, back arched and hair cascading down back, hands on thighs, body fully presented, confident sensual power",
+      "reclining with one knee bent up, arm draped above head, full body stretched out, every curve from bust to hip to leg on display, languid and inviting"
     ]
   },
 
   "expressions": {
     "微笑": [
-      "gentle natural smile, eyes crinkled with joy, warm genuine",
-      "subtle mysterious smile, Mona Lisa expression, intriguing",
-      "bright cheerful smile, showing teeth, infectious happiness",
-      "soft closed-lip smile, serene peaceful, madonna-like"
+      "warm genuine smile with eyes crinkled in delight, head tilted slightly, radiating approachable charm",
+      "subtle mysterious Mona Lisa smile with knowing eyes, as if hiding a delicious secret",
+      "bright infectious smile showing perfect teeth, eyes sparkling with playful energy",
+      "soft closed-lip smile with slightly raised eyebrow, serene yet subtly flirtatious"
     ],
     "性感": [
-      "sultry gaze, lips slightly parted, smoldering intensity",
-      "bedroom eyes, seductive half-smile, alluring charm",
-      "confident sexy smirk, direct eye contact, magnetic presence",
-      "sensual pout, heavy-lidded eyes, irresistible appeal"
+      "sultry half-lidded gaze looking directly into camera, lips slightly parted and glistening, smoldering with barely contained desire",
+      "bedroom eyes with heavy lids and dilated pupils, tongue lightly touching upper lip, seductive and inviting",
+      "intense eye contact with a slow confident smirk, chin slightly lowered, looking up through long lashes, dangerously attractive",
+      "sensual pout with full glossy lips, dreamy unfocused gaze, head tilted back exposing neck, irresistible vulnerability",
+      "biting lower lip gently while maintaining piercing eye contact, flushed cheeks, the look of someone about to be kissed"
+    ],
+    "挑逗": [
+      "playful wink with one eye, mischievous grin, tongue peeking at corner of mouth, teasing and irresistible",
+      "looking over shoulder with a come-hither glance, lips curved in a knowing smile, daring you to follow",
+      "coy shy smile while looking up through lashes, one finger touching lower lip, innocent yet devastatingly flirtatious",
+      "blowing a subtle kiss at camera, eyes twinkling with playful mischief, magnetic feminine charm",
+      "head thrown back in carefree laughter exposing long neck, eyes closed in pure joy, effortlessly captivating"
+    ],
+    "纯欲": [
+      "wide innocent doe eyes gazing at camera with slightly parted dewy lips, the perfect blend of pure and sensual, baby-face seduction",
+      "soft dreamy expression with unfocused gaze, lips naturally pouty and pink, looking freshly woken up, angelic yet tempting",
+      "innocent surprised expression with big round eyes and slightly open mouth, blushing cheeks, the allure of unaware beauty",
+      "gentle sleepy half-smile with heavy eyelids, natural bare-face glow, messy hair falling across face, intimate morning-after softness",
+      "shy downcast eyes with a tiny secret smile, natural flush on cheeks, looking like she was just caught thinking something naughty"
     ],
     "冷艳": [
-      "icy cold stare, emotionless beauty, intimidating elegance",
-      "aloof distant expression, untouchable aura, mysterious",
-      "piercing intense gaze, strong silent type, powerful presence"
+      "icy piercing stare with perfectly arched brow, emotionless porcelain beauty, intimidatingly gorgeous",
+      "aloof distant gaze with slightly narrowed eyes, untouchable ice-queen aura, mysteriously magnetic",
+      "sharp intense eye contact with zero warmth, jaw set in elegant defiance, dangerously beautiful"
     ],
     "忧郁": [
-      "melancholic gaze, wistful expression, poetic sadness",
-      "thoughtful distant look, introspective mood, emotional depth",
-      "lonely beautiful expression, rain-like melancholy, artistic"
+      "melancholic gaze looking away into distance, eyes glistening with unshed tears, hauntingly beautiful sadness",
+      "thoughtful distant look with lips slightly downturned, introspective mood, poetic emotional depth",
+      "lonely wistful expression gazing out window, chin resting on hand, rain-like melancholy, achingly artistic"
     ],
     "自信": [
-      "confident direct gaze, empowered expression, boss energy",
-      "self-assured smile, knowing look, powerful feminine",
-      "fierce determined expression, unstoppable energy, inspiring"
+      "confident direct gaze with slight chin lift, empowered expression radiating boss energy, magnetic authority",
+      "self-assured knowing smile with one eyebrow slightly raised, powerful feminine presence that commands attention",
+      "fierce determined expression with intense focused eyes, unstoppable energy, inspiring and intimidating"
     ]
   },
 
