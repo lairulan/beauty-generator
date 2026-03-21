@@ -19,3 +19,4 @@
 - 2026-03-21 14:09:18 | success | event=workflow_dispatch | style=清纯系/性感 | run=151 | https://github.com/lairulan/beauty-generator/actions/runs/23373580618
 - 2026-03-21 14:45:49 | success | event=workflow_dispatch | style=清纯系/性感 | run=152 | https://github.com/lairulan/beauty-generator/actions/runs/23374145010
 - 2026-03-21 18:56:51 | success | event=workflow_dispatch | style=清纯系/性感 | run=153 | https://github.com/lairulan/beauty-generator/actions/runs/23378127972
+- 2026-03-21 19:31:51 | failure | event=repository_dispatch | style=清纯系/性感 | run=154 | https://github.com/lairulan/beauty-generator/actions/runs/23378726127
