@@ -971,6 +971,80 @@ def _resolve_default_outfit(generator, scene, outfit_style):
 
 # ─── 系列生成 ────────────────────────────────────────────────
 
+def generate_custom(prompt: str, count: int = 1) -> dict:
+    """手动模式：使用用户自定义提示词直接生成图片
+
+    跳过随机元素库组合，直接使用用户提供的 prompt 调用双引擎生成。
+    """
+    if not os.environ.get("GOOGLE_API_KEY") and not os.environ.get("DOUBAO_API_KEY"):
+        log("错误: 请设置 GOOGLE_API_KEY 或 DOUBAO_API_KEY 环境变量", "ERROR")
+        return {"success": False, "count": 0, "total": count, "character": {}, "images": []}
+
+    log("=" * 60)
+    log(f"美女生成 V{VERSION} - 手动提示词模式")
+    log("=" * 60)
+    log(f"日期: {date.today()}")
+    log(f"自定义 Prompt: {prompt[:200]}...")
+    log(f"生成数量: {count}")
+
+    # 通用负面提示词
+    negative_prompt = (
+        "cartoon, anime, illustration, painting, drawing, sketch, "
+        "3d render, cgi, doll, plastic, deformed, ugly, blurry, "
+        "low quality, watermark, text, logo, extra fingers, "
+        "mutated hands, bad anatomy, bad proportions"
+    )
+
+    images = []
+    inter_delay = GENERATION_CFG.get("inter_image_delay", 2)
+
+    log("")
+    log("=" * 60)
+    log(f"开始生成 {count} 张图片（手动模式）...")
+    log("=" * 60)
+
+    for i in range(count):
+        log(f"")
+        log(f"图片 {i+1}/{count} - 手动模式")
+        log(f"  Prompt: {prompt[:100]}...")
+
+        result = generate_image(prompt, negative_prompt)
+
+        if result["success"]:
+            url = result["url"]
+            images.append({
+                "index": i + 1,
+                "pose_type": "custom",
+                "scene_type": "custom",
+                "outfit_style": "custom",
+                "expression_type": "custom",
+                "lighting_type": "custom",
+                "art_style": "custom",
+                "url": url
+            })
+            log(f"  完成!")
+        else:
+            log(f"  失败: {result.get('error')}", "ERROR")
+
+        if i < count - 1:
+            time.sleep(inter_delay)
+
+    success_count = len(images)
+
+    log("")
+    log("=" * 60)
+    log(f"生成完成: {success_count}/{count}")
+    log("=" * 60)
+
+    return {
+        "success": success_count == count,
+        "count": success_count,
+        "total": count,
+        "character": {},
+        "images": images
+    }
+
+
 def generate_series(count: int = 3,
                     style: str = None,
                     scene_type: str = None,
@@ -1126,6 +1200,7 @@ def main():
 
     parser.add_argument("--count", "-c", type=int, default=GENERATION_CFG.get("default_count", 3),
                         help=f"生成数量 (默认: {GENERATION_CFG.get('default_count', 3)})")
+    parser.add_argument("--prompt", help="手动模式：直接使用自定义提示词生成（跳过随机元素库）")
     parser.add_argument("--style", "-s", help="人物风格: 甜美系, 清纯系, 性感系, 邻家女孩系, 国风系, 职场系, 生活场景系")
     parser.add_argument("--scene", help="场景类型: 自然, 城市, 室内, 特殊")
     parser.add_argument("--outfit", "-o", help="穿搭风格: 优雅, 性感, 清新, 时尚, 古典, 运动")
@@ -1173,14 +1248,21 @@ def main():
 
         return 0
 
-    # 生成图片
-    result = generate_series(
-        count=args.count,
-        style=args.style,
-        scene_type=args.scene,
-        outfit_style=args.outfit,
-        emotion=args.emotion
-    )
+    # 手动模式：使用自定义提示词
+    if args.prompt:
+        result = generate_custom(
+            prompt=args.prompt,
+            count=args.count
+        )
+    else:
+        # 自动模式：从元素库随机组合
+        result = generate_series(
+            count=args.count,
+            style=args.style,
+            scene_type=args.scene,
+            outfit_style=args.outfit,
+            emotion=args.emotion
+        )
 
     if result["success"]:
         print(f"\n全部成功！\n")

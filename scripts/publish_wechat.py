@@ -306,26 +306,32 @@ def _extract_image_urls(output: str) -> list:
     return [url for url, _ in _extract_images_with_meta(output)]
 
 
-def generate_daily_images(count: int = 3, style: str = "", emotion: str = "") -> list:
+def generate_daily_images(count: int = 3, style: str = "", emotion: str = "", prompt: str = "") -> list:
     """
     生成多张一致性人物图片
     使用双引擎 (Google Imagen 4 Ultra + Doubao Seedream 4.5)
 
+    prompt: 手动模式 - 直接使用用户自定义提示词（跳过随机元素库）
     返回: [(url, meta_dict), ...]  meta 含 scene_type/outfit_style/expression_type/lighting_type/art_style
     """
     import re
 
     images_with_meta = []
 
-    print(f"\n🎨 [双引擎] 正在生成 {count} 张图片 (Google Imagen → 豆包 fallback)...")
+    if prompt:
+        print(f"\n🎨 [手动模式] 正在使用自定义提示词生成 {count} 张图片...")
+    else:
+        print(f"\n🎨 [自动模式] 正在生成 {count} 张图片 (Google Imagen → 豆包 fallback)...")
 
     cmd = [
         "python3", str(BEAUTY_GENERATE_SCRIPT),
         "--count", str(count)
     ]
-    if style:
+    if prompt:
+        cmd.extend(["--prompt", prompt])
+    elif style:
         cmd.extend(["--style", style])
-    if emotion:
+    if emotion and not prompt:
         cmd.extend(["--emotion", emotion])
 
     try:
@@ -369,6 +375,8 @@ def main():
     )
 
     parser.add_argument("--count", "-c", type=int, default=1, help="生成图片数量（默认1张）")
+    parser.add_argument("--prompt", help="手动模式：直接使用自定义提示词生成（跳过随机元素库）")
+    parser.add_argument("--caption-text", help="手动模式下的自定义配文（可选，不提供则用默认）")
     parser.add_argument("--style", "-s", help="风格描述")
     parser.add_argument("--scene", help="场景：雨夜、樱花雨、赛博朋克、咖啡厅等")
     parser.add_argument("--emotion", help="情绪：挑逗、忧郁、神秘、开心、高冷、温柔、自信、俏皮")
@@ -391,9 +399,15 @@ def main():
     today = date.today()
     weekday_str = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"][today.weekday()]
 
+    # 判断模式
+    is_manual = bool(args.prompt)
+
     # 生成标题
     if not args.title:
-        args.title = f"📸 每日美女 | {weekday_str}"
+        if is_manual:
+            args.title = f"📸 每日美女 | 手动精选"
+        else:
+            args.title = f"📸 每日美女 | {weekday_str}"
 
     # 智能生成一句话介绍（根据场景、情绪等参数）
     if not args.caption:
@@ -406,6 +420,11 @@ def main():
 
     print("=" * 50)
     print(f"📅 日期: {today}")
+    if is_manual:
+        print(f"🔧 模式: 手动提示词")
+        print(f"📝 Prompt: {args.prompt[:100]}...")
+    else:
+        print(f"🔧 模式: 自动（元素库随机）")
     print(f"📋 标题: {args.title}")
     print(f"💬 介绍: {args.caption}")
     if args.scene:
@@ -415,7 +434,9 @@ def main():
     print("=" * 50)
 
     # 生成图片（返回 [(url, meta), ...]）
-    images_with_meta = generate_daily_images(args.count, args.style, args.emotion or "")
+    images_with_meta = generate_daily_images(
+        args.count, args.style, args.emotion or "", prompt=args.prompt or ""
+    )
 
     if len(images_with_meta) == 0:
         print("❌ 没有成功生成任何图片")
@@ -440,17 +461,29 @@ def main():
 
     print(f"\n📤 正在发布到公众号...")
 
-    # 构建图片和说明配对 - 基于元数据动态生成配文
+    # 构建图片和说明配对
     image_pairs = []
     first_meta = {}
+
+    # 手动模式：使用用户自定义配文或默认配文
+    manual_caption = args.caption_text if is_manual and args.caption_text else None
+
     for i, (img_url, meta) in enumerate(images_with_meta):
         if i == 0:
             first_meta = meta or {}
-        caption = generate_caption_from_meta(meta) if meta else generate_smart_caption()
+        if manual_caption:
+            caption = manual_caption
+        elif meta and meta.get("scene_type") != "custom":
+            caption = generate_caption_from_meta(meta)
+        else:
+            caption = "今日份心动瞬间。"
         image_pairs.append((img_url, caption))
 
-    # 基于第一张图的元数据生成动态标签
-    dynamic_tags = generate_tags_from_meta(first_meta) if first_meta else "#每日美女 #写真 #人像摄影 #今日心动"
+    # 标签：手动模式用通用标签，自动模式基于元数据
+    if is_manual:
+        dynamic_tags = "#每日美女 #写真 #人像摄影 #今日心动"
+    else:
+        dynamic_tags = generate_tags_from_meta(first_meta) if first_meta else "#每日美女 #写真 #人像摄影 #今日心动"
     print(f"🏷️ 标签: {dynamic_tags}")
 
     result = publish_to_wechat(
