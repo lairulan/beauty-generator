@@ -1,5 +1,15 @@
 {
   "version": "1.0",
   "description": "手动模式提示词库 - 用户自定义 prompt 自动存档",
-  "prompts": []
+  "prompts": [
+    {
+      "id": 1,
+      "prompt": "A stunning Asian woman in a vibrant red chiffon gala dress with sweetheart corset bodice and off-shoulder puffed sleeves, seated gracefully on a rustic weathered wooden bridge over a calm stream. Lush bougainvillea flowers in pink and magenta cascade around her, creating a romantic canopy. Golden hour sunlight filters through the foliage, casting warm honeyed light on her skin. Shot with 85mm portrait lens, f/1.8, shallow depth of field with creamy bokeh. Her long black hair flows softly in a gentle breeze. Cinematic color grading, 3:4 aspect ratio, ultra high resolution, photorealistic.",
+      "caption": "暮色温柔，红裙如火。木桥上的她，被三角梅编织成一幅画。",
+      "tags": "#每日美女 #红裙 #三角梅 #黄金时刻 #人像摄影 #木桥 #写真",
+      "title": "手动精选 | 花桥红裙",
+      "image_url": "https://ai-gateway-resource.trickle-lab.tech/images/1774180565957-4767ea39-b91a-4cf3-93d5-e658cf87ead6-0.png",
+      "created_at": "2026-03-22 11:56:20"
+    }
+  ]
 }
