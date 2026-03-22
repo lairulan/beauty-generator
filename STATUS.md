@@ -1,26 +1,27 @@
-# beauty-generator STATUS v11.0.0 — 2026-03-21
+# beauty-generator STATUS v11.2.0 — 2026-03-22
 
 ## 断点
-- 本次完成：v10.0 → v11.0 大版本升级
-  - 调研 15+ AI 提示词平台，采集 47,010 条美女/人像提示词
-  - 尝试合并外部提示词库（v11.0/v11.1/v12.0），效果不理想后回退到 v10.0 基础
-  - 新增动态配文系统：基于图片 META 元数据（场景/穿搭/表情/光影/艺术风格）自动生成配文
-  - 新增动态标签系统：根据图片内容自动选择话题标签（最多6个）
-  - generate_beauty.py 输出 META 行协议，publish_wechat.py 解析并动态生成
-  - 5次测试验证：图片生成 5/5 成功，META 解析 5/5 正确，WeChat 发布 2/5 成功（3次 API 超时为基础设施问题）
-- 下一步：观察每日自动发布效果，验证动态配文与图片的贴合度
+- 本次完成：v11.1.1 → v11.2.0 手动提示词库
+  - 新增 config/manual_prompts.json 独立提示词库（与自动模式 prompt_library.json 完全隔离）
+  - publish_wechat.py: 新增 load/save/list/get 四个提示词库函数
+  - 手动模式发布成功后自动存档（prompt、配文、标签、图片URL、时间戳、自增ID）
+  - 新增 --list-prompts 浏览 / --use-prompt <ID> 复用已保存提示词
+  - SKILL.md 更新到 v11.2.0，文档同步
+- 下一步：实际使用手动模式积累提示词；观察自动存档效果；考虑扩充关键词映射库
 
 ## 环境
 - 仓库：https://github.com/lairulan/beauty-generator.git
-- 触发：CF Worker UTC 11:30 → repository_dispatch + schedule cron UTC 12:00 兜底
+- 触发：CF Worker UTC 11:30 → repository_dispatch（自动模式）+ workflow_dispatch（手动模式）+ schedule cron UTC 12:00 兜底
 - API：Google Imagen 4 Ultra (主力) + 豆包 Seedream 4.5 (回退) + imgbb (图床)
 - 发布：三更熟公众号 (AppID: wx287cdb9d78a498aa)
-- 提示词库：prompt_library.json v10.0（284 元素，9 维度，1.14 万亿组合）
+- 自动提示词库：config/prompt_library.json v10.0（284 元素，9 维度，1.14 万亿组合）
+- 手动提示词库：config/manual_prompts.json（独立存储，发布成功自动存档）
 
 ## 已知问题
 - WeChat API (wx.limyai.com) 间歇性超时，SSL 证书过期需跳过验证
 - CF Worker 偶尔触发失败，已有 schedule cron 兜底
 
 ## 勿碰
-- .github/workflows/daily-publish.yml 的 concurrency 配置
 - config/prompt_library.json 的基础结构（v10.0 已验证稳定）
+- .github/workflows/daily-publish.yml 的 concurrency 和 workflow_dispatch inputs 配置
+- config/manual_prompts.json 不要与 prompt_library.json 合并，两条线独立
