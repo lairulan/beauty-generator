@@ -202,6 +202,173 @@ def generate_tags_from_meta(meta: dict) -> str:
     return " ".join(tags[:6])  # 最多 6 个标签
 
 
+def generate_caption_from_prompt(prompt: str) -> str:
+    """基于用户自定义英文提示词，提取关键元素生成中文配文"""
+    import random
+
+    prompt_lower = prompt.lower()
+
+    import re
+
+    # --- 场景关键词 -> 中文描写 ---
+    # 长关键词优先匹配（子串安全）
+    scene_map = {
+        "izakaya": ["居酒屋的烟火气", "昏黄灯光下的深夜食堂", "日式小酒馆的温暖"],
+        "coffee shop": ["咖啡香里的慵懒时光", "午后咖啡馆的邂逅"],
+        "cherry blossom": ["樱花树下的约定", "春风十里不如你"],
+        "cafe": ["咖啡香里的慵懒时光", "午后咖啡馆的邂逅"],
+        "beach": ["海风轻抚的温柔", "浪花写下的情书", "海边的自在"],
+        "ocean": ["海风轻抚的温柔", "海与天的交界处"],
+        "street": ["街角转弯遇见美好", "街拍质感满分"],
+        "garden": ["花园里的秘密", "被花包围的浪漫时光"],
+        "forest": ["林间光影斑驳", "绿意盎然的画面"],
+        "snow": ["初雪的浪漫", "雪景里的温柔"],
+        "temple": ["古寺中的静谧", "青砖黛瓦间的古典美"],
+        "library": ["书香气里的安静", "图书馆的光影"],
+        "kitchen": ["厨房里的烟火气", "生活最真实的模样"],
+        "bedroom": ["窗边的慵懒时光", "清晨最柔软的光"],
+        "rooftop": ["天台上的风和故事", "城市上空的自由"],
+        "train": ["列车窗外的风景", "旅途中的偶遇"],
+        "subway": ["地铁里的一瞬间", "城市脉搏里的故事"],
+        "park": ["公园里的闲适", "阳光和绿荫最配"],
+        "mountain": ["山间的清风", "远方的风景值得追寻"],
+        "sunset": ["日落把一切都镀了金", "黄昏是最浪漫的滤镜"],
+        "sunflower": ["向日葵田里的笑容", "被阳光追着跑的季节"],
+        "sakura": ["樱花树下的约定", "花瓣落满肩头"],
+        "pool": ["泳池边的夏日", "水光粼粼的午后"],
+        "hotel": ["旅途中的小憩", "酒店窗边的风景"],
+        "market": ["市集里的烟火气", "人间烟火最抚人心"],
+        "restaurant": ["美食与美人都不可辜负", "餐厅的暖光里"],
+        "balcony": ["阳台上的小世界", "阳台是家里最浪漫的角落"],
+        "window": ["窗边的光影故事", "透过窗户看世界"],
+    }
+
+    # 需要词边界匹配的短关键词（避免 rain/grain, bar/sidebar, night/nightlife 误匹配）
+    scene_word_boundary = {
+        "bar": ["吧台边的微醺时光", "酒杯里映着的故事", "深夜酒吧的低语"],
+        "rain": ["雨天自带电影感", "雨中的浪漫"],
+        "city": ["城市光影中的故事", "都市里的片刻宁静"],
+        "night": ["夜色温柔", "深夜的故事最动人"],
+    }
+
+    # --- 情绪/氛围关键词 -> 中文描写 ---
+    mood_map = {
+        "smile": ["笑容是最好的滤镜", "嘴角上扬的弧度刚好"],
+        "gentle": ["温柔是最好的答案", "岁月温柔以待"],
+        "sweet": ["甜度爆表", "甜到心里了"],
+        "sexy": ["恰到好处的性感", "眼角眉梢全是故事"],
+        "elegant": ["优雅是骨子里的气质", "美得不动声色"],
+        "nostalgic": ["怀旧的色调最有故事", "时光在这里慢下来"],
+        "candid": ["不经意的瞬间最动人", "真实的样子最美"],
+        "intimate": ["亲密的氛围感", "靠近一点，再靠近一点"],
+        "cozy": ["温暖的氛围感拉满", "想把这一刻留住"],
+        "melancholy": ["微微忧郁的眼神", "故事写在眼睛里"],
+        "confident": ["自信是最好的妆容", "气场全开"],
+        "mysterious": ["神秘感刚刚好", "让人想靠近的距离感"],
+        "playful": ["古灵精怪招人爱", "元气少女上线"],
+        "dreamy": ["梦幻般的画面", "像走进了一场梦"],
+        "lonely": ["独处的时光也很美", "一个人的风景"],
+    }
+
+    # --- 风格关键词 -> 中文描写 ---
+    style_map = {
+        "film": ["胶片质感的温柔", "每一帧都像电影"],
+        "analog": ["复古胶片的色调真好看", "模拟胶片的温度"],
+        "vintage": ["复古的色调最有味道", "时光倒流的美感"],
+        "kodak": ["柯达色调的浪漫", "胶片里的光影故事"],
+        "portra": ["Portra色调就是yyds", "胶片感拉满"],
+        "cinematic": ["电影感十足", "每一帧都值得截图"],
+        "wong kar-wai": ["王家卫式的光影", "暧昧的色调太绝了"],
+        "moriyama": ["森山大道式的粗粝", "街头的诗意"],
+        "showa": ["昭和风的怀旧感", "那个年代的浪漫"],
+        "retro": ["复古风永不过时", "旧时光的美好"],
+    }
+
+    parts = []
+
+    # 匹配场景（先查子串安全的长关键词）
+    matched_scene = False
+    for key, phrases in scene_map.items():
+        if key in prompt_lower:
+            parts.append(random.choice(phrases))
+            matched_scene = True
+            break
+
+    # 再查需要词边界的短关键词
+    if not matched_scene:
+        for key, phrases in scene_word_boundary.items():
+            if re.search(r'\b' + re.escape(key) + r'\b', prompt_lower):
+                parts.append(random.choice(phrases))
+                break
+
+    # 匹配情绪
+    for key, phrases in mood_map.items():
+        if key in prompt_lower:
+            parts.append(random.choice(phrases))
+            break
+
+    # 如果不够2句，匹配风格
+    if len(parts) < 2:
+        for key, phrases in style_map.items():
+            if key in prompt_lower:
+                parts.append(random.choice(phrases))
+                break
+
+    # 保底
+    if not parts:
+        fallback = ["今日份心动瞬间", "美好值得被定格", "镜头里的温柔",
+                     "光影之间的故事", "被美好击中的瞬间", "每一帧都是风景"]
+        parts.append(random.choice(fallback))
+
+    if len(parts) >= 2:
+        return f"{parts[0]}，{parts[1]}。"
+    return f"{parts[0]}。"
+
+
+def generate_tags_from_prompt(prompt: str) -> str:
+    """基于用户自定义英文提示词生成话题标签"""
+    import re
+    prompt_lower = prompt.lower()
+    tags = ["#每日美女", "#写真"]
+
+    tag_map = {
+        "izakaya": "#日式居酒屋", "cafe": "#咖啡时光",
+        "coffee shop": "#咖啡时光", "beach": "#海边", "ocean": "#海边",
+        "street": "#街拍", "garden": "#花园",
+        "forest": "#户外写真", "temple": "#国风",
+        "sunset": "#日落", "pool": "#泳池",
+        "sakura": "#樱花", "cherry blossom": "#樱花",
+        "sunflower": "#向日葵",
+        "kodak": "#胶片质感", "cinematic": "#电影感",
+        "wong kar-wai": "#王家卫", "showa": "#昭和风",
+        "vintage": "#复古", "retro": "#复古",
+        "candid": "#抓拍", "cozy": "#氛围感",
+    }
+
+    # 需要词边界匹配的短关键词（避免 rain/grain, bar/ebar 等误匹配）
+    word_boundary_tags = {
+        "bar": "#深夜酒吧", "rain": "#雨天", "night": "#夜景",
+        "city": "#都市", "film": "#胶片质感", "sexy": "#性感",
+        "sweet": "#甜美", "elegant": "#优雅", "gentle": "#温柔",
+    }
+
+    for key, tag in tag_map.items():
+        if key in prompt_lower and tag not in tags:
+            tags.append(tag)
+        if len(tags) >= 5:
+            break
+
+    if len(tags) < 5:
+        for key, tag in word_boundary_tags.items():
+            if re.search(r'\b' + re.escape(key) + r'\b', prompt_lower) and tag not in tags:
+                tags.append(tag)
+            if len(tags) >= 5:
+                break
+
+    tags.append("#人像摄影")
+    return " ".join(tags[:6])
+
+
 def generate_smart_caption(scene: str = "", emotion: str = "", makeup: str = "", art_style: str = "") -> str:
     """兼容旧接口：无元数据时使用"""
     return generate_caption_from_meta({
@@ -465,8 +632,13 @@ def main():
     image_pairs = []
     first_meta = {}
 
-    # 手动模式：使用用户自定义配文或默认配文
-    manual_caption = args.caption_text if is_manual and args.caption_text else None
+    # 手动模式：优先用户自定义配文 > 从 prompt 智能生成 > 默认
+    if is_manual and args.caption_text:
+        manual_caption = args.caption_text
+    elif is_manual and args.prompt:
+        manual_caption = generate_caption_from_prompt(args.prompt)
+    else:
+        manual_caption = None
 
     for i, (img_url, meta) in enumerate(images_with_meta):
         if i == 0:
@@ -479,9 +651,9 @@ def main():
             caption = "今日份心动瞬间。"
         image_pairs.append((img_url, caption))
 
-    # 标签：手动模式用通用标签，自动模式基于元数据
-    if is_manual:
-        dynamic_tags = "#每日美女 #写真 #人像摄影 #今日心动"
+    # 标签：手动模式从 prompt 智能生成，自动模式基于元数据
+    if is_manual and args.prompt:
+        dynamic_tags = generate_tags_from_prompt(args.prompt)
     else:
         dynamic_tags = generate_tags_from_meta(first_meta) if first_meta else "#每日美女 #写真 #人像摄影 #今日心动"
     print(f"🏷️ 标签: {dynamic_tags}")
