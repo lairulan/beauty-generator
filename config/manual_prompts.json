@@ -37,6 +37,15 @@
       "title": "手动精选 | 慵懒周日",
       "image_url": "https://ai-gateway-resource.trickle-lab.tech/images/1774182015853-b6babf18-927d-45e8-bafc-64eef5c04a97-0.png",
       "created_at": "2026-03-22 12:20:32"
+    },
+    {
+      "id": 5,
+      "prompt": "A 25-year-old Korean woman taking a selfie with the front-facing camera. Soft and natural lighting illuminates her face evenly. The background shows a clean, modern apartment interior with minimal decor. She wears a vibrant colored top that creates a nice color contrast against the neutral apartment tones. Her expression is natural and relaxed, slightly smiling. The photo has that authentic selfie quality - slightly close-up, casual angle, genuine moment captured. Skin texture is realistic with natural makeup. iPhone front camera quality, slight soft focus, 3:4 aspect ratio, photorealistic.",
+      "caption": "素颜自拍，不加滤镜的午后。最好的状态，就是最自然的样子。",
+      "tags": "#每日美女 #韩系自拍 #素颜 #日常 #自然光 #人像摄影 #居家",
+      "title": "手动精选 | 公寓自拍",
+      "image_url": "https://ai-gateway-resource.trickle-lab.tech/images/1774182293784-15defecd-5a59-4cf6-8fc8-368c87449d3d-0.png",
+      "created_at": "2026-03-22 12:25:09"
     }
   ]
 }
