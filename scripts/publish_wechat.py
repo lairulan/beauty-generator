@@ -325,6 +325,68 @@ def generate_caption_from_prompt(prompt: str) -> str:
     return f"{parts[0]}。"
 
 
+def load_manual_prompts() -> dict:
+    """加载手动提示词库"""
+    prompts_file = CONFIG_DIR / "manual_prompts.json"
+    if prompts_file.exists():
+        with open(prompts_file, "r", encoding="utf-8") as f:
+            return json.load(f)
+    return {"version": "1.0", "prompts": []}
+
+
+def save_manual_prompt(prompt: str, caption: str = "", tags: str = "", title: str = "", image_url: str = ""):
+    """保存手动提示词到库中（发布成功后自动调用）"""
+    data = load_manual_prompts()
+    # 计算下一个 ID
+    next_id = max((p.get("id", 0) for p in data["prompts"]), default=0) + 1
+    entry = {
+        "id": next_id,
+        "prompt": prompt,
+        "caption": caption,
+        "tags": tags,
+        "title": title,
+        "image_url": image_url,
+        "created_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+    }
+    data["prompts"].append(entry)
+    prompts_file = CONFIG_DIR / "manual_prompts.json"
+    with open(prompts_file, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+    print(f"  📚 提示词已保存到库（ID: {next_id}）")
+    return next_id
+
+
+def list_manual_prompts():
+    """列出所有已保存的手动提示词"""
+    data = load_manual_prompts()
+    prompts = data.get("prompts", [])
+    if not prompts:
+        print("📚 提示词库为空，还没有保存过手动提示词。")
+        return
+    print(f"📚 手动提示词库（共 {len(prompts)} 条）")
+    print("=" * 60)
+    for p in prompts:
+        pid = p.get("id", "?")
+        created = p.get("created_at", "")
+        prompt_text = p.get("prompt", "")
+        preview = prompt_text[:80] + "..." if len(prompt_text) > 80 else prompt_text
+        caption = p.get("caption", "")
+        print(f"  [{pid}] {created}")
+        print(f"      Prompt: {preview}")
+        if caption:
+            print(f"      配文: {caption}")
+        print()
+
+
+def get_manual_prompt(prompt_id: int) -> dict:
+    """按 ID 获取已保存的提示词"""
+    data = load_manual_prompts()
+    for p in data.get("prompts", []):
+        if p.get("id") == prompt_id:
+            return p
+    return {}
+
+
 def generate_tags_from_prompt(prompt: str) -> str:
     """基于用户自定义英文提示词生成话题标签"""
     import re
@@ -552,10 +614,31 @@ def main():
     parser.add_argument("--appid", help="公众号 AppID（默认：三更熟）")
     parser.add_argument("--title", "-t", help="文章标题（自动生成默认）")
     parser.add_argument("--caption", help="一句话介绍（自动生成默认）")
+    parser.add_argument("--list-prompts", action="store_true", help="列出已保存的手动提示词库")
+    parser.add_argument("--use-prompt", type=int, metavar="ID", help="使用已保存的提示词（按 ID）")
     parser.add_argument("--test", action="store_true", help="测试模式：只生成不发布")
     parser.add_argument("--type", choices=["news", "newspic"], default="newspic", help="文章类型")
 
     args = parser.parse_args()
+
+    # 列出提示词库
+    if args.list_prompts:
+        list_manual_prompts()
+        return 0
+
+    # 从库中加载提示词
+    if args.use_prompt:
+        saved = get_manual_prompt(args.use_prompt)
+        if not saved:
+            print(f"❌ 未找到 ID={args.use_prompt} 的提示词，请用 --list-prompts 查看可用列表")
+            return 1
+        args.prompt = saved["prompt"]
+        if not args.caption_text and saved.get("caption"):
+            args.caption_text = saved["caption"]
+        if not args.title and saved.get("title"):
+            args.title = saved["title"]
+        print(f"📚 已加载提示词库 ID={args.use_prompt}")
+        print(f"   Prompt: {args.prompt[:80]}...")
 
     # 检查 API Key
     if not get_api_key():
@@ -674,6 +757,16 @@ def main():
     if result.get("success") is True or result.get("code") == "SUCCESS":
         print("✅ 发布成功！")
         print(f"📱 请到公众号后台查看草稿箱")
+        # 手动模式发布成功 → 自动保存提示词到库
+        if is_manual and args.prompt:
+            first_url = images_with_meta[0][0] if images_with_meta else ""
+            save_manual_prompt(
+                prompt=args.prompt,
+                caption=manual_caption or "",
+                tags=dynamic_tags,
+                title=args.title,
+                image_url=first_url,
+            )
         return 0
     else:
         error_msg = result.get("error", "未知错误")
