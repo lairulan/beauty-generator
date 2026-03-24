@@ -34,3 +34,4 @@
 - 2026-03-23 20:59:57 | success | event=schedule | style=性感系/挑逗 | run=186 | https://github.com/lairulan/beauty-generator/actions/runs/23438484679
 - 2026-03-24 19:31:47 | success | event=repository_dispatch | style=甜美系/俏皮 | run=187 | https://github.com/lairulan/beauty-generator/actions/runs/23487192728
 - 2026-03-24 21:05:03 | failure | event=schedule | style=甜美系/俏皮 | run=188 | https://github.com/lairulan/beauty-generator/actions/runs/23490851261
+- 2026-03-24 23:41:53 | success | event=workflow_dispatch | mode=manual | prompt=8K ultra-realistic portrait, 3:4 ratio. A stunning... | run=189 | https://github.com/lairulan/beauty-generator/actions/runs/23498304446
