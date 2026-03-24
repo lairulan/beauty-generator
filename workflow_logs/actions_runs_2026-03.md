@@ -35,3 +35,4 @@
 - 2026-03-24 19:31:47 | success | event=repository_dispatch | style=甜美系/俏皮 | run=187 | https://github.com/lairulan/beauty-generator/actions/runs/23487192728
 - 2026-03-24 21:05:03 | failure | event=schedule | style=甜美系/俏皮 | run=188 | https://github.com/lairulan/beauty-generator/actions/runs/23490851261
 - 2026-03-24 23:41:53 | success | event=workflow_dispatch | mode=manual | prompt=8K ultra-realistic portrait, 3:4 ratio. A stunning... | run=189 | https://github.com/lairulan/beauty-generator/actions/runs/23498304446
+- 2026-03-24 23:44:54 | failure | event=workflow_dispatch | mode=manual | prompt=A raw amateur phone photo shot on iphone photos wi... | run=190 | https://github.com/lairulan/beauty-generator/actions/runs/23498422521
