@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-公众号发布脚本
+公众号发布脚本 V10.0
 将生成的美女图片发布到公众号草稿箱（小绿书形式）
 """
 
@@ -58,7 +58,11 @@ def make_request(endpoint, data=None):
             },
             method="POST"
         )
-        with urllib.request.urlopen(req, timeout=30) as response:
+        # TODO: 临时跳过 SSL 验证（wx.limyai.com 证书过期），恢复后删除 ssl_ctx
+        ssl_ctx = ssl.create_default_context()
+        ssl_ctx.check_hostname = False
+        ssl_ctx.verify_mode = ssl.CERT_NONE
+        with urllib.request.urlopen(req, timeout=60, context=ssl_ctx) as response:
             return json.loads(response.read().decode("utf-8"))
     except urllib.error.HTTPError as e:
         body = e.read().decode("utf-8", errors="replace")
@@ -71,195 +75,369 @@ def make_request(endpoint, data=None):
         return {"success": False, "error": str(e)}
 
 
-def generate_smart_caption(scene: str = "", emotion: str = "", makeup: str = "", art_style: str = "") -> str:
-    """
-    智能生成配文 - 根据图片参数动态生成
-    不再受星期几限制，完全随机且与图片内容匹配
-    """
+def generate_caption_from_meta(meta: dict) -> str:
+    """基于图片元数据动态生成配文（与图片内容贴合）
 
-    # 大型配文库 - 按情绪和场景分类
-    captions = {
-        "挑逗": [
-            "一眼心动，再沦陷。",
-            "迷人无需多言，看就够了。",
-            "眼神会说话，你听到了吗？",
-            "危险又迷人的距离。",
-            "这一刻的吸引力，致命。",
-            "风情万种，不过如此。",
-            "不用刻意，就很勾人。",
-            "撩人于无形之中。",
-            "美，是种武器。",
-            "这眼神，藏不住。",
-            "近一点，再近一点。",
-            "你的心跳，我听见了。",
-            "刚好撞进你的眼睛里。",
-            "那种感觉，叫心动。",
-            "妩媚，是天生的。",
-            "一颦一笑，皆是陷阱。",
-            "回眸一笑，万劫不复。",
-            "魅力这种东西，藏不住。",
-            "若无其事，最是勾人。",
-            "眼角眉梢，全是故事。",
-            "这一刻，时间停了。",
-            "靠近，是本能。",
-            "撩得恰到好处。",
-            "那种气场，天生的。",
-            "低眉浅笑，胜过千言。",
-            "明知是陷阱，还是跳。",
-            "美到让人语塞。",
-            "风情，不动声色地弥漫。",
-            "这种吸引力，无解。",
-            "骨子里的妩媚。",
-            "令人窒息的存在感。",
-            "越看越上头。",
-            "让人移不开眼。",
-            "这眼神会放电。",
-            "撩人于无意之间，才最厉害。",
-            "一眼，就输了。",
-            "心跳加速，无法自控。",
-            "这种美，带着温度。",
-            "不经意间的回眸，杀伤力极强。",
-            "妩媚不是刻意的，是流淌的。",
-            "这一帧，值得反复看。",
-        ],
-        "忧郁": [
-            "孤独是华丽的。",
-            "温柔里藏着忧伤。",
-            "安静中，故事在流淌。",
-            "眼中有海，心中有故事。",
-            "淡然，是最好的伪装。",
-            "有些话，不用说。",
-            "沉默，也是一种表达。"
-        ],
-        "神秘": [
-            "看不透，才最迷人。",
-            "眼神里，藏着故事。",
-            "若即若离，最是抓人。",
-            "谜一样的存在。",
-            "保持距离，更有魅力。",
-            "猜不透的谜题。",
-            "越神秘，越想靠近。"
-        ],
-        "开心": [
-            "笑容是最好的滤镜。",
-            "今天的快乐超标了。",
-            "阳光下的笑容，治愈一切。",
-            "笑着，就很美。",
-            "心情写在脸上。",
-            "元气满满的一天。",
-            "今天也很开心呀。"
-        ],
-        "高冷": [
-            "不讨好，自有光芒。",
-            "高冷，也是一种温度。",
-            "疏离感刚刚好。",
-            "无需刻意，就很酷。",
-            "气场全开。",
-            "距离产生美。",
-            "生人勿近的气场。"
-        ],
-        "温柔": [
-            "温柔了岁月，惊艳了时光。",
-            "岁月静好，温柔相伴。",
-            "温暖，是最好的滤镜。",
-            "柔软中，自有力量。",
-            "温柔了整个世界。",
-            "安静的美好。",
-            "如沐春风的温柔。"
-        ],
-        "自信": [
-            "无需定义，只做自己。",
-            "从容，是最大的魅力。",
-            "自信，是最好的妆容。",
-            "光芒万丈，无需多言。",
-            "做自己的风景。",
-            "不被定义的自由。",
-            "本色出演，就足够好。"
-        ],
-        "俏皮": [
-            "今天也很可爱呢。",
-            "甜度满分，超标了。",
-            "元气少女上线。",
-            "可爱，是挡不住的。",
-            "今天的可爱值爆表。",
-            "俏皮一下，很开心。",
-            "活泼是天性。"
-        ],
-        # 通用配文（无特定情绪）
-        "通用": [
-            "今日份心动瞬间。",
-            "美好，值得被记录。",
-            "每一帧都是心动。",
-            "定格此刻的美好。",
-            "遇见，就是最好的开始。",
-            "时光不语，却给了答案。",
-            "安静地发光。",
-            "美好从不缺席。",
-            "今日份美好已送达。",
-            "被光选中的一天。"
-        ],
-        # 场景配文
-        "雨夜": [
-            "雨夜，最适合想念。",
-            "霓虹灯下的孤单。",
-            "雨中，故事在发生。",
-            "潮湿的情绪，被雨淋湿。",
-            "雨夜，别有一番风味。",
-            "湿漉漉的温柔。"
-        ],
-        "樱花雨": [
-            "花瓣雨，落满心头。",
-            "樱花树下的约定。",
-            "粉色，是春天的告白。",
-            "落花时节，又逢君。",
-            "樱花雨，浪漫了时光。",
-            "每一片都是心事。"
-        ],
-        "黄昏海滩": [
-            "黄昏时，在海边想你。",
-            "日落时分，温柔了世界。",
-            "海边的黄昏，黄金时刻。",
-            "阳光与海，最好的组合。",
-            "黄昏，海风，心事。",
-            "此刻，刚刚好。"
-        ],
-        "赛博朋克": [
-            "霓虹灯下的未来感。",
-            "赛博朋克的浪漫。",
-            "未来的样子，想象不到。",
-            "科技与美，完美融合。",
-            "霓虹闪烁的夜晚。",
-            "未来已来。"
-        ],
-        "咖啡厅": [
-            "咖啡时光，慢下来。",
-            "咖啡香里，故事发酵。",
-            "一杯咖啡，一下午。",
-            "咖啡厅，偷得浮生半日闲。",
-            "温暖，从一杯咖啡开始。",
-            "慢生活，刚刚好。"
-        ]
-    }
-
+    meta 结构: {scene_type, outfit_style, expression_type, lighting_type, art_style}
+    """
     import random
 
-    # 根据传入的参数选择配文
-    if emotion and emotion in captions:
-        # 优先使用情绪配文
-        return random.choice(captions[emotion])
-    elif scene == "雨夜":
-        return random.choice(captions["雨夜"])
-    elif scene == "樱花雨":
-        return random.choice(captions["樱花雨"])
-    elif scene == "黄昏海滩":
-        return random.choice(captions["黄昏海滩"])
-    elif scene == "赛博朋克":
-        return random.choice(captions["赛博朋克"])
-    elif scene == "咖啡厅":
-        return random.choice(captions["咖啡厅"])
+    scene = meta.get("scene_type", "")
+    outfit = meta.get("outfit_style", "")
+    expression = meta.get("expression_type", "")
+    lighting = meta.get("lighting_type", "")
+    art = meta.get("art_style", "")
+
+    # --- 场景描写片段 ---
+    scene_phrases = {
+        "自然": ["山野间的风", "绿意盎然的画面", "大自然最好的滤镜", "清风与花香交织"],
+        "海滩": ["海风轻抚的瞬间", "浪花写下的情书", "海与天的交界处", "被海风吹乱的温柔"],
+        "花田": ["花海里的少女心事", "花瓣落满肩头", "被花包围的浪漫", "春天专属的色彩"],
+        "城市": ["城市光影中的故事", "街角的一抹亮色", "都市里的片刻宁静", "水泥森林中的柔软"],
+        "街头": ["街拍质感满分", "街角转弯遇见美好", "城市漫步的随性", "人潮中最亮眼的存在"],
+        "室内": ["窗边光影的温柔", "阳光洒进来的午后", "室内的安静时光", "光线最好的角落"],
+        "咖啡厅": ["咖啡香里的慵懒", "一杯拿铁的时光", "午后咖啡馆的邂逅", "慢下来，享受此刻"],
+        "古建筑": ["青砖黛瓦间的古典美", "时光在这里停驻", "古韵与美人相得益彰", "历史与美的对话"],
+        "特殊": ["独特氛围感拉满", "不一样的视角", "光影交错中的故事", "氛围感这一块拿捏住了"],
+    }
+
+    # --- 表情描写片段 ---
+    expr_phrases = {
+        "甜美微笑": ["甜度爆表", "笑容是最好的滤镜", "嘴角上扬的弧度刚好", "笑起来眼睛弯弯的"],
+        "优雅端庄": ["优雅是骨子里的气质", "举手投足间的从容", "美得不动声色", "端庄中透着温度"],
+        "俏皮灵动": ["古灵精怪招人爱", "灵动的眼神会说话", "元气少女上线", "可爱值已超标"],
+        "冷艳高贵": ["气场全开", "高冷中透着迷人", "疏离感刚刚好", "清冷如月的美"],
+        "性感妩媚": ["眼角眉梢全是故事", "风情万种不过如此", "这种美，带着温度", "靠近是本能"],
+        "文艺知性": ["书卷气自成风景", "知性是最高级的性感", "文艺范十足", "眉目间的故事感"],
+        "清纯自然": ["清水出芙蓉", "不施粉黛的美好", "干净得像一阵风", "最纯粹的样子"],
+    }
+
+    # --- 光影描写片段 ---
+    light_phrases = {
+        "自然光": ["自然光就是最好的打光师", "光线温柔得刚好", "阳光帮你做造型"],
+        "黄金时刻": ["黄金时刻的魔法", "夕阳把一切都镀了金", "日落是最浪漫的滤镜"],
+        "柔和室内光": ["窗边的柔光最温柔", "光影交织的安静", "被光线偏爱的角落"],
+    }
+
+    # --- 穿搭描写片段 ---
+    outfit_phrases = {
+        "优雅": ["优雅是永不过时的时尚", "精致到每一个细节"],
+        "性感": ["恰到好处的性感", "美得让人心跳加速"],
+        "清新": ["清新感扑面而来", "像春风一样舒服"],
+        "时尚": ["时尚嗅觉满分", "走在潮流前端"],
+        "古典": ["古典韵味十足", "穿越时光的美"],
+        "运动": ["活力值拉满", "运动女孩最迷人"],
+    }
+
+    # 从各维度随机选一个片段组合
+    parts = []
+
+    if scene and scene in scene_phrases:
+        parts.append(random.choice(scene_phrases[scene]))
+    elif scene:
+        parts.append(f"{scene}里的故事")
+
+    if expression and expression in expr_phrases:
+        parts.append(random.choice(expr_phrases[expression]))
+
+    if not parts:
+        if lighting and lighting in light_phrases:
+            parts.append(random.choice(light_phrases[lighting]))
+
+    if not parts:
+        if outfit and outfit in outfit_phrases:
+            parts.append(random.choice(outfit_phrases[outfit]))
+
+    # 保底：至少有一句
+    if not parts:
+        fallback = ["今日份心动瞬间", "美好值得被定格", "每一帧都是风景",
+                     "镜头里的温柔", "光影之间的故事", "被美好击中的瞬间"]
+        parts.append(random.choice(fallback))
+
+    # 组合：1-2 句，用逗号或句号连接
+    if len(parts) >= 2:
+        return f"{parts[0]}，{parts[1]}。"
     else:
-        # 使用通用配文
-        return random.choice(captions["通用"])
+        return f"{parts[0]}。"
+
+
+def generate_tags_from_meta(meta: dict) -> str:
+    """基于图片元数据动态生成话题标签"""
+    tags = ["#每日美女", "#写真"]
+
+    scene = meta.get("scene_type", "")
+    expression = meta.get("expression_type", "")
+    art = meta.get("art_style", "")
+
+    # 场景标签
+    scene_tags = {
+        "自然": "#户外写真", "海滩": "#海边", "花田": "#花海",
+        "城市": "#街拍", "街头": "#街拍", "室内": "#室内写真",
+        "咖啡厅": "#咖啡时光", "古建筑": "#国风", "特殊": "#创意摄影",
+    }
+    if scene in scene_tags:
+        tags.append(scene_tags[scene])
+
+    # 表情/风格标签
+    expr_tags = {
+        "甜美微笑": "#甜美", "优雅端庄": "#优雅", "俏皮灵动": "#元气少女",
+        "冷艳高贵": "#高冷范", "性感妩媚": "#性感", "文艺知性": "#文艺范",
+        "清纯自然": "#清纯",
+    }
+    if expression in expr_tags:
+        tags.append(expr_tags[expression])
+
+    # 艺术风格标签
+    art_tags = {
+        "电影感": "#电影感", "胶片": "#胶片质感", "日系": "#日系",
+        "ins风": "#ins风",
+    }
+    if art in art_tags:
+        tags.append(art_tags[art])
+
+    # 固定尾部标签
+    tags.append("#人像摄影")
+    tags.append("#今日心动")
+
+    return " ".join(tags[:6])  # 最多 6 个标签
+
+
+def generate_caption_from_prompt(prompt: str) -> str:
+    """基于用户自定义英文提示词，提取关键元素生成中文配文"""
+    import random
+
+    prompt_lower = prompt.lower()
+
+    import re
+
+    # --- 场景关键词 -> 中文描写 ---
+    # 长关键词优先匹配（子串安全）
+    scene_map = {
+        "izakaya": ["居酒屋的烟火气", "昏黄灯光下的深夜食堂", "日式小酒馆的温暖"],
+        "coffee shop": ["咖啡香里的慵懒时光", "午后咖啡馆的邂逅"],
+        "cherry blossom": ["樱花树下的约定", "春风十里不如你"],
+        "cafe": ["咖啡香里的慵懒时光", "午后咖啡馆的邂逅"],
+        "beach": ["海风轻抚的温柔", "浪花写下的情书", "海边的自在"],
+        "ocean": ["海风轻抚的温柔", "海与天的交界处"],
+        "street": ["街角转弯遇见美好", "街拍质感满分"],
+        "garden": ["花园里的秘密", "被花包围的浪漫时光"],
+        "forest": ["林间光影斑驳", "绿意盎然的画面"],
+        "snow": ["初雪的浪漫", "雪景里的温柔"],
+        "temple": ["古寺中的静谧", "青砖黛瓦间的古典美"],
+        "library": ["书香气里的安静", "图书馆的光影"],
+        "kitchen": ["厨房里的烟火气", "生活最真实的模样"],
+        "bedroom": ["窗边的慵懒时光", "清晨最柔软的光"],
+        "rooftop": ["天台上的风和故事", "城市上空的自由"],
+        "train": ["列车窗外的风景", "旅途中的偶遇"],
+        "subway": ["地铁里的一瞬间", "城市脉搏里的故事"],
+        "park": ["公园里的闲适", "阳光和绿荫最配"],
+        "mountain": ["山间的清风", "远方的风景值得追寻"],
+        "sunset": ["日落把一切都镀了金", "黄昏是最浪漫的滤镜"],
+        "sunflower": ["向日葵田里的笑容", "被阳光追着跑的季节"],
+        "sakura": ["樱花树下的约定", "花瓣落满肩头"],
+        "pool": ["泳池边的夏日", "水光粼粼的午后"],
+        "hotel": ["旅途中的小憩", "酒店窗边的风景"],
+        "market": ["市集里的烟火气", "人间烟火最抚人心"],
+        "restaurant": ["美食与美人都不可辜负", "餐厅的暖光里"],
+        "balcony": ["阳台上的小世界", "阳台是家里最浪漫的角落"],
+        "window": ["窗边的光影故事", "透过窗户看世界"],
+    }
+
+    # 需要词边界匹配的短关键词（避免 rain/grain, bar/sidebar, night/nightlife 误匹配）
+    scene_word_boundary = {
+        "bar": ["吧台边的微醺时光", "酒杯里映着的故事", "深夜酒吧的低语"],
+        "rain": ["雨天自带电影感", "雨中的浪漫"],
+        "city": ["城市光影中的故事", "都市里的片刻宁静"],
+        "night": ["夜色温柔", "深夜的故事最动人"],
+    }
+
+    # --- 情绪/氛围关键词 -> 中文描写 ---
+    mood_map = {
+        "smile": ["笑容是最好的滤镜", "嘴角上扬的弧度刚好"],
+        "gentle": ["温柔是最好的答案", "岁月温柔以待"],
+        "sweet": ["甜度爆表", "甜到心里了"],
+        "sexy": ["恰到好处的性感", "眼角眉梢全是故事"],
+        "elegant": ["优雅是骨子里的气质", "美得不动声色"],
+        "nostalgic": ["怀旧的色调最有故事", "时光在这里慢下来"],
+        "candid": ["不经意的瞬间最动人", "真实的样子最美"],
+        "intimate": ["亲密的氛围感", "靠近一点，再靠近一点"],
+        "cozy": ["温暖的氛围感拉满", "想把这一刻留住"],
+        "melancholy": ["微微忧郁的眼神", "故事写在眼睛里"],
+        "confident": ["自信是最好的妆容", "气场全开"],
+        "mysterious": ["神秘感刚刚好", "让人想靠近的距离感"],
+        "playful": ["古灵精怪招人爱", "元气少女上线"],
+        "dreamy": ["梦幻般的画面", "像走进了一场梦"],
+        "lonely": ["独处的时光也很美", "一个人的风景"],
+    }
+
+    # --- 风格关键词 -> 中文描写 ---
+    style_map = {
+        "film": ["胶片质感的温柔", "每一帧都像电影"],
+        "analog": ["复古胶片的色调真好看", "模拟胶片的温度"],
+        "vintage": ["复古的色调最有味道", "时光倒流的美感"],
+        "kodak": ["柯达色调的浪漫", "胶片里的光影故事"],
+        "portra": ["Portra色调就是yyds", "胶片感拉满"],
+        "cinematic": ["电影感十足", "每一帧都值得截图"],
+        "wong kar-wai": ["王家卫式的光影", "暧昧的色调太绝了"],
+        "moriyama": ["森山大道式的粗粝", "街头的诗意"],
+        "showa": ["昭和风的怀旧感", "那个年代的浪漫"],
+        "retro": ["复古风永不过时", "旧时光的美好"],
+    }
+
+    parts = []
+
+    # 匹配场景（先查子串安全的长关键词）
+    matched_scene = False
+    for key, phrases in scene_map.items():
+        if key in prompt_lower:
+            parts.append(random.choice(phrases))
+            matched_scene = True
+            break
+
+    # 再查需要词边界的短关键词
+    if not matched_scene:
+        for key, phrases in scene_word_boundary.items():
+            if re.search(r'\b' + re.escape(key) + r'\b', prompt_lower):
+                parts.append(random.choice(phrases))
+                break
+
+    # 匹配情绪
+    for key, phrases in mood_map.items():
+        if key in prompt_lower:
+            parts.append(random.choice(phrases))
+            break
+
+    # 如果不够2句，匹配风格
+    if len(parts) < 2:
+        for key, phrases in style_map.items():
+            if key in prompt_lower:
+                parts.append(random.choice(phrases))
+                break
+
+    # 保底
+    if not parts:
+        fallback = ["今日份心动瞬间", "美好值得被定格", "镜头里的温柔",
+                     "光影之间的故事", "被美好击中的瞬间", "每一帧都是风景"]
+        parts.append(random.choice(fallback))
+
+    if len(parts) >= 2:
+        return f"{parts[0]}，{parts[1]}。"
+    return f"{parts[0]}。"
+
+
+def load_manual_prompts() -> dict:
+    """加载手动提示词库"""
+    prompts_file = CONFIG_DIR / "manual_prompts.json"
+    if prompts_file.exists():
+        with open(prompts_file, "r", encoding="utf-8") as f:
+            return json.load(f)
+    return {"version": "1.0", "prompts": []}
+
+
+def save_manual_prompt(prompt: str, caption: str = "", tags: str = "", title: str = "", image_url: str = ""):
+    """保存手动提示词到库中（发布成功后自动调用）"""
+    data = load_manual_prompts()
+    # 计算下一个 ID
+    next_id = max((p.get("id", 0) for p in data["prompts"]), default=0) + 1
+    entry = {
+        "id": next_id,
+        "prompt": prompt,
+        "caption": caption,
+        "tags": tags,
+        "title": title,
+        "image_url": image_url,
+        "created_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+    }
+    data["prompts"].append(entry)
+    prompts_file = CONFIG_DIR / "manual_prompts.json"
+    with open(prompts_file, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+    print(f"  📚 提示词已保存到库（ID: {next_id}）")
+    return next_id
+
+
+def list_manual_prompts():
+    """列出所有已保存的手动提示词"""
+    data = load_manual_prompts()
+    prompts = data.get("prompts", [])
+    if not prompts:
+        print("📚 提示词库为空，还没有保存过手动提示词。")
+        return
+    print(f"📚 手动提示词库（共 {len(prompts)} 条）")
+    print("=" * 60)
+    for p in prompts:
+        pid = p.get("id", "?")
+        created = p.get("created_at", "")
+        prompt_text = p.get("prompt", "")
+        preview = prompt_text[:80] + "..." if len(prompt_text) > 80 else prompt_text
+        caption = p.get("caption", "")
+        print(f"  [{pid}] {created}")
+        print(f"      Prompt: {preview}")
+        if caption:
+            print(f"      配文: {caption}")
+        print()
+
+
+def get_manual_prompt(prompt_id: int) -> dict:
+    """按 ID 获取已保存的提示词"""
+    data = load_manual_prompts()
+    for p in data.get("prompts", []):
+        if p.get("id") == prompt_id:
+            return p
+    return {}
+
+
+def generate_tags_from_prompt(prompt: str) -> str:
+    """基于用户自定义英文提示词生成话题标签"""
+    import re
+    prompt_lower = prompt.lower()
+    tags = ["#每日美女", "#写真"]
+
+    tag_map = {
+        "izakaya": "#日式居酒屋", "cafe": "#咖啡时光",
+        "coffee shop": "#咖啡时光", "beach": "#海边", "ocean": "#海边",
+        "street": "#街拍", "garden": "#花园",
+        "forest": "#户外写真", "temple": "#国风",
+        "sunset": "#日落", "pool": "#泳池",
+        "sakura": "#樱花", "cherry blossom": "#樱花",
+        "sunflower": "#向日葵",
+        "kodak": "#胶片质感", "cinematic": "#电影感",
+        "wong kar-wai": "#王家卫", "showa": "#昭和风",
+        "vintage": "#复古", "retro": "#复古",
+        "candid": "#抓拍", "cozy": "#氛围感",
+    }
+
+    # 需要词边界匹配的短关键词（避免 rain/grain, bar/ebar 等误匹配）
+    word_boundary_tags = {
+        "bar": "#深夜酒吧", "rain": "#雨天", "night": "#夜景",
+        "city": "#都市", "film": "#胶片质感", "sexy": "#性感",
+        "sweet": "#甜美", "elegant": "#优雅", "gentle": "#温柔",
+    }
+
+    for key, tag in tag_map.items():
+        if key in prompt_lower and tag not in tags:
+            tags.append(tag)
+        if len(tags) >= 5:
+            break
+
+    if len(tags) < 5:
+        for key, tag in word_boundary_tags.items():
+            if re.search(r'\b' + re.escape(key) + r'\b', prompt_lower) and tag not in tags:
+                tags.append(tag)
+            if len(tags) >= 5:
+                break
+
+    tags.append("#人像摄影")
+    return " ".join(tags[:6])
+
+
+def generate_smart_caption(scene: str = "", emotion: str = "", makeup: str = "", art_style: str = "") -> str:
+    """兼容旧接口：无元数据时使用"""
+    return generate_caption_from_meta({
+        "scene_type": scene,
+        "expression_type": emotion,
+        "art_style": art_style,
+    })
 
 
 def generate_one_line_caption(style: str = "") -> str:
@@ -272,7 +450,8 @@ def publish_to_wechat(
     title: str,
     content: str,
     images: list,
-    article_type: str = "newspic"
+    article_type: str = "newspic",
+    **kwargs
 ):
     """发布到公众号草稿箱"""
 
@@ -280,14 +459,15 @@ def publish_to_wechat(
     if article_type == "newspic":
         # 构建小绿书内容 - 移除 alt text 避免"图片"文字出现
         content_lines = []
+        first_meta = {}
         for i, (img_url, caption) in enumerate(images):
-            # 使用空的 alt text，避免显示"图片"文字
             content_lines.append(f"![]({img_url})")
             if caption:
                 content_lines.append(f"\n{caption}\n")
 
-        # 末尾加话题标签
-        content_lines.append("\n#每日美女 #写真 #人像摄影 #国风美女 #今日心动")
+        # 动态标签（基于元数据或默认）
+        tags = kwargs.get("tags", "#每日美女 #写真 #人像摄影 #今日心动")
+        content_lines.append(f"\n{tags}")
 
         content_md = "\n".join(content_lines)
     else:
@@ -310,41 +490,78 @@ def publish_to_wechat(
     return result
 
 
-def _extract_image_urls(output: str) -> list:
-    """从脚本输出中提取图片 URL（支持豆包、imgbb 等多种来源）"""
+def _extract_images_with_meta(output: str) -> list:
+    """从脚本输出中提取图片 URL 和 META 元数据
+
+    返回: [(url, meta_dict), ...]
+    META 行格式: META:场景|穿搭|表情|光影|艺术风格
+    """
     import re
-    images = []
-    for line in output.split("\n"):
+    results = []
+    lines = output.split("\n")
+
+    for i, line in enumerate(lines):
         if "http" not in line:
             continue
         # 匹配所有已知图片 URL 来源
         if any(domain in line for domain in [
-            "ark-content", "doubao", "volces.com",  # 豆包
-            "imgbb", "i.ibb.co", "ibb.co",          # imgbb 图床
-            "imgur.com",                              # imgur
+            "ark-content", "doubao", "volces.com",
+            "imgbb", "i.ibb.co", "ibb.co",
+            "imgur.com",
+            "sm.ms", "loli.net",
         ]):
             urls = re.findall(r'https?://[^\s\)\]"\']+', line)
-            images.extend(urls)
-    return images
+            for url in urls:
+                # 向后查找对应的 META 行
+                meta = {}
+                for j in range(i + 1, min(i + 3, len(lines))):
+                    if lines[j].strip().startswith("META:"):
+                        parts = lines[j].strip()[5:].split("|")
+                        if len(parts) >= 5:
+                            meta = {
+                                "scene_type": parts[0],
+                                "outfit_style": parts[1],
+                                "expression_type": parts[2],
+                                "lighting_type": parts[3],
+                                "art_style": parts[4],
+                            }
+                        break
+                results.append((url, meta))
+    return results
 
 
-def generate_daily_images(count: int = 3, style: str = "") -> list:
+def _extract_image_urls(output: str) -> list:
+    """兼容旧接口：只返回 URL 列表"""
+    return [url for url, _ in _extract_images_with_meta(output)]
+
+
+def generate_daily_images(count: int = 3, style: str = "", emotion: str = "", prompt: str = "") -> list:
     """
     生成多张一致性人物图片
     使用双引擎 (Google Imagen 4 Ultra + Doubao Seedream 4.5)
+
+    prompt: 手动模式 - 直接使用用户自定义提示词（跳过随机元素库）
+    返回: [(url, meta_dict), ...]  meta 含 scene_type/outfit_style/expression_type/lighting_type/art_style
     """
     import re
 
-    images = []
+    images_with_meta = []
 
-    print(f"\n🎨 [双引擎] 正在生成 {count} 张图片 (Google Imagen → 豆包 fallback)...")
+    if prompt:
+        print(f"\n🎨 [手动模式] 正在使用自定义提示词生成 {count} 张图片...")
+    else:
+        print(f"\n🎨 [自动模式] 正在生成 {count} 张图片 (Google Imagen → 豆包 fallback)...")
 
     cmd = [
         "python3", str(BEAUTY_GENERATE_SCRIPT),
         "--count", str(count)
     ]
-    if style:
+    if prompt:
+        cmd.extend(["--prompt", prompt])
+    elif style:
         cmd.extend(["--style", style])
+    if emotion and not prompt:
+        cmd.extend(["--emotion", emotion])
 
     try:
         result = subprocess.run(
@@ -358,20 +575,19 @@ def generate_daily_images(count: int = 3, style: str = "") -> list:
         # 打印生成脚本的关键日志（引擎选择、提示词摘要等）
         if result.stdout:
             for line in result.stdout.split("\n"):
-                # 打印引擎信息、人物特征、关键状态
-                if any(kw in line for kw in ["[Google]", "[豆包]", "👤", "风格:", "脸型:", "Prompt:", "随机种子", "✅", "❌", "⚠️", "降级"]):
+                if any(kw in line for kw in ["[Google]", "[豆包]", "👤", "风格:", "脸型:", "Prompt:", "随机种子", "✅", "❌", "⚠️", "降级", "http", "全部成功", "META:"]):
                     print(f"  {line.strip()}")
 
-        images = _extract_image_urls(result.stdout)
+        images_with_meta = _extract_images_with_meta(result.stdout)
 
-        if result.returncode == 0 and len(images) > 0:
-            print(f"  ✅ 成功生成 {len(images)} 张图片")
-            return images
+        if result.returncode == 0 and len(images_with_meta) > 0:
+            print(f"  ✅ 成功生成 {len(images_with_meta)} 张图片")
+            return images_with_meta
 
-        print(f"  ❌ 生成失败（返回码: {result.returncode}, 图片数: {len(images)}）")
+        print(f"  ❌ 生成失败（返回码: {result.returncode}, 图片数: {len(images_with_meta)}）")
         if result.stderr:
             print(f"  错误: {result.stderr[:500]}")
-        if result.stdout and not images:
+        if result.stdout and not images_with_meta:
             print(f"  完整输出: {result.stdout[-500:]}")
 
     except subprocess.TimeoutExpired:
@@ -379,7 +595,7 @@ def generate_daily_images(count: int = 3, style: str = "") -> list:
     except Exception as e:
         print(f"  ❌ 生成异常: {e}")
 
-    return images
+    return images_with_meta
 
 
 def main():
@@ -388,6 +604,8 @@ def main():
     )
 
     parser.add_argument("--count", "-c", type=int, default=1, help="生成图片数量（默认1张）")
+    parser.add_argument("--prompt", help="手动模式：直接使用自定义提示词生成（跳过随机元素库）")
+    parser.add_argument("--caption-text", help="手动模式下的自定义配文（可选，不提供则用默认）")
     parser.add_argument("--style", "-s", help="风格描述")
     parser.add_argument("--scene", help="场景：雨夜、樱花雨、赛博朋克、咖啡厅等")
     parser.add_argument("--emotion", help="情绪：挑逗、忧郁、神秘、开心、高冷、温柔、自信、俏皮")
@@ -396,10 +614,31 @@ def main():
     parser.add_argument("--appid", help="公众号 AppID（默认：三更熟）")
     parser.add_argument("--title", "-t", help="文章标题（自动生成默认）")
     parser.add_argument("--caption", help="一句话介绍（自动生成默认）")
+    parser.add_argument("--list-prompts", action="store_true", help="列出已保存的手动提示词库")
+    parser.add_argument("--use-prompt", type=int, metavar="ID", help="使用已保存的提示词（按 ID）")
     parser.add_argument("--test", action="store_true", help="测试模式：只生成不发布")
     parser.add_argument("--type", choices=["news", "newspic"], default="newspic", help="文章类型")
 
     args = parser.parse_args()
+
+    # 列出提示词库
+    if args.list_prompts:
+        list_manual_prompts()
+        return 0
+
+    # 从库中加载提示词
+    if args.use_prompt:
+        saved = get_manual_prompt(args.use_prompt)
+        if not saved:
+            print(f"❌ 未找到 ID={args.use_prompt} 的提示词，请用 --list-prompts 查看可用列表")
+            return 1
+        args.prompt = saved["prompt"]
+        if not args.caption_text and saved.get("caption"):
+            args.caption_text = saved["caption"]
+        if not args.title and saved.get("title"):
+            args.title = saved["title"]
+        print(f"📚 已加载提示词库 ID={args.use_prompt}")
+        print(f"   Prompt: {args.prompt[:80]}...")
 
     # 检查 API Key
     if not get_api_key():
@@ -410,9 +649,15 @@ def main():
     today = date.today()
     weekday_str = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"][today.weekday()]
 
+    # 判断模式
+    is_manual = bool(args.prompt)
+
     # 生成标题
     if not args.title:
-        args.title = f"📸 每日美女 | {weekday_str}"
+        if is_manual:
+            args.title = f"📸 每日美女 | 手动精选"
+        else:
+            args.title = f"📸 每日美女 | {weekday_str}"
 
     # 智能生成一句话介绍（根据场景、情绪等参数）
     if not args.caption:
@@ -425,6 +670,11 @@ def main():
 
     print("=" * 50)
     print(f"📅 日期: {today}")
+    if is_manual:
+        print(f"🔧 模式: 手动提示词")
+        print(f"📝 Prompt: {args.prompt[:100]}...")
+    else:
+        print(f"🔧 模式: 自动（元素库随机）")
     print(f"📋 标题: {args.title}")
     print(f"💬 介绍: {args.caption}")
     if args.scene:
@@ -433,21 +683,27 @@ def main():
         print(f"😊 情绪: {args.emotion}")
     print("=" * 50)
 
-    # 生成图片
-    images = generate_daily_images(args.count, args.style)
+    # 生成图片（返回 [(url, meta), ...]）
+    images_with_meta = generate_daily_images(
+        args.count, args.style, args.emotion or "", prompt=args.prompt or ""
+    )
 
-    if len(images) == 0:
+    if len(images_with_meta) == 0:
         print("❌ 没有成功生成任何图片")
         return 1
 
-    print(f"\n✅ 成功生成 {len(images)} 张图片")
+    print(f"\n✅ 成功生成 {len(images_with_meta)} 张图片")
 
     # 测试模式
     if args.test:
         print("\n🧪 测试模式：不发布到公众号")
         print("\n生成的图片链接:")
-        for i, url in enumerate(images, 1):
+        for i, (url, meta) in enumerate(images_with_meta, 1):
+            caption = generate_caption_from_meta(meta) if meta else "今日份心动瞬间。"
+            tags = generate_tags_from_meta(meta) if meta else "#每日美女 #写真 #人像摄影 #今日心动"
             print(f"  {i}. {url}")
+            print(f"     配文: {caption}")
+            print(f"     标签: {tags}")
         return 0
 
     # 发布到公众号
@@ -455,24 +711,43 @@ def main():
 
     print(f"\n📤 正在发布到公众号...")
 
-    # 构建图片和说明配对 - 每张图配独立的随机配文
+    # 构建图片和说明配对
     image_pairs = []
-    for i, img in enumerate(images):
+    first_meta = {}
+
+    # 手动模式：优先用户自定义配文 > 从 prompt 智能生成 > 默认
+    if is_manual and args.caption_text:
+        manual_caption = args.caption_text
+    elif is_manual and args.prompt:
+        manual_caption = generate_caption_from_prompt(args.prompt)
+    else:
+        manual_caption = None
+
+    for i, (img_url, meta) in enumerate(images_with_meta):
         if i == 0:
-            caption = args.caption  # 第一张用主配文
+            first_meta = meta or {}
+        if manual_caption:
+            caption = manual_caption
+        elif meta and meta.get("scene_type") != "custom":
+            caption = generate_caption_from_meta(meta)
         else:
-            caption = generate_smart_caption(
-                scene=args.scene or "",
-                emotion=args.emotion or ""
-            )
-        image_pairs.append((img, caption))
+            caption = "今日份心动瞬间。"
+        image_pairs.append((img_url, caption))
+
+    # 标签：手动模式从 prompt 智能生成，自动模式基于元数据
+    if is_manual and args.prompt:
+        dynamic_tags = generate_tags_from_prompt(args.prompt)
+    else:
+        dynamic_tags = generate_tags_from_meta(first_meta) if first_meta else "#每日美女 #写真 #人像摄影 #今日心动"
+    print(f"🏷️ 标签: {dynamic_tags}")
 
     result = publish_to_wechat(
         appid=appid,
         title=args.title,
         content="",
         images=image_pairs,
-        article_type=args.type
+        article_type=args.type,
+        tags=dynamic_tags
     )
 
     # 打印详细的API响应用于调试
@@ -482,6 +757,16 @@ def main():
     if result.get("success") is True or result.get("code") == "SUCCESS":
         print("✅ 发布成功！")
         print(f"📱 请到公众号后台查看草稿箱")
+        # 手动模式发布成功 → 自动保存提示词到库
+        if is_manual and args.prompt:
+            first_url = images_with_meta[0][0] if images_with_meta else ""
+            save_manual_prompt(
+                prompt=args.prompt,
+                caption=manual_caption or "",
+                tags=dynamic_tags,
+                title=args.title,
+                image_url=first_url,
+            )
         return 0
     else:
         error_msg = result.get("error", "未知错误")
