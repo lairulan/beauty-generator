@@ -1,4 +1,4 @@
-# Beauty Generator V8.0
+# Beauty Generator V10.0
 
 > 双引擎艺术写真生成 + 风格轮换 + 公众号自动发布
 
@@ -119,6 +119,6 @@ beauty-generator/
 
 ## 版本
 
-**V8.0** - 2026-03-11
+**V10.0.0** - 2026-03-21
 
 详见 [CHANGELOG.md](CHANGELOG.md)

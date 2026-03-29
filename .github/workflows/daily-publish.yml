@@ -5,8 +5,21 @@ on:
   schedule:
     - cron: '0 12 * * *'
 
-  # Cloudflare Worker 通过 workflow_dispatch 触发
+  # Cloudflare Worker 通过 workflow_dispatch 触发（支持手动提示词）
   workflow_dispatch:
+    inputs:
+      prompt:
+        description: '手动模式：自定义提示词（留空则使用自动模式）'
+        required: false
+        default: ''
+      caption_text:
+        description: '手动模式：自定义配文（可选）'
+        required: false
+        default: ''
+      title:
+        description: '自定义标题（可选）'
+        required: false
+        default: ''
 
   # 支持 repository_dispatch 触发（来自 Cloudflare Worker）
   repository_dispatch:
@@ -60,11 +73,23 @@ jobs:
           WECHAT_API_KEY: ${{ secrets.WECHAT_API_KEY }}
           DOUBAO_API_KEY: ${{ secrets.DOUBAO_API_KEY }}
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          INPUT_PROMPT: ${{ github.event.inputs.prompt }}
+          INPUT_CAPTION: ${{ github.event.inputs.caption_text }}
+          INPUT_TITLE: ${{ github.event.inputs.title }}
         run: |
           cd scripts
-          python3 publish_wechat.py --count 1 \
-            --style "${{ steps.style.outputs.style }}" \
-            --emotion "${{ steps.style.outputs.emotion }}"
+          if [ -n "$INPUT_PROMPT" ]; then
+            echo "🔧 手动模式：使用自定义提示词"
+            CMD="python3 publish_wechat.py --count 1 --prompt \"$INPUT_PROMPT\""
+            [ -n "$INPUT_CAPTION" ] && CMD="$CMD --caption-text \"$INPUT_CAPTION\""
+            [ -n "$INPUT_TITLE" ] && CMD="$CMD --title \"$INPUT_TITLE\""
+            eval $CMD
+          else
+            echo "🔧 自动模式：风格 ${{ steps.style.outputs.style }} / ${{ steps.style.outputs.emotion }}"
+            python3 publish_wechat.py --count 1 \
+              --style "${{ steps.style.outputs.style }}" \
+              --emotion "${{ steps.style.outputs.emotion }}"
+          fi
 
       - name: 记录日志
         if: always()
@@ -82,6 +107,7 @@ jobs:
           JOB_STATUS: ${{ job.status }}
           DAILY_STYLE: ${{ steps.style.outputs.style }}
           DAILY_EMOTION: ${{ steps.style.outputs.emotion }}
+          INPUT_PROMPT: ${{ github.event.inputs.prompt }}
         run: |
           set -e
           mkdir -p workflow_logs
@@ -94,7 +120,9 @@ jobs:
             STATUS="$JOB_STATUS"
           fi
           STYLE_INFO=""
-          if [ -n "$DAILY_STYLE" ]; then
+          if [ -n "$INPUT_PROMPT" ]; then
+            STYLE_INFO=" | mode=manual | prompt=${INPUT_PROMPT:0:50}..."
+          elif [ -n "$DAILY_STYLE" ]; then
             STYLE_INFO=" | style=${DAILY_STYLE}/${DAILY_EMOTION}"
           fi
           echo "- ${TS} | ${STATUS} | event=${RUN_EVENT}${STYLE_INFO} | run=${RUN_NUMBER} | ${RUN_URL}" >> "$LOG_FILE"
@@ -102,4 +130,5 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add workflow_logs/
           git commit -m "记录工作流执行日志 (run ${RUN_NUMBER})" || exit 0
-          git push
+          git pull --rebase origin main || true
+          git push || echo "⚠️ 日志推送失败（非关键错误）"

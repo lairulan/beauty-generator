@@ -13,10 +13,13 @@
 
 ## 环境
 - 仓库：https://github.com/lairulan/beauty-generator.git
-- 触发：CF Worker UTC 11:30 → repository_dispatch + schedule cron UTC 12:00 兜底
+- 触发：CF Worker UTC 11:30 → repository_dispatch（自动模式）+ workflow_dispatch（手动模式）+ schedule cron UTC 12:00 兜底
 - API：Google Imagen 4 Ultra (主力) + 豆包 Seedream 4.5 (回退) + imgbb (图床)
 - 发布：三更熟公众号 (AppID: wx287cdb9d78a498aa)
+- 自动提示词库：config/prompt_library.json v10.0（284 元素，9 维度，1.14 万亿组合）
+- 手动提示词库：config/manual_prompts.json（独立存储，发布成功自动存档）
 
 ## 勿碰
-- .github/workflows/daily-publish.yml 的 concurrency 配置
-- scripts/publish_wechat.py 的微信发布逻辑
+- config/prompt_library.json 的基础结构（v10.0 已验证稳定）
+- .github/workflows/daily-publish.yml 的 concurrency 和 workflow_dispatch inputs 配置
+- config/manual_prompts.json 不要与 prompt_library.json 合并，两条线独立
