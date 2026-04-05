@@ -952,7 +952,7 @@ def generate_image_doubao(prompt: str, negative_prompt: str) -> dict:
 
 
 def generate_image(prompt: str, negative_prompt: str) -> dict:
-    """生成图片：MiniMax image-01（主力）→ 豆包 Seedream（备选）→ Google Imagen（保底）"""
+    """生成图片：MiniMax image-01（主力）→ Google Imagen（备选）→ 豆包 Seedream（保底）"""
 
     # 优先 MiniMax（每日免费50张额度）
     minimax_key = os.environ.get("MINIMAX_API_KEY")
@@ -962,22 +962,22 @@ def generate_image(prompt: str, negative_prompt: str) -> dict:
         if result["success"]:
             log("  [MiniMax] 生成成功")
             return result
-        log(f"  [MiniMax] 失败: {result.get('error')}，降级到豆包...")
+        log(f"  [MiniMax] 失败: {result.get('error')}，降级到 Google...")
 
-    # 降级到豆包 Seedream
-    doubao_key = os.environ.get("DOUBAO_API_KEY")
-    if doubao_key:
-        log("  [豆包] 使用 Seedream 生成...")
-        result = generate_image_doubao(prompt, negative_prompt)
-        if result["success"]:
-            return result
-        log(f"  [豆包] 失败: {result.get('error')}，降级到 Google...")
-
-    # 终极保底：Google Imagen 4 Ultra
+    # 降级到 Google Imagen 4 Ultra
     google_key = os.environ.get("GOOGLE_API_KEY")
     if google_key:
         log("  [Google] 尝试 Imagen 4 Ultra...")
-        return generate_image_google(prompt)
+        result = generate_image_google(prompt)
+        if result["success"]:
+            return result
+        log(f"  [Google] 失败: {result.get('error')}，降级到豆包...")
+
+    # 终极保底：豆包 Seedream
+    doubao_key = os.environ.get("DOUBAO_API_KEY")
+    if doubao_key:
+        log("  [豆包] 使用 Seedream 保底...")
+        return generate_image_doubao(prompt, negative_prompt)
 
     return {"success": False, "error": "所有引擎均无可用 API Key"}
 
