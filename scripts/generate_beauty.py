@@ -872,6 +872,12 @@ def generate_image_minimax(prompt: str) -> dict:
         "prompt_optimizer": True
     }
 
+    # 图生图：有参考图时启用 subject_reference 保持人物一致性
+    ref_url = os.environ.get("REFERENCE_IMAGE_URL", "")
+    if ref_url:
+        payload["subject_reference"] = [{"type": "character", "image_file": ref_url}]
+        log("  [MiniMax] 图生图模式（subject_reference 已启用）")
+
     ssl_context = _get_ssl_context()
     try:
         data = json.dumps(payload).encode("utf-8")

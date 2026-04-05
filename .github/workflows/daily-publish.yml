@@ -54,6 +54,7 @@ jobs:
           WECHAT_API_KEY: ${{ secrets.WECHAT_API_KEY }}
           DOUBAO_API_KEY: ${{ secrets.DOUBAO_API_KEY }}
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          REFERENCE_IMAGE_URL: ${{ secrets.REFERENCE_IMAGE_URL }}
           INPUT_PROMPT: ${{ github.event.inputs.prompt }}
           INPUT_CAPTION: ${{ github.event.inputs.caption_text }}
           INPUT_TITLE: ${{ github.event.inputs.title }}
