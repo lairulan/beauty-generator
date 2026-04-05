@@ -4,3 +4,4 @@
 - 2026-04-04 19:31:05 | success | event=repository_dispatch | style=清纯系/性感 | run=214 | https://github.com/lairulan/beauty-generator/actions/runs/23978000492
 - 2026-04-05 19:30:57 | success | event=repository_dispatch | style=邻家女孩系/温柔 | run=215 | https://github.com/lairulan/beauty-generator/actions/runs/24000597626
 - 2026-04-05 20:55:59 | success | mode=auto-50pics-7styles | run=216 | https://github.com/lairulan/beauty-generator/actions/runs/24001656749
+- 2026-04-05 22:39:59 | cancelled | mode=auto-50pics-7styles | run=217 | https://github.com/lairulan/beauty-generator/actions/runs/24003551567
