@@ -1,16 +1,15 @@
-name: 每日艺术写真发布
+name: 每日艺术写真发布（7风格×50张）
 
 on:
-  # 兜底定时：UTC 12:00（北京20:00），CF Worker 失败时自动补发
-  # schedule (disabled: managed by Cloudflare Worker github-scheduler):
+  # 兜底定时：禁用（统一由 Cloudflare Worker github-scheduler 触发）
   # schedule:
-  #    - cron: '0 12 * * *'
+  #   - cron: '30 11 * * *'
 
-  # Cloudflare Worker 通过 workflow_dispatch 触发（支持手动提示词）
+  # Cloudflare Worker 通过 workflow_dispatch 触发
   workflow_dispatch:
     inputs:
       prompt:
-        description: '手动模式：自定义提示词（留空则使用自动模式）'
+        description: '手动模式：自定义提示词（留空则使用自动7风格模式）'
         required: false
         default: ''
       caption_text:
@@ -46,30 +45,11 @@ jobs:
           python-version: '3.10'
 
       - name: 安装依赖
-        run: |
-          python3 -m pip install --upgrade pip
+        run: python3 -m pip install --upgrade pip
 
-      - name: 计算今日风格
-        id: style
-        run: |
-          # 星期风格轮换：0=周日 1=周一 ... 6=周六
-          # 7日7风格：贴近生活、温暖性感、男性审美优化
-          DOW=$(TZ=Asia/Shanghai date +%w)
-          case $DOW in
-            0) STYLE="邻家女孩系"; EMOTION="温柔" ;;   # 周日 - 邻家亲切
-            1) STYLE="性感系"; EMOTION="挑逗" ;;     # 周一 - 性感开场
-            2) STYLE="甜美系"; EMOTION="俏皮" ;;     # 周二 - 甜美活泼
-            3) STYLE="国风系"; EMOTION="温柔" ;;     # 周三 - 古典韵味
-            4) STYLE="职场系"; EMOTION="自信" ;;     # 周四 - 职场诱惑
-            5) STYLE="生活场景系"; EMOTION="微笑" ;; # 周五 - 居家温馨
-            6) STYLE="清纯系"; EMOTION="性感" ;;     # 周六 - 纯欲周末
-          esac
-          echo "style=$STYLE" >> $GITHUB_OUTPUT
-          echo "emotion=$EMOTION" >> $GITHUB_OUTPUT
-          echo "今日风格: $STYLE / $EMOTION (星期$DOW)"
-
-      - name: 生成并发布艺术写真
+      - name: 生成并发布（手动模式 or 7风格50张自动模式）
         env:
+          MINIMAX_API_KEY: ${{ secrets.MINIMAX_API_KEY }}
           IMGBB_API_KEY: ${{ secrets.IMGBB_API_KEY }}
           WECHAT_API_KEY: ${{ secrets.WECHAT_API_KEY }}
           DOUBAO_API_KEY: ${{ secrets.DOUBAO_API_KEY }}
@@ -79,24 +59,62 @@ jobs:
           INPUT_TITLE: ${{ github.event.inputs.title }}
         run: |
           cd scripts
+
           if [ -n "$INPUT_PROMPT" ]; then
+            # ── 手动模式：单张自定义 ──
             echo "🔧 手动模式：使用自定义提示词"
             CMD="python3 publish_wechat.py --count 1 --prompt \"$INPUT_PROMPT\""
             [ -n "$INPUT_CAPTION" ] && CMD="$CMD --caption-text \"$INPUT_CAPTION\""
-            [ -n "$INPUT_TITLE" ] && CMD="$CMD --title \"$INPUT_TITLE\""
+            [ -n "$INPUT_TITLE" ]   && CMD="$CMD --title \"$INPUT_TITLE\""
             eval $CMD
           else
-            echo "🔧 自动模式：风格 ${{ steps.style.outputs.style }} / ${{ steps.style.outputs.emotion }}"
-            python3 publish_wechat.py --count 1 \
-              --style "${{ steps.style.outputs.style }}" \
-              --emotion "${{ steps.style.outputs.emotion }}"
-          fi
+            # ── 自动模式：7风格 × 7-8张 = 50张，每风格一篇草稿 ──
+            echo "🎨 自动模式：7风格×50张 → 7篇草稿入库"
 
-      - name: 记录日志
-        if: always()
-        run: |
-          echo "任务执行时间: $(date)"
-          echo "时区: Asia/Shanghai"
+            # 风格数组（7种）及对应表情
+            STYLES=("性感系" "甜美系" "国风系" "邻家女孩系" "职场系" "生活场景系" "清纯系")
+            EMOTIONS=("挑逗"  "俏皮"   "温柔"  "温柔"       "自信"  "微笑"       "性感")
+            COUNTS=(  7       7        7       7            7       7            8   )
+            # 合计：7*6+8 = 50
+
+            SUCCESS=0
+            FAIL=0
+
+            for i in "${!STYLES[@]}"; do
+              STYLE="${STYLES[$i]}"
+              EMOTION="${EMOTIONS[$i]}"
+              COUNT="${COUNTS[$i]}"
+              BATCH=$((i+1))
+
+              echo ""
+              echo "════════════════════════════════════"
+              echo "📸 第${BATCH}/7 批：${STYLE} × ${COUNT}张"
+              echo "════════════════════════════════════"
+
+              if python3 publish_wechat.py \
+                  --count "$COUNT" \
+                  --style "$STYLE" \
+                  --emotion "$EMOTION" \
+                  --title "📸 每日写真 | ${STYLE}"; then
+                echo "✅ ${STYLE} 批次完成"
+                SUCCESS=$((SUCCESS+1))
+              else
+                echo "⚠️  ${STYLE} 批次失败，继续下一批..."
+                FAIL=$((FAIL+1))
+              fi
+
+              # 批次间隔，避免 API 限速
+              [ "$BATCH" -lt 7 ] && sleep 8
+            done
+
+            echo ""
+            echo "════════════════════════════════════"
+            echo "📊 汇总：成功 ${SUCCESS}/7 批，失败 ${FAIL}/7 批"
+            echo "════════════════════════════════════"
+
+            # 任意一批成功即视为整体成功
+            [ "$SUCCESS" -gt 0 ] || exit 1
+          fi
 
       - name: 记录运行日志到仓库
         if: always()
@@ -106,8 +124,6 @@ jobs:
           RUN_NUMBER: ${{ github.run_number }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           JOB_STATUS: ${{ job.status }}
-          DAILY_STYLE: ${{ steps.style.outputs.style }}
-          DAILY_EMOTION: ${{ steps.style.outputs.emotion }}
           INPUT_PROMPT: ${{ github.event.inputs.prompt }}
         run: |
           set -e
@@ -115,18 +131,13 @@ jobs:
           TS=$(TZ=Asia/Shanghai date '+%Y-%m-%d %H:%M:%S')
           MONTH=$(TZ=Asia/Shanghai date '+%Y-%m')
           LOG_FILE="workflow_logs/actions_runs_${MONTH}.md"
-          if [ "$JOB_STATUS" = "success" ]; then
-            STATUS="success"
-          else
-            STATUS="$JOB_STATUS"
-          fi
-          STYLE_INFO=""
+          STATUS="$JOB_STATUS"
           if [ -n "$INPUT_PROMPT" ]; then
-            STYLE_INFO=" | mode=manual | prompt=${INPUT_PROMPT:0:50}..."
-          elif [ -n "$DAILY_STYLE" ]; then
-            STYLE_INFO=" | style=${DAILY_STYLE}/${DAILY_EMOTION}"
+            MODE=" | mode=manual | prompt=${INPUT_PROMPT:0:50}..."
+          else
+            MODE=" | mode=auto-50pics-7styles"
           fi
-          echo "- ${TS} | ${STATUS} | event=${RUN_EVENT}${STYLE_INFO} | run=${RUN_NUMBER} | ${RUN_URL}" >> "$LOG_FILE"
+          echo "- ${TS} | ${STATUS}${MODE} | run=${RUN_NUMBER} | ${RUN_URL}" >> "$LOG_FILE"
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add workflow_logs/

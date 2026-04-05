@@ -857,6 +857,62 @@ def generate_image_google(prompt: str) -> dict:
         return {"success": False, "error": str(e)}
 
 
+def generate_image_minimax(prompt: str) -> dict:
+    """调用 MiniMax image-01 生成图片，临时 URL → 下载后上传 imgbb 获取永久链接"""
+    minimax_key = os.environ.get("MINIMAX_API_KEY")
+    if not minimax_key:
+        return {"success": False, "error": "MINIMAX_API_KEY 未设置"}
+
+    payload = {
+        "model": "image-01",
+        "prompt": prompt,
+        "aspect_ratio": "3:4",
+        "response_format": "url",
+        "n": 1,
+        "prompt_optimizer": True
+    }
+
+    ssl_context = _get_ssl_context()
+    try:
+        data = json.dumps(payload).encode("utf-8")
+        req = urllib.request.Request(
+            "https://api.minimaxi.com/v1/image_generation",
+            data=data,
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {minimax_key}"
+            },
+            method="POST"
+        )
+        with urllib.request.urlopen(req, context=ssl_context, timeout=120) as response:
+            result = json.loads(response.read().decode("utf-8"))
+
+        status_code = result.get("base_resp", {}).get("status_code", -1)
+        if status_code != 0:
+            msg = result.get("base_resp", {}).get("status_msg", "未知错误")
+            return {"success": False, "error": f"MiniMax API 错误 {status_code}: {msg}"}
+
+        image_urls = result.get("data", {}).get("image_urls", [])
+        if not image_urls:
+            return {"success": False, "error": "MiniMax API 无返回图片"}
+
+        # MiniMax URL 24h 有效，必须下载后上传 imgbb 获取永久链接
+        temp_url = image_urls[0]
+        log("  [MiniMax] 下载临时图片并上传图床...")
+        dl_req = urllib.request.Request(temp_url, headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(dl_req, context=ssl_context, timeout=60) as dl_resp:
+            image_bytes = dl_resp.read()
+
+        b64_data = base64.b64encode(image_bytes).decode("utf-8")
+        upload_result = upload_image(b64_data)
+        if upload_result["success"]:
+            return {"success": True, "url": upload_result["url"]}
+        return {"success": False, "error": f"图床上传失败: {upload_result['error']}"}
+
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+
+
 def generate_image_doubao(prompt: str, negative_prompt: str) -> dict:
     """调用豆包 Seedream API 生成图片"""
     doubao_key = os.environ.get("DOUBAO_API_KEY")
@@ -896,21 +952,34 @@ def generate_image_doubao(prompt: str, negative_prompt: str) -> dict:
 
 
 def generate_image(prompt: str, negative_prompt: str) -> dict:
-    """生成图片：优先 Google Imagen 4 Ultra，失败后降级到豆包 Seedream"""
+    """生成图片：MiniMax image-01（主力）→ 豆包 Seedream（备选）→ Google Imagen（保底）"""
 
-    # 优先尝试 Google Imagen 4 Ultra
+    # 优先 MiniMax（每日免费50张额度）
+    minimax_key = os.environ.get("MINIMAX_API_KEY")
+    if minimax_key:
+        log("  [MiniMax] 尝试 image-01...")
+        result = generate_image_minimax(prompt)
+        if result["success"]:
+            log("  [MiniMax] 生成成功")
+            return result
+        log(f"  [MiniMax] 失败: {result.get('error')}，降级到豆包...")
+
+    # 降级到豆包 Seedream
+    doubao_key = os.environ.get("DOUBAO_API_KEY")
+    if doubao_key:
+        log("  [豆包] 使用 Seedream 生成...")
+        result = generate_image_doubao(prompt, negative_prompt)
+        if result["success"]:
+            return result
+        log(f"  [豆包] 失败: {result.get('error')}，降级到 Google...")
+
+    # 终极保底：Google Imagen 4 Ultra
     google_key = os.environ.get("GOOGLE_API_KEY")
     if google_key:
         log("  [Google] 尝试 Imagen 4 Ultra...")
-        result = generate_image_google(prompt)
-        if result["success"]:
-            log("  [Google] 生成成功")
-            return result
-        log(f"  [Google] 失败: {result.get('error')}，降级到豆包...")
+        return generate_image_google(prompt)
 
-    # 降级到豆包 Seedream
-    log("  [豆包] 使用 Seedream 生成...")
-    return generate_image_doubao(prompt, negative_prompt)
+    return {"success": False, "error": "所有引擎均无可用 API Key"}
 
 
 # ─── 风格策略 ────────────────────────────────────────────────
