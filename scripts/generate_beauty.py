@@ -65,16 +65,7 @@ STYLE_STRATEGIES = _load_json_config("style_strategies.json")
 
 # 从 CONSTANTS 读取 API 配置（硬编码值作为 fallback）
 _engines = CONSTANTS.get("engines", {})
-_google_cfg = _engines.get("google", {})
 _doubao_cfg = _engines.get("doubao", {})
-
-GOOGLE_IMAGEN_ENDPOINT = _google_cfg.get(
-    "endpoint",
-    "https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-ultra-generate-001:predict"
-)
-GOOGLE_TIMEOUT = _google_cfg.get("timeout", 120)
-GOOGLE_ASPECT_RATIO = _google_cfg.get("aspect_ratio", "3:4")
-GOOGLE_SAMPLE_COUNT = _google_cfg.get("sample_count", 1)
 
 API_ENDPOINT = _doubao_cfg.get(
     "endpoint",
@@ -812,51 +803,6 @@ def upload_image(base64_data: str) -> dict:
 
 # ─── 图片生成引擎 ────────────────────────────────────────────
 
-def generate_image_google(prompt: str) -> dict:
-    """调用 Google Imagen 4 Ultra 生成图片，结果上传到图床返回 URL"""
-    google_key = os.environ.get("GOOGLE_API_KEY")
-    if not google_key:
-        return {"success": False, "error": "GOOGLE_API_KEY 未设置"}
-
-    endpoint = f"{GOOGLE_IMAGEN_ENDPOINT}?key={google_key}"
-    payload = {
-        "instances": [{"prompt": prompt}],
-        "parameters": {
-            "sampleCount": GOOGLE_SAMPLE_COUNT,
-            "aspectRatio": GOOGLE_ASPECT_RATIO
-        }
-    }
-
-    ssl_context = _get_ssl_context()
-    try:
-        data = json.dumps(payload).encode("utf-8")
-        req = urllib.request.Request(
-            endpoint,
-            data=data,
-            headers={"Content-Type": "application/json"},
-            method="POST"
-        )
-        with urllib.request.urlopen(req, context=ssl_context, timeout=GOOGLE_TIMEOUT) as response:
-            result = json.loads(response.read().decode("utf-8"))
-
-        predictions = result.get("predictions", [])
-        if not predictions:
-            return {"success": False, "error": "Google API 无返回图片"}
-
-        b64_data = predictions[0].get("bytesBase64Encoded", "")
-        if not b64_data:
-            return {"success": False, "error": "Google API 返回数据为空"}
-
-        log("  上传到图床...")
-        upload_result = upload_image(b64_data)
-        if upload_result["success"]:
-            return {"success": True, "url": upload_result["url"]}
-        return {"success": False, "error": f"图床上传失败: {upload_result['error']}"}
-
-    except Exception as e:
-        return {"success": False, "error": str(e)}
-
-
 def generate_image_minimax(prompt: str) -> dict:
     """调用 MiniMax image-01 生成图片，临时 URL → 下载后上传 imgbb 获取永久链接"""
     minimax_key = os.environ.get("MINIMAX_API_KEY")
@@ -920,7 +866,7 @@ def generate_image_minimax(prompt: str) -> dict:
 
 
 def generate_image_doubao(prompt: str, negative_prompt: str) -> dict:
-    """调用豆包 Seedream API 生成图片"""
+    """调用豆包 Seedream API 生成图片，有参考图时启用图生图"""
     doubao_key = os.environ.get("DOUBAO_API_KEY")
     if not doubao_key:
         return {"success": False, "error": "DOUBAO_API_KEY 未设置"}
@@ -933,6 +879,12 @@ def generate_image_doubao(prompt: str, negative_prompt: str) -> dict:
         "response_format": "url",
         "watermark": False
     }
+
+    # 图生图：有参考图时传入 image_url 保持人物一致性
+    ref_url = os.environ.get("REFERENCE_IMAGE_URL", "")
+    if ref_url:
+        payload["image_url"] = ref_url
+        log("  [豆包] 图生图模式（image_url 已启用）")
 
     ssl_context = _get_ssl_context()
     try:
@@ -958,9 +910,9 @@ def generate_image_doubao(prompt: str, negative_prompt: str) -> dict:
 
 
 def generate_image(prompt: str, negative_prompt: str) -> dict:
-    """生成图片：MiniMax image-01（主力）→ Google Imagen（备选）→ 豆包 Seedream（保底）"""
+    """生成图片：MiniMax image-01（主力）→ 豆包 Seedream（保底）"""
 
-    # 优先 MiniMax（每日免费50张额度）
+    # 优先 MiniMax（每日免费50张额度，支持 subject_reference 图生图）
     minimax_key = os.environ.get("MINIMAX_API_KEY")
     if minimax_key:
         log("  [MiniMax] 尝试 image-01...")
@@ -968,18 +920,9 @@ def generate_image(prompt: str, negative_prompt: str) -> dict:
         if result["success"]:
             log("  [MiniMax] 生成成功")
             return result
-        log(f"  [MiniMax] 失败: {result.get('error')}，降级到 Google...")
+        log(f"  [MiniMax] 失败: {result.get('error')}，降级到豆包...")
 
-    # 降级到 Google Imagen 4 Ultra
-    google_key = os.environ.get("GOOGLE_API_KEY")
-    if google_key:
-        log("  [Google] 尝试 Imagen 4 Ultra...")
-        result = generate_image_google(prompt)
-        if result["success"]:
-            return result
-        log(f"  [Google] 失败: {result.get('error')}，降级到豆包...")
-
-    # 终极保底：豆包 Seedream
+    # 保底：豆包 Seedream（支持 image_url 图生图）
     doubao_key = os.environ.get("DOUBAO_API_KEY")
     if doubao_key:
         log("  [豆包] 使用 Seedream 保底...")
