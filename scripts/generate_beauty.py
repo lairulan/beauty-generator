@@ -625,16 +625,18 @@ class SmartPromptGenerator:
         else:
             sections.append(f"{quality}, featuring {asian_id}")
 
-        # 2. 外貌特征（面容/发型/肤质/体态）
+        # 2. 外貌特征（有参考图时跳过，由参考图决定人物外貌）
+        has_ref = bool(os.environ.get("REFERENCE_IMAGE_URL", ""))
         traits = []
-        if character.get("face"):
-            traits.append(character["face"])
-        if character.get("hair"):
-            traits.append(character["hair"])
-        if character.get("skin"):
-            traits.append(character["skin"])
-        if character.get("body"):
-            traits.append(character["body"])
+        if not has_ref:
+            if character.get("face"):
+                traits.append(character["face"])
+            if character.get("hair"):
+                traits.append(character["hair"])
+            if character.get("skin"):
+                traits.append(character["skin"])
+            if character.get("body"):
+                traits.append(character["body"])
         if traits:
             sections.append("She has " + ". ".join(traits))
 
