@@ -71,7 +71,7 @@ API_ENDPOINT = _doubao_cfg.get(
     "endpoint",
     "https://ark.cn-beijing.volces.com/api/v3/images/generations"
 )
-API_MODEL = _doubao_cfg.get("model", "doubao-seedream-4-5-251128")
+API_MODEL = _doubao_cfg.get("model", "doubao-seedream-5-0-260128")
 DOUBAO_TIMEOUT = _doubao_cfg.get("timeout", 90)
 DOUBAO_SIZE = _doubao_cfg.get("size", "2K")
 
@@ -880,11 +880,11 @@ def generate_image_doubao(prompt: str, negative_prompt: str) -> dict:
         "watermark": False
     }
 
-    # 图生图：有参考图时传入 image_url 保持人物一致性
+    # 图生图：有参考图时传入 image 数组保持人物一致性
     ref_url = os.environ.get("REFERENCE_IMAGE_URL", "")
     if ref_url:
-        payload["image_url"] = ref_url
-        log("  [豆包] 图生图模式（image_url 已启用）")
+        payload["image"] = [ref_url]
+        log("  [豆包] 图生图模式（image 参考图已启用）")
 
     ssl_context = _get_ssl_context()
     try:
@@ -910,25 +910,13 @@ def generate_image_doubao(prompt: str, negative_prompt: str) -> dict:
 
 
 def generate_image(prompt: str, negative_prompt: str) -> dict:
-    """生成图片：MiniMax image-01（主力）→ 豆包 Seedream（保底）"""
-
-    # 优先 MiniMax（每日免费50张额度，支持 subject_reference 图生图）
-    minimax_key = os.environ.get("MINIMAX_API_KEY")
-    if minimax_key:
-        log("  [MiniMax] 尝试 image-01...")
-        result = generate_image_minimax(prompt)
-        if result["success"]:
-            log("  [MiniMax] 生成成功")
-            return result
-        log(f"  [MiniMax] 失败: {result.get('error')}，降级到豆包...")
-
-    # 保底：豆包 Seedream（支持 image_url 图生图）
+    """生成图片：豆包 Seedream 5.0 Lite（图生图 + 参考图人物一致性）"""
     doubao_key = os.environ.get("DOUBAO_API_KEY")
     if doubao_key:
-        log("  [豆包] 使用 Seedream 保底...")
+        log("  [豆包] 使用 Seedream 5.0 Lite...")
         return generate_image_doubao(prompt, negative_prompt)
 
-    return {"success": False, "error": "所有引擎均无可用 API Key"}
+    return {"success": False, "error": "DOUBAO_API_KEY 未设置"}
 
 
 # ─── 风格策略 ────────────────────────────────────────────────

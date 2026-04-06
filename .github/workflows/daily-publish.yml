@@ -1,4 +1,4 @@
-name: 每日艺术写真发布（7风格×50张）
+name: 每日艺术写真发布（每日1张精品）
 
 on:
   # 兜底定时：禁用（统一由 Cloudflare Worker github-scheduler 触发）
@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
     inputs:
       prompt:
-        description: '手动模式：自定义提示词（留空则使用自动7风格模式）'
+        description: '手动模式：自定义提示词（留空则使用自动模式）'
         required: false
         default: ''
       caption_text:
@@ -47,9 +47,8 @@ jobs:
       - name: 安装依赖
         run: python3 -m pip install --upgrade pip
 
-      - name: 生成并发布（手动模式 or 7风格50张自动模式）
+      - name: 生成并发布（手动模式 or 每日1张自动模式）
         env:
-          MINIMAX_API_KEY: ${{ secrets.MINIMAX_API_KEY }}
           IMGBB_API_KEY: ${{ secrets.IMGBB_API_KEY }}
           WECHAT_API_KEY: ${{ secrets.WECHAT_API_KEY }}
           DOUBAO_API_KEY: ${{ secrets.DOUBAO_API_KEY }}
@@ -68,52 +67,24 @@ jobs:
             [ -n "$INPUT_TITLE" ]   && CMD="$CMD --title \"$INPUT_TITLE\""
             eval $CMD
           else
-            # ── 自动模式：7风格 × 7-8张 = 50张，每风格一篇草稿 ──
-            echo "🎨 自动模式：7风格×50张 → 7篇草稿入库"
+            # ── 自动模式：每日1张精品图 ──
+            echo "🎨 自动模式：每日1张精品写真"
 
-            # 风格数组（7种）及对应表情
+            # 7种风格按星期轮换（周一=1 → 索引0）
             STYLES=("性感系" "甜美系" "国风系" "邻家女孩系" "职场系" "生活场景系" "清纯系")
             EMOTIONS=("挑逗"  "俏皮"   "温柔"  "温柔"       "自信"  "微笑"       "性感")
-            COUNTS=(  7       7        7       7            7       7            8   )
-            # 合计：7*6+8 = 50
+            DOW=$(date -u +%u)  # 1=Monday ... 7=Sunday
+            IDX=$(( (DOW - 1) % 7 ))
+            STYLE="${STYLES[$IDX]}"
+            EMOTION="${EMOTIONS[$IDX]}"
 
-            SUCCESS=0
-            FAIL=0
+            echo "📸 今日风格：${STYLE} | 表情：${EMOTION}"
 
-            for i in "${!STYLES[@]}"; do
-              STYLE="${STYLES[$i]}"
-              EMOTION="${EMOTIONS[$i]}"
-              COUNT="${COUNTS[$i]}"
-              BATCH=$((i+1))
-
-              echo ""
-              echo "════════════════════════════════════"
-              echo "📸 第${BATCH}/7 批：${STYLE} × ${COUNT}张"
-              echo "════════════════════════════════════"
-
-              if python3 publish_wechat.py \
-                  --count "$COUNT" \
-                  --style "$STYLE" \
-                  --emotion "$EMOTION" \
-                  --title "📸 每日写真 | ${STYLE}"; then
-                echo "✅ ${STYLE} 批次完成"
-                SUCCESS=$((SUCCESS+1))
-              else
-                echo "⚠️  ${STYLE} 批次失败，继续下一批..."
-                FAIL=$((FAIL+1))
-              fi
-
-              # 批次间隔，避免 API 限速
-              [ "$BATCH" -lt 7 ] && sleep 8
-            done
-
-            echo ""
-            echo "════════════════════════════════════"
-            echo "📊 汇总：成功 ${SUCCESS}/7 批，失败 ${FAIL}/7 批"
-            echo "════════════════════════════════════"
-
-            # 任意一批成功即视为整体成功
-            [ "$SUCCESS" -gt 0 ] || exit 1
+            python3 publish_wechat.py \
+              --count 1 \
+              --style "$STYLE" \
+              --emotion "$EMOTION" \
+              --title "📸 每日写真 | ${STYLE}"
           fi
 
       - name: 记录运行日志到仓库
@@ -135,7 +106,7 @@ jobs:
           if [ -n "$INPUT_PROMPT" ]; then
             MODE=" | mode=manual | prompt=${INPUT_PROMPT:0:50}..."
           else
-            MODE=" | mode=auto-50pics-7styles"
+            MODE=" | mode=auto-1pic-daily"
           fi
           echo "- ${TS} | ${STATUS}${MODE} | run=${RUN_NUMBER} | ${RUN_URL}" >> "$LOG_FILE"
           git config user.name "github-actions[bot]"
