@@ -1,12 +1,12 @@
 ---
 name: beauty-img2img
-version: 13.1.0
+version: 1.0.0
 description: 基于参考图的图生图写真生成。使用豆包 Seedream 5.0 Lite + 参考图保持人物一致性，每日自动生成1张精品写真发布到微信公众号。触发词："图生图美女"、"参考图生成"、"换装写真"、"beauty img2img"。
 author: rulanlai
 tags: [image-generation, img2img, beauty, seedream, wechat]
 ---
 
-# Beauty Img2Img - 参考图写真生成 V13.1
+# Beauty Img2Img - 参考图写真生成 V1.0
 
 基于参考图的图生图写真生成。参考图提供人物一致性（脸部/体态），提示词只控制场景/服装/光线/氛围。
 
