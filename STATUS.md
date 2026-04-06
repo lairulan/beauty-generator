@@ -1,25 +1,37 @@
-# beauty-generator STATUS v11.1.0 — 2026-03-22
+# beauty-generator STATUS — 2026-04-06
 
-## 断点
-- 本次完成：v11.1.0 新增手动提示词模式，自动+手动双模式（2026-03-22 GitHub 同步）
-  - generate_beauty.py: 新增 generate_custom() 函数 + --prompt 参数（1280行）
-  - publish_wechat.py: 新增 --prompt / --caption-text 参数透传（517行）
-  - workflow_dispatch 支持在 GitHub Actions 手动输入提示词触发
-- 下一步：观察每日自动发布效果，如需指定主题可在 GitHub Actions 手动 dispatch
+## 两个 Skill 架构
 
-## 上一版本
-- v11.0.0（2026-03-21）动态配文+标签系统，META 元数据协议
-- v9.1（2026-03-14）去AI化 prompt 改造：真实相机描述+自然瑕疵+反AI锚点
+### beauty-generator（文生图）v9.1.0
+- 引擎：Google Imagen 4 Ultra（主力）→ 豆包 Seedream 5.0 Lite（兜底）
+- 工作流：daily-publish.yml
+- CF Worker 事件：daily-beauty（UTC 12:00 = 北京 20:00）
+- 模式：prompt_library 284 元素随机组合，完整 face/hair/skin/body 描述
+
+### beauty-img2img（图生图）v1.0.0
+- 引擎：豆包 Seedream 5.0 Lite + image 参考图
+- 工作流：daily-publish-i2i.yml
+- CF Worker 事件：daily-beauty-i2i（UTC 11:30 = 北京 19:30）
+- 模式：参考图决定人物，prompt 只控制场景/服装/光线
+- 参考图：ref_02.jpg → https://i.ibb.co/4RR0L47z/ref-02-beauty.jpg
+
+## 本次改动
+- 模型升级：doubao-seedream-4-5 → doubao-seedream-5-0-260128
+- 图生图参数修正：image_url(字符串) → image(数组)
+- Anti-AI 强化：negative prompt 新增 anti_ai + 真实感锚点
+- Skill 拆分：文生图/图生图独立工作流和 SKILL 定义
+- Google API key 更��，恢复文生图双引擎架构
+- 豆包 API key 更新
+
+## 待办
+- CF Worker 部署（已修改 wrangler.toml + index.js，待登录后 deploy）
 
 ## 环境
 - 仓库：https://github.com/lairulan/beauty-generator.git
-- 触发：CF Worker UTC 11:30 → repository_dispatch（自动模式）+ workflow_dispatch（手动模式）+ schedule cron UTC 12:00 兜底
-- API：Google Imagen 4 Ultra (主力) + 豆包 Seedream 4.5 (回退) + imgbb (图床)
 - 发布：三更熟公众号 (AppID: wx287cdb9d78a498aa)
-- 自动提示词库：config/prompt_library.json v10.0（284 元素，9 维度，1.14 万亿组合）
-- 手动提示词库：config/manual_prompts.json（独立存储，发布成功自动存档）
+- 图床：imgbb
 
 ## 勿碰
 - config/prompt_library.json 的基础结构（v10.0 已验证稳定）
-- .github/workflows/daily-publish.yml 的 concurrency 和 workflow_dispatch inputs 配置
-- config/manual_prompts.json 不要与 prompt_library.json 合并，两条线独立
+- .github/workflows/ 的 concurrency 配置
+- config/manual_prompts.json 不要与 prompt_library.json 合并
