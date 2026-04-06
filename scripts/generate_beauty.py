@@ -634,18 +634,16 @@ class SmartPromptGenerator:
         else:
             sections.append(f"{quality}, featuring {asian_id}")
 
-        # 2. 外貌特征（有参考图时跳过，由参考图决定人物外貌）
-        has_ref = bool(os.environ.get("REFERENCE_IMAGE_URL", ""))
+        # 2. 外貌特征
         traits = []
-        if not has_ref:
-            if character.get("face"):
-                traits.append(character["face"])
-            if character.get("hair"):
-                traits.append(character["hair"])
-            if character.get("skin"):
-                traits.append(character["skin"])
-            if character.get("body"):
-                traits.append(character["body"])
+        if character.get("face"):
+            traits.append(character["face"])
+        if character.get("hair"):
+            traits.append(character["hair"])
+        if character.get("skin"):
+            traits.append(character["skin"])
+        if character.get("body"):
+            traits.append(character["body"])
         if traits:
             sections.append("She has " + ". ".join(traits))
 
@@ -688,10 +686,6 @@ class SmartPromptGenerator:
 
         # --- 用句号连接各段落 ---
         prompt = ". ".join(sections)
-
-        # 图生图模式：追加真实感锚点，压制 AI 感
-        if has_ref:
-            prompt += ". No retouching, real person, natural imperfections, slight skin texture visible, subtle asymmetry"
 
         # 清理多余空格和标点
         while "  " in prompt:
