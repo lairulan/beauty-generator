@@ -17,6 +17,7 @@ import os
 import random
 import sys
 import time
+import urllib.error
 import urllib.parse
 import urllib.request
 import ssl
@@ -67,6 +68,7 @@ STYLE_STRATEGIES = _load_json_config("style_strategies.json")
 _engines = CONSTANTS.get("engines", {})
 _doubao_cfg = _engines.get("doubao", {})
 _google_cfg = _engines.get("google", {})
+_google_retry_cfg = _google_cfg.get("retry", {})
 
 API_ENDPOINT = _doubao_cfg.get(
     "endpoint",
@@ -83,6 +85,10 @@ GOOGLE_IMAGEN_ENDPOINT = _google_cfg.get(
 GOOGLE_TIMEOUT = _google_cfg.get("timeout", 120)
 GOOGLE_ASPECT_RATIO = _google_cfg.get("aspect_ratio", "3:4")
 GOOGLE_SAMPLE_COUNT = _google_cfg.get("sample_count", 1)
+GOOGLE_RETRY_MAX_ATTEMPTS = _google_retry_cfg.get("max_attempts", 3)
+GOOGLE_RETRY_BASE_DELAY = _google_retry_cfg.get("base_delay", 5)
+GOOGLE_RETRY_MAX_DELAY = _google_retry_cfg.get("max_delay", 20)
+GOOGLE_COOLDOWN_SECONDS = _google_retry_cfg.get("cooldown_seconds", 300)
 
 IMAGE_HOSTS = CONSTANTS.get("image_hosts", [
     {"name": "imgbb", "endpoint": "https://api.imgbb.com/1/upload", "timeout": 60, "env_key": "IMGBB_API_KEY"}
@@ -105,6 +111,9 @@ SCENE_OUTFIT_MAP = CONSTANTS.get("scene_outfit_map", {
     "职场": ["职场", "优雅"]
 })
 
+GOOGLE_SUSPENDED_UNTIL = 0.0
+GOOGLE_SUSPENDED_REASON = ""
+
 
 # ─── 日志 ────────────────────────────────────────────────────
 
@@ -120,6 +129,36 @@ def log(message: str, level: str = "INFO"):
             f.write(log_msg + "\n")
     except Exception:
         pass
+
+
+def _suspend_google(reason: str, cooldown_seconds: int | None = None):
+    """在当前进程内暂时或持续停用 Google 引擎。"""
+    global GOOGLE_SUSPENDED_UNTIL, GOOGLE_SUSPENDED_REASON
+
+    GOOGLE_SUSPENDED_REASON = reason
+    if cooldown_seconds is None:
+        GOOGLE_SUSPENDED_UNTIL = float("inf")
+    else:
+        GOOGLE_SUSPENDED_UNTIL = time.time() + max(1, cooldown_seconds)
+
+
+def _get_google_suspend_message() -> str:
+    """返回当前 Google 引擎暂停原因；若未暂停则返回空字符串。"""
+    global GOOGLE_SUSPENDED_UNTIL, GOOGLE_SUSPENDED_REASON
+
+    if not GOOGLE_SUSPENDED_REASON:
+        return ""
+
+    if GOOGLE_SUSPENDED_UNTIL == float("inf"):
+        return f"Google 当前在本次运行中已停用: {GOOGLE_SUSPENDED_REASON}"
+
+    remaining = int(max(0, GOOGLE_SUSPENDED_UNTIL - time.time()))
+    if remaining <= 0:
+        GOOGLE_SUSPENDED_UNTIL = 0.0
+        GOOGLE_SUSPENDED_REASON = ""
+        return ""
+
+    return f"Google 当前处于冷却期（剩余约 {remaining}s）: {GOOGLE_SUSPENDED_REASON}"
 
 
 # ─── Prompt 元素库 ───────────────────────────────────────────
@@ -829,12 +868,6 @@ def generate_image_minimax(prompt: str) -> dict:
         "prompt_optimizer": True
     }
 
-    # 图生图：有参考图时启用 subject_reference 保持人物一致性
-    ref_url = os.environ.get("REFERENCE_IMAGE_URL", "")
-    if ref_url:
-        payload["subject_reference"] = [{"type": "character", "image_file": ref_url}]
-        log("  [MiniMax] 图生图模式（subject_reference 已启用）")
-
     ssl_context = _get_ssl_context()
     try:
         data = json.dumps(payload).encode("utf-8")
@@ -882,6 +915,10 @@ def generate_image_google(prompt: str) -> dict:
     if not google_key:
         return {"success": False, "error": "GOOGLE_API_KEY 未设置"}
 
+    suspended = _get_google_suspend_message()
+    if suspended:
+        return {"success": False, "error": suspended, "error_type": "suspended"}
+
     endpoint = f"{GOOGLE_IMAGEN_ENDPOINT}?key={google_key}"
     payload = {
         "instances": [{"prompt": prompt}],
@@ -891,38 +928,115 @@ def generate_image_google(prompt: str) -> dict:
         }
     }
 
+    def _parse_retry_after_seconds(headers) -> int:
+        retry_after = headers.get("Retry-After") if headers else None
+        if not retry_after:
+            return 0
+        retry_after = retry_after.strip()
+        if retry_after.isdigit():
+            return max(1, int(retry_after))
+        return 0
+
+    def _parse_google_error_body(body: str) -> dict:
+        try:
+            payload = json.loads(body)
+        except Exception:
+            return {}
+
+        error = payload.get("error", {})
+        reason = ""
+        for detail in error.get("details", []):
+            if detail.get("@type", "").endswith("ErrorInfo"):
+                reason = detail.get("reason", "")
+                break
+
+        return {
+            "message": error.get("message", ""),
+            "status": error.get("status", ""),
+            "reason": reason
+        }
+
+    def _format_google_http_error(status_code: int, body: str) -> str:
+        details = _parse_google_error_body(body)
+        message = (details.get("message") or body or "未知错误").strip()
+        reason = details.get("reason", "")
+
+        if reason == "API_KEY_INVALID" and "expired" in message.lower():
+            return "Google API Key 已过期，请更新 GOOGLE_API_KEY"
+        if reason == "API_KEY_INVALID":
+            return f"Google API Key 无效，请检查 GOOGLE_API_KEY: {message}"
+        if status_code == 429:
+            return f"Google API 限流或配额不足 (429): {message}"
+        if reason:
+            return f"Google API 错误 {status_code} ({reason}): {message}"
+        return f"Google API 错误 {status_code}: {message}"
+
     ssl_context = _get_ssl_context()
-    try:
-        data = json.dumps(payload).encode("utf-8")
-        req = urllib.request.Request(
-            endpoint,
-            data=data,
-            headers={"Content-Type": "application/json"},
-            method="POST"
-        )
-        with urllib.request.urlopen(req, context=ssl_context, timeout=GOOGLE_TIMEOUT) as response:
-            result = json.loads(response.read().decode("utf-8"))
+    for attempt in range(GOOGLE_RETRY_MAX_ATTEMPTS):
+        try:
+            data = json.dumps(payload).encode("utf-8")
+            req = urllib.request.Request(
+                endpoint,
+                data=data,
+                headers={"Content-Type": "application/json"},
+                method="POST"
+            )
+            with urllib.request.urlopen(req, context=ssl_context, timeout=GOOGLE_TIMEOUT) as response:
+                result = json.loads(response.read().decode("utf-8"))
 
-        predictions = result.get("predictions", [])
-        if not predictions:
-            return {"success": False, "error": "Google API 无返回图片"}
+            predictions = result.get("predictions", [])
+            if not predictions:
+                return {"success": False, "error": "Google API 无返回图片"}
 
-        b64_data = predictions[0].get("bytesBase64Encoded", "")
-        if not b64_data:
-            return {"success": False, "error": "Google API 返回数据为空"}
+            b64_data = predictions[0].get("bytesBase64Encoded", "")
+            if not b64_data:
+                return {"success": False, "error": "Google API 返回数据为空"}
 
-        log("  上传到图床...")
-        upload_result = upload_image(b64_data)
-        if upload_result["success"]:
-            return {"success": True, "url": upload_result["url"]}
-        return {"success": False, "error": f"图床上传失败: {upload_result['error']}"}
+            log("  上传到图床...")
+            upload_result = upload_image(b64_data)
+            if upload_result["success"]:
+                return {"success": True, "url": upload_result["url"]}
+            return {"success": False, "error": f"图床上传失败: {upload_result['error']}"}
 
-    except Exception as e:
-        return {"success": False, "error": str(e)}
+        except urllib.error.HTTPError as e:
+            body = e.read().decode("utf-8", errors="replace")
+            error_message = _format_google_http_error(e.code, body)
+
+            if e.code == 429 and attempt < GOOGLE_RETRY_MAX_ATTEMPTS - 1:
+                retry_after = _parse_retry_after_seconds(e.headers)
+                delay = retry_after or min(
+                    GOOGLE_RETRY_MAX_DELAY,
+                    GOOGLE_RETRY_BASE_DELAY * (2 ** attempt)
+                )
+                log(
+                    f"  [Google] 触发限流，{delay}s 后重试 ({attempt + 1}/{GOOGLE_RETRY_MAX_ATTEMPTS})",
+                    "WARN"
+                )
+                time.sleep(delay)
+                continue
+
+            if e.code == 429:
+                _suspend_google(error_message, GOOGLE_COOLDOWN_SECONDS)
+                return {"success": False, "error": error_message, "error_type": "rate_limit"}
+
+            if "Key 已过期" in error_message or "Key 无效" in error_message:
+                _suspend_google(error_message, None)
+                return {"success": False, "error": error_message, "error_type": "key_invalid"}
+
+            return {"success": False, "error": error_message}
+
+        except urllib.error.URLError as e:
+            return {"success": False, "error": f"Google 连接失败: {e.reason}"}
+        except json.JSONDecodeError:
+            return {"success": False, "error": "Google API 响应 JSON 解析失败"}
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+
+    return {"success": False, "error": "Google API 重试后仍失败"}
 
 
 def generate_image_doubao(prompt: str, negative_prompt: str) -> dict:
-    """调用豆包 Seedream API 生成图片，有参考图时启用图生图"""
+    """调用豆包 Seedream API 生成图片（文生图保底引擎）"""
     doubao_key = os.environ.get("DOUBAO_API_KEY")
     if not doubao_key:
         return {"success": False, "error": "DOUBAO_API_KEY 未设置"}
@@ -935,12 +1049,6 @@ def generate_image_doubao(prompt: str, negative_prompt: str) -> dict:
         "response_format": "url",
         "watermark": False
     }
-
-    # 图生图：有参考图时传入 image 数组保持人物一致性
-    ref_url = os.environ.get("REFERENCE_IMAGE_URL", "")
-    if ref_url:
-        payload["image"] = [ref_url]
-        log("  [豆包] 图生图模式（image 参考图已启用）")
 
     ssl_context = _get_ssl_context()
     try:
@@ -976,7 +1084,16 @@ def generate_image(prompt: str, negative_prompt: str) -> dict:
         if result["success"]:
             log("  [Google] 生成成功")
             return result
-        log(f"  [Google] 失败: {result.get('error')}，降级到豆包...")
+        error = result.get("error", "未知错误")
+        error_type = result.get("error_type", "")
+        if error_type == "key_invalid" or "已过期" in error:
+            log(f"  [Google] Key 不可用: {error}，本次运行后续将跳过 Google，降级到豆包...", "WARN")
+        elif error_type == "rate_limit" or "429" in error or "限流" in error:
+            log(f"  [Google] 遭遇限流: {error}，本次运行后续将短暂跳过 Google，降级到豆包...", "WARN")
+        elif error_type == "suspended":
+            log(f"  [Google] 跳过: {error}，直接降级到豆包...", "WARN")
+        else:
+            log(f"  [Google] 失败: {error}，降级到豆包...")
 
     # 保底：豆包 Seedream 5.0 Lite
     doubao_key = os.environ.get("DOUBAO_API_KEY")

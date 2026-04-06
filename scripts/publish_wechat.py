@@ -20,13 +20,10 @@ from pathlib import Path
 SCRIPT_DIR = Path(__file__).parent.absolute()
 SKILL_DIR = SCRIPT_DIR.parent
 CONFIG_DIR = SKILL_DIR / "config"
-GENERATE_SCRIPT = SKILL_DIR / "scripts" / "generate.py"
 BEAUTY_GENERATE_SCRIPT = SKILL_DIR / "scripts" / "generate_beauty.py"
-ARTISTIC_GENERATE_SCRIPT = SKILL_DIR / "scripts" / "generate_artistic.py"
 
 # API 配置
 API_BASE = "https://wx.limyai.com/api/openapi"
-WECHAT_API_KEY = os.environ.get("WECHAT_API_KEY")
 
 # 公众号配置
 DEFAULT_APPID = "wx287cdb9d78a498aa"  # 三更熟
@@ -34,9 +31,40 @@ DEFAULT_APPID = "wx287cdb9d78a498aa"  # 三更熟
 
 def get_api_key():
     """获取 API Key"""
-    if not WECHAT_API_KEY:
-        return None
-    return WECHAT_API_KEY
+    return os.environ.get("WECHAT_API_KEY")
+
+
+def _build_ssl_context(verify: bool = True):
+    """构建 SSL context，默认启用证书校验。"""
+    ctx = ssl.create_default_context()
+    if not verify:
+        ctx.check_hostname = False
+        ctx.verify_mode = ssl.CERT_NONE
+    return ctx
+
+
+def _is_cert_error(exc: Exception) -> bool:
+    """判断是否为证书校验错误。"""
+    if isinstance(exc, ssl.SSLCertVerificationError):
+        return True
+
+    reason = getattr(exc, "reason", None)
+    if isinstance(reason, ssl.SSLCertVerificationError):
+        return True
+
+    text = str(exc).lower()
+    return "certificate verify failed" in text or "certificate_verify_failed" in text
+
+
+def _allow_insecure_ssl_fallback() -> bool:
+    """是否允许在证书异常时回退到不校验证书。"""
+    value = os.environ.get("WECHAT_API_ALLOW_INSECURE_SSL", "1").strip().lower()
+    return value not in {"0", "false", "no"}
+
+
+def _open_json_request(req, timeout: int, ssl_context):
+    with urllib.request.urlopen(req, timeout=timeout, context=ssl_context) as response:
+        return json.loads(response.read().decode("utf-8"))
 
 
 def make_request(endpoint, data=None):
@@ -58,12 +86,19 @@ def make_request(endpoint, data=None):
             },
             method="POST"
         )
-        # TODO: 临时跳过 SSL 验证（wx.limyai.com 证书过期），恢复后删除 ssl_ctx
-        ssl_ctx = ssl.create_default_context()
-        ssl_ctx.check_hostname = False
-        ssl_ctx.verify_mode = ssl.CERT_NONE
-        with urllib.request.urlopen(req, timeout=60, context=ssl_ctx) as response:
-            return json.loads(response.read().decode("utf-8"))
+        try:
+            return _open_json_request(req, timeout=60, ssl_context=_build_ssl_context())
+        except (urllib.error.URLError, ssl.SSLCertVerificationError) as e:
+            if _is_cert_error(e):
+                if not _allow_insecure_ssl_fallback():
+                    return {
+                        "success": False,
+                        "error": "SSL 证书校验失败，且已禁用不安全回退（WECHAT_API_ALLOW_INSECURE_SSL=0）"
+                    }
+
+                print("⚠️ 微信发布接口 SSL 证书校验失败，已回退到不校验证书连接。建议尽快修复服务端证书。")
+                return _open_json_request(req, timeout=60, ssl_context=_build_ssl_context(verify=False))
+            raise
     except urllib.error.HTTPError as e:
         body = e.read().decode("utf-8", errors="replace")
         return {"success": False, "error": f"HTTP {e.code}: {body[:200]}"}
@@ -433,11 +468,41 @@ def generate_tags_from_prompt(prompt: str) -> str:
 
 def generate_smart_caption(scene: str = "", emotion: str = "", makeup: str = "", art_style: str = "") -> str:
     """兼容旧接口：无元数据时使用"""
-    return generate_caption_from_meta({
+    base = generate_caption_from_meta({
         "scene_type": scene,
         "expression_type": emotion,
         "art_style": art_style,
     })
+
+    makeup_phrases = {
+        "韩妆": "韩系妆感更显清透",
+        "欧美妆": "欧美妆感把轮廓衬得更立体",
+        "烟熏妆": "烟熏妆把氛围感拉满",
+        "玻璃妆": "玻璃肌质感很适合近景",
+        "裸妆": "裸妆更贴近自然抓拍感",
+        "红唇妆": "红唇让画面更有记忆点",
+    }
+    art_phrases = {
+        "电影感": "电影感色调让故事更完整",
+        "王家卫": "王家卫式氛围格外迷人",
+        "韩剧": "韩剧感光影自带温柔滤镜",
+        "时尚杂志": "时尚杂志感让镜头更高级",
+        "ins风": "ins 风构图干净又轻盈",
+        "暗调": "暗调氛围更显情绪张力",
+        "复古胶片": "复古胶片感把时间都放慢了",
+    }
+
+    details = []
+    if makeup:
+        details.append(makeup_phrases.get(makeup, f"{makeup}细节也很加分"))
+    if art_style:
+        details.append(art_phrases.get(art_style, f"{art_style}氛围很有辨识度"))
+
+    if not details:
+        return base
+
+    base = base[:-1] if base.endswith("。") else base
+    return f"{base}，{details[0]}。"
 
 
 def generate_one_line_caption(style: str = "") -> str:
@@ -459,7 +524,9 @@ def publish_to_wechat(
     if article_type == "newspic":
         # 构建小绿书内容 - 移除 alt text 避免"图片"文字出现
         content_lines = []
-        first_meta = {}
+        if content.strip():
+            content_lines.append(content.strip())
+            content_lines.append("")
         for i, (img_url, caption) in enumerate(images):
             content_lines.append(f"![]({img_url})")
             if caption:
@@ -501,21 +568,24 @@ def _extract_images_with_meta(output: str) -> list:
     lines = output.split("\n")
 
     for i, line in enumerate(lines):
-        if "http" not in line:
+        stripped = line.strip()
+        if not stripped.startswith("http"):
             continue
         # 匹配所有已知图片 URL 来源
-        if any(domain in line for domain in [
+        if any(domain in stripped for domain in [
             "ark-content", "doubao", "volces.com",
             "imgbb", "i.ibb.co", "ibb.co",
             "imgur.com",
             "sm.ms", "loli.net",
         ]):
-            urls = re.findall(r'https?://[^\s\)\]"\']+', line)
+            urls = re.findall(r'https?://[^\s\)\]"\']+', stripped)
             for url in urls:
                 # 向后查找对应的 META 行
                 meta = {}
+                found_meta = False
                 for j in range(i + 1, min(i + 3, len(lines))):
                     if lines[j].strip().startswith("META:"):
+                        found_meta = True
                         parts = lines[j].strip()[5:].split("|")
                         if len(parts) >= 5:
                             meta = {
@@ -526,7 +596,8 @@ def _extract_images_with_meta(output: str) -> list:
                                 "art_style": parts[4],
                             }
                         break
-                results.append((url, meta))
+                if found_meta:
+                    results.append((url, meta))
     return results
 
 
@@ -535,10 +606,16 @@ def _extract_image_urls(output: str) -> list:
     return [url for url, _ in _extract_images_with_meta(output)]
 
 
-def generate_daily_images(count: int = 3, style: str = "", emotion: str = "", prompt: str = "") -> list:
+def generate_daily_images(
+    count: int = 3,
+    style: str = "",
+    scene: str = "",
+    emotion: str = "",
+    prompt: str = "",
+) -> list:
     """
     生成多张一致性人物图片
-    使用双引擎 (Google Imagen 4 Ultra + Doubao Seedream 4.5)
+    使用双引擎 (Google Imagen 4 Ultra + Doubao Seedream 5.0 Lite)
 
     prompt: 手动模式 - 直接使用用户自定义提示词（跳过随机元素库）
     返回: [(url, meta_dict), ...]  meta 含 scene_type/outfit_style/expression_type/lighting_type/art_style
@@ -560,6 +637,8 @@ def generate_daily_images(count: int = 3, style: str = "", emotion: str = "", pr
         cmd.extend(["--prompt", prompt])
     elif style:
         cmd.extend(["--style", style])
+    if scene and not prompt:
+        cmd.extend(["--scene", scene])
     if emotion and not prompt:
         cmd.extend(["--emotion", emotion])
 
@@ -607,13 +686,13 @@ def main():
     parser.add_argument("--prompt", help="手动模式：直接使用自定义提示词生成（跳过随机元素库）")
     parser.add_argument("--caption-text", help="手动模式下的自定义配文（可选，不提供则用默认）")
     parser.add_argument("--style", "-s", help="风格描述")
-    parser.add_argument("--scene", help="场景：雨夜、樱花雨、赛博朋克、咖啡厅等")
-    parser.add_argument("--emotion", help="情绪：挑逗、忧郁、神秘、开心、高冷、温柔、自信、俏皮")
-    parser.add_argument("--makeup", help="妆容：韩妆、欧美妆、烟熏妆、玻璃妆等")
-    parser.add_argument("--art-style", help="艺术风格：王家卫、韩剧、电影感、ins风等")
+    parser.add_argument("--scene", help="场景关键词：影响图片生成和介绍文案")
+    parser.add_argument("--emotion", help="情绪关键词：影响图片生成和介绍文案")
+    parser.add_argument("--makeup", help="妆容关键词：用于补充介绍文案")
+    parser.add_argument("--art-style", help="艺术风格关键词：用于补充介绍文案")
     parser.add_argument("--appid", help="公众号 AppID（默认：三更熟）")
     parser.add_argument("--title", "-t", help="文章标题（自动生成默认）")
-    parser.add_argument("--caption", help="一句话介绍（自动生成默认）")
+    parser.add_argument("--caption", help="小绿书开场一句话（自动生成默认）")
     parser.add_argument("--list-prompts", action="store_true", help="列出已保存的手动提示词库")
     parser.add_argument("--use-prompt", type=int, metavar="ID", help="使用已保存的提示词（按 ID）")
     parser.add_argument("--test", action="store_true", help="测试模式：只生成不发布")
@@ -640,8 +719,8 @@ def main():
         print(f"📚 已加载提示词库 ID={args.use_prompt}")
         print(f"   Prompt: {args.prompt[:80]}...")
 
-    # 检查 API Key
-    if not get_api_key():
+    # 发布模式才需要公众号 API Key
+    if not args.test and not get_api_key():
         print("❌ 环境变量 WECHAT_API_KEY 未设置")
         return 1
 
@@ -685,7 +764,11 @@ def main():
 
     # 生成图片（返回 [(url, meta), ...]）
     images_with_meta = generate_daily_images(
-        args.count, args.style, args.emotion or "", prompt=args.prompt or ""
+        args.count,
+        args.style,
+        args.scene or "",
+        args.emotion or "",
+        prompt=args.prompt or "",
     )
 
     if len(images_with_meta) == 0:
@@ -694,13 +777,30 @@ def main():
 
     print(f"\n✅ 成功生成 {len(images_with_meta)} 张图片")
 
+    # 手动模式：优先用户自定义配文 > 从 prompt 智能生成 > 默认
+    if is_manual and args.caption_text:
+        manual_caption = args.caption_text
+    elif is_manual and args.prompt:
+        manual_caption = generate_caption_from_prompt(args.prompt)
+    else:
+        manual_caption = None
+
     # 测试模式
     if args.test:
         print("\n🧪 测试模式：不发布到公众号")
         print("\n生成的图片链接:")
         for i, (url, meta) in enumerate(images_with_meta, 1):
-            caption = generate_caption_from_meta(meta) if meta else "今日份心动瞬间。"
-            tags = generate_tags_from_meta(meta) if meta else "#每日美女 #写真 #人像摄影 #今日心动"
+            if manual_caption:
+                caption = manual_caption
+            elif meta and meta.get("scene_type") != "custom":
+                caption = generate_caption_from_meta(meta)
+            else:
+                caption = "今日份心动瞬间。"
+
+            if is_manual and args.prompt:
+                tags = generate_tags_from_prompt(args.prompt)
+            else:
+                tags = generate_tags_from_meta(meta) if meta else "#每日美女 #写真 #人像摄影 #今日心动"
             print(f"  {i}. {url}")
             print(f"     配文: {caption}")
             print(f"     标签: {tags}")
@@ -714,14 +814,6 @@ def main():
     # 构建图片和说明配对
     image_pairs = []
     first_meta = {}
-
-    # 手动模式：优先用户自定义配文 > 从 prompt 智能生成 > 默认
-    if is_manual and args.caption_text:
-        manual_caption = args.caption_text
-    elif is_manual and args.prompt:
-        manual_caption = generate_caption_from_prompt(args.prompt)
-    else:
-        manual_caption = None
 
     for i, (img_url, meta) in enumerate(images_with_meta):
         if i == 0:
@@ -744,7 +836,7 @@ def main():
     result = publish_to_wechat(
         appid=appid,
         title=args.title,
-        content="",
+        content=args.caption or "",
         images=image_pairs,
         article_type=args.type,
         tags=dynamic_tags

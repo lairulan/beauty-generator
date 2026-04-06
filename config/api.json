@@ -1,5 +1,5 @@
 {
-  "description": "仅供参考，实际参数由 generate_beauty.py 硬编码控制",
+  "description": "仓库当前主链路参考配置，与 scripts/generate_beauty.py 保持一致",
   "engines": {
     "primary": {
       "name": "Google Imagen 4 Ultra",
@@ -7,18 +7,29 @@
       "api_key_env": "GOOGLE_API_KEY",
       "aspect_ratio": "3:4",
       "output_format": "base64",
-      "upload": "imgbb"
+      "upload": "imgbb",
+      "retry": {
+        "max_attempts": 3,
+        "base_delay_seconds": 5,
+        "max_delay_seconds": 20,
+        "cooldown_seconds": 300
+      }
     },
     "fallback": {
-      "name": "Doubao Seedream 4.5",
+      "name": "Doubao Seedream 5.0 Lite",
       "endpoint": "https://ark.cn-beijing.volces.com/api/v3/images/generations",
-      "model": "doubao-seedream-4-5-251128",
+      "model": "doubao-seedream-5-0-260128",
       "api_key_env": "DOUBAO_API_KEY",
       "size": "2K",
       "response_format": "url",
       "supports_negative_prompt": true
     }
   },
+  "requirements": [
+    "GOOGLE_API_KEY",
+    "IMGBB_API_KEY",
+    "DOUBAO_API_KEY"
+  ],
   "retry": {
     "max_attempts": 3,
     "delay_seconds": 3

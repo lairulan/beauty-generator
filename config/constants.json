@@ -5,7 +5,13 @@
       "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-ultra-generate-001:predict",
       "timeout": 120,
       "aspect_ratio": "3:4",
-      "sample_count": 1
+      "sample_count": 1,
+      "retry": {
+        "max_attempts": 3,
+        "base_delay": 5,
+        "max_delay": 20,
+        "cooldown_seconds": 300
+      }
     },
     "doubao": {
       "endpoint": "https://ark.cn-beijing.volces.com/api/v3/images/generations",
@@ -40,9 +46,12 @@
     "挑逗": "挑逗",
     "性感": "性感",
     "温柔": "微笑",
+    "微笑": "微笑",
+    "开心": "微笑",
     "俏皮": "挑逗",
     "自信": "自信",
     "高冷": "冷艳",
+    "神秘": "冷艳",
     "忧郁": "忧郁",
     "纯欲": "纯欲"
   },

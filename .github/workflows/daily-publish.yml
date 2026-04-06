@@ -41,7 +41,58 @@ jobs:
       - name: 安装依赖
         run: python3 -m pip install --upgrade pip
 
+      - name: 检查今日自动发布是否已完成
+        id: dedupe
+        env:
+          RUN_EVENT: ${{ github.event_name }}
+          INPUT_PROMPT: ${{ github.event.inputs.prompt }}
+          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          CURRENT_RUN_ID: ${{ github.run_id }}
+        run: |
+          SHOULD_RUN=true
+          SKIP_REASON=
+          BRANCH="${GITHUB_REF_NAME:-main}"
+
+          if [ "$RUN_EVENT" = "repository_dispatch" ] && [ -z "$INPUT_PROMPT" ]; then
+            TODAY=$(TZ=Asia/Shanghai date '+%Y-%m-%d')
+            MONTH=$(TZ=Asia/Shanghai date '+%Y-%m')
+            LOG_FILE="workflow_logs/actions_runs_${MONTH}.md"
+            REMOTE_REF="origin/${BRANCH}"
+
+            API_URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/workflows/daily-publish.yml/runs?event=repository_dispatch&status=completed&branch=${BRANCH}&per_page=20"
+            RUNS_JSON=$(curl -fsSL \
+              -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+              -H "Accept: application/vnd.github+json" \
+              "$API_URL" 2>/dev/null || true)
+
+            API_MATCH=false
+            if [ -n "$RUNS_JSON" ]; then
+              API_MATCH=$(RUNS_JSON="$RUNS_JSON" TODAY="$TODAY" CURRENT_RUN_ID="$CURRENT_RUN_ID" python3 -c 'import json, os; from datetime import datetime, timedelta, timezone; runs=json.loads(os.environ["RUNS_JSON"]).get("workflow_runs", []); today=os.environ["TODAY"]; current=os.environ.get("CURRENT_RUN_ID", ""); tz=timezone(timedelta(hours=8)); print("true" if any(str(run.get("id")) != current and run.get("conclusion") == "success" and ((datetime.fromisoformat(started.replace("Z", "+00:00")).astimezone(tz).strftime("%Y-%m-%d") == today) if started else False) for run in runs for started in [run.get("run_started_at") or run.get("created_at") or run.get("updated_at")]) else "false")')
+            fi
+
+            if [ "$API_MATCH" = "true" ]; then
+              SHOULD_RUN=false
+              SKIP_REASON=actions-success-today
+              echo "⏭️ 检测到 ${TODAY} 已有 GitHub Actions 自动成功记录，跳过本次自动发布"
+            fi
+
+            git fetch origin "${BRANCH}" --depth=1 >/dev/null 2>&1 || true
+
+            if [ "$SHOULD_RUN" = "true" ] && \
+              git cat-file -e "${REMOTE_REF}:${LOG_FILE}" 2>/dev/null && \
+              git show "${REMOTE_REF}:${LOG_FILE}" | grep -Eq "^- ${TODAY} .*\\| success \\| mode=t2i-auto-1pic \\|"; then
+              SHOULD_RUN=false
+              SKIP_REASON=remote-log-success-today
+              echo "⏭️ 检测到 ${TODAY} 已有远端日志成功记录，跳过本次自动发布"
+            fi
+          fi
+
+          echo "should_run=$SHOULD_RUN" >> "$GITHUB_OUTPUT"
+          echo "skip_reason=$SKIP_REASON" >> "$GITHUB_OUTPUT"
+
       - name: 文生图·每日1张
+        if: steps.dedupe.outputs.should_run == 'true'
         env:
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
           IMGBB_API_KEY: ${{ secrets.IMGBB_API_KEY }}
@@ -87,6 +138,8 @@ jobs:
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           JOB_STATUS: ${{ job.status }}
           INPUT_PROMPT: ${{ github.event.inputs.prompt }}
+          SHOULD_RUN: ${{ steps.dedupe.outputs.should_run }}
+          SKIP_REASON: ${{ steps.dedupe.outputs.skip_reason }}
         run: |
           set -e
           mkdir -p workflow_logs
@@ -94,7 +147,9 @@ jobs:
           MONTH=$(TZ=Asia/Shanghai date '+%Y-%m')
           LOG_FILE="workflow_logs/actions_runs_${MONTH}.md"
           STATUS="$JOB_STATUS"
-          if [ -n "$INPUT_PROMPT" ]; then
+          if [ "$RUN_EVENT" = "repository_dispatch" ] && [ -z "$INPUT_PROMPT" ] && [ "$SHOULD_RUN" != "true" ]; then
+            MODE=" | mode=t2i-auto-skipped-duplicate | reason=${SKIP_REASON:-already-published-today}"
+          elif [ -n "$INPUT_PROMPT" ]; then
             MODE=" | mode=t2i-manual | prompt=${INPUT_PROMPT:0:50}..."
           else
             MODE=" | mode=t2i-auto-1pic"
@@ -102,7 +157,7 @@ jobs:
           echo "- ${TS} | ${STATUS}${MODE} | run=${RUN_NUMBER} | ${RUN_URL}" >> "$LOG_FILE"
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add workflow_logs/
+          git add workflow_logs/ config/manual_prompts.json
           git commit -m "记录工作流执行日志 (run ${RUN_NUMBER})" || exit 0
           git pull --rebase origin main || true
           git push || echo "⚠️ 日志推送失败（非关键错误）"

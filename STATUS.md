@@ -1,17 +1,17 @@
 # beauty-generator STATUS — 2026-04-06
 
-## 断点
-- 本次完成：v9.1.0 恢复文生图独立仓库 + Google Imagen 主力 + 豆包兜底
-  - 从 beauty-img2img 拆分为独立仓库
-  - 恢复 generate_image_google() + Google→豆包降级
-  - prompt 修复 flawless 矛盾，清理图生图残留代码
-  - Anti-AI negative prompt 强化
-  - Google API key 更新（429 限频中，定时触发应正常）
-- 下一步：观察 Google 限频是否在定时触发时恢复正常
+## 当前状态
+- 版本：v10.0.0，独立文生图仓库
+- 主链路：Google Imagen 4 Ultra 生成 → imgbb 上传；失败时自动回退到豆包 Seedream 5.0 Lite
+- Google 现状：新 API Key 已固定到本地与 GitHub Actions；当前剩余问题是 Google 侧 `429` 配额/限流
+- 发布链路：`publish_wechat.py` 负责标题、开场文案、内容组装与公众号草稿箱发布
+- 自动去重：自动触发前先检查 GitHub Actions 当日成功记录，再回查远端 `workflow_logs`
+- 测试模式：`--test` 只生成不发布，不要求 `WECHAT_API_KEY`
+- HTTPS：默认严格校验证书，证书异常时仅在 `WECHAT_API_ALLOW_INSECURE_SSL` 允许下临时回退
 
 ## 环境
 - 仓库：https://github.com/lairulan/beauty-generator.git
-- 触发：CF Worker daily-beauty（UTC 12:00 = 北京 20:00）
+- 触发：CF Worker daily-beauty（北京时间 19:30 左右，具体以 Worker 调度为准）
 - API：Google Imagen 4 Ultra (主力) + 豆包 Seedream 5.0 Lite (兜底) + imgbb (图床)
 - 发布：三更熟公众号 (AppID: wx287cdb9d78a498aa)
 

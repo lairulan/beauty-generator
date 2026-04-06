@@ -1,14 +1,14 @@
 ---
 name: beauty-generator
-version: 9.1.0
-description: Generate realistic beauty photography with dual-engine (Google Imagen 4 Ultra + Doubao Seedream 5.0 Lite). 7-day style rotation (性感/甜美/国风/职场/生活场景/清纯/邻家), scene/emotion control, manual prompt mode, and WeChat auto-publishing. Use when user asks to generate beauty images ("生成美女", "每日美女", "发布美女", "艺术写真", "文生图美女").
+version: 10.0.0
+description: 独立文生图写真仓库。Google Imagen 4 Ultra 主力，Doubao Seedream 5.0 Lite 回退，支持场景/情绪控制、手动 prompt、公众号草稿箱发布与 7 天风格轮换。Use when user asks to generate beauty images ("生成美女", "每日美女", "发布美女", "艺术写真", "文生图美女").
 author: rulanlai
-tags: [image-generation, beauty, wechat, doubao, seedream]
+tags: [image-generation, beauty, wechat, google, doubao, seedream]
 ---
 
-# Beauty Generator - 文生图写真 V9.1
+# Beauty Generator - 文生图写真 V10.0
 
-纯文生图模式：Google Imagen 4 Ultra（主力）+ 豆包 Seedream 5.0 Lite（兜底）。从 284 元素 × 9 维度的元素库随机组合提示词，生成高质量艺术写真。
+纯文生图模式：Google Imagen 4 Ultra（主力）+ 豆包 Seedream 5.0 Lite（兜底）。从元素库随机组合人物、场景、穿搭、光线和艺术风格，生成高质量艺术写真，并可直接发布到微信公众号草稿箱。
 
 ## 与 beauty-img2img（图生图）的区别
 
@@ -19,27 +19,38 @@ tags: [image-generation, beauty, wechat, doubao, seedream]
 
 - "生成美女"、"画一个美女"、"美女图片"
 - "每日美女"、"今日美女"、"文生图美女"
-- "发布美女"、"艺术写真"
+- "发布美女"、"艺术写真"、"公众号美女图"
 
 ## 快速使用
 
 ```bash
-# 自动模式
-python3 ~/.claude/skills/beauty-generator/scripts/publish_wechat.py --count 1
+# 在仓库根目录执行
 
-# 手动模式
-python3 ~/.claude/skills/beauty-generator/scripts/publish_wechat.py \
+# 自动模式：生成并发布 1 张
+python3 scripts/publish_wechat.py --count 1
+
+# 手动 prompt
+python3 scripts/publish_wechat.py \
   --prompt "your prompt" --count 1
+
+# 测试模式：只生成不发布
+python3 scripts/publish_wechat.py \
+  --test --count 1 --scene "城市" --emotion "自信"
 ```
 
 ## API 配置
 
 ```bash
-export DOUBAO_API_KEY="..."   # 豆包 Seedream 5.0 Lite
-export IMGBB_API_KEY="..."    # imgbb 图片托管
-export WECHAT_API_KEY="..."   # 微信公众号 API
+export GOOGLE_API_KEY="..."    # Google Imagen 4 Ultra（主力）
+export DOUBAO_API_KEY="..."    # 豆包 Seedream 5.0 Lite（回退）
+export IMGBB_API_KEY="..."     # Google 生成图片上传所需
+export WECHAT_API_KEY="..."    # 微信公众号 API
+export WECHAT_API_ALLOW_INSECURE_SSL="1"  # 可选：证书异常时允许临时回退
 ```
 
 ## 定时发布
 
-CF Worker 触发 `daily-beauty` → GitHub Actions `daily-publish.yml`。7 风格按星期轮换。
+- Cloudflare Worker 触发 `daily-beauty` → GitHub Actions `daily-publish.yml`
+- `workflow_dispatch` 可手动补跑
+- 自动触发会先检查 GitHub Actions 当日成功记录，再回查远端月度日志，避免重复发布
+- 7 风格按星期轮换
