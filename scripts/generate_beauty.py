@@ -680,6 +680,10 @@ class SmartPromptGenerator:
         # --- 用句号连接各段落 ---
         prompt = ". ".join(sections)
 
+        # 图生图模式：追加真实感锚点，压制 AI 感
+        if has_ref:
+            prompt += ". No retouching, real person, natural imperfections, slight skin texture visible, subtle asymmetry"
+
         # 清理多余空格和标点
         while "  " in prompt:
             prompt = prompt.replace("  ", " ")
@@ -700,6 +704,8 @@ class SmartPromptGenerator:
             parts.append(neg["asian_focused"])
         if neg.get("quality"):
             parts.append(neg["quality"])
+        if neg.get("anti_ai"):
+            parts.append(neg["anti_ai"])
 
         prompt = ", ".join(parts)
         if pose_type == "特写":

@@ -422,6 +422,7 @@
   "negative_prompts": {
     "standard": "cartoon, anime, 3d render, cgi, sketch, drawing, painting, illustration, disfigured, deformed, blurry, watermark, text, extra limbs, extra fingers, mutated hands, bad anatomy",
     "asian_focused": "Western face, Caucasian features, European features, blonde hair, blue eyes, green eyes, non-Asian features",
-    "quality": "low quality, pixelated, overexposed, underexposed, amateur, poorly lit"
+    "quality": "low quality, pixelated, overexposed, underexposed, amateur, poorly lit",
+    "anti_ai": "plastic skin, waxy skin, overly smooth skin, airbrushed, porcelain doll, mannequin, uncanny valley, too perfect, symmetrical face, digital art look, artificial lighting, studio render, hyperrealistic 3d, flawless complexion"
   }
 }

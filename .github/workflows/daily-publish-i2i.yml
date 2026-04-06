@@ -1,4 +1,4 @@
-name: 每日写真·文生图（7风格轮换）
+name: 每日写真·图生图（参考图 + 1张精品）
 
 on:
   workflow_dispatch:
@@ -17,13 +17,13 @@ on:
         default: ''
 
   repository_dispatch:
-    types: [daily-beauty]
+    types: [daily-beauty-i2i]
 
 jobs:
   publish:
     runs-on: ubuntu-latest
     concurrency:
-      group: daily-beauty-${{ github.ref }}
+      group: daily-beauty-i2i-${{ github.ref }}
       cancel-in-progress: false
     permissions:
       actions: read
@@ -41,11 +41,12 @@ jobs:
       - name: 安装依赖
         run: python3 -m pip install --upgrade pip
 
-      - name: 文生图·每日1张
+      - name: 图生图·每日1张精品
         env:
           IMGBB_API_KEY: ${{ secrets.IMGBB_API_KEY }}
           WECHAT_API_KEY: ${{ secrets.WECHAT_API_KEY }}
           DOUBAO_API_KEY: ${{ secrets.DOUBAO_API_KEY }}
+          REFERENCE_IMAGE_URL: ${{ secrets.REFERENCE_IMAGE_URL }}
           INPUT_PROMPT: ${{ github.event.inputs.prompt }}
           INPUT_CAPTION: ${{ github.event.inputs.caption_text }}
           INPUT_TITLE: ${{ github.event.inputs.title }}
@@ -59,7 +60,7 @@ jobs:
             [ -n "$INPUT_TITLE" ]   && CMD="$CMD --title \"$INPUT_TITLE\""
             eval $CMD
           else
-            echo "🎨 文生图模式：每日1张写真"
+            echo "🎨 图生图模式：每日1张精品写真"
 
             STYLES=("性感系" "甜美系" "国风系" "邻家女孩系" "职场系" "生活场景系" "清纯系")
             EMOTIONS=("挑逗"  "俏皮"   "温柔"  "温柔"       "自信"  "微笑"       "性感")
@@ -94,9 +95,9 @@ jobs:
           LOG_FILE="workflow_logs/actions_runs_${MONTH}.md"
           STATUS="$JOB_STATUS"
           if [ -n "$INPUT_PROMPT" ]; then
-            MODE=" | mode=t2i-manual | prompt=${INPUT_PROMPT:0:50}..."
+            MODE=" | mode=i2i-manual | prompt=${INPUT_PROMPT:0:50}..."
           else
-            MODE=" | mode=t2i-auto-1pic"
+            MODE=" | mode=i2i-auto-1pic"
           fi
           echo "- ${TS} | ${STATUS}${MODE} | run=${RUN_NUMBER} | ${RUN_URL}" >> "$LOG_FILE"
           git config user.name "github-actions[bot]"
