@@ -66,6 +66,7 @@ STYLE_STRATEGIES = _load_json_config("style_strategies.json")
 # 从 CONSTANTS 读取 API 配置（硬编码值作为 fallback）
 _engines = CONSTANTS.get("engines", {})
 _doubao_cfg = _engines.get("doubao", {})
+_google_cfg = _engines.get("google", {})
 
 API_ENDPOINT = _doubao_cfg.get(
     "endpoint",
@@ -74,6 +75,14 @@ API_ENDPOINT = _doubao_cfg.get(
 API_MODEL = _doubao_cfg.get("model", "doubao-seedream-5-0-260128")
 DOUBAO_TIMEOUT = _doubao_cfg.get("timeout", 90)
 DOUBAO_SIZE = _doubao_cfg.get("size", "2K")
+
+GOOGLE_IMAGEN_ENDPOINT = _google_cfg.get(
+    "endpoint",
+    "https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-ultra-generate-001:predict"
+)
+GOOGLE_TIMEOUT = _google_cfg.get("timeout", 120)
+GOOGLE_ASPECT_RATIO = _google_cfg.get("aspect_ratio", "3:4")
+GOOGLE_SAMPLE_COUNT = _google_cfg.get("sample_count", 1)
 
 IMAGE_HOSTS = CONSTANTS.get("image_hosts", [
     {"name": "imgbb", "endpoint": "https://api.imgbb.com/1/upload", "timeout": 60, "env_key": "IMGBB_API_KEY"}
@@ -873,6 +882,51 @@ def generate_image_minimax(prompt: str) -> dict:
         return {"success": False, "error": str(e)}
 
 
+def generate_image_google(prompt: str) -> dict:
+    """调用 Google Imagen 4 Ultra 生成图片，结果上传到图床返回 URL"""
+    google_key = os.environ.get("GOOGLE_API_KEY")
+    if not google_key:
+        return {"success": False, "error": "GOOGLE_API_KEY 未设置"}
+
+    endpoint = f"{GOOGLE_IMAGEN_ENDPOINT}?key={google_key}"
+    payload = {
+        "instances": [{"prompt": prompt}],
+        "parameters": {
+            "sampleCount": GOOGLE_SAMPLE_COUNT,
+            "aspectRatio": GOOGLE_ASPECT_RATIO
+        }
+    }
+
+    ssl_context = _get_ssl_context()
+    try:
+        data = json.dumps(payload).encode("utf-8")
+        req = urllib.request.Request(
+            endpoint,
+            data=data,
+            headers={"Content-Type": "application/json"},
+            method="POST"
+        )
+        with urllib.request.urlopen(req, context=ssl_context, timeout=GOOGLE_TIMEOUT) as response:
+            result = json.loads(response.read().decode("utf-8"))
+
+        predictions = result.get("predictions", [])
+        if not predictions:
+            return {"success": False, "error": "Google API 无返回图片"}
+
+        b64_data = predictions[0].get("bytesBase64Encoded", "")
+        if not b64_data:
+            return {"success": False, "error": "Google API 返回数据为空"}
+
+        log("  上传到图床...")
+        upload_result = upload_image(b64_data)
+        if upload_result["success"]:
+            return {"success": True, "url": upload_result["url"]}
+        return {"success": False, "error": f"图床上传失败: {upload_result['error']}"}
+
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+
+
 def generate_image_doubao(prompt: str, negative_prompt: str) -> dict:
     """调用豆包 Seedream API 生成图片，有参考图时启用图生图"""
     doubao_key = os.environ.get("DOUBAO_API_KEY")
@@ -918,13 +972,25 @@ def generate_image_doubao(prompt: str, negative_prompt: str) -> dict:
 
 
 def generate_image(prompt: str, negative_prompt: str) -> dict:
-    """生成图片：豆包 Seedream 5.0 Lite（图生图 + 参考图人物一致性）"""
+    """生成图片：Google Imagen 4 Ultra（主力）→ 豆包 Seedream 5.0（保底）"""
+
+    # 优先 Google Imagen 4 Ultra
+    google_key = os.environ.get("GOOGLE_API_KEY")
+    if google_key:
+        log("  [Google] 尝试 Imagen 4 Ultra...")
+        result = generate_image_google(prompt)
+        if result["success"]:
+            log("  [Google] 生成成功")
+            return result
+        log(f"  [Google] 失败: {result.get('error')}，降级到豆包...")
+
+    # 保底：豆包 Seedream 5.0 Lite
     doubao_key = os.environ.get("DOUBAO_API_KEY")
     if doubao_key:
-        log("  [豆包] 使用 Seedream 5.0 Lite...")
+        log("  [豆包] 使用 Seedream 5.0 Lite 保底...")
         return generate_image_doubao(prompt, negative_prompt)
 
-    return {"success": False, "error": "DOUBAO_API_KEY 未设置"}
+    return {"success": False, "error": "所有引擎均无可用 API Key"}
 
 
 # ─── 风格策略 ────────────────────────────────────────────────

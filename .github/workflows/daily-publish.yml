@@ -43,6 +43,7 @@ jobs:
 
       - name: 文生图·每日1张
         env:
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
           IMGBB_API_KEY: ${{ secrets.IMGBB_API_KEY }}
           WECHAT_API_KEY: ${{ secrets.WECHAT_API_KEY }}
           DOUBAO_API_KEY: ${{ secrets.DOUBAO_API_KEY }}
