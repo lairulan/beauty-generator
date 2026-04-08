@@ -111,7 +111,7 @@ def make_request(endpoint, data=None):
 
 
 def generate_caption_from_meta(meta: dict) -> str:
-    """基于图片元数据动态生成配文（与图片内容贴合）
+    """基于图片元数据动态生成图片配文（2句，��景+表情组合）
 
     meta 结构: {scene_type, outfit_style, expression_type, lighting_type, art_style}
     """
@@ -119,14 +119,16 @@ def generate_caption_from_meta(meta: dict) -> str:
 
     scene = meta.get("scene_type", "")
     outfit = meta.get("outfit_style", "")
-    expression = meta.get("expression_type", "")
+    # 修复：自动将 workflow emotion 值映射到 expr_phrases key
+    raw_expr = meta.get("expression_type", "")
+    expression = _EMOTION_ALIAS.get(raw_expr, raw_expr)
     lighting = meta.get("lighting_type", "")
     art = meta.get("art_style", "")
 
     # --- 场景描写片段 ---
     scene_phrases = {
         "自然": ["山野间的风", "绿意盎然的画面", "大自然最好的滤镜", "清风与花香交织"],
-        "海滩": ["海风轻抚的瞬间", "浪花写下的情书", "海与天的交界处", "被海风吹乱的温柔"],
+        "海滩": ["海风轻抚的瞬间", "浪花写下的情书", "海���天的交界处", "被海风吹乱的温柔"],
         "花田": ["花海里的少女心事", "花瓣落满肩头", "被花包围的浪漫", "春天专属的色彩"],
         "城市": ["城市光影中的故事", "街角的一抹亮色", "都市里的片刻宁静", "水泥森林中的柔软"],
         "街头": ["街拍质感满分", "街角转弯遇见美好", "城市漫步的随性", "人潮中最亮眼的存在"],
@@ -164,7 +166,6 @@ def generate_caption_from_meta(meta: dict) -> str:
         "运动": ["活力值拉满", "运动女孩最迷人"],
     }
 
-    # 从各维度随机选一个片段组合
     parts = []
 
     if scene and scene in scene_phrases:
@@ -183,13 +184,24 @@ def generate_caption_from_meta(meta: dict) -> str:
         if outfit and outfit in outfit_phrases:
             parts.append(random.choice(outfit_phrases[outfit]))
 
+    # 补第2句：从光影/穿搭里再取一个维度
+    if len(parts) == 1:
+        if lighting and lighting in light_phrases:
+            candidate = random.choice(light_phrases[lighting])
+            if candidate not in parts:
+                parts.append(candidate)
+        elif outfit and outfit in outfit_phrases:
+            candidate = random.choice(outfit_phrases[outfit])
+            if candidate not in parts:
+                parts.append(candidate)
+
     # 保底：至少有一句
     if not parts:
         fallback = ["今日份心动瞬间", "美好值得被定格", "每一帧都是风景",
                      "镜头里的温柔", "光影之间的故事", "被美好击中的瞬间"]
         parts.append(random.choice(fallback))
 
-    # 组合：1-2 句，用逗号或句号连接
+    # 组合：最多2句
     if len(parts) >= 2:
         return f"{parts[0]}，{parts[1]}。"
     else:
@@ -466,43 +478,131 @@ def generate_tags_from_prompt(prompt: str) -> str:
     return " ".join(tags[:6])
 
 
-def generate_smart_caption(scene: str = "", emotion: str = "", makeup: str = "", art_style: str = "") -> str:
-    """兼容旧接口：无元数据时使用"""
-    base = generate_caption_from_meta({
-        "scene_type": scene,
-        "expression_type": emotion,
-        "art_style": art_style,
-    })
+# ── 风格开场文案（3条/风格，按日期轮换） ──────────────────────────
+_STYLE_OPENERS = {
+    "性感系": [
+        "不经意间，眼神轻抬，万种风情自然流露。这种美，不需要解释。",
+        "美从来不是刻意摆出来的，而是那一刻突然涌现的心跳。",
+        "靠近，是本能。今日这帧，记得多看一眼。",
+    ],
+    "甜美系": [
+        "笑起来眼睛弯弯的，甜度爆表，让人心情瞬间好起来。",
+        "春风十里，不如今天这个微笑来得直接。",
+        "今日份甜蜜准时送达，请查收。",
+    ],
+    "国风系": [
+        "一袭古风，把岁月的柔情都装进了镜头里，东方美学从不过时。",
+        "青砖黛瓦，美人如画。古典与现代之间，美总是共通的。",
+        "千年审美，一帧定格。今天的国风，今天的她。",
+    ],
+    "邻家女孩系": [
+        "转角遇见的美好，就是这种感觉——自然又温柔，不用力。",
+        "不需要刻意，清新感扑面而来，像邻家姑娘的一个眼神。",
+        "最喜欢这种不加滤镜的真实，干净，让人放松。",
+    ],
+    "职场系": [
+        "干练中透着温柔，自信是最好的妆容。这种气场，无法复制。",
+        "精致不失亲切，职场里最迷人的，是那份从容与笃定。",
+        "气场全开，眼神里依然有温度。今日这帧，请认真欣赏。",
+    ],
+    "生活场景系": [
+        "生活里最真实的美好，往往藏在平凡的瞬间。今天这一帧也是。",
+        "烟火气里的她，才是最动人的模样——真实，鲜活，有温度。",
+        "不是舞台，是生活，但每一帧都值得被珍藏。",
+    ],
+    "清纯系": [
+        "干净的眼神，比任何滤镜都好看。清水出芙蓉，天然去雕饰。",
+        "最纯粹的美，是不需要任何装饰的那种，自然天成。",
+        "简单的美好，像一阵清风，让人心里安静下来。",
+    ],
+}
 
-    makeup_phrases = {
-        "韩妆": "韩系妆感更显清透",
-        "欧美妆": "欧美妆感把轮廓衬得更立体",
-        "烟熏妆": "烟熏妆把氛围感拉满",
-        "玻璃妆": "玻璃肌质感很适合近景",
-        "裸妆": "裸妆更贴近自然抓拍感",
-        "红唇妆": "红唇让画面更有记忆点",
-    }
-    art_phrases = {
-        "电影感": "电影感色调让故事更完整",
-        "王家卫": "王家卫式氛围格外迷人",
-        "韩剧": "韩剧感光影自带温柔滤镜",
-        "时尚杂志": "时尚杂志感让镜头更高级",
-        "ins风": "ins 风构图干净又轻盈",
-        "暗调": "暗调氛围更显情绪张力",
-        "复古胶片": "复古胶片感把时间都放慢了",
-    }
+# ── workflow emotion 值 → 补充结尾句 ───────────────────────────────
+_EMOTION_CLOSERS = {
+    "挑逗": "眼角眉梢都是故事，靠近，是本能。",
+    "俏皮": "灵动的眼神藏着小心思，古灵精怪招人爱。",
+    "温柔": "温柔是最让人心动的力量，久久回味。",
+    "自信": "这样的她，发光。不需要理由，只需要欣赏。",
+    "微笑": "一个微笑，就足以让这一天变得不同。",
+    "性感": "这种美，带着温度，有点危险，却让人想靠近。",
+}
 
-    details = []
-    if makeup:
-        details.append(makeup_phrases.get(makeup, f"{makeup}细节也很加分"))
-    if art_style:
-        details.append(art_phrases.get(art_style, f"{art_style}氛围很有辨识度"))
+# ── workflow emotion → expr_phrases key（修复匹配缺失） ────────────
+_EMOTION_ALIAS = {
+    "挑逗": "性感妩媚",
+    "俏皮": "俏皮灵动",
+    "温柔": "清纯自然",
+    "自信": "优雅端庄",
+    "微笑": "甜美微笑",
+    "性感": "性感妩媚",
+}
 
-    if not details:
-        return base
+# ── 风格标题（更有辨识度） ──────────────────────────────────────────
+STYLE_TITLES = {
+    "性感系": "今日写真 · 性感系",
+    "甜美系": "今日写真 · 甜美系",
+    "国风系": "今日写真 · 国风",
+    "邻家女孩系": "今日写真 · 邻家女孩",
+    "职场系": "今日写真 · 职场气质",
+    "生活场景系": "今日写真 · 烟火日常",
+    "清纯系": "今日写真 · 清纯系",
+}
 
-    base = base[:-1] if base.endswith("。") else base
-    return f"{base}，{details[0]}。"
+
+def generate_smart_caption(scene: str = "", emotion: str = "", makeup: str = "", art_style: str = "", style: str = "") -> str:
+    """生成开场文案（2段，风格感更强）"""
+    from datetime import date
+
+    parts = []
+
+    # 第1段：风格专属开场（按日期轮换，同一天同风格固定同一句）
+    if style and style in _STYLE_OPENERS:
+        idx = date.today().toordinal() % len(_STYLE_OPENERS[style])
+        parts.append(_STYLE_OPENERS[style][idx])
+
+    # 第2段：emotion 补充结尾句
+    if emotion and emotion in _EMOTION_CLOSERS:
+        parts.append(_EMOTION_CLOSERS[emotion])
+
+    # 没有 style 时回退到基于 meta 的旧逻辑
+    if not parts:
+        # 修复：将 workflow emotion 值映射到 expr_phrases key
+        mapped_emotion = _EMOTION_ALIAS.get(emotion, emotion)
+        base = generate_caption_from_meta({
+            "scene_type": scene,
+            "expression_type": mapped_emotion,
+            "art_style": art_style,
+        })
+
+        makeup_phrases = {
+            "韩妆": "韩系妆感更显清透",
+            "欧美妆": "欧美妆感把轮廓衬得更立体",
+            "烟熏妆": "烟熏妆把氛围感拉满",
+            "玻璃妆": "玻璃肌质感很适合近景",
+            "裸妆": "裸妆更贴近自然抓拍感",
+            "红唇妆": "红唇让画面更有记忆点",
+        }
+        art_phrases = {
+            "电影感": "电影感色调让故事更完整",
+            "王家卫": "王家卫式氛围格外迷人",
+            "韩剧": "韩剧感光影自带温柔滤镜",
+            "时尚杂志": "时尚杂志感让镜头更高级",
+            "ins风": "ins 风构图干净又轻盈",
+            "暗调": "暗调氛围更显情绪张力",
+            "复古胶片": "复古胶片感把时间都放慢了",
+        }
+        details = []
+        if makeup:
+            details.append(makeup_phrases.get(makeup, f"{makeup}细节也很加分"))
+        if art_style:
+            details.append(art_phrases.get(art_style, f"{art_style}氛围很有辨识度"))
+        if details:
+            base = base[:-1] if base.endswith("。") else base
+            parts.append(f"{base}，{details[0]}。")
+        else:
+            parts.append(base)
+
+    return "\n\n".join(parts)
 
 
 def generate_one_line_caption(style: str = "") -> str:
@@ -734,17 +834,20 @@ def main():
     # 生成标题
     if not args.title:
         if is_manual:
-            args.title = f"📸 每日美女 | 手动精选"
+            args.title = f"📸 每日写真 | 手动精选"
+        elif args.style and args.style in STYLE_TITLES:
+            args.title = f"📸 {STYLE_TITLES[args.style]}"
         else:
-            args.title = f"📸 每日美女 | {weekday_str}"
+            args.title = f"📸 今日写真 · {weekday_str}"
 
-    # 智能生成一句话介绍（根据场景、情绪等参数）
+    # 智能生成开场文案（传入 style 让内容更有针对性）
     if not args.caption:
         args.caption = generate_smart_caption(
             scene=args.scene or "",
             emotion=args.emotion or "",
             makeup=args.makeup or "",
-            art_style=args.art_style or ""
+            art_style=args.art_style or "",
+            style=args.style or "",
         )
 
     print("=" * 50)

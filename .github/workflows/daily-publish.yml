@@ -128,8 +128,7 @@ jobs:
             python3 publish_wechat.py \
               --count 1 \
               --style "$STYLE" \
-              --emotion "$EMOTION" \
-              --title "📸 每日写真 | ${STYLE}"
+              --emotion "$EMOTION"
           fi
 
       - name: 记录运行日志到仓库
