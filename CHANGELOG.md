@@ -1,6 +1,17 @@
 # 版本历史
 
-## v10.0.0 (2026-03-21) - 配置驱动架构重构
+## v10.1.0 (2026-04-08) - 内容质量升级
+
+### 功能改进
+- **差异化标题**：新增 `STYLE_TITLES` 映射，7种风格各有独立标题（如"今日写真 · 国风"），不再每篇都是"每日美女 | 周三"
+- **风格专属开场文案**：新增 `_STYLE_OPENERS`，每种风格3条开场句按日期轮换，配合 `_EMOTION_CLOSERS` 组成2段开场内容
+- **修复 emotion 映射缺失**：新增 `_EMOTION_ALIAS`，将 workflow 传入的 emotion 值（"挑逗"/"俏皮"/"温柔"等）正确映射到 `expr_phrases` key，解决开场白长期落入 fallback 的问题
+- **图片配文升级**：`generate_caption_from_meta` 自动补第2句（从光影/穿搭维度），避免单句配文
+
+### Bug 修复
+- **dedupe exit 126 修复**：将 `RUNS_JSON` 改为写入临时文件再传给 python，规避 Argument list too long 问题（随运行记录积累 JSON 超出内核参数上限）
+
+
 
 ### 架构优化
 - **配置驱动风格策略**: 风格策略从 if-elif 硬编码迁移到 `style_strategies.json`，支持无代码修改风格组合
