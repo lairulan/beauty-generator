@@ -66,9 +66,12 @@ jobs:
               -H "Accept: application/vnd.github+json" \
               "$API_URL" 2>/dev/null || true)
 
+            RUNS_JSON_FILE=$(mktemp)
             API_MATCH=false
             if [ -n "$RUNS_JSON" ]; then
-              API_MATCH=$(RUNS_JSON="$RUNS_JSON" TODAY="$TODAY" CURRENT_RUN_ID="$CURRENT_RUN_ID" python3 -c 'import json, os; from datetime import datetime, timedelta, timezone; runs=json.loads(os.environ["RUNS_JSON"]).get("workflow_runs", []); today=os.environ["TODAY"]; current=os.environ.get("CURRENT_RUN_ID", ""); tz=timezone(timedelta(hours=8)); print("true" if any(str(run.get("id")) != current and run.get("conclusion") == "success" and ((datetime.fromisoformat(started.replace("Z", "+00:00")).astimezone(tz).strftime("%Y-%m-%d") == today) if started else False) for run in runs for started in [run.get("run_started_at") or run.get("created_at") or run.get("updated_at")]) else "false")')
+              printf '%s' "$RUNS_JSON" > "$RUNS_JSON_FILE"
+              API_MATCH=$(TODAY="$TODAY" CURRENT_RUN_ID="$CURRENT_RUN_ID" RUNS_JSON_FILE="$RUNS_JSON_FILE" python3 -c 'import json, os; from datetime import datetime, timedelta, timezone; runs=json.load(open(os.environ["RUNS_JSON_FILE"])).get("workflow_runs", []); today=os.environ["TODAY"]; current=os.environ.get("CURRENT_RUN_ID", ""); tz=timezone(timedelta(hours=8)); print("true" if any(str(run.get("id")) != current and run.get("conclusion") == "success" and ((datetime.fromisoformat(started.replace("Z", "+00:00")).astimezone(tz).strftime("%Y-%m-%d") == today) if started else False) for run in runs for started in [run.get("run_started_at") or run.get("created_at") or run.get("updated_at")]) else "false")')
+              rm -f "$RUNS_JSON_FILE"
             fi
 
             if [ "$API_MATCH" = "true" ]; then
