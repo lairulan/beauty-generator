@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-美女生成 V10.0 - 双引擎高清生成系统
-- Google Imagen 4 Ultra 主力 + 豆包 Seedream 备选
+美女生成 V11.0 - 豆包 Seedream 3.0 主力引擎
+- 豆包 Seedream 3.0（全球第一梯队，写真人像维度全球 #1）作为唯一主力
+- 自动重试 + 429 指数退避（最多 3 次）
 - 配置驱动风格策略（style_strategies.json）
 - 多图床容错上传 + 重试机制
 - 从丰富的元素库中随机组合
@@ -25,7 +26,7 @@ from datetime import date, datetime
 from pathlib import Path
 
 
-VERSION = "10.0.0"
+VERSION = "11.0.0"
 
 
 def _get_ssl_context():
@@ -74,21 +75,14 @@ API_ENDPOINT = _doubao_cfg.get(
     "endpoint",
     "https://ark.cn-beijing.volces.com/api/v3/images/generations"
 )
-API_MODEL = _doubao_cfg.get("model", "doubao-seedream-5-0-260128")
+API_MODEL = _doubao_cfg.get("model", "doubao-seedream-3-0-t2i-250415")
 DOUBAO_TIMEOUT = _doubao_cfg.get("timeout", 90)
 DOUBAO_SIZE = _doubao_cfg.get("size", "2K")
 
-GOOGLE_IMAGEN_ENDPOINT = _google_cfg.get(
-    "endpoint",
-    "https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-ultra-generate-001:predict"
-)
-GOOGLE_TIMEOUT = _google_cfg.get("timeout", 120)
-GOOGLE_ASPECT_RATIO = _google_cfg.get("aspect_ratio", "3:4")
-GOOGLE_SAMPLE_COUNT = _google_cfg.get("sample_count", 1)
-GOOGLE_RETRY_MAX_ATTEMPTS = _google_retry_cfg.get("max_attempts", 3)
-GOOGLE_RETRY_BASE_DELAY = _google_retry_cfg.get("base_delay", 5)
-GOOGLE_RETRY_MAX_DELAY = _google_retry_cfg.get("max_delay", 20)
-GOOGLE_COOLDOWN_SECONDS = _google_retry_cfg.get("cooldown_seconds", 300)
+_doubao_retry_cfg = _doubao_cfg.get("retry", {})
+DOUBAO_RETRY_MAX_ATTEMPTS = _doubao_retry_cfg.get("max_attempts", 3)
+DOUBAO_RETRY_BASE_DELAY = _doubao_retry_cfg.get("base_delay", 10)
+DOUBAO_RETRY_MAX_DELAY = _doubao_retry_cfg.get("max_delay", 60)
 
 IMAGE_HOSTS = CONSTANTS.get("image_hosts", [
     {"name": "imgbb", "endpoint": "https://api.imgbb.com/1/upload", "timeout": 60, "env_key": "IMGBB_API_KEY"}
@@ -111,10 +105,6 @@ SCENE_OUTFIT_MAP = CONSTANTS.get("scene_outfit_map", {
     "职场": ["职场", "优雅"]
 })
 
-GOOGLE_SUSPENDED_UNTIL = 0.0
-GOOGLE_SUSPENDED_REASON = ""
-
-
 # ─── 日志 ────────────────────────────────────────────────────
 
 def log(message: str, level: str = "INFO"):
@@ -129,36 +119,6 @@ def log(message: str, level: str = "INFO"):
             f.write(log_msg + "\n")
     except Exception:
         pass
-
-
-def _suspend_google(reason: str, cooldown_seconds: int | None = None):
-    """在当前进程内暂时或持续停用 Google 引擎。"""
-    global GOOGLE_SUSPENDED_UNTIL, GOOGLE_SUSPENDED_REASON
-
-    GOOGLE_SUSPENDED_REASON = reason
-    if cooldown_seconds is None:
-        GOOGLE_SUSPENDED_UNTIL = float("inf")
-    else:
-        GOOGLE_SUSPENDED_UNTIL = time.time() + max(1, cooldown_seconds)
-
-
-def _get_google_suspend_message() -> str:
-    """返回当前 Google 引擎暂停原因；若未暂停则返回空字符串。"""
-    global GOOGLE_SUSPENDED_UNTIL, GOOGLE_SUSPENDED_REASON
-
-    if not GOOGLE_SUSPENDED_REASON:
-        return ""
-
-    if GOOGLE_SUSPENDED_UNTIL == float("inf"):
-        return f"Google 当前在本次运行中已停用: {GOOGLE_SUSPENDED_REASON}"
-
-    remaining = int(max(0, GOOGLE_SUSPENDED_UNTIL - time.time()))
-    if remaining <= 0:
-        GOOGLE_SUSPENDED_UNTIL = 0.0
-        GOOGLE_SUSPENDED_REASON = ""
-        return ""
-
-    return f"Google 当前处于冷却期（剩余约 {remaining}s）: {GOOGLE_SUSPENDED_REASON}"
 
 
 # ─── Prompt 元素库 ───────────────────────────────────────────
@@ -1040,7 +1000,12 @@ def generate_image_google(prompt: str) -> dict:
 
 
 def generate_image_doubao(prompt: str, negative_prompt: str) -> dict:
-    """调用豆包 Seedream API 生成图片（文生图保底引擎）"""
+    """调用豆包 Seedream 3.0 生成图片（主力引擎）
+
+    - 模型：doubao-seedream-3-0-t2i-250415（全球第一梯队，人像维度 #1）
+    - 支持 429 指数退避重试，最多 DOUBAO_RETRY_MAX_ATTEMPTS 次
+    - 永久性错误（400/401/403）直接返回，不重试
+    """
     doubao_key = os.environ.get("DOUBAO_API_KEY")
     if not doubao_key:
         return {"success": False, "error": "DOUBAO_API_KEY 未设置"}
@@ -1055,57 +1020,98 @@ def generate_image_doubao(prompt: str, negative_prompt: str) -> dict:
     }
 
     ssl_context = _get_ssl_context()
-    try:
-        data = json.dumps(payload).encode("utf-8")
-        req = urllib.request.Request(
-            API_ENDPOINT,
-            data=data,
-            headers={
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {doubao_key}"
-            },
-            method="POST"
-        )
-        with urllib.request.urlopen(req, context=ssl_context, timeout=DOUBAO_TIMEOUT) as response:
-            if response.status == 200:
+
+    for attempt in range(DOUBAO_RETRY_MAX_ATTEMPTS):
+        try:
+            body = json.dumps(payload).encode("utf-8")
+            req = urllib.request.Request(
+                API_ENDPOINT,
+                data=body,
+                headers={
+                    "Content-Type": "application/json",
+                    "Authorization": f"Bearer {doubao_key}"
+                },
+                method="POST"
+            )
+            with urllib.request.urlopen(req, context=ssl_context, timeout=DOUBAO_TIMEOUT) as response:
                 response_data = response.read().decode("utf-8")
-                data = json.loads(response_data)
-                if "data" in data and len(data["data"]) > 0:
-                    return {"success": True, "url": data["data"][0].get("url")}
-        return {"success": False, "error": "豆包 API 响应异常"}
-    except Exception as e:
-        return {"success": False, "error": str(e)}
+                result = json.loads(response_data)
+                if "data" in result and len(result["data"]) > 0:
+                    url = result["data"][0].get("url")
+                    if url:
+                        return {"success": True, "url": url}
+            return {"success": False, "error": "豆包 API 响应无图片数据"}
+
+        except urllib.error.HTTPError as e:
+            err_body = e.read().decode("utf-8", errors="replace")[:300]
+            if e.code == 429:
+                if attempt < DOUBAO_RETRY_MAX_ATTEMPTS - 1:
+                    delay = min(DOUBAO_RETRY_MAX_DELAY, DOUBAO_RETRY_BASE_DELAY * (2 ** attempt))
+                    log(f"  [豆包] 触发限流 (429)，{delay}s 后重试 ({attempt + 1}/{DOUBAO_RETRY_MAX_ATTEMPTS})", "WARN")
+                    time.sleep(delay)
+                    continue
+                return {
+                    "success": False,
+                    "error": f"HTTP Error 429: Too Many Requests（已重试 {DOUBAO_RETRY_MAX_ATTEMPTS} 次）",
+                    "error_type": "rate_limit"
+                }
+            if e.code in (400, 401, 403):
+                return {
+                    "success": False,
+                    "error": f"HTTP Error {e.code}: {err_body}",
+                    "error_type": "auth_error"
+                }
+            if attempt < DOUBAO_RETRY_MAX_ATTEMPTS - 1:
+                delay = min(DOUBAO_RETRY_MAX_DELAY, DOUBAO_RETRY_BASE_DELAY * (2 ** attempt))
+                log(f"  [豆包] HTTP {e.code} 错误，{delay}s 后重试 ({attempt + 1}/{DOUBAO_RETRY_MAX_ATTEMPTS})", "WARN")
+                time.sleep(delay)
+                continue
+            return {"success": False, "error": f"HTTP Error {e.code}: {err_body}"}
+
+        except urllib.error.URLError as e:
+            return {"success": False, "error": f"豆包连接失败: {e.reason}"}
+
+        except json.JSONDecodeError:
+            return {"success": False, "error": "豆包 API 响应 JSON 解析失败"}
+
+        except Exception as e:
+            if attempt < DOUBAO_RETRY_MAX_ATTEMPTS - 1:
+                delay = DOUBAO_RETRY_BASE_DELAY
+                log(f"  [豆包] 异常: {e}，{delay}s 后重试 ({attempt + 1}/{DOUBAO_RETRY_MAX_ATTEMPTS})", "WARN")
+                time.sleep(delay)
+                continue
+            return {"success": False, "error": str(e)}
+
+    return {"success": False, "error": "豆包 API 重试后仍失败"}
 
 
 def generate_image(prompt: str, negative_prompt: str) -> dict:
-    """生成图片：Google Imagen 4 Ultra（主力）→ 豆包 Seedream 5.0（保底）"""
+    """生成图片：豆包 Seedream 3.0 主力（含重试）→ Google Imagen 备用（key 存在时）"""
 
-    # 优先 Google Imagen 4 Ultra
+    # 主力：豆包 Seedream 3.0
+    doubao_key = os.environ.get("DOUBAO_API_KEY")
+    if doubao_key:
+        log(f"  [豆包] 使用 Seedream 3.0（{API_MODEL}）...")
+        result = generate_image_doubao(prompt, negative_prompt)
+        if result["success"]:
+            log("  [豆包] 生成成功")
+            return result
+        error_type = result.get("error_type", "")
+        log(f"  [豆包] 失败: {result.get('error')}，尝试 Google 备用...", "WARN")
+        # 认证错误不降级（不会有帮助）
+        if error_type == "auth_error":
+            return result
+
+    # 备用：Google Imagen（仅当 key 存在时）
     google_key = os.environ.get("GOOGLE_API_KEY")
     if google_key:
-        log("  [Google] 尝试 Imagen 4 Ultra...")
+        log("  [Google] 尝试 Imagen 备用...")
         result = generate_image_google(prompt)
         if result["success"]:
             log("  [Google] 生成成功")
-            return result
-        error = result.get("error", "未知错误")
-        error_type = result.get("error_type", "")
-        if error_type == "key_invalid" or "已过期" in error:
-            log(f"  [Google] Key 不可用: {error}，本次运行后续将跳过 Google，降级到豆包...", "WARN")
-        elif error_type == "rate_limit" or "429" in error or "限流" in error:
-            log(f"  [Google] 遭遇限流: {error}，本次运行后续将短暂跳过 Google，降级到豆包...", "WARN")
-        elif error_type == "suspended":
-            log(f"  [Google] 跳过: {error}，直接降级到豆包...", "WARN")
-        else:
-            log(f"  [Google] 失败: {error}，降级到豆包...")
+        return result
 
-    # 保底：豆包 Seedream 5.0 Lite
-    doubao_key = os.environ.get("DOUBAO_API_KEY")
-    if doubao_key:
-        log("  [豆包] 使用 Seedream 5.0 Lite 保底...")
-        return generate_image_doubao(prompt, negative_prompt)
-
-    return {"success": False, "error": "所有引擎均无可用 API Key"}
+    return {"success": False, "error": "所有引擎均无可用 API Key 或生成失败"}
 
 
 # ─── 风格策略 ────────────────────────────────────────────────
@@ -1171,8 +1177,8 @@ def generate_custom(prompt: str, count: int = 1) -> dict:
 
     跳过随机元素库组合，直接使用用户提供的 prompt 调用双引擎生成。
     """
-    if not os.environ.get("GOOGLE_API_KEY") and not os.environ.get("DOUBAO_API_KEY"):
-        log("错误: 请设置 GOOGLE_API_KEY 或 DOUBAO_API_KEY 环境变量", "ERROR")
+    if not os.environ.get("DOUBAO_API_KEY") and not os.environ.get("GOOGLE_API_KEY"):
+        log("错误: 请设置 DOUBAO_API_KEY 环境变量", "ERROR")
         return {"success": False, "count": 0, "total": count, "character": {}, "images": []}
 
     log("=" * 60)
@@ -1247,12 +1253,12 @@ def generate_series(count: int = 3,
                     emotion: str = None) -> dict:
     """生成系列图片"""
 
-    if not os.environ.get("GOOGLE_API_KEY") and not os.environ.get("DOUBAO_API_KEY"):
-        log("错误: 请设置 GOOGLE_API_KEY 或 DOUBAO_API_KEY 环境变量", "ERROR")
+    if not os.environ.get("DOUBAO_API_KEY") and not os.environ.get("GOOGLE_API_KEY"):
+        log("错误: 请设置 DOUBAO_API_KEY 环境变量", "ERROR")
         return {"success": False, "count": 0, "total": count, "character": {}, "images": []}
 
     log("=" * 60)
-    log(f"美女生成 V{VERSION} - 双引擎高清生成系统")
+    log(f"美女生成 V{VERSION} - 豆包 Seedream 3.0 主力引擎")
     log("=" * 60)
 
     # 加载元素库
@@ -1276,7 +1282,7 @@ def generate_series(count: int = 3,
 
     log("")
     log("=" * 60)
-    log(f"开始生成 {count} 张图片（纯文生图，4K 高清）...")
+    log(f"开始生成 {count} 张图片（Seedream 3.0，原生 2K）...")
     log("=" * 60)
 
     for i in range(count):

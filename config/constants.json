@@ -1,23 +1,16 @@
 {
-  "version": "10.0.0",
+  "version": "11.0.0",
   "engines": {
-    "google": {
-      "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-ultra-generate-001:predict",
-      "timeout": 120,
-      "aspect_ratio": "3:4",
-      "sample_count": 1,
-      "retry": {
-        "max_attempts": 3,
-        "base_delay": 5,
-        "max_delay": 20,
-        "cooldown_seconds": 300
-      }
-    },
     "doubao": {
       "endpoint": "https://ark.cn-beijing.volces.com/api/v3/images/generations",
-      "model": "doubao-seedream-5-0-260128",
+      "model": "doubao-seedream-3-0-t2i-250415",
       "timeout": 90,
-      "size": "2K"
+      "size": "2K",
+      "retry": {
+        "max_attempts": 3,
+        "base_delay": 10,
+        "max_delay": 60
+      }
     }
   },
   "image_hosts": [
