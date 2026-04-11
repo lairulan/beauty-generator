@@ -1023,6 +1023,10 @@ def generate_image_google(prompt: str) -> dict:
                 _suspend_google(error_message, None)
                 return {"success": False, "error": error_message, "error_type": "key_invalid"}
 
+            if e.code == 400 and ("paid plans" in error_message or "upgrade" in error_message.lower()):
+                _suspend_google(error_message, None)
+                return {"success": False, "error": error_message, "error_type": "quota_exceeded"}
+
             return {"success": False, "error": error_message}
 
         except urllib.error.URLError as e:
