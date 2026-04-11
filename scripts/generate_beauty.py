@@ -1086,32 +1086,20 @@ def generate_image_doubao(prompt: str, negative_prompt: str) -> dict:
 
 
 def generate_image(prompt: str, negative_prompt: str) -> dict:
-    """生成图片：豆包 Seedream 3.0 主力（含重试）→ Google Imagen 备用（key 存在时）"""
+    """生成图片：豆包 Seedream 5.0 主力（含重试）"""
 
-    # 主力：豆包 Seedream 3.0
+    # 主力：豆包 Seedream 5.0
     doubao_key = os.environ.get("DOUBAO_API_KEY")
-    if doubao_key:
-        log(f"  [豆包] 使用 Seedream 3.0（{API_MODEL}）...")
-        result = generate_image_doubao(prompt, negative_prompt)
-        if result["success"]:
-            log("  [豆包] 生成成功")
-            return result
-        error_type = result.get("error_type", "")
-        log(f"  [豆包] 失败: {result.get('error')}，尝试 Google 备用...", "WARN")
-        # 认证错误不降级（不会有帮助）
-        if error_type == "auth_error":
-            return result
+    if not doubao_key:
+        return {"success": False, "error": "DOUBAO_API_KEY 未设置"}
 
-    # 备用：Google Imagen（仅当 key 存在时）
-    google_key = os.environ.get("GOOGLE_API_KEY")
-    if google_key:
-        log("  [Google] 尝试 Imagen 备用...")
-        result = generate_image_google(prompt)
-        if result["success"]:
-            log("  [Google] 生成成功")
-        return result
-
-    return {"success": False, "error": "所有引擎均无可用 API Key 或生成失败"}
+    log(f"  [豆包] 使用 Seedream（{API_MODEL}）...")
+    result = generate_image_doubao(prompt, negative_prompt)
+    if result["success"]:
+        log("  [豆包] 生成成功")
+    else:
+        log(f"  [豆包] 失败: {result.get('error')}", "WARN")
+    return result
 
 
 # ─── 风格策略 ────────────────────────────────────────────────
