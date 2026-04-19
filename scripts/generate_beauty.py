@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-美女生成 V11.0 - 豆包 Seedream 3.0 主力引擎
-- 豆包 Seedream 3.0（全球第一梯队，写真人像维度全球 #1）作为唯一主力
+美女生成 V12.0 - 豆包 Seedream 4.5 主力 + Google Imagen 备选
+- 豆包 Seedream 4.5（文生图/图编辑双榜第一）作为主力引擎
+- Google Imagen 作为 fallback
 - 自动重试 + 429 指数退避（最多 3 次）
 - 配置驱动风格策略（style_strategies.json）
 - 多图床容错上传 + 重试机制
-- 从丰富的元素库中随机组合
-- 确保每次生成都有新鲜感
-- 严格东方美女风格
 """
 
 import argparse
@@ -26,7 +24,7 @@ from datetime import date, datetime
 from pathlib import Path
 
 
-VERSION = "11.0.0"
+VERSION = "12.0.0"
 
 
 def _get_ssl_context():
@@ -83,6 +81,18 @@ _doubao_retry_cfg = _doubao_cfg.get("retry", {})
 DOUBAO_RETRY_MAX_ATTEMPTS = _doubao_retry_cfg.get("max_attempts", 3)
 DOUBAO_RETRY_BASE_DELAY = _doubao_retry_cfg.get("base_delay", 10)
 DOUBAO_RETRY_MAX_DELAY = _doubao_retry_cfg.get("max_delay", 60)
+
+GOOGLE_IMAGEN_ENDPOINT = _google_cfg.get(
+    "endpoint",
+    "https://us-central1-aiplatform.googleapis.com/v1/projects/gen-lang-client-0574418043/locations/us-central1/publishers/google/models/imagen-3.0-generate-002:predict"
+)
+GOOGLE_TIMEOUT = _google_cfg.get("timeout", 120)
+GOOGLE_SAMPLE_COUNT = _google_cfg.get("sample_count", 1)
+GOOGLE_ASPECT_RATIO = _google_cfg.get("aspect_ratio", "3:4")
+GOOGLE_RETRY_MAX_ATTEMPTS = _google_retry_cfg.get("max_attempts", 2)
+GOOGLE_RETRY_BASE_DELAY = _google_retry_cfg.get("base_delay", 15)
+GOOGLE_RETRY_MAX_DELAY = _google_retry_cfg.get("max_delay", 120)
+GOOGLE_COOLDOWN_SECONDS = _google_cfg.get("cooldown_seconds", 1800)
 
 IMAGE_HOSTS = CONSTANTS.get("image_hosts", [
     {"name": "imgbb", "endpoint": "https://api.imgbb.com/1/upload", "timeout": 60, "env_key": "IMGBB_API_KEY"}
@@ -869,8 +879,37 @@ def generate_image_minimax(prompt: str) -> dict:
         return {"success": False, "error": str(e)}
 
 
+_GOOGLE_SUSPEND_FILE = LOGS_DIR / "google_suspended.json"
+
+
+def _suspend_google(message: str, seconds):
+    data = {"message": message, "ts": time.time()}
+    if seconds:
+        data["until"] = time.time() + seconds
+    try:
+        with open(_GOOGLE_SUSPEND_FILE, "w") as f:
+            json.dump(data, f)
+    except Exception:
+        pass
+
+
+def _get_google_suspend_message():
+    try:
+        if not _GOOGLE_SUSPEND_FILE.exists():
+            return None
+        with open(_GOOGLE_SUSPEND_FILE) as f:
+            data = json.load(f)
+        until = data.get("until")
+        if until and time.time() > until:
+            _GOOGLE_SUSPEND_FILE.unlink(missing_ok=True)
+            return None
+        return data.get("message", "Google API suspended")
+    except Exception:
+        return None
+
+
 def generate_image_google(prompt: str) -> dict:
-    """调用 Google Imagen 4 Ultra 生成图片，结果上传到图床返回 URL"""
+    """调用 Google Imagen 生成图片，结果上传到图床返回 URL"""
     google_key = os.environ.get("GOOGLE_API_KEY")
     if not google_key:
         return {"success": False, "error": "GOOGLE_API_KEY 未设置"}
@@ -1086,20 +1125,27 @@ def generate_image_doubao(prompt: str, negative_prompt: str) -> dict:
 
 
 def generate_image(prompt: str, negative_prompt: str) -> dict:
-    """生成图片：豆包 Seedream 5.0 主力（含重试）"""
+    """生成图片：豆包 Seedream 4.5 主力 → Google Imagen 备选"""
 
-    # 主力：豆包 Seedream 5.0
     doubao_key = os.environ.get("DOUBAO_API_KEY")
-    if not doubao_key:
-        return {"success": False, "error": "DOUBAO_API_KEY 未设置"}
+    if doubao_key:
+        log(f"  [豆包] 使用 Seedream（{API_MODEL}）...")
+        result = generate_image_doubao(prompt, negative_prompt)
+        if result["success"]:
+            log("  [豆包] 生成成功")
+            return result
+        log(f"  [豆包] 失败: {result.get('error')}，尝试 Google 备选...", "WARN")
 
-    log(f"  [豆包] 使用 Seedream（{API_MODEL}）...")
-    result = generate_image_doubao(prompt, negative_prompt)
-    if result["success"]:
-        log("  [豆包] 生成成功")
-    else:
-        log(f"  [豆包] 失败: {result.get('error')}", "WARN")
-    return result
+    google_key = os.environ.get("GOOGLE_API_KEY")
+    if google_key:
+        log("  [Google] 使用 Imagen 备选引擎...")
+        result = generate_image_google(prompt)
+        if result["success"]:
+            log("  [Google] 生成成功")
+            return result
+        log(f"  [Google] 失败: {result.get('error')}", "WARN")
+
+    return {"success": False, "error": "所有引擎均不可用或生成失败"}
 
 
 # ─── 风格策略 ────────────────────────────────────────────────
