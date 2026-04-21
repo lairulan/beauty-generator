@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-美女生成 V12.0 - Google Imagen 4 Ultra 主力 + 豆包 Seedream 4.5 备选
-- Google Imagen 4 Ultra 作为主力引擎
+美女生成 V12.0 - Google Imagen 4 Ultra 双 Key 主力 + 豆包 Seedream 4.5 备选
+- Google Imagen 4 Ultra 作为主力引擎，支持主备 Key 轮换
 - 豆包 Seedream 4.5 作为 fallback
 - 自动重试 + 429 指数退避（最多 3 次）
 - 配置驱动风格策略（style_strategies.json）
@@ -991,15 +991,45 @@ def _get_google_suspend_message():
         return None
 
 
-def generate_image_google(prompt: str) -> dict:
-    """调用 Google Imagen 生成图片，结果上传到图床返回 URL"""
-    google_key = os.environ.get("GOOGLE_API_KEY")
-    if not google_key:
-        return {"success": False, "error": "GOOGLE_API_KEY 未设置"}
+def _get_google_key_candidates() -> list[tuple[str, str]]:
+    """返回按优先级排序的 Google API Key 候选。"""
+    candidates = []
+    seen = set()
+    for env_name, label in [
+        ("GOOGLE_API_KEY", "primary"),
+        ("GOOGLE_API_KEY_BACKUP", "backup")
+    ]:
+        value = os.environ.get(env_name, "").strip()
+        if value and value not in seen:
+            candidates.append((label, value))
+            seen.add(value)
+    return candidates
 
-    suspended = _get_google_suspend_message()
-    if suspended:
-        return {"success": False, "error": suspended, "error_type": "suspended"}
+
+def _has_google_key_configured() -> bool:
+    return bool(_get_google_key_candidates())
+
+
+def _is_google_key_retryable_error(error: str) -> bool:
+    """判断当前错误是否值得切到下一把 Google Key。"""
+    text = (error or "").lower()
+    return any(token in text for token in [
+        "google api 限流或配额不足 (429)",
+        "google api key 无效",
+        "google api key 已过期",
+        "api key invalid",
+        "paid plans",
+        "upgrade",
+        "quota",
+        "resource exhausted",
+        "google 连接失败",
+        "temporarily unavailable",
+        "429"
+    ])
+
+
+def _generate_image_google_with_key(prompt: str, google_key: str) -> dict:
+    """调用单把 Google Key 生成图片，结果上传到图床返回 URL。"""
 
     payload = {
         "instances": [{"prompt": prompt}],
@@ -1044,9 +1074,9 @@ def generate_image_google(prompt: str) -> dict:
         reason = details.get("reason", "")
 
         if reason == "API_KEY_INVALID" and "expired" in message.lower():
-            return "Google API Key 已过期，请更新 GOOGLE_API_KEY"
+            return "Google API Key 已过期，请更新当前配置的 Google Key"
         if reason == "API_KEY_INVALID":
-            return f"Google API Key 无效，请检查 GOOGLE_API_KEY: {message}"
+            return f"Google API Key 无效，请检查当前配置的 Google Key: {message}"
         if status_code == 429:
             return f"Google API 限流或配额不足 (429): {message}"
         if reason:
@@ -1102,15 +1132,12 @@ def generate_image_google(prompt: str) -> dict:
                 continue
 
             if e.code == 429:
-                _suspend_google(error_message, GOOGLE_COOLDOWN_SECONDS)
                 return {"success": False, "error": error_message, "error_type": "rate_limit"}
 
             if "Key 已过期" in error_message or "Key 无效" in error_message:
-                _suspend_google(error_message, None)
                 return {"success": False, "error": error_message, "error_type": "key_invalid"}
 
             if e.code == 400 and ("paid plans" in error_message or "upgrade" in error_message.lower()):
-                _suspend_google(error_message, None)
                 return {"success": False, "error": error_message, "error_type": "quota_exceeded"}
 
             return {"success": False, "error": error_message}
@@ -1123,6 +1150,39 @@ def generate_image_google(prompt: str) -> dict:
             return {"success": False, "error": str(e)}
 
     return {"success": False, "error": "Google API 重试后仍失败"}
+
+
+def generate_image_google(prompt: str) -> dict:
+    """调用 Google Imagen 生成图片，支持主备 Key 轮换。"""
+    google_keys = _get_google_key_candidates()
+    if not google_keys:
+        return {"success": False, "error": "GOOGLE_API_KEY / GOOGLE_API_KEY_BACKUP 均未设置"}
+
+    suspended = _get_google_suspend_message()
+    if suspended:
+        return {"success": False, "error": suspended, "error_type": "suspended"}
+
+    last_result = {"success": False, "error": "Google API 未返回结果"}
+
+    for index, (label, google_key) in enumerate(google_keys, start=1):
+        log(f"  [Google] 尝试第 {index} 把 Key ({label})")
+        result = _generate_image_google_with_key(prompt, google_key)
+        if result["success"]:
+            return result
+
+        last_result = result
+        error_message = result.get("error", "Google API 未知错误")
+        if _is_google_key_retryable_error(error_message) and index < len(google_keys):
+            log(f"  [Google] 第 {index} 把 Key 不可用，切下一把: {error_message}", "WARN")
+            continue
+
+        if result.get("error_type") == "rate_limit":
+            _suspend_google(error_message, GOOGLE_COOLDOWN_SECONDS)
+        elif result.get("error_type") in {"key_invalid", "quota_exceeded"}:
+            _suspend_google(error_message, None)
+        return result
+
+    return last_result
 
 
 def generate_image_doubao(prompt: str, negative_prompt: str) -> dict:
@@ -1215,8 +1275,7 @@ def generate_image(prompt: str, negative_prompt: str) -> dict:
     """生成图片：Google Imagen 主力 → 豆包 Seedream 4.5 备选"""
     force_google_only = os.environ.get("FORCE_GOOGLE_ONLY", "").strip().lower() in {"1", "true", "yes"}
 
-    google_key = os.environ.get("GOOGLE_API_KEY")
-    if google_key:
+    if _has_google_key_configured():
         log("  [Google] 使用 Imagen 主力引擎...")
         result = generate_image_google(prompt)
         if result["success"]:
@@ -1241,25 +1300,27 @@ def generate_image(prompt: str, negative_prompt: str) -> dict:
 
 def _describe_runtime_engine() -> tuple[str, str]:
     """返回当前运行时的引擎描述与生成文案。"""
-    has_google = bool(os.environ.get("GOOGLE_API_KEY"))
+    google_keys = _get_google_key_candidates()
+    has_google = bool(google_keys)
+    has_google_backup = len(google_keys) > 1
     has_doubao = bool(os.environ.get("DOUBAO_API_KEY"))
     force_google_only = os.environ.get("FORCE_GOOGLE_ONLY", "").strip().lower() in {"1", "true", "yes"}
 
     if has_google and force_google_only:
         return (
-            f"Google Imagen 4 Ultra 强制模式（模型: {GOOGLE_MODEL}）",
+            f"Google Imagen 4 Ultra {'双 Key ' if has_google_backup else ''}强制模式（模型: {GOOGLE_MODEL}）",
             f"Google Imagen 4 Ultra，{GOOGLE_ASPECT_RATIO}，{GOOGLE_IMAGE_SIZE}"
         )
 
     if has_google and has_doubao:
         return (
-            f"Google Imagen 4 Ultra 主力 + 豆包 Seedream 4.5 备选（Google: {GOOGLE_MODEL}）",
+            f"Google Imagen 4 Ultra {'双 Key 主力' if has_google_backup else '主力'} + 豆包 Seedream 4.5 备选（Google: {GOOGLE_MODEL}）",
             f"Google Imagen 4 Ultra 主力，{GOOGLE_ASPECT_RATIO}，{GOOGLE_IMAGE_SIZE}"
         )
 
     if has_google:
         return (
-            f"Google Imagen 4 Ultra 单引擎（模型: {GOOGLE_MODEL}）",
+            f"Google Imagen 4 Ultra {'双 Key ' if has_google_backup else ''}单引擎（模型: {GOOGLE_MODEL}）",
             f"Google Imagen 4 Ultra，{GOOGLE_ASPECT_RATIO}，{GOOGLE_IMAGE_SIZE}"
         )
 
@@ -1332,8 +1393,8 @@ def generate_custom(prompt: str, count: int = 1) -> dict:
 
     跳过随机元素库组合，直接使用用户提供的 prompt 调用双引擎生成。
     """
-    if not os.environ.get("DOUBAO_API_KEY") and not os.environ.get("GOOGLE_API_KEY"):
-        log("错误: 请设置 GOOGLE_API_KEY 或 DOUBAO_API_KEY 环境变量", "ERROR")
+    if not os.environ.get("DOUBAO_API_KEY") and not _has_google_key_configured():
+        log("错误: 请设置 GOOGLE_API_KEY / GOOGLE_API_KEY_BACKUP 或 DOUBAO_API_KEY 环境变量", "ERROR")
         return {"success": False, "count": 0, "total": count, "character": {}, "images": []}
 
     log("=" * 60)
@@ -1408,8 +1469,8 @@ def generate_series(count: int = 3,
                     emotion: str = None) -> dict:
     """生成系列图片"""
 
-    if not os.environ.get("DOUBAO_API_KEY") and not os.environ.get("GOOGLE_API_KEY"):
-        log("错误: 请设置 GOOGLE_API_KEY 或 DOUBAO_API_KEY 环境变量", "ERROR")
+    if not os.environ.get("DOUBAO_API_KEY") and not _has_google_key_configured():
+        log("错误: 请设置 GOOGLE_API_KEY / GOOGLE_API_KEY_BACKUP 或 DOUBAO_API_KEY 环境变量", "ERROR")
         return {"success": False, "count": 0, "total": count, "character": {}, "images": []}
 
     engine_title, generation_desc = _describe_runtime_engine()
@@ -1575,8 +1636,8 @@ def main():
         return 0
 
     # 检查 API Key（预览和列表模式不需要）
-    if not args.preview and not os.environ.get("GOOGLE_API_KEY") and not os.environ.get("DOUBAO_API_KEY"):
-        print("错误: 请设置 GOOGLE_API_KEY 或 DOUBAO_API_KEY 环境变量")
+    if not args.preview and not _has_google_key_configured() and not os.environ.get("DOUBAO_API_KEY"):
+        print("错误: 请设置 GOOGLE_API_KEY / GOOGLE_API_KEY_BACKUP 或 DOUBAO_API_KEY 环境变量")
         print("Google: export GOOGLE_API_KEY='your-api-key'")
         print("豆包:   export DOUBAO_API_KEY='your-api-key'")
         return 1

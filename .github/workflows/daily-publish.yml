@@ -99,6 +99,7 @@ jobs:
         env:
           FORCE_GOOGLE_ONLY: "1"
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          GOOGLE_API_KEY_BACKUP: ${{ secrets.GOOGLE_API_KEY_BACKUP }}
           IMGBB_API_KEY: ${{ secrets.IMGBB_API_KEY }}
           WECHAT_API_KEY: ${{ secrets.WECHAT_API_KEY }}
           DOUBAO_API_KEY: ${{ secrets.DOUBAO_API_KEY }}
