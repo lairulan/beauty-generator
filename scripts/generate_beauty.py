@@ -73,7 +73,7 @@ API_ENDPOINT = _doubao_cfg.get(
     "endpoint",
     "https://ark.cn-beijing.volces.com/api/v3/images/generations"
 )
-API_MODEL = _doubao_cfg.get("model", "doubao-seedream-3-0-t2i-250415")
+API_MODEL = _doubao_cfg.get("model", "doubao-seedream-4-5-251128")
 DOUBAO_TIMEOUT = _doubao_cfg.get("timeout", 90)
 DOUBAO_SIZE = _doubao_cfg.get("size", "2K")
 
@@ -606,10 +606,10 @@ class SmartPromptGenerator:
                      pose_type: str = None,
                      custom_elements: list = None,
                      style: str = None) -> str:
-        """构建 Imagen 4 Ultra 自然语言 Prompt
+        """构建 Google Imagen fallback 自然语言 Prompt
 
         采用自然语言句子结构替代 SD 风格的关键词堆叠，
-        更好地利用 Imagen 4 的 T5-XXL 语言理解能力。
+        更好地利用 Imagen 系列模型的语言理解能力。
         结构：主体描述 -> 外貌特征 -> 穿搭动作 -> 场景环境 -> 技术风格
         """
 
@@ -1039,9 +1039,9 @@ def generate_image_google(prompt: str) -> dict:
 
 
 def generate_image_doubao(prompt: str, negative_prompt: str) -> dict:
-    """调用豆包 Seedream 3.0 生成图片（主力引擎）
+    """调用豆包 Seedream 4.5 生成图片（主力引擎）
 
-    - 模型：doubao-seedream-3-0-t2i-250415（全球第一梯队，人像维度 #1）
+    - 模型：doubao-seedream-4-5-251128
     - 支持 429 指数退避重试，最多 DOUBAO_RETRY_MAX_ATTEMPTS 次
     - 永久性错误（400/401/403）直接返回，不重试
     """
