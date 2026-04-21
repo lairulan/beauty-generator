@@ -715,7 +715,7 @@ def generate_daily_images(
 ) -> list:
     """
     生成多张一致性人物图片
-    使用双引擎 (Google Imagen 4 Ultra + Doubao Seedream 5.0 Lite)
+    使用双引擎 (Doubao Seedream 4.5 + Google Imagen fallback)
 
     prompt: 手动模式 - 直接使用用户自定义提示词（跳过随机元素库）
     返回: [(url, meta_dict), ...]  meta 含 scene_type/outfit_style/expression_type/lighting_type/art_style
@@ -727,7 +727,7 @@ def generate_daily_images(
     if prompt:
         print(f"\n🎨 [手动模式] 正在使用自定义提示词生成 {count} 张图片...")
     else:
-        print(f"\n🎨 [自动模式] 正在生成 {count} 张图片 (Google Imagen → 豆包 fallback)...")
+        print(f"\n🎨 [自动模式] 正在生成 {count} 张图片 (豆包 Seedream 4.5 → Google Imagen fallback)...")
 
     cmd = [
         "python3", str(BEAUTY_GENERATE_SCRIPT),
