@@ -732,17 +732,29 @@ class SmartPromptGenerator:
 
 # ─── 图床上传（多图床容错 + 重试） ────────────────────────────
 
-def _upload_imgbb(host: dict, base64_data: str, api_key: str) -> dict:
-    """上传到 imgbb"""
+def _upload_imgbb(host: dict, base64_data: str, api_key: str, image_bytes: bytes = None) -> dict:
+    """上传到 imgbb，优先走 multipart 二进制上传以避免大图 base64 写入超时"""
     ssl_context = _get_ssl_context()
     try:
-        form_data = urllib.parse.urlencode({"image": base64_data}).encode("utf-8")
+        if image_bytes is not None:
+            boundary = f"----CodexBoundary{int(time.time() * 1000)}"
+            body = (
+                f"--{boundary}\r\n"
+                f'Content-Disposition: form-data; name="image"; filename="beauty.png"\r\n'
+                f"Content-Type: image/png\r\n\r\n"
+            ).encode("utf-8") + image_bytes + f"\r\n--{boundary}--\r\n".encode("utf-8")
+            headers = {"Content-Type": f"multipart/form-data; boundary={boundary}"}
+        else:
+            body = urllib.parse.urlencode({"image": base64_data}).encode("utf-8")
+            headers = {"Content-Type": "application/x-www-form-urlencoded"}
+
         req = urllib.request.Request(
             f"{host['endpoint']}?key={api_key}",
-            data=form_data,
+            data=body,
+            headers=headers,
             method="POST"
         )
-        timeout = host.get("timeout", 60)
+        timeout = host.get("timeout", 180)
         with urllib.request.urlopen(req, context=ssl_context, timeout=timeout) as response:
             result = json.loads(response.read().decode("utf-8"))
             if result.get("success"):
@@ -752,12 +764,12 @@ def _upload_imgbb(host: dict, base64_data: str, api_key: str) -> dict:
         return {"success": False, "error": str(e)}
 
 
-def _upload_smms(host: dict, base64_data: str, api_key: str) -> dict:
+def _upload_smms(host: dict, base64_data: str, api_key: str, image_bytes: bytes = None) -> dict:
     """上传到 sm.ms"""
     ssl_context = _get_ssl_context()
     try:
         # sm.ms 需要 multipart/form-data 格式
-        image_bytes = base64.b64decode(base64_data)
+        image_bytes = image_bytes or base64.b64decode(base64_data)
         boundary = f"----WebKitFormBoundary{int(time.time() * 1000)}"
         body = (
             f"--{boundary}\r\n"
@@ -787,7 +799,7 @@ def _upload_smms(host: dict, base64_data: str, api_key: str) -> dict:
         return {"success": False, "error": str(e)}
 
 
-def upload_image(base64_data: str) -> dict:
+def upload_image(base64_data: str, image_bytes: bytes = None) -> dict:
     """多图床上传，按优先级尝试，每个图床支持重试"""
     max_attempts = RETRY_CFG.get("max_attempts", 2)
     base_delay = RETRY_CFG.get("base_delay", 3)
@@ -801,9 +813,9 @@ def upload_image(base64_data: str) -> dict:
         host_name = host.get("name", "unknown")
         for attempt in range(max_attempts):
             if host_name == "imgbb":
-                result = _upload_imgbb(host, base64_data, api_key)
+                result = _upload_imgbb(host, base64_data, api_key, image_bytes=image_bytes)
             elif host_name == "smms":
-                result = _upload_smms(host, base64_data, api_key)
+                result = _upload_smms(host, base64_data, api_key, image_bytes=image_bytes)
             else:
                 result = {"success": False, "error": f"不支持的图床: {host_name}"}
                 break
@@ -872,7 +884,7 @@ def generate_image_minimax(prompt: str) -> dict:
             image_bytes = dl_resp.read()
 
         b64_data = base64.b64encode(image_bytes).decode("utf-8")
-        upload_result = upload_image(b64_data)
+        upload_result = upload_image(b64_data, image_bytes=image_bytes)
         if upload_result["success"]:
             return {"success": True, "url": upload_result["url"]}
         return {"success": False, "error": f"图床上传失败: {upload_result['error']}"}
@@ -996,8 +1008,9 @@ def generate_image_google(prompt: str) -> dict:
             if not b64_data:
                 return {"success": False, "error": "Google API 返回数据为空"}
 
+            image_bytes = base64.b64decode(b64_data)
             log("  上传到图床...")
-            upload_result = upload_image(b64_data)
+            upload_result = upload_image(b64_data, image_bytes=image_bytes)
             if upload_result["success"]:
                 return {"success": True, "url": upload_result["url"]}
             return {"success": False, "error": f"图床上传失败: {upload_result['error']}"}
@@ -1131,6 +1144,7 @@ def generate_image_doubao(prompt: str, negative_prompt: str) -> dict:
 
 def generate_image(prompt: str, negative_prompt: str) -> dict:
     """生成图片：Google Imagen 主力 → 豆包 Seedream 4.5 备选"""
+    force_google_only = os.environ.get("FORCE_GOOGLE_ONLY", "").strip().lower() in {"1", "true", "yes"}
 
     google_key = os.environ.get("GOOGLE_API_KEY")
     if google_key:
@@ -1138,6 +1152,9 @@ def generate_image(prompt: str, negative_prompt: str) -> dict:
         result = generate_image_google(prompt)
         if result["success"]:
             log("  [Google] 生成成功")
+            return result
+        if force_google_only:
+            log(f"  [Google] 失败且已启用 FORCE_GOOGLE_ONLY: {result.get('error')}", "WARN")
             return result
         log(f"  [Google] 失败: {result.get('error')}，尝试豆包备选...", "WARN")
 
@@ -1151,6 +1168,36 @@ def generate_image(prompt: str, negative_prompt: str) -> dict:
         log(f"  [豆包] 失败: {result.get('error')}", "WARN")
 
     return {"success": False, "error": "所有引擎均不可用或生成失败"}
+
+
+def _describe_runtime_engine() -> tuple[str, str]:
+    """返回当前运行时的引擎描述与生成文案。"""
+    has_google = bool(os.environ.get("GOOGLE_API_KEY"))
+    has_doubao = bool(os.environ.get("DOUBAO_API_KEY"))
+    force_google_only = os.environ.get("FORCE_GOOGLE_ONLY", "").strip().lower() in {"1", "true", "yes"}
+
+    if has_google and force_google_only:
+        return (
+            f"Google Imagen 4 Ultra 强制模式（模型: {GOOGLE_MODEL}）",
+            f"Google Imagen 4 Ultra，{GOOGLE_ASPECT_RATIO}，{GOOGLE_IMAGE_SIZE}"
+        )
+
+    if has_google and has_doubao:
+        return (
+            f"Google Imagen 4 Ultra 主力 + 豆包 Seedream 4.5 备选（Google: {GOOGLE_MODEL}）",
+            f"Google Imagen 4 Ultra 主力，{GOOGLE_ASPECT_RATIO}，{GOOGLE_IMAGE_SIZE}"
+        )
+
+    if has_google:
+        return (
+            f"Google Imagen 4 Ultra 单引擎（模型: {GOOGLE_MODEL}）",
+            f"Google Imagen 4 Ultra，{GOOGLE_ASPECT_RATIO}，{GOOGLE_IMAGE_SIZE}"
+        )
+
+    return (
+        f"豆包 Seedream 4.5 单引擎（模型: {API_MODEL}）",
+        f"豆包 Seedream 4.5，{DOUBAO_SIZE}"
+    )
 
 
 # ─── 风格策略 ────────────────────────────────────────────────
@@ -1217,7 +1264,7 @@ def generate_custom(prompt: str, count: int = 1) -> dict:
     跳过随机元素库组合，直接使用用户提供的 prompt 调用双引擎生成。
     """
     if not os.environ.get("DOUBAO_API_KEY") and not os.environ.get("GOOGLE_API_KEY"):
-        log("错误: 请设置 DOUBAO_API_KEY 环境变量", "ERROR")
+        log("错误: 请设置 GOOGLE_API_KEY 或 DOUBAO_API_KEY 环境变量", "ERROR")
         return {"success": False, "count": 0, "total": count, "character": {}, "images": []}
 
     log("=" * 60)
@@ -1293,11 +1340,12 @@ def generate_series(count: int = 3,
     """生成系列图片"""
 
     if not os.environ.get("DOUBAO_API_KEY") and not os.environ.get("GOOGLE_API_KEY"):
-        log("错误: 请设置 DOUBAO_API_KEY 环境变量", "ERROR")
+        log("错误: 请设置 GOOGLE_API_KEY 或 DOUBAO_API_KEY 环境变量", "ERROR")
         return {"success": False, "count": 0, "total": count, "character": {}, "images": []}
 
+    engine_title, generation_desc = _describe_runtime_engine()
     log("=" * 60)
-    log(f"美女生成 V{VERSION} - 豆包 Seedream 3.0 主力引擎")
+    log(f"美女生成 V{VERSION} - {engine_title}")
     log("=" * 60)
 
     # 加载元素库
@@ -1321,7 +1369,7 @@ def generate_series(count: int = 3,
 
     log("")
     log("=" * 60)
-    log(f"开始生成 {count} 张图片（Seedream 3.0，原生 2K）...")
+    log(f"开始生成 {count} 张图片（{generation_desc}）...")
     log("=" * 60)
 
     for i in range(count):
