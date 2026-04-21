@@ -13,10 +13,12 @@
       }
     },
     "google": {
-      "endpoint": "https://us-central1-aiplatform.googleapis.com/v1/projects/gen-lang-client-0574418043/locations/us-central1/publishers/google/models/imagen-3.0-generate-002:predict",
+      "model": "imagen-4.0-ultra-generate-001",
+      "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-ultra-generate-001:predict",
       "timeout": 120,
       "sample_count": 1,
       "aspect_ratio": "3:4",
+      "image_size": "2K",
       "retry": {
         "max_attempts": 2,
         "base_delay": 15,

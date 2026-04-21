@@ -2,19 +2,12 @@
   "description": "仓库当前主链路参考配置，与 scripts/generate_beauty.py 保持一致",
   "engines": {
     "primary": {
-      "name": "Doubao Seedream 4.5",
-      "endpoint": "https://ark.cn-beijing.volces.com/api/v3/images/generations",
-      "model": "doubao-seedream-4-5-251128",
-      "api_key_env": "DOUBAO_API_KEY",
-      "size": "2K",
-      "response_format": "url",
-      "supports_negative_prompt": true
-    },
-    "fallback": {
-      "name": "Google Imagen (current fallback endpoint)",
-      "endpoint": "https://us-central1-aiplatform.googleapis.com/v1/projects/gen-lang-client-0574418043/locations/us-central1/publishers/google/models/imagen-3.0-generate-002:predict",
+      "name": "Google Imagen 4 Ultra",
+      "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-ultra-generate-001:predict",
+      "model": "imagen-4.0-ultra-generate-001",
       "api_key_env": "GOOGLE_API_KEY",
       "aspect_ratio": "3:4",
+      "image_size": "2K",
       "output_format": "base64",
       "upload": "imgbb",
       "retry": {
@@ -23,6 +16,15 @@
         "max_delay_seconds": 20,
         "cooldown_seconds": 300
       }
+    },
+    "fallback": {
+      "name": "Doubao Seedream 4.5",
+      "endpoint": "https://ark.cn-beijing.volces.com/api/v3/images/generations",
+      "model": "doubao-seedream-4-5-251128",
+      "api_key_env": "DOUBAO_API_KEY",
+      "size": "2K",
+      "response_format": "url",
+      "supports_negative_prompt": true
     }
   },
   "requirements": [

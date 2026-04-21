@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-美女生成 V12.0 - 豆包 Seedream 4.5 主力 + Google Imagen 备选
-- 豆包 Seedream 4.5（文生图/图编辑双榜第一）作为主力引擎
-- Google Imagen 作为 fallback
+美女生成 V12.0 - Google Imagen 4 Ultra 主力 + 豆包 Seedream 4.5 备选
+- Google Imagen 4 Ultra 作为主力引擎
+- 豆包 Seedream 4.5 作为 fallback
 - 自动重试 + 429 指数退避（最多 3 次）
 - 配置驱动风格策略（style_strategies.json）
 - 多图床容错上传 + 重试机制
@@ -84,11 +84,13 @@ DOUBAO_RETRY_MAX_DELAY = _doubao_retry_cfg.get("max_delay", 60)
 
 GOOGLE_IMAGEN_ENDPOINT = _google_cfg.get(
     "endpoint",
-    "https://us-central1-aiplatform.googleapis.com/v1/projects/gen-lang-client-0574418043/locations/us-central1/publishers/google/models/imagen-3.0-generate-002:predict"
+    "https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-ultra-generate-001:predict"
 )
+GOOGLE_MODEL = _google_cfg.get("model", "imagen-4.0-ultra-generate-001")
 GOOGLE_TIMEOUT = _google_cfg.get("timeout", 120)
 GOOGLE_SAMPLE_COUNT = _google_cfg.get("sample_count", 1)
 GOOGLE_ASPECT_RATIO = _google_cfg.get("aspect_ratio", "3:4")
+GOOGLE_IMAGE_SIZE = _google_cfg.get("image_size", "2K")
 GOOGLE_RETRY_MAX_ATTEMPTS = _google_retry_cfg.get("max_attempts", 2)
 GOOGLE_RETRY_BASE_DELAY = _google_retry_cfg.get("base_delay", 15)
 GOOGLE_RETRY_MAX_DELAY = _google_retry_cfg.get("max_delay", 120)
@@ -606,7 +608,7 @@ class SmartPromptGenerator:
                      pose_type: str = None,
                      custom_elements: list = None,
                      style: str = None) -> str:
-        """构建 Google Imagen fallback 自然语言 Prompt
+        """构建 Google Imagen 自然语言 Prompt
 
         采用自然语言句子结构替代 SD 风格的关键词堆叠，
         更好地利用 Imagen 系列模型的语言理解能力。
@@ -918,12 +920,12 @@ def generate_image_google(prompt: str) -> dict:
     if suspended:
         return {"success": False, "error": suspended, "error_type": "suspended"}
 
-    endpoint = f"{GOOGLE_IMAGEN_ENDPOINT}?key={google_key}"
     payload = {
         "instances": [{"prompt": prompt}],
         "parameters": {
             "sampleCount": GOOGLE_SAMPLE_COUNT,
-            "aspectRatio": GOOGLE_ASPECT_RATIO
+            "aspectRatio": GOOGLE_ASPECT_RATIO,
+            "imageSize": GOOGLE_IMAGE_SIZE
         }
     }
 
@@ -975,9 +977,12 @@ def generate_image_google(prompt: str) -> dict:
         try:
             data = json.dumps(payload).encode("utf-8")
             req = urllib.request.Request(
-                endpoint,
+                GOOGLE_IMAGEN_ENDPOINT,
                 data=data,
-                headers={"Content-Type": "application/json"},
+                headers={
+                    "Content-Type": "application/json",
+                    "x-goog-api-key": google_key
+                },
                 method="POST"
             )
             with urllib.request.urlopen(req, context=ssl_context, timeout=GOOGLE_TIMEOUT) as response:
@@ -1125,25 +1130,25 @@ def generate_image_doubao(prompt: str, negative_prompt: str) -> dict:
 
 
 def generate_image(prompt: str, negative_prompt: str) -> dict:
-    """生成图片：豆包 Seedream 4.5 主力 → Google Imagen 备选"""
-
-    doubao_key = os.environ.get("DOUBAO_API_KEY")
-    if doubao_key:
-        log(f"  [豆包] 使用 Seedream（{API_MODEL}）...")
-        result = generate_image_doubao(prompt, negative_prompt)
-        if result["success"]:
-            log("  [豆包] 生成成功")
-            return result
-        log(f"  [豆包] 失败: {result.get('error')}，尝试 Google 备选...", "WARN")
+    """生成图片：Google Imagen 主力 → 豆包 Seedream 4.5 备选"""
 
     google_key = os.environ.get("GOOGLE_API_KEY")
     if google_key:
-        log("  [Google] 使用 Imagen 备选引擎...")
+        log("  [Google] 使用 Imagen 主力引擎...")
         result = generate_image_google(prompt)
         if result["success"]:
             log("  [Google] 生成成功")
             return result
-        log(f"  [Google] 失败: {result.get('error')}", "WARN")
+        log(f"  [Google] 失败: {result.get('error')}，尝试豆包备选...", "WARN")
+
+    doubao_key = os.environ.get("DOUBAO_API_KEY")
+    if doubao_key:
+        log(f"  [豆包] 使用 Seedream 备选引擎（{API_MODEL}）...")
+        result = generate_image_doubao(prompt, negative_prompt)
+        if result["success"]:
+            log("  [豆包] 生成成功")
+            return result
+        log(f"  [豆包] 失败: {result.get('error')}", "WARN")
 
     return {"success": False, "error": "所有引擎均不可用或生成失败"}
 
