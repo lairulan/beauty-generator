@@ -3,19 +3,19 @@
   "description": "Imagen 4 Ultra 优化版 - 自然语言摄影描述风格",
 
   "base_quality": [
-    "A high-quality professional portrait photograph with natural skin texture and visible pores, shot in beautiful light with shallow depth of field",
-    "An editorial-quality photograph captured with a professional camera, rich detail and natural colors, magazine-worthy portrait with authentic feel",
-    "A stunning candid portrait photograph with cinematic quality, natural ambient lighting, film-like color grading and razor-sharp focus on the subject",
-    "A beautiful high-resolution photograph with professional studio quality, soft natural skin tones, perfectly composed portrait with artistic depth",
-    "An award-winning portrait photograph with lifelike detail, gentle bokeh background, warm natural tones and intimate atmosphere"
+    "A candid editorial portrait photographed in available light, with lifelike skin detail, natural color response, and quiet emotional realism",
+    "A documentary-style portrait captured on a full-frame camera, with believable tones, restrained contrast, and an authentic atmosphere",
+    "A lifestyle photograph with natural light, honest skin texture, soft depth of field, and unforced body language",
+    "An observed portrait photograph with subtle filmic color, realistic light falloff, and the feeling of a real moment",
+    "A magazine-quality portrait that still feels human and lightly retouched, with visible pores, fabric detail, and grounded composition"
   ],
 
   "asian_identity": [
-    "a beautiful young Chinese woman in her early twenties with delicate East Asian features",
-    "a gorgeous Chinese woman aged around 22 with natural Asian beauty and youthful radiance",
-    "a stunning young East Asian woman with refined Chinese facial features and luminous skin",
-    "a captivating Chinese girl in her twenties with elegant oriental features and a fresh youthful face",
-    "a beautiful Chinese woman in her mid-twenties with soft East Asian features and porcelain complexion"
+    "a young Chinese woman in her early twenties",
+    "a Chinese woman in her mid-twenties with East Asian features",
+    "a young East Asian woman from China with a believable real-life presence",
+    "a Chinese woman in her twenties with calm, natural facial features",
+    "a young Chinese woman with an unforced everyday look"
   ],
 
   "face_types": {
@@ -104,35 +104,35 @@
   ],
 
   "skin_textures": [
-    "porcelain skin with visible pores, natural skin texture, healthy glow",
-    "dewy glass skin, luminous complexion, subtle skin details, radiant",
-    "creamy smooth skin, natural texture, soft focus, photorealistic",
-    "honey-toned skin, warm undertones, healthy natural glow, detailed texture",
-    "milky white skin, translucent quality, delicate texture, ethereal glow"
+    "real skin texture with visible pores, soft sheen, and slight tonal variation",
+    "natural complexion with faint under-eye texture, subtle blush, and honest detail",
+    "healthy skin with a soft natural sheen, fine texture, and believable highlights",
+    "skin with small tonal shifts, gentle texture, and realistic light falloff",
+    "natural skin with pores, a few tiny imperfections, and understated glow"
   ],
 
   "body_types": [
-    "perfect hourglass figure with stunning feminine proportions, slim defined waist curving into graceful hips, long toned legs, the kind of silhouette that turns every head",
-    "gorgeous curvy body with naturally feminine fullness, tiny cinched waist, beautifully rounded hips, long slender legs, magazine-cover proportions",
-    "enviable feminine physique with alluring curves, sculpted narrow waist, generous hips, smooth flawless skin, head-turning proportions that catch every eye",
-    "breathtaking S-curve body with elegant feminine lines, nipped waist flowing into shapely hips and thighs, graceful long legs, irresistible body line",
-    "statuesque model figure with perfect feminine proportions, dramatically narrow waist, wide elegant hips, endless legs, runway-worthy silhouette",
-    "alluring feminine silhouette with soft natural curves, flat toned stomach, perfect hourglass waist-to-hip ratio, long lean legs, goddess-like body",
-    "stunning curvy frame with captivating feminine fullness, impossibly slim waist, voluptuous hips, toned calves, jaw-dropping figure that commands attention",
-    "elegant yet voluptuous body with graceful natural curves, defined waist curve, shapely thighs, effortlessly attractive proportions",
-    "incredible feminine figure with youthful firmness, sculpted midriff, wide hips, long smooth legs, breathtaking silhouette made for photography",
-    "goddess-tier body proportions with perfect feminine balance, impossibly tiny waist, dramatic hip curve, toned endless legs, absolute perfection in motion"
+    "balanced natural proportions, relaxed shoulders, a defined waistline, and healthy legs that read realistically on camera",
+    "soft natural curves, an ordinary waist-to-hip ratio, and a believable full-body silhouette",
+    "a lean everyday build with feminine curves, relaxed posture, and realistic proportions",
+    "a tall slim frame with natural hips and long legs, photographed without exaggeration",
+    "an athletic but natural build, toned legs, real posture, and believable proportions",
+    "a softly curvy figure with a natural waistline and unforced body language",
+    "a medium build with feminine balance, everyday proportions, and a relaxed stance",
+    "a graceful frame with subtle curves, natural shoulders, and realistic proportions",
+    "a healthy slim figure with natural leg length and a relaxed center of gravity",
+    "balanced full-body proportions with natural curves and a believable silhouette"
   ],
 
   "body_types_sexy": [
-    "voluptuous hourglass figure with generous feminine curves straining against every garment, cinched narrow waist, wide curvaceous hips, perfectly proportioned feminine body that radiates sensuality",
-    "gorgeous curvy body with eye-catching feminine fullness, tiny waist creating dramatic contrast with full hips, long toned legs, provocative magazine-worthy silhouette",
-    "sensational figure with curves that clothing can barely contain, defined waist curve, generous hips, smooth flawless skin, alluring proportions that demand attention",
-    "stunning feminine physique with captivating fullness up top, sculpted waist, shapely thighs, seductive body line that makes fabric look like art",
-    "breathtaking curves with impossible proportions, nipped waist flowing into voluptuous wide hips, long slender legs, irresistible body contour",
-    "dangerously curvy figure with gravity-defying feminine proportions, wasp waist, dramatic hip flare, toned thighs, the kind of body that stops traffic",
-    "phenomenal hourglass shape with extreme feminine definition, every curve perfectly sculpted, wide hips, long legs, a silhouette that leaves lasting impressions",
-    "jaw-dropping figure with showstopping curves, fabric stretched beautifully across feminine form, ultra narrow waist, voluptuous rounded hips, absolute bombshell silhouette"
+    "a confident curvy figure with natural feminine volume, a defined waist, rounded hips, and believable sensual presence",
+    "a softly sculpted body with natural curves, long legs, and proportions that still feel human on camera",
+    "a feminine figure with graceful curvature, relaxed posture, and clothing that follows the body without exaggeration",
+    "a shapely body with a realistic waistline, full hips, and natural leg proportions",
+    "a curvy silhouette with balanced proportions, subtle definition, and understated sensuality",
+    "a well-balanced hourglass figure with believable hips, natural thighs, and relaxed body language",
+    "a confident full-body silhouette with soft curves, a real center of gravity, and grounded presence",
+    "a feminine frame with natural volume and proportions that feel photographic rather than stylized"
   ],
 
   "outfits": {
@@ -154,11 +154,11 @@
       "form-fitting mesh and lace cocktail dress, fabric creating peek-a-boo effect with strategic coverage, body outlined in sultry silhouette, red-carpet provocative glamour"
     ],
     "清新": [
-      "white cotton sundress with delicate floral embroidery, thin straps over bare sun-kissed shoulders, fitted bodice with sweetheart line, flowy skirt catching the breeze, sun-dappled innocence",
-      "light blue oversized linen shirt slipping off one shoulder, top buttons undone showing collarbone, tucked loosely into denim shorts, bare legs, effortless girl-next-door charm",
-      "pastel pink wrap top with gentle gathering at the front, paired with white linen midi skirt, natural waist definition, soft fabric catching warm light, dreamy feminine layers",
-      "cream knit camisole with thin straps, soft fabric draping naturally over feminine form, layered under sheer cardigan, high-waisted floral skirt, literary romantic aesthetic",
-      "off-shoulder peasant blouse in white cotton, neckline sitting below collarbones, gathered fabric creating soft volume, paired with flowing midi skirt, countryside fresh beauty"
+      "white cotton sundress with delicate floral embroidery, modest neckline, soft waist seam, and a skirt moving naturally in the breeze",
+      "light blue oversized linen shirt with rolled sleeves, tucked loosely into relaxed denim, simple everyday styling, easy girl-next-door charm",
+      "pastel pink wrap top with gentle gathering at the front, paired with a white linen midi skirt, soft fabric catching warm light, calm feminine layers",
+      "cream knit tank layered under a light cardigan, paired with a high-waisted floral skirt, literary and understated",
+      "white cotton peasant blouse with a relaxed neckline and flowing midi skirt, fresh countryside mood without overt styling"
     ],
     "时尚": [
       "oversized structured blazer worn as mini dress, deep neckline with just a hint of what lies beneath, cinched with chain belt at waist, bare legs in heeled boots, editorial power dressing",
@@ -189,25 +189,25 @@
       "Tang Dynasty-inspired court dress in imperial gold, wide neckline exposing shoulders in historical style, fitted silhouette with flowing multi-layered skirt, opulent historical elegance"
     ],
     "职场": [
-      "crisp white fitted blouse with top buttons undone showing collarbone, tucked into high-waisted pencil skirt, sheer black stockings, stiletto heels, professional polish with feminine allure",
-      "tailored blazer with single button at waist worn over silk camisole with lace trim, slim-fit trousers, delicate gold necklace, powerful corporate femininity",
-      "fitted sweater dress in charcoal cashmere, thin knit fabric following feminine contours, knee-length with subtle back slit, reading glasses, pearl earrings, intellectual allure",
-      "black bodycon work dress with square neckline framing collarbones, fabric perfectly fitted, subtle side slit above knee, statement belt cinching waist, polished office goddess",
-      "silk blouse in champagne with bow tie, elegant sheerness hinting at layers beneath, tucked into high-waisted wool trousers, blazer over shoulders, understated office sensuality"
+      "crisp white blouse neatly tucked into a high-waisted pencil skirt, low-key accessories, polished professional styling",
+      "tailored blazer worn over a simple silk shell, straight-leg trousers, delicate gold necklace, modern corporate ease",
+      "charcoal cashmere sweater dress with a clean knee-length line, reading glasses, pearl earrings, restrained and intelligent",
+      "black work dress with structured tailoring, square neckline, statement belt, and polished office-ready balance",
+      "champagne silk blouse with a bow tie, tucked into high-waisted wool trousers, blazer over shoulders, understated executive styling"
     ],
     "居家": [
-      "oversized white boyfriend shirt with middle button fastened, fabric draping loosely over feminine form, shirt barely covering upper thighs, messy morning hair, bare legs, intimate bedroom warmth",
-      "silk camisole pajama set with lace-trimmed neckline, thin satin draping softly over curves, matching shorts, soft warm lamplight catching glossy fabric, relaxed sensual comfort",
-      "loose knit sweater with wide neckline fallen off one shoulder, lace strap visible, bare legs curled on sofa, cozy winter-evening intimacy",
-      "soft white cotton tee paired with tiny cotton shorts, natural morning light, hair still messy from sleep, effortless bedroom beauty",
-      "silk robe loosely tied at waist, one side slipping to reveal collarbone and shoulder, bare legs visible below knee-length hem, damp post-shower hair, private intimate moment"
+      "oversized white shirt over soft lounge shorts, fabric draping naturally, messy morning hair, quiet bedroom warmth",
+      "soft cotton pajama set with a relaxed collar and matching shorts, warm lamplight, comfortable lived-in texture",
+      "loose knit sweater and lounge pants, curled on a sofa, cozy winter-evening calm",
+      "soft white cotton tee with relaxed house shorts, natural morning light, hair still slightly messy from sleep",
+      "simple robe tied loosely at the waist, damp post-shower hair, private domestic calm without overt sensual styling"
     ],
     "邻家": [
-      "simple white V-neck tee tucked into high-waisted denim shorts, white sneakers, ponytail, approachable everyday beauty with effortless charm",
-      "light floral sundress with thin straps, fitted bodice, swaying skirt above knee, sandals, girl-at-the-park warmth and natural beauty",
-      "striped Breton top tucked into a-line midi skirt, canvas tote bag, wind-blown hair, casual French-inspired charm with feminine figure",
-      "cropped graphic tee showing bare midriff, paired with relaxed baggy jeans riding low on hips, messy bun, effortless college-girl cool",
-      "oversized denim jacket over fitted tank top, daisy duke shorts revealing long legs, boots, sun-kissed skin, roadtrip adventure vibes"
+      "simple white tee tucked into relaxed denim shorts, white sneakers, ponytail, approachable everyday charm",
+      "light floral sundress with comfortable straps, swaying skirt, sandals, park-side warmth and natural ease",
+      "striped Breton top tucked into an A-line midi skirt, canvas tote bag, wind-blown hair, casual French-inspired charm",
+      "graphic tee paired with relaxed baggy jeans, messy bun, backpack strap on shoulder, effortless college-girl cool",
+      "oversized denim jacket over a fitted tank and easy shorts, boots, sunlit skin, casual road-trip energy"
     ]
   },
 
@@ -220,42 +220,42 @@
       "close-up from slightly above, looking up at camera with big eyes, hands framing face, vulnerable and captivating"
     ],
     "半身": [
-      "waist-up shot, one hand running through hair while other arm frames body, bust and waist prominently visible, natural alluring gesture",
-      "upper body portrait leaning forward toward camera, arms framing body, engaging direct eye contact, inviting composition",
-      "seated half-body shot, one leg crossed over other, leaning back with hands behind for support, chest lifted with confident posture, relaxed elegance",
-      "side-angle waist-up shot, body turned three-quarters toward camera, one arm across waist accentuating curves, looking over shoulder",
-      "standing half-body, both hands adjusting hair above head, arms raised elongating torso, carefree sensual stretch"
+      "waist-up shot with one hand moving lightly through the hair, relaxed shoulders, and an easy natural gesture",
+      "upper-body portrait leaning slightly toward camera, open posture, steady eye contact, and a conversational feel",
+      "seated half-body shot with hands resting naturally in the lap, upright but relaxed posture, calm presence",
+      "side-angle waist-up shot with the body turned slightly three-quarters toward camera, one arm resting near the waist, looking over shoulder naturally",
+      "standing half-body portrait with hands adjusting the hair or collar, subtle movement, and unforced body language"
     ],
     "全身": [
-      "full body standing pose, weight shifted to one hip creating dramatic S-curve, one hand on waist emphasizing hourglass figure, legs elongated",
-      "walking toward camera, hair and fabric in motion, one leg forward showing thigh through slit, dynamic confident stride",
-      "seated on edge of surface with legs crossed, leaning back on one arm, full body visible with curves on display, casual elegance",
-      "leaning against wall with hip pushed out, one knee bent, back arched slightly, body creating natural S-shape from shoulder to ankle",
-      "standing in contrapposto pose, one shoulder dropped, body twisted to accentuate feminine silhouette and hip curve, classical sculpture elegance"
+      "full-body standing pose with weight resting naturally on one leg, one hand relaxed by the side, grounded proportions",
+      "walking toward camera with hair and fabric moving gently, a confident but believable stride",
+      "seated on the edge of a chair or bench with both feet grounded, full body visible, casual elegance",
+      "leaning lightly against a wall with one knee bent, relaxed spine, and natural balance from shoulder to ankle",
+      "standing in a soft contrapposto pose with slight shoulder drop, subtle body twist, and realistic posture"
     ],
     "动态": [
-      "hair flipping in dramatic arc, body caught mid-motion, dress lifted by movement revealing legs, frozen sensual moment",
-      "twirling in flowing dress, fabric spiraling around curves, one leg exposed mid-spin, joyful yet seductive energy",
-      "reaching up gracefully with both arms, body fully elongated, every curve stretched and defined, dancer-like elegance",
-      "looking back over bare shoulder with body turning, hip curve and waist prominently visible, mysterious come-hither allure",
-      "caught mid-laugh throwing head back, hair flying, body relaxed and open, hand on chest, uninhibited magnetic energy"
+      "hair moving lightly as she turns, body caught mid-motion, a believable candid instant",
+      "twirling in a flowing dress, fabric spiraling softly, joyful energy without forced posing",
+      "reaching up with both arms in a relaxed stretch, elongated posture, dancer-like ease",
+      "looking back over the shoulder while turning naturally, subtle movement through the body, curious glance",
+      "caught mid-laugh with hair moving, body relaxed and open, hand near the chest, uninhibited warmth"
     ],
     "写真": [
-      "lying on side propped on one elbow, body creating flowing S-curve from shoulder through waist to hip, looking at camera with smoldering intensity, every curve highlighted",
-      "lying face-down on bed, propped up on elbows with chin on hands, legs bent up behind, looking at camera seductively, intimate bedroom mood",
-      "sitting with knees drawn up, arms wrapped around legs, head tilted, body compact yet curves visible, intimate vulnerable beauty",
-      "standing with dramatic back arch, one hand in hair, hip pushed back, extreme hourglass silhouette from side angle, sensual body line",
-      "kneeling upright with back arched and hair cascading down back, hands resting on thighs, feminine form on full display, confident sensual power",
-      "reclining with one knee bent up, arm draped above head, full body stretched out, every feminine curve on display from shoulder to toe, languid and inviting"
+      "standing portrait with a gentle turn through the shoulders, hands relaxed, and an editorial but believable stance",
+      "seated portrait on a chair or bench, one leg folded comfortably, hands resting naturally, intimate but grounded mood",
+      "sitting with knees drawn up loosely, arms around the legs, head tilted slightly, quiet reflective presence",
+      "standing near a window or wall with one hand adjusting the hair, natural weight shift, understated elegance",
+      "kneeling or crouching in a relaxed way with a straight back and calm expression, composed documentary feel",
+      "reclining in a simple pose with one knee bent and one arm resting nearby, full body visible, calm lived-in atmosphere"
     ]
   },
 
   "expressions": {
     "微笑": [
       "warm genuine smile with eyes crinkled in delight, head tilted slightly, radiating approachable charm",
-      "subtle mysterious Mona Lisa smile with knowing eyes, as if hiding a delicious secret",
-      "bright infectious smile showing perfect teeth, eyes sparkling with playful energy",
-      "soft closed-lip smile with slightly raised eyebrow, serene yet subtly flirtatious"
+      "subtle natural smile with calm eyes, as if caught in a private thought",
+      "bright easy smile showing teeth, eyes alive with relaxed warmth",
+      "soft closed-lip smile with a slightly raised eyebrow, serene and observant"
     ],
     "性感": [
       "sultry half-lidded gaze looking directly into camera, lips slightly parted and glistening, smoldering with barely contained desire",
@@ -412,17 +412,17 @@
   },
 
   "enhancement_keywords": [
-    "with visible skin pores and fine hair strands, authentic natural detail",
-    "with catchlight reflections in eyes and detailed iris texture",
-    "with balanced composition following rule of thirds, harmonious color palette",
-    "with professional color grading and subtle film-like tonal quality",
-    "with sharp focus on eyes and gentle background separation"
+    "with a few flyaway hairs, mild skin texture around the nose, and real fabric creases",
+    "with slight asymmetry in the smile, faint under-eye texture, and believable catchlights",
+    "with a relaxed shoulder line, gentle hand tension, and natural breathing posture",
+    "with subtle wrinkles in clothing, small light falloff across the face, and grounded depth",
+    "with a tiny mole, fine baby hairs, and the texture of lived-in materials around her"
   ],
 
   "negative_prompts": {
     "standard": "cartoon, anime, 3d render, cgi, sketch, drawing, painting, illustration, disfigured, deformed, blurry, watermark, text, extra limbs, extra fingers, mutated hands, bad anatomy",
     "asian_focused": "Western face, Caucasian features, European features, blonde hair, blue eyes, green eyes, non-Asian features",
-    "quality": "low quality, pixelated, overexposed, underexposed, amateur, poorly lit",
-    "anti_ai": "plastic skin, waxy skin, overly smooth skin, airbrushed, porcelain doll, mannequin, uncanny valley, too perfect, symmetrical face, digital art look, artificial lighting, studio render, hyperrealistic 3d, flawless complexion"
+    "quality": "low quality, pixelated, overexposed, underexposed, amateur, poorly lit, oversharpened skin, HDR halo, crunchy detail, artificial contrast",
+    "anti_ai": "beauty filter, over-retouched skin, plastic skin, waxy skin, overly smooth skin, porcelain doll, mannequin, uncanny valley, too perfect, extreme symmetry, digital art look, artificial lighting, studio render, hyperrealistic 3d, unrealistically large eyes, impossible body proportions, unnaturally tiny waist, exaggerated curves, glam retouch, instagram face"
   }
 }

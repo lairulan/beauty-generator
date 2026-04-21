@@ -601,6 +601,73 @@ class SmartPromptGenerator:
         _, pose = self.pick_from_dict(self.library.get("poses", {}), pose_type)
         return pose
 
+    def _should_include_body(self, pose_type: str = None, style: str = None) -> bool:
+        """近景时弱化身材描写，避免提示词落到夸张身材模板。"""
+        return pose_type in {"全身", "写真", "动态"} or style == "性感系"
+
+    def _build_realism_clauses(self, style: str = None, pose_type: str = None) -> list[str]:
+        """补充真实摄影约束，降低 AI 味和过度美化。"""
+        clauses = [
+            "Keep the image grounded in real-world photography with believable skin texture, faint facial asymmetry, and restrained retouching",
+            "Preserve relaxed posture, natural hand placement, and the subtle imperfections of a candid portrait"
+        ]
+
+        if pose_type in {"特写", "半身"}:
+            clauses.append("Prioritize expression, eyes, and face over body emphasis")
+        else:
+            clauses.append("Keep body proportions realistic and avoid an unnaturally tiny waist or exaggerated curves")
+
+        if style in {"清纯系", "邻家女孩系", "生活场景系"}:
+            clauses.append("Use understated makeup, lived-in wardrobe detail, and ordinary available light")
+        elif style == "职场系":
+            clauses.append("Use restrained styling, believable office posture, and clean natural light")
+        elif style == "国风系":
+            clauses.append("Favor tactile fabric detail and grounded styling over fantasy rendering")
+
+        return clauses
+
+    def _pick_art_direction(self, style: str = None) -> str:
+        """按风格选择更贴近真实写真的视觉语气。"""
+        grounded_styles = {
+            "清纯系": [
+                "soft documentary portrait treatment, natural colors, minimal grading",
+                "quiet lifestyle editorial realism, restrained contrast, gentle tonal roll-off",
+                "subtle film-like color with understated styling and a believable everyday mood"
+            ],
+            "甜美系": [
+                "natural lifestyle magazine tone, warm but restrained colors, candid emotional feel",
+                "soft editorial realism with believable light falloff and clean skin detail",
+                "gentle filmic color and a relaxed contemporary portrait mood"
+            ],
+            "邻家女孩系": [
+                "street-documentary portrait tone, natural colors, observed everyday atmosphere",
+                "casual lifestyle editorial realism with minimal grading and real-world light",
+                "candid neighborhood photography mood, grounded color, and unforced styling"
+            ],
+            "生活场景系": [
+                "intimate domestic photography tone, natural color, soft practical light",
+                "quiet home-life editorial realism with restrained contrast and tactile detail",
+                "documentary lifestyle treatment with believable indoor light and lived-in texture"
+            ],
+            "职场系": [
+                "clean contemporary portrait treatment, restrained contrast, and polished realism",
+                "modern editorial office photography with believable light and understated grading",
+                "professional lifestyle portrait tone with natural color and controlled highlights"
+            ],
+            "国风系": [
+                "grounded historical portrait styling with tactile fabric detail and restrained color",
+                "classical portrait realism with gentle contrast and a believable cultural setting",
+                "subtle cinematic color inspired by period photography rather than fantasy rendering"
+            ]
+        }
+
+        if style in grounded_styles:
+            return self.pick_one(grounded_styles[style])
+
+        art_key, art_style = self.pick_from_dict(self.library.get("art_styles", {}))
+        self._last_art_style_key = art_key
+        return art_style
+
     def build_prompt(self,
                      character: dict = None,
                      scene: dict = None,
@@ -630,8 +697,7 @@ class SmartPromptGenerator:
             scene = self.generate_scene()
 
         camera = self.pick_one(self.library.get("camera_settings", []))
-        art_key, art_style = self.pick_from_dict(self.library.get("art_styles", {}))
-        self._last_art_style_key = art_key
+        art_style = self._pick_art_direction(style)
         enhancement = self.pick_one(self.library.get("enhancement_keywords", []))
 
         # --- 组装自然语言段落 ---
@@ -653,7 +719,7 @@ class SmartPromptGenerator:
             traits.append(character["hair"])
         if character.get("skin"):
             traits.append(character["skin"])
-        if character.get("body"):
+        if character.get("body") and self._should_include_body(pose_type, style):
             traits.append(character["body"])
         if traits:
             sections.append("She has " + ". ".join(traits))
@@ -691,7 +757,10 @@ class SmartPromptGenerator:
         if enhancement:
             sections.append(enhancement)
 
-        # 10. 自定义元素
+        # 10. 真实摄影约束
+        sections.extend(self._build_realism_clauses(style, pose_type))
+
+        # 11. 自定义元素
         if custom_elements:
             sections.extend(custom_elements)
 
