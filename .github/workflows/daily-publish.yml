@@ -1,6 +1,9 @@
 name: 每日写真·文生图（7风格轮换）
 
 on:
+  schedule:
+    - cron: '0 12 * * *' # UTC 12:00 = Asia/Shanghai 20:00
+
   workflow_dispatch:
     inputs:
       prompt:
@@ -53,14 +56,19 @@ jobs:
           SHOULD_RUN=true
           SKIP_REASON=
           BRANCH="${GITHUB_REF_NAME:-main}"
+          AUTO_EVENT=false
 
-          if [ "$RUN_EVENT" = "repository_dispatch" ] && [ -z "$INPUT_PROMPT" ]; then
+          if [ "$RUN_EVENT" = "repository_dispatch" ] || [ "$RUN_EVENT" = "schedule" ]; then
+            AUTO_EVENT=true
+          fi
+
+          if [ "$AUTO_EVENT" = "true" ] && [ -z "$INPUT_PROMPT" ]; then
             TODAY=$(TZ=Asia/Shanghai date '+%Y-%m-%d')
             MONTH=$(TZ=Asia/Shanghai date '+%Y-%m')
             LOG_FILE="workflow_logs/actions_runs_${MONTH}.md"
             REMOTE_REF="origin/${BRANCH}"
 
-            API_URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/workflows/daily-publish.yml/runs?event=repository_dispatch&status=completed&branch=${BRANCH}&per_page=20"
+            API_URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/workflows/daily-publish.yml/runs?status=completed&branch=${BRANCH}&per_page=30"
             RUNS_JSON=$(curl -fsSL \
               -H "Authorization: Bearer ${GITHUB_TOKEN}" \
               -H "Accept: application/vnd.github+json" \
@@ -70,7 +78,7 @@ jobs:
             API_MATCH=false
             if [ -n "$RUNS_JSON" ]; then
               printf '%s' "$RUNS_JSON" > "$RUNS_JSON_FILE"
-              API_MATCH=$(TODAY="$TODAY" CURRENT_RUN_ID="$CURRENT_RUN_ID" RUNS_JSON_FILE="$RUNS_JSON_FILE" python3 -c 'import json, os; from datetime import datetime, timedelta, timezone; runs=json.load(open(os.environ["RUNS_JSON_FILE"])).get("workflow_runs", []); today=os.environ["TODAY"]; current=os.environ.get("CURRENT_RUN_ID", ""); tz=timezone(timedelta(hours=8)); print("true" if any(str(run.get("id")) != current and run.get("conclusion") == "success" and ((datetime.fromisoformat(started.replace("Z", "+00:00")).astimezone(tz).strftime("%Y-%m-%d") == today) if started else False) for run in runs for started in [run.get("run_started_at") or run.get("created_at") or run.get("updated_at")]) else "false")')
+              API_MATCH=$(TODAY="$TODAY" CURRENT_RUN_ID="$CURRENT_RUN_ID" RUNS_JSON_FILE="$RUNS_JSON_FILE" python3 -c 'import json, os; from datetime import datetime, timedelta, timezone; runs=json.load(open(os.environ["RUNS_JSON_FILE"])).get("workflow_runs", []); today=os.environ["TODAY"]; current=os.environ.get("CURRENT_RUN_ID", ""); tz=timezone(timedelta(hours=8)); auto_events={"repository_dispatch","schedule"}; print("true" if any(str(run.get("id")) != current and run.get("conclusion") == "success" and run.get("event") in auto_events and ((datetime.fromisoformat(started.replace("Z", "+00:00")).astimezone(tz).strftime("%Y-%m-%d") == today) if started else False) for run in runs for started in [run.get("run_started_at") or run.get("created_at") or run.get("updated_at")]) else "false")')
               rm -f "$RUNS_JSON_FILE"
             fi
 
@@ -151,12 +159,19 @@ jobs:
           MONTH=$(TZ=Asia/Shanghai date '+%Y-%m')
           LOG_FILE="workflow_logs/actions_runs_${MONTH}.md"
           STATUS="$JOB_STATUS"
-          if [ "$RUN_EVENT" = "repository_dispatch" ] && [ -z "$INPUT_PROMPT" ] && [ "$SHOULD_RUN" != "true" ]; then
+          AUTO_EVENT=false
+          if [ "$RUN_EVENT" = "repository_dispatch" ] || [ "$RUN_EVENT" = "schedule" ]; then
+            AUTO_EVENT=true
+          fi
+
+          if [ "$AUTO_EVENT" = "true" ] && [ -z "$INPUT_PROMPT" ] && [ "$SHOULD_RUN" != "true" ]; then
             MODE=" | mode=t2i-auto-skipped-duplicate | reason=${SKIP_REASON:-already-published-today}"
-          elif [ -n "$INPUT_PROMPT" ]; then
+          elif [ "$RUN_EVENT" = "workflow_dispatch" ] && [ -n "$INPUT_PROMPT" ]; then
             MODE=" | mode=t2i-manual | prompt=${INPUT_PROMPT:0:50}..."
+          elif [ "$RUN_EVENT" = "workflow_dispatch" ]; then
+            MODE=" | mode=t2i-manual-workflow-dispatch"
           else
-            MODE=" | mode=t2i-auto-1pic"
+            MODE=" | mode=t2i-auto-1pic | event=${RUN_EVENT}"
           fi
           echo "- ${TS} | ${STATUS}${MODE} | run=${RUN_NUMBER} | ${RUN_URL}" >> "$LOG_FILE"
           git config user.name "github-actions[bot]"
