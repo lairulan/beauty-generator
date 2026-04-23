@@ -157,16 +157,16 @@ def get_default_library() -> dict:
             "Lifestyle photograph, relaxed candid moment, gentle bokeh background, Nikon Z8"
         ],
         "asian_identity": [
-            "Chinese woman in her early twenties",
-            "young East Asian woman, Chinese",
-            "twenty-something Chinese woman",
-            "young woman with Chinese features",
-            "East Asian woman, early twenties"
+            "adult Chinese woman in her late twenties",
+            "adult East Asian woman, Chinese, mature feminine presence",
+            "Chinese woman in her mid-to-late twenties",
+            "adult woman with Chinese features and composed charm",
+            "East Asian woman around 28 with mature adult appeal"
         ],
         "face_types": {
             "甜美系": [
                 "sweet innocent face, round cheeks, bright sparkling eyes, cherry lips, dimples when smiling",
-                "baby face, cute round eyes, small button nose, natural pink lips, youthful glow",
+                "soft heart-shaped face, cute round eyes, small button nose, natural pink lips, warm adult sweetness",
                 "adorable face, aegyo sal, gradient lips, innocent expression, glowing skin",
                 "heart-shaped face, big doe eyes, delicate pointed chin, peach-tinted lips, tiny beauty mark near mouth",
                 "oval face with soft jawline, crescent-moon smile eyes, natural flush on apple cheeks, petal-soft lips",
@@ -177,7 +177,7 @@ def get_default_library() -> dict:
                 "pure innocent face, clear bright eyes, natural beauty, fresh clean look",
                 "fresh-faced beauty, dewy skin, natural brows, innocent gaze",
                 "youthful pristine face, clear luminous skin, natural pink lips slightly parted, gentle captivating eyes",
-                "delicate porcelain face, wide clear eyes with long natural lashes, barely-there makeup, school-girl innocence",
+                "delicate porcelain face, wide clear eyes with long natural lashes, barely-there makeup, clean adult innocence",
                 "serene oval face, calm deep brown eyes, straight nose, bare lips with natural rose tint, quiet beauty",
                 "clean minimalist face, sharp yet soft features, clear single-eyelid eyes, thin natural brows, literary goddess",
                 "gentle round face, large sparkling eyes, small nose bridge, natural dewy lips, heart-skip beauty"
@@ -207,12 +207,12 @@ def get_default_library() -> dict:
                 "mature sensual face, knowing eyes with golden shimmer, strong brow bone, full wine-stained lips"
             ],
             "邻家女孩系": [
-                "girl-next-door face, natural unfiltered beauty, warm genuine smile, approachable charm",
+                "woman-next-door face, natural unfiltered beauty, warm genuine smile, approachable adult charm",
                 "friendly natural face, soft features, bright cheerful eyes, light freckles across nose, everyday beauty",
                 "cute wholesome face, natural rosy cheeks, warm brown eyes, authentic smile showing teeth",
                 "adorable everyday face, minimal makeup, natural skin glow, playful innocent eyes, coffee-shop beauty",
                 "sun-kissed casual face, crinkled laugh lines, slightly windblown hair, outdoor active girl charm",
-                "youthful college-girl face, clear skin with tiny moles, wire-frame glasses, studious cute appeal",
+                "bookish adult face, clear skin with tiny moles, wire-frame glasses, intelligent gentle appeal",
                 "cheerful tomboy-ish face, short layered hair, bright toothy grin, healthy outdoorsy complexion"
             ],
             "国风系": [
@@ -263,18 +263,18 @@ def get_default_library() -> dict:
             "milky white skin, translucent quality, delicate texture, ethereal glow"
         ],
         "body_types": [
-            "perfect hourglass figure with stunning feminine proportions, slim defined waist curving into graceful hips, long toned legs",
-            "gorgeous curvy body with naturally feminine fullness, tiny cinched waist, beautifully rounded hips, long slender legs",
-            "breathtaking S-curve body with elegant feminine lines, nipped waist flowing into shapely hips and thighs, graceful long legs",
-            "statuesque model figure with perfect feminine proportions, dramatically narrow waist, wide elegant hips, endless legs",
-            "alluring feminine silhouette with soft natural curves, flat toned stomach, perfect hourglass waist-to-hip ratio, long lean legs"
+            "balanced adult feminine proportions, natural bust line, defined waist, soft hips, and healthy legs",
+            "soft natural curves, modest-to-full natural bust, realistic waist-to-hip ratio, and believable silhouette",
+            "lean everyday build with visible feminine curves, natural chest shape, relaxed posture, and realistic proportions",
+            "tall slim frame with natural bust, soft hips, and long legs, photographed without exaggeration",
+            "graceful feminine silhouette with natural bust-to-waist proportion, soft hips, and grounded balance"
         ],
         "body_types_sexy": [
-            "voluptuous hourglass figure with generous feminine curves straining against every garment, cinched narrow waist, wide curvaceous hips",
-            "gorgeous curvy body with eye-catching feminine fullness, tiny waist creating dramatic contrast with full hips, long toned legs",
-            "sensational figure with curves that clothing can barely contain, defined waist curve, generous hips, smooth flawless skin",
-            "stunning feminine physique with captivating fullness up top, sculpted waist, shapely thighs, seductive body line",
-            "breathtaking curves with impossible proportions, nipped waist flowing into voluptuous wide hips, long slender legs"
+            "confident curvy figure with natural feminine volume, fuller but realistic bust, defined waist, and rounded hips",
+            "softly sculpted body with natural curves, graceful bust-to-waist line, long legs, and believable proportions",
+            "mature feminine figure with natural upper-body fullness, relaxed posture, and clothing that follows the body without exaggeration",
+            "shapely body with realistic waistline, full hips, soft natural bust, and natural leg proportions",
+            "balanced hourglass figure with natural full bust, believable hips, and relaxed body language"
         ],
         "outfits": {
             "优雅": [
@@ -291,7 +291,7 @@ def get_default_library() -> dict:
             ],
             "清新": [
                 "white cotton sundress with floral embroidery, fresh innocent",
-                "light blue oversized shirt, effortless casual, girl-next-door",
+                "light blue oversized shirt, effortless casual, woman-next-door",
                 "pastel cardigan with white tee, soft feminine layers",
                 "linen midi skirt with simple blouse, natural aesthetic"
             ],
@@ -328,8 +328,8 @@ def get_default_library() -> dict:
             ],
             "邻家": [
                 "simple white tee tucked into denim shorts, casual sneakers, natural effortless style",
-                "light sundress with thin straps, small crossbody bag, sandals, girl-you-meet-at-the-park vibe",
-                "striped casual shirt, jeans rolled at ankle, minimal accessories, fresh natural college-girl look"
+                "light sundress with thin straps, small crossbody bag, sandals, warm park-side adult charm",
+                "striped casual shirt, jeans rolled at ankle, minimal accessories, fresh natural off-duty look"
             ]
         },
         "poses": {
@@ -511,7 +511,8 @@ def get_default_library() -> dict:
         "negative_prompts": {
             "standard": "deformed, bad anatomy, disfigured, ugly, extra fingers, mutated hands, extra limbs, missing limbs, fused fingers, too many fingers, long neck",
             "asian_focused": "Western face, Caucasian features, blonde hair, blue eyes, green eyes, non-Asian features",
-            "quality": "3D render, CGI, digital art, illustration, painting, cartoon, anime, plastic skin, airbrushed, over-retouched, wax figure, doll-like, uncanny valley, symmetrical face, too perfect, flawless porcelain, studio backdrop, stock photo, watermark"
+            "quality": "3D render, CGI, digital art, illustration, painting, cartoon, anime, plastic skin, airbrushed, over-retouched, wax figure, doll-like, uncanny valley, symmetrical face, too perfect, flawless porcelain, studio backdrop, stock photo, watermark",
+            "anti_ai": "impossible body proportions, unnaturally tiny waist, distorted chest anatomy, flattened chest, unnaturally flat chest, missing bust contour, exaggerated fake curves, teen, underage, childlike face, school uniform, childish styling"
         }
     }
 
@@ -605,6 +606,26 @@ class SmartPromptGenerator:
         """近景时弱化身材描写，避免提示词落到夸张身材模板。"""
         return pose_type in {"全身", "写真", "动态"} or style == "性感系"
 
+    def _build_feminine_presence_clause(self, style: str = None, pose_type: str = None) -> str:
+        """稳定强调成熟女性感，同时避免夸张失真的身体比例。"""
+        if style == "性感系":
+            return (
+                "Her mature feminine presence is central: graceful neck and collarbones, "
+                "a natural fuller bust, a defined waist, soft rounded hips, and confident womanly posture, "
+                "all kept realistic and photographic"
+            )
+
+        if pose_type in {"特写", "半身"}:
+            return (
+                "Keep a clearly adult feminine upper-body silhouette visible through the neckline, "
+                "collarbones, natural bust contour, shoulder line, and waist suggestion"
+            )
+
+        return (
+            "Keep her mature adult femininity visible through natural bust-to-waist proportion, "
+            "soft hips, graceful legs, and believable full-body balance"
+        )
+
     def _build_realism_clauses(self, style: str = None, pose_type: str = None) -> list[str]:
         """补充真实摄影约束，降低 AI 味和过度美化。"""
         clauses = [
@@ -613,11 +634,13 @@ class SmartPromptGenerator:
         ]
 
         if pose_type in {"特写", "半身"}:
-            clauses.append("Prioritize expression, eyes, and face over body emphasis")
+            clauses.append("Prioritize expression and face while keeping a mature feminine neckline, collarbones, and natural upper-body curve visible")
         else:
-            clauses.append("Keep body proportions realistic and avoid an unnaturally tiny waist or exaggerated curves")
+            clauses.append("Keep mature feminine curves visible but realistic, with natural bust, waist, and hip proportions rather than cartoon exaggeration")
 
-        if style in {"清纯系", "邻家女孩系", "生活场景系"}:
+        if style == "性感系":
+            clauses.append("Use tasteful sensual fashion styling, form-flattering fabric, confident eye contact, and adult glamour without nudity")
+        elif style in {"清纯系", "邻家女孩系", "生活场景系"}:
             clauses.append("Use understated makeup, lived-in wardrobe detail, and ordinary available light")
         elif style == "职场系":
             clauses.append("Use restrained styling, believable office posture, and clean natural light")
@@ -706,7 +729,7 @@ class SmartPromptGenerator:
         # 1. 主体描述（质量基调 + 人物身份）
         if style == "性感系":
             sections.append(
-                f"A glamorous sensual beauty photograph with alluring feminine charm, featuring {asian_id}"
+                f"A tasteful mature sensual fashion portrait with elegant adult femininity, natural full-bust silhouette, defined waist, and confident womanly allure, featuring {asian_id}"
             )
         else:
             sections.append(f"{quality}, featuring {asian_id}")
@@ -723,6 +746,10 @@ class SmartPromptGenerator:
             traits.append(character["body"])
         if traits:
             sections.append("She has " + ". ".join(traits))
+
+        feminine_presence = self._build_feminine_presence_clause(style, pose_type)
+        if feminine_presence:
+            sections.append(feminine_presence)
 
         # 3. 穿搭
         if styling.get("outfit"):
@@ -1657,7 +1684,8 @@ def main():
                 character=character,
                 scene=scene,
                 styling=styling,
-                pose_type=pose_type
+                pose_type=pose_type,
+                style=args.style
             )
             print(f"\n【{pose_type}】")
             print(prompt)

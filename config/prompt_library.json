@@ -11,20 +11,20 @@
   ],
 
   "asian_identity": [
-    "a young Chinese woman in her early twenties",
-    "a Chinese woman in her mid-twenties with East Asian features",
-    "a young East Asian woman from China with a believable real-life presence",
-    "a Chinese woman in her twenties with calm, natural facial features",
-    "a young Chinese woman with an unforced everyday look"
+    "an adult Chinese woman in her late twenties with mature East Asian features",
+    "a Chinese woman in her mid-to-late twenties with a poised adult presence",
+    "an adult East Asian Chinese woman with elegant mature femininity",
+    "a Chinese woman around 28 with calm natural facial features and composed adult charm",
+    "an adult Chinese woman with an unforced real-life presence and mature feminine appeal"
   ],
 
   "face_types": {
     "甜美系": [
       "sweet innocent face, round cheeks, bright sparkling eyes, cherry lips, dimples when smiling, warm radiant glow",
-      "baby face, cute round eyes, small button nose, natural pink lips, youthful glow, sunshine smile",
+      "soft heart-shaped face, cute round eyes, small button nose, natural pink lips, warm adult sweetness, sunshine smile",
       "adorable face, aegyo sal, gradient lips, innocent expression, glowing warm skin, playful charm",
       "heart-shaped face, big doe eyes, delicate pointed chin, peach-tinted lips, tiny beauty mark near mouth, angelic sweetness",
-      "oval face with soft jawline, crescent-moon smile eyes, natural flush on apple cheeks, petal-soft lips, girl-crush cuteness",
+      "oval face with soft jawline, crescent-moon smile eyes, natural flush on apple cheeks, petal-soft lips, feminine charm",
       "petite face with high forehead, bright almond eyes, button nose with slight upturn, cupid-bow lips, infectious giggle expression",
       "soft diamond face, twinkling starry eyes, small straight nose, natural gradient blush, sweet tooth-gap smile"
     ],
@@ -32,7 +32,7 @@
       "pure innocent face with subtle sensuality, clear bright eyes, natural beauty, fresh dewy look, inviting warmth",
       "fresh-faced beauty, dewy glass skin, natural brows, innocent yet alluring gaze, soft warm blush",
       "youthful pristine face, clear luminous skin, natural pink lips slightly parted, gentle captivating eyes",
-      "delicate porcelain face, wide clear eyes with long natural lashes, barely-there makeup, school-girl innocence with hidden depth",
+      "delicate porcelain face, wide clear eyes with long natural lashes, barely-there makeup, clean adult innocence with hidden depth",
       "serene oval face, calm deep brown eyes, straight nose, bare lips with natural rose tint, quiet understated beauty",
       "clean minimalist face, sharp yet soft features, clear single-eyelid eyes, thin natural brows, literary campus goddess vibe",
       "gentle round face, large sparkling eyes, small nose bridge, natural dewy lips, the pure beauty that makes hearts skip"
@@ -47,12 +47,12 @@
       "mature sensual face, knowing eyes with golden shimmer, strong brow bone, full lips with wine stain, experienced allure"
     ],
     "邻家女孩系": [
-      "girl-next-door face, natural unfiltered beauty, warm genuine smile, approachable charm, no heavy makeup, relatable cuteness",
+      "woman-next-door face, natural unfiltered beauty, warm genuine smile, approachable adult charm, no heavy makeup, relatable softness",
       "friendly natural face, soft features, bright cheerful eyes, light freckles across nose bridge, effortless everyday beauty",
       "cute wholesome face, natural rosy cheeks, casual messy hair, warm brown eyes, authentic smile showing teeth",
       "adorable everyday face, minimal makeup, natural skin glow, playful innocent eyes, coffee-shop beauty vibes",
       "sun-kissed casual face, crinkled laugh lines, slightly windblown hair, natural tan, outdoor active girl charm",
-      "youthful college-girl face, clear skin with tiny moles, wire-frame glasses, bright curious eyes, studious cute appeal",
+      "bookish adult face, clear skin with tiny moles, wire-frame glasses, bright curious eyes, intelligent gentle appeal",
       "cheerful tomboy-ish face, short layered hair, bright toothy grin, healthy outdoorsy complexion, energetic natural charm"
     ],
     "国风系": [
@@ -77,7 +77,7 @@
       "natural relaxed face, bare-faced beauty with dewy skin, sleepy morning eyes, messy hair charm, intimate warm expression",
       "cozy homebody beauty, minimal skincare glow, lazy smile, soft drowsy eyes, effortlessly attractive in pajamas",
       "everyday goddess face, natural no-makeup look, warm gentle expression, slightly tousled hair, comfortable intimate beauty",
-      "domestic beauty, fresh washed face, natural skin texture visible, warm sleepy smile, the girl you wake up next to",
+      "domestic beauty, fresh washed face, natural skin texture visible, warm sleepy smile, the woman you wake up next to",
       "post-shower fresh face, damp hair framing face, clean bare skin, relaxed half-smile, steamy bathroom warmth",
       "lazy weekend face, slightly puffy morning eyes, messy bun coming undone, oversized collar exposing shoulder, cozy charm",
       "cooking-at-home beauty, flour-dusted cheek, tied-back hair with loose strands, focused concentrated expression, domestic goddess"
@@ -98,7 +98,7 @@
     "low bun with wispy strands, elegant refined look, ballet dancer aesthetic",
     "wavy lob, textured layers, trendy modern style, effortless volume",
     "side-swept long hair over one shoulder, revealing neck and collarbone, glamorous asymmetry",
-    "twin braids with loose strands, youthful playful charm, school-girl nostalgia",
+    "twin braids with loose strands, playful adult charm, soft nostalgic styling",
     "wet-look slicked-back hair, editorial high fashion, sharp cheekbones exposed, fierce",
     "loose natural waves with center part, bohemian goddess, free-spirited beauty"
   ],
@@ -112,27 +112,27 @@
   ],
 
   "body_types": [
-    "balanced natural proportions, relaxed shoulders, a defined waistline, and healthy legs that read realistically on camera",
-    "soft natural curves, an ordinary waist-to-hip ratio, and a believable full-body silhouette",
-    "a lean everyday build with feminine curves, relaxed posture, and realistic proportions",
-    "a tall slim frame with natural hips and long legs, photographed without exaggeration",
-    "an athletic but natural build, toned legs, real posture, and believable proportions",
-    "a softly curvy figure with a natural waistline and unforced body language",
-    "a medium build with feminine balance, everyday proportions, and a relaxed stance",
-    "a graceful frame with subtle curves, natural shoulders, and realistic proportions",
-    "a healthy slim figure with natural leg length and a relaxed center of gravity",
-    "balanced full-body proportions with natural curves and a believable silhouette"
+    "balanced adult feminine proportions, relaxed shoulders, a natural bust line, a defined waistline, and healthy legs that read realistically on camera",
+    "soft natural curves, a modest-to-full natural bust, an ordinary waist-to-hip ratio, and a believable full-body silhouette",
+    "a lean everyday build with visible feminine curves, natural chest shape, relaxed posture, and realistic proportions",
+    "a tall slim frame with a natural bust, soft hips, and long legs, photographed without exaggeration",
+    "an athletic but natural build, toned legs, subtle upper-body volume, real posture, and believable proportions",
+    "a softly curvy figure with a natural waistline, gentle bust contour, and unforced body language",
+    "a medium build with adult feminine balance, natural bust and hips, everyday proportions, and a relaxed stance",
+    "a graceful frame with subtle curves, natural shoulders, soft chest contour, and realistic proportions",
+    "a healthy slim figure with natural leg length, a believable bust-to-waist line, and a relaxed center of gravity",
+    "balanced full-body proportions with natural curves, a visible feminine upper-body silhouette, and a believable shape"
   ],
 
   "body_types_sexy": [
-    "a confident curvy figure with natural feminine volume, a defined waist, rounded hips, and believable sensual presence",
-    "a softly sculpted body with natural curves, long legs, and proportions that still feel human on camera",
-    "a feminine figure with graceful curvature, relaxed posture, and clothing that follows the body without exaggeration",
-    "a shapely body with a realistic waistline, full hips, and natural leg proportions",
-    "a curvy silhouette with balanced proportions, subtle definition, and understated sensuality",
-    "a well-balanced hourglass figure with believable hips, natural thighs, and relaxed body language",
-    "a confident full-body silhouette with soft curves, a real center of gravity, and grounded presence",
-    "a feminine frame with natural volume and proportions that feel photographic rather than stylized"
+    "a confident curvy figure with natural feminine volume, a fuller but realistic bust, a defined waist, rounded hips, and believable sensual presence",
+    "a softly sculpted body with natural curves, a graceful bust-to-waist line, long legs, and proportions that still feel human on camera",
+    "a mature feminine figure with graceful curvature, natural upper-body fullness, relaxed posture, and clothing that follows the body without exaggeration",
+    "a shapely body with a realistic waistline, full hips, a soft natural bust, and natural leg proportions",
+    "a curvy silhouette with balanced proportions, subtle definition, natural chest contour, and understated sensuality",
+    "a well-balanced hourglass figure with a natural full bust, believable hips, natural thighs, and relaxed body language",
+    "a confident full-body silhouette with soft curves, real upper-body volume, a grounded center of gravity, and mature presence",
+    "a feminine frame with natural bust and hip volume, believable proportions, and a photographic rather than stylized shape"
   ],
 
   "outfits": {
@@ -206,7 +206,7 @@
       "simple white tee tucked into relaxed denim shorts, white sneakers, ponytail, approachable everyday charm",
       "light floral sundress with comfortable straps, swaying skirt, sandals, park-side warmth and natural ease",
       "striped Breton top tucked into an A-line midi skirt, canvas tote bag, wind-blown hair, casual French-inspired charm",
-      "graphic tee paired with relaxed baggy jeans, messy bun, backpack strap on shoulder, effortless college-girl cool",
+      "graphic tee paired with relaxed baggy jeans, messy bun, backpack strap on shoulder, effortless off-duty young professional cool",
       "oversized denim jacket over a fitted tank and easy shorts, boots, sunlit skin, casual road-trip energy"
     ]
   },
@@ -272,7 +272,7 @@
       "head thrown back in carefree laughter exposing long neck, eyes closed in pure joy, effortlessly captivating"
     ],
     "纯欲": [
-      "wide innocent doe eyes gazing at camera with slightly parted dewy lips, the perfect blend of pure and sensual, baby-face seduction",
+      "wide soft doe eyes gazing at camera with slightly parted dewy lips, the perfect blend of pure and sensual, soft-faced adult allure",
       "soft dreamy expression with unfocused gaze, lips naturally pouty and pink, looking freshly woken up, angelic yet tempting",
       "innocent surprised expression with big round eyes and slightly open mouth, blushing cheeks, the allure of unaware beauty",
       "gentle sleepy half-smile with heavy eyelids, natural bare-face glow, messy hair falling across face, intimate morning-after softness",
@@ -423,6 +423,6 @@
     "standard": "cartoon, anime, 3d render, cgi, sketch, drawing, painting, illustration, disfigured, deformed, blurry, watermark, text, extra limbs, extra fingers, mutated hands, bad anatomy",
     "asian_focused": "Western face, Caucasian features, European features, blonde hair, blue eyes, green eyes, non-Asian features",
     "quality": "low quality, pixelated, overexposed, underexposed, amateur, poorly lit, oversharpened skin, HDR halo, crunchy detail, artificial contrast",
-    "anti_ai": "beauty filter, over-retouched skin, plastic skin, waxy skin, overly smooth skin, porcelain doll, mannequin, uncanny valley, too perfect, extreme symmetry, digital art look, artificial lighting, studio render, hyperrealistic 3d, unrealistically large eyes, impossible body proportions, unnaturally tiny waist, exaggerated curves, glam retouch, instagram face"
+    "anti_ai": "beauty filter, over-retouched skin, plastic skin, waxy skin, overly smooth skin, porcelain doll, mannequin, uncanny valley, too perfect, extreme symmetry, digital art look, artificial lighting, studio render, hyperrealistic 3d, unrealistically large eyes, impossible body proportions, unnaturally tiny waist, distorted chest anatomy, flattened chest, exaggerated fake curves, glam retouch, instagram face, teen, underage, childlike face, school uniform, childish styling"
   }
 }
