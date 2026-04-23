@@ -1,4 +1,4 @@
-# Beauty Generator V10.0
+# Beauty Generator V12.1
 
 > 双引擎艺术写真生成 + 风格轮换 + 公众号自动发布
 
@@ -28,7 +28,7 @@
 | 引擎 | 用途 | 说明 |
 |------|------|------|
 | Google Imagen 4 Ultra | 主力生成 | 高质量，生成后上传 imgbb 获取 URL；429 限流时会退避重试，并在当前运行内短暂跳过后续 Google 尝试 |
-| 豆包 Seedream 5.0 Lite | 自动回退 | Google 失败时自动切换，自带图片 URL |
+| 豆包 Seedream 4.5 | 自动回退 | Google 失败时自动切换，自带图片 URL |
 
 ## 风格轮换（V8.0 新增）
 
@@ -90,7 +90,7 @@ python3 scripts/generate_beauty.py --list-options
 
 ```bash
 export GOOGLE_API_KEY="..."    # Google Imagen 4 Ultra（主力）
-export DOUBAO_API_KEY="..."    # 豆包 Seedream 5.0 Lite（回退）
+export DOUBAO_API_KEY="..."    # 豆包 Seedream 4.5（回退）
 export IMGBB_API_KEY="..."     # imgbb 图片托管（Google 生成的图片需上传）
 export WECHAT_API_KEY="..."    # 微信公众号 API
 export WECHAT_API_ALLOW_INSECURE_SSL="1"  # 可选：证书异常时允许临时回退
@@ -119,6 +119,8 @@ beauty-generator/
 
 ## 版本
 
-**V10.0.0** - 2026-03-21
+**V12.1.0** - 2026-04-23
+
+年轻成熟女性 prompt 收口到 24-27 岁观感，强化自然女性曲线与 anti-flat-chest/anti-aging 负面约束；同步文档、配置版本与 Seedream 4.5 兜底说明。
 
 详见 [CHANGELOG.md](CHANGELOG.md)

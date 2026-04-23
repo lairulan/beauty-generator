@@ -1,5 +1,23 @@
 # 版本历史
 
+## v12.1.0 (2026-04-23) - 年轻成熟女性 Prompt 与发布前整理
+
+### Prompt 优化
+- 年龄锚点统一为 24-27 岁 / mid-twenties / youthful softness，减少模型把“成熟”理解成偏年长的概率。
+- 强化成熟女性感但保持写实：自然胸部轮廓、腰臀比例、锁骨/肩颈线、合身衣料和自信姿态，不走夸张或裸露方向。
+- negative prompt 增加并保留 anti-flat-chest、anti-aging、anti-underage 与真实身体比例约束。
+- 清理容易显老的备用词：将 `mature elegant face`、`crinkled laugh lines`、偏年长的 manager 表述改成年轻成人的精致/笑眼/职业感。
+
+### 文档与元数据
+- SKILL/README/STATUS/WORKFLOW 统一到 v12.1.0，并同步 Google Imagen 4 Ultra + 豆包 Seedream 4.5 架构。
+- 定时发布说明保持为 Cloudflare Worker + GitHub Actions UTC 12:00 / 北京 20:00 兜底。
+- 配置版本同步到 12.1.0，prompt library 标记为 12.1。
+
+### 验证
+- 已通过 JSON 配置解析、Python 编译检查和 prompt preview 检查。
+
+---
+
 ## v10.1.0 (2026-04-08) - 内容质量升级
 
 ### 功能改进

@@ -1,14 +1,14 @@
 ---
 name: beauty-generator
-version: 10.0.0
-description: 独立文生图写真仓库。Google Imagen 4 Ultra 主力，Doubao Seedream 5.0 Lite 回退，支持场景/情绪控制、手动 prompt、公众号草稿箱发布与 7 天风格轮换。Use when user asks to generate beauty images ("生成美女", "每日美女", "发布美女", "艺术写真", "文生图美女").
+version: 12.1.0
+description: 独立文生图写真仓库。Google Imagen 4 Ultra 主力，Doubao Seedream 4.5 回退，支持年轻成熟女性写真 prompt、场景/情绪控制、手动 prompt、公众号草稿箱发布与 7 天风格轮换。Use when user asks to generate beauty images ("生成美女", "每日美女", "发布美女", "艺术写真", "文生图美女").
 author: rulanlai
 tags: [image-generation, beauty, wechat, google, doubao, seedream]
 ---
 
-# Beauty Generator - 文生图写真 V10.0
+# Beauty Generator - 文生图写真 V12.1
 
-纯文生图模式：Google Imagen 4 Ultra（主力）+ 豆包 Seedream 5.0 Lite（兜底）。从元素库随机组合人物、场景、穿搭、光线和艺术风格，生成高质量艺术写真，并可直接发布到微信公众号草稿箱。
+纯文生图模式：Google Imagen 4 Ultra（主力）+ 豆包 Seedream 4.5（兜底）。从元素库随机组合人物、场景、穿搭、光线和艺术风格，生成高质量年轻成熟女性艺术写真，并可直接发布到微信公众号草稿箱。
 
 ## 与 beauty-img2img（图生图）的区别
 
@@ -42,7 +42,7 @@ python3 scripts/publish_wechat.py \
 
 ```bash
 export GOOGLE_API_KEY="..."    # Google Imagen 4 Ultra（主力）
-export DOUBAO_API_KEY="..."    # 豆包 Seedream 5.0 Lite（回退）
+export DOUBAO_API_KEY="..."    # 豆包 Seedream 4.5（回退）
 export IMGBB_API_KEY="..."     # Google 生成图片上传所需
 export WECHAT_API_KEY="..."    # 微信公众号 API
 export WECHAT_API_ALLOW_INSECURE_SSL="1"  # 可选：证书异常时允许临时回退

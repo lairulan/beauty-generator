@@ -1,4 +1,4 @@
-# 工作流程 V10.0
+# 工作流程 V12.1
 
 ## 运行逻辑
 
@@ -14,7 +14,7 @@
 
 3. **图片生成**（`generate_beauty.py`）
    - 优先: Google Imagen 4 Ultra → imgbb 上传获取 URL（429 限流时先退避重试，并在当前运行内短暂跳过后续 Google 尝试）
-   - 回退: 豆包 Seedream 5.0 Lite（自带 URL）
+   - 回退: 豆包 Seedream 4.5（自带 URL）
    - Prompt: 从元素库随机组合（脸型/发型/穿搭/场景/光影/艺术风格）
 
 4. **组装发布**（`publish_wechat.py`）
@@ -38,7 +38,7 @@ flowchart TD
   D --> E[Google Imagen 4 Ultra]
   E --> F{成功?}
   F -->|是| G[上传 imgbb]
-  F -->|否| H[豆包 Seedream 5.0 Lite]
+  F -->|否| H[豆包 Seedream 4.5]
   G --> I[组装开场文案/配图说明/标签]
   H --> I
   I --> J[发布到公众号草稿箱]

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-美女生成 V12.0 - Google Imagen 4 Ultra 双 Key 主力 + 豆包 Seedream 4.5 备选
+美女生成 V12.1 - Google Imagen 4 Ultra 双 Key 主力 + 豆包 Seedream 4.5 备选
 - Google Imagen 4 Ultra 作为主力引擎，支持主备 Key 轮换
 - 豆包 Seedream 4.5 作为 fallback
 - 自动重试 + 429 指数退避（最多 3 次）
@@ -24,7 +24,7 @@ from datetime import date, datetime
 from pathlib import Path
 
 
-VERSION = "12.0.0"
+VERSION = "12.1.0"
 
 
 def _get_ssl_context():
@@ -125,7 +125,7 @@ def log(message: str, level: str = "INFO"):
     log_msg = f"[{timestamp}] [{level}] {message}"
     print(log_msg)
 
-    log_file = LOGS_DIR / f"v10-{datetime.now().strftime('%Y%m%d')}.log"
+    log_file = LOGS_DIR / f"v12-{datetime.now().strftime('%Y%m%d')}.log"
     try:
         with open(log_file, "a", encoding="utf-8") as f:
             f.write(log_msg + "\n")
@@ -183,7 +183,7 @@ def get_default_library() -> dict:
                 "gentle round face, large sparkling eyes, small nose bridge, natural dewy lips, heart-skip beauty"
             ],
             "御姐系": [
-                "mature elegant face, sharp jawline, sophisticated features, intense gaze",
+                "refined young-adult elegant face, sharp jawline, sophisticated features, intense gaze",
                 "queen-like features, high cheekbones, defined brows, powerful presence",
                 "fierce beautiful face, strong bone structure, captivating eyes, confident expression"
             ],
@@ -211,7 +211,7 @@ def get_default_library() -> dict:
                 "friendly natural face, soft features, bright cheerful eyes, light freckles across nose, everyday beauty",
                 "cute wholesome face, natural rosy cheeks, warm brown eyes, authentic smile showing teeth",
                 "adorable everyday face, minimal makeup, natural skin glow, playful innocent eyes, coffee-shop beauty",
-                "sun-kissed casual face, crinkled laugh lines, slightly windblown hair, outdoor active girl charm",
+                "sun-kissed casual face, bright smiling eyes, slightly windblown hair, outdoor active girl charm",
                 "bookish adult face, clear skin with tiny moles, wire-frame glasses, intelligent gentle appeal",
                 "cheerful tomboy-ish face, short layered hair, bright toothy grin, healthy outdoorsy complexion"
             ],
@@ -231,7 +231,7 @@ def get_default_library() -> dict:
                 "elegant business beauty, minimal chic makeup, confident direct gaze, professional glamour",
                 "sharp-featured career woman, angular jawline, penetrating dark eyes, matte nude lips, ice-queen aura",
                 "youthful professional face, bright eager eyes behind trendy glasses, light blush, ambitious energy",
-                "poised manager beauty, symmetrical features, arched brows, mauve lips, quiet authority expression"
+                "young poised professional beauty, symmetrical features, arched brows, mauve lips, quiet authority expression"
             ],
             "生活场景系": [
                 "natural relaxed face, bare-faced beauty with dewy skin, sleepy morning eyes, intimate warm expression",
