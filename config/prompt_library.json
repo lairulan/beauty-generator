@@ -11,11 +11,11 @@
   ],
 
   "asian_identity": [
-    "an adult Chinese woman in her late twenties with mature East Asian features",
-    "a Chinese woman in her mid-to-late twenties with a poised adult presence",
-    "an adult East Asian Chinese woman with elegant mature femininity",
-    "a Chinese woman around 28 with calm natural facial features and composed adult charm",
-    "an adult Chinese woman with an unforced real-life presence and mature feminine appeal"
+    "an adult Chinese woman in her mid-twenties, 24 to 27 years old, with youthful softness and refined feminine presence",
+    "a Chinese woman around 25 with a poised adult presence and fresh East Asian features",
+    "an adult East Asian Chinese woman in her mid-twenties with elegant young femininity",
+    "a Chinese woman around 26 with calm natural facial features and confident adult charm",
+    "an adult Chinese woman with an unforced real-life presence, youthful softness, and refined feminine appeal"
   ],
 
   "face_types": {
@@ -44,7 +44,7 @@
       "captivating beauty, bedroom eyes, sculpted jawline, seductive expression, dangerously attractive",
       "enchanting face, half-lidded seductive gaze, cherry lips slightly parted, flawless silk skin, devastating allure",
       "fierce fox-face beauty, upswept cat eyes, sharp nose, bold red lips, lethal combination of cold and hot",
-      "mature sensual face, knowing eyes with golden shimmer, strong brow bone, full lips with wine stain, experienced allure"
+      "refined sensual face, knowing eyes with golden shimmer, balanced brow bone, full lips with wine stain, confident young-adult allure"
     ],
     "邻家女孩系": [
       "woman-next-door face, natural unfiltered beauty, warm genuine smile, approachable adult charm, no heavy makeup, relatable softness",
@@ -127,11 +127,11 @@
   "body_types_sexy": [
     "a confident curvy figure with natural feminine volume, a fuller but realistic bust, a defined waist, rounded hips, and believable sensual presence",
     "a softly sculpted body with natural curves, a graceful bust-to-waist line, long legs, and proportions that still feel human on camera",
-    "a mature feminine figure with graceful curvature, natural upper-body fullness, relaxed posture, and clothing that follows the body without exaggeration",
+    "a refined young-adult feminine figure with graceful curvature, natural upper-body fullness, relaxed posture, and clothing that follows the body without exaggeration",
     "a shapely body with a realistic waistline, full hips, a soft natural bust, and natural leg proportions",
     "a curvy silhouette with balanced proportions, subtle definition, natural chest contour, and understated sensuality",
     "a well-balanced hourglass figure with a natural full bust, believable hips, natural thighs, and relaxed body language",
-    "a confident full-body silhouette with soft curves, real upper-body volume, a grounded center of gravity, and mature presence",
+    "a confident full-body silhouette with soft curves, real upper-body volume, a grounded center of gravity, and poised young-adult presence",
     "a feminine frame with natural bust and hip volume, believable proportions, and a photographic rather than stylized shape"
   ],
 
@@ -423,6 +423,6 @@
     "standard": "cartoon, anime, 3d render, cgi, sketch, drawing, painting, illustration, disfigured, deformed, blurry, watermark, text, extra limbs, extra fingers, mutated hands, bad anatomy",
     "asian_focused": "Western face, Caucasian features, European features, blonde hair, blue eyes, green eyes, non-Asian features",
     "quality": "low quality, pixelated, overexposed, underexposed, amateur, poorly lit, oversharpened skin, HDR halo, crunchy detail, artificial contrast",
-    "anti_ai": "beauty filter, over-retouched skin, plastic skin, waxy skin, overly smooth skin, porcelain doll, mannequin, uncanny valley, too perfect, extreme symmetry, digital art look, artificial lighting, studio render, hyperrealistic 3d, unrealistically large eyes, impossible body proportions, unnaturally tiny waist, distorted chest anatomy, flattened chest, exaggerated fake curves, glam retouch, instagram face, teen, underage, childlike face, school uniform, childish styling"
+    "anti_ai": "beauty filter, over-retouched skin, plastic skin, waxy skin, overly smooth skin, porcelain doll, mannequin, uncanny valley, too perfect, extreme symmetry, digital art look, artificial lighting, studio render, hyperrealistic 3d, unrealistically large eyes, impossible body proportions, unnaturally tiny waist, distorted chest anatomy, flattened chest, exaggerated fake curves, glam retouch, instagram face, teen, underage, childlike face, school uniform, childish styling, middle-aged, older woman, aged face, deep wrinkles, heavy nasolabial folds, tired face, sagging skin"
   }
 }

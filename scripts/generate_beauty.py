@@ -157,11 +157,11 @@ def get_default_library() -> dict:
             "Lifestyle photograph, relaxed candid moment, gentle bokeh background, Nikon Z8"
         ],
         "asian_identity": [
-            "adult Chinese woman in her late twenties",
-            "adult East Asian woman, Chinese, mature feminine presence",
-            "Chinese woman in her mid-to-late twenties",
+            "adult Chinese woman in her mid-twenties, 24 to 27 years old",
+            "adult East Asian woman, Chinese, youthful softness and refined feminine presence",
+            "Chinese woman around 25 or 26 with a poised adult presence",
             "adult woman with Chinese features and composed charm",
-            "East Asian woman around 28 with mature adult appeal"
+            "East Asian woman in her mid-twenties with confident adult appeal"
         ],
         "face_types": {
             "甜美系": [
@@ -204,7 +204,7 @@ def get_default_library() -> dict:
                 "captivating beauty, bedroom eyes, sculpted jawline, seductive expression, dangerously attractive",
                 "enchanting face, half-lidded seductive gaze, cherry lips slightly parted, devastating allure",
                 "fierce fox-face beauty, upswept cat eyes, sharp nose, bold red lips, lethal hot-cold combination",
-                "mature sensual face, knowing eyes with golden shimmer, strong brow bone, full wine-stained lips"
+                "refined sensual face, knowing eyes with golden shimmer, balanced brow bone, full wine-stained lips, confident young-adult allure"
             ],
             "邻家女孩系": [
                 "woman-next-door face, natural unfiltered beauty, warm genuine smile, approachable adult charm",
@@ -272,7 +272,7 @@ def get_default_library() -> dict:
         "body_types_sexy": [
             "confident curvy figure with natural feminine volume, fuller but realistic bust, defined waist, and rounded hips",
             "softly sculpted body with natural curves, graceful bust-to-waist line, long legs, and believable proportions",
-            "mature feminine figure with natural upper-body fullness, relaxed posture, and clothing that follows the body without exaggeration",
+            "refined young-adult feminine figure with natural upper-body fullness, relaxed posture, and clothing that follows the body without exaggeration",
             "shapely body with realistic waistline, full hips, soft natural bust, and natural leg proportions",
             "balanced hourglass figure with natural full bust, believable hips, and relaxed body language"
         ],
@@ -512,7 +512,7 @@ def get_default_library() -> dict:
             "standard": "deformed, bad anatomy, disfigured, ugly, extra fingers, mutated hands, extra limbs, missing limbs, fused fingers, too many fingers, long neck",
             "asian_focused": "Western face, Caucasian features, blonde hair, blue eyes, green eyes, non-Asian features",
             "quality": "3D render, CGI, digital art, illustration, painting, cartoon, anime, plastic skin, airbrushed, over-retouched, wax figure, doll-like, uncanny valley, symmetrical face, too perfect, flawless porcelain, studio backdrop, stock photo, watermark",
-            "anti_ai": "impossible body proportions, unnaturally tiny waist, distorted chest anatomy, flattened chest, unnaturally flat chest, missing bust contour, exaggerated fake curves, teen, underage, childlike face, school uniform, childish styling"
+            "anti_ai": "impossible body proportions, unnaturally tiny waist, distorted chest anatomy, flattened chest, unnaturally flat chest, missing bust contour, exaggerated fake curves, teen, underage, childlike face, school uniform, childish styling, middle-aged, older woman, aged face, deep wrinkles, heavy nasolabial folds, tired face, sagging skin"
         }
     }
 
@@ -607,11 +607,11 @@ class SmartPromptGenerator:
         return pose_type in {"全身", "写真", "动态"} or style == "性感系"
 
     def _build_feminine_presence_clause(self, style: str = None, pose_type: str = None) -> str:
-        """稳定强调成熟女性感，同时避免夸张失真的身体比例。"""
+        """稳定强调年轻成熟女性感，同时避免夸张失真的身体比例。"""
         if style == "性感系":
             return (
-                "Her mature feminine presence is central: graceful neck and collarbones, "
-                "a natural fuller bust, a defined waist, soft rounded hips, and confident womanly posture, "
+                "Her refined young-adult feminine presence is central: graceful neck and collarbones, "
+                "a natural fuller bust, a defined waist, soft rounded hips, and confident feminine posture, "
                 "all kept realistic and photographic"
             )
 
@@ -622,7 +622,7 @@ class SmartPromptGenerator:
             )
 
         return (
-            "Keep her mature adult femininity visible through natural bust-to-waist proportion, "
+            "Keep her refined adult femininity visible through natural bust-to-waist proportion, "
             "soft hips, graceful legs, and believable full-body balance"
         )
 
@@ -634,12 +634,12 @@ class SmartPromptGenerator:
         ]
 
         if pose_type in {"特写", "半身"}:
-            clauses.append("Prioritize expression and face while keeping a mature feminine neckline, collarbones, and natural upper-body curve visible")
+            clauses.append("Prioritize a fresh mid-twenties face and expression while keeping a refined feminine neckline, collarbones, and natural upper-body curve visible")
         else:
-            clauses.append("Keep mature feminine curves visible but realistic, with natural bust, waist, and hip proportions rather than cartoon exaggeration")
+            clauses.append("Keep refined feminine curves visible but realistic, with natural bust, waist, and hip proportions rather than cartoon exaggeration")
 
         if style == "性感系":
-            clauses.append("Use tasteful sensual fashion styling, form-flattering fabric, confident eye contact, and adult glamour without nudity")
+            clauses.append("Use tasteful sensual fashion styling, form-flattering fabric, confident eye contact, and youthful adult glamour without nudity")
         elif style in {"清纯系", "邻家女孩系", "生活场景系"}:
             clauses.append("Use understated makeup, lived-in wardrobe detail, and ordinary available light")
         elif style == "职场系":
@@ -729,7 +729,7 @@ class SmartPromptGenerator:
         # 1. 主体描述（质量基调 + 人物身份）
         if style == "性感系":
             sections.append(
-                f"A tasteful mature sensual fashion portrait with elegant adult femininity, natural full-bust silhouette, defined waist, and confident womanly allure, featuring {asian_id}"
+                f"A tasteful young-adult sensual fashion portrait with refined adult femininity, natural full-bust silhouette, defined waist, youthful softness, and confident feminine allure, featuring {asian_id}"
             )
         else:
             sections.append(f"{quality}, featuring {asian_id}")
