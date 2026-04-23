@@ -11,7 +11,7 @@
 
 ## 环境
 - 仓库：https://github.com/lairulan/beauty-generator.git
-- 触发：CF Worker daily-beauty（北京时间 19:30 左右，具体以 Worker 调度为准）
+- 触发：CF Worker daily-beauty / GitHub Actions schedule（UTC 12:00 / 北京时间 20:00）
 - API：Google Imagen 4 Ultra (主力) + 豆包 Seedream 4.5 (兜底) + imgbb (图床)
 - 发布：三更熟公众号 (AppID: wx287cdb9d78a498aa)
 

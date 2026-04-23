@@ -3,7 +3,7 @@
 ## 运行逻辑
 
 1. **触发**
-   - 自动：Cloudflare Worker → `repository_dispatch` (UTC 11:30 / 北京 19:30)
+   - 自动：Cloudflare Worker → `repository_dispatch`，并保留 GitHub Actions `schedule` 兜底（UTC 12:00 / 北京 20:00）
    - 手动：GitHub Actions `workflow_dispatch`
    - 防并发：同一分支通过 `concurrency` 串行执行
    - 防重复：自动触发前先检查 GitHub Actions 当日成功记录，再回查远端月度日志，当天已有成功记录则跳过

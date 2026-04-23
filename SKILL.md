@@ -51,6 +51,7 @@ export WECHAT_API_ALLOW_INSECURE_SSL="1"  # 可选：证书异常时允许临时
 ## 定时发布
 
 - Cloudflare Worker 触发 `daily-beauty` → GitHub Actions `daily-publish.yml`
+- GitHub Actions 原生 `schedule` 兜底：UTC 12:00 / 北京 20:00
 - `workflow_dispatch` 可手动补跑
 - 自动触发会先检查 GitHub Actions 当日成功记录，再回查远端月度日志，避免重复发布
 - 7 风格按星期轮换

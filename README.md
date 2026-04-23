@@ -15,9 +15,10 @@
 
 ### 定时发布
 
-**每天 19:30 自动发布到「三更熟」公众号草稿箱**
+**每天 20:00（北京时间）自动发布到「三更熟」公众号草稿箱**
 
-- Cloudflare Worker 触发 `repository_dispatch`
+- Cloudflare Worker 触发 `daily-beauty` → GitHub Actions `repository_dispatch`
+- GitHub Actions 原生 `schedule` 作为同时间兜底：UTC 12:00 / 北京 20:00
 - GitHub Actions `workflow_dispatch` 可手动补跑
 - Workflow `concurrency` 防止同一分支并发重入
 - 自动触发会先检查 GitHub Actions 当日成功记录，再回查远端月度日志，避免重复发布
