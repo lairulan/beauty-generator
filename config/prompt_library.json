@@ -1,20 +1,20 @@
 {
-  "version": "12.10",
-  "description": "Imagen 4 Ultra 优化版 - 年轻成熟女性自然语言摄影描述风格，强化典型东方脸、22-23 岁年轻成人感、年轻脸部表情、自然唇色、安全日常场景、自然饱满女性轮廓和无遮挡构图",
+  "version": "12.11",
+  "description": "Imagen 4 Ultra 优化版 - 年轻成熟女性自然语言摄影描述风格，强化典型东方脸、22-23 岁年轻成人感、干净健康肤质、年轻自然表情、自然唇色、安全日常场景、自然饱满女性轮廓和无遮挡构图",
 
   "base_quality": [
-    "A candid editorial portrait photographed in available light, with lifelike skin detail, natural color response, and quiet emotional realism",
+    "A candid editorial portrait photographed in available light, with clean healthy skin, natural color response, and warm emotional realism",
     "A documentary-style portrait captured on a full-frame camera, with believable tones, restrained contrast, and an authentic atmosphere",
-    "A lifestyle photograph with natural light, honest skin texture, soft depth of field, and unforced body language",
+    "A lifestyle photograph with natural light, clear healthy complexion, soft depth of field, and unforced body language",
     "An observed portrait photograph with subtle filmic color, realistic light falloff, and the feeling of a real moment",
-    "A magazine-quality portrait that still feels human and lightly retouched, with visible pores, fabric detail, and grounded composition"
+    "A magazine-quality portrait that still feels human and lightly retouched, with clean skin, fabric detail, and grounded composition"
   ],
 
   "asian_identity": [
     "an adult Chinese woman in her early twenties, 22 to 23 years old, with youthful cheek fullness and refined feminine presence",
     "a clearly adult Chinese woman around 22 or 23 with fresh East Asian features, bright eyes, and a soft lower face",
     "an adult East Asian Chinese woman in her early twenties with elegant young femininity, smooth lower-face contours, and no mature office-worker fatigue",
-    "a Chinese woman around 23 with calm natural facial features, youthful softness, and confident adult charm",
+    "a Chinese woman around 23 with lively natural facial features, youthful softness, and confident adult charm",
     "an adult Chinese woman with an unforced real-life presence, fresh 22-23 age impression, and refined feminine appeal"
   ],
 
@@ -33,7 +33,7 @@
       "fresh-faced beauty, dewy glass skin, natural brows, innocent yet alluring gaze, soft warm blush",
       "youthful pristine face, clear luminous skin, natural pink lips slightly parted, gentle captivating eyes",
       "delicate porcelain face, wide clear eyes with long natural lashes, barely-there makeup, clean adult innocence with hidden depth",
-      "fresh oval face, calm bright brown eyes, straight nose, bare lips with natural rose tint, quiet youthful beauty",
+      "fresh oval face, bright brown eyes, straight nose, bare lips with natural rose tint, quiet youthful beauty",
       "clean minimalist face, sharp yet soft features, clear single-eyelid eyes, thin natural brows, literary campus goddess vibe",
       "gentle round face, large sparkling eyes, small nose bridge, natural dewy lips, the pure beauty that makes hearts skip"
     ],
@@ -48,11 +48,11 @@
     ],
     "邻家女孩系": [
       "woman-next-door face, natural unfiltered beauty, warm genuine smile, approachable adult charm, no heavy makeup, relatable softness",
-      "friendly natural face, soft features, bright cheerful eyes, light freckles across nose bridge, effortless everyday beauty",
+      "friendly natural face, soft features, bright cheerful eyes, clean cheeks, effortless everyday beauty",
       "cute wholesome face, natural rosy cheeks, casual messy hair, warm brown eyes, authentic smile showing teeth",
       "adorable everyday face, minimal makeup, natural skin glow, playful innocent eyes, coffee-shop beauty vibes",
       "sun-kissed casual face, bright smiling eyes, slightly windblown hair, natural tan, outdoor active girl charm",
-      "bookish adult face, clear skin with tiny moles, wire-frame glasses, bright curious eyes, intelligent gentle appeal",
+      "bookish adult face, clear clean skin, wire-frame glasses, bright curious eyes, intelligent gentle appeal",
       "cheerful tomboy-ish face, short layered hair, bright toothy grin, healthy outdoorsy complexion, energetic natural charm"
     ],
     "国风系": [
@@ -74,13 +74,13 @@
       "polished Chinese professional face with approachable warmth, natural brows, dark almond eyes, soft smile, natural low-saturation peach-beige lips, refined adult femininity"
     ],
     "生活场景系": [
-      "fresh everyday young-adult Chinese face, dewy skin, bright rested eyes, soft cheeks, relaxed warm expression",
-      "cozy homebody beauty with minimal skincare glow, gentle smile, clear eyes, youthful lower-face softness",
-      "natural no-makeup look, warm gentle expression, slightly tousled hair, comfortable everyday beauty",
-      "fresh washed face with realistic skin texture, smooth lower-face contours, relaxed half-smile, morning coffee calm",
-      "casual weekend face with bright eyes, soft cheek fullness, simple neat hair, approachable charm",
-      "cooking-at-home beauty, flour-dusted cheek, tied-back hair with loose strands, focused concentrated expression",
-      "young adult lifestyle face with light blush, clean brows, soft oval face, and lively 22-23 age impression"
+      "photogenic everyday young-adult Chinese face, clean dewy skin, bright rested eyes, soft cheeks, warm easy smile",
+      "cozy homebody beauty with minimal skincare glow, gentle smile, clear eyes, youthful lower-face softness, and delicate facial balance",
+      "natural no-makeup look with balanced delicate features, warm gentle smile, slightly tousled hair, comfortable everyday beauty",
+      "fresh washed face with clear healthy skin, smooth lower-face contours, lively half-smile, morning coffee warmth, and clean oval contours",
+      "photogenic casual weekend face with bright smiling eyes, soft cheek fullness, delicate nose bridge, clean oval contours, approachable charm",
+      "cooking-at-home beauty, clean cheek, tied-back hair with loose strands, bright focused smile",
+      "photogenic young adult lifestyle face with light blush, clean brows, soft oval face, and lively attractive 22-23 age impression"
     ]
   },
 
@@ -104,11 +104,11 @@
   ],
 
   "skin_textures": [
-    "real skin texture with visible pores, soft sheen, and slight tonal variation",
-    "natural complexion with faint cheek texture, subtle blush, and honest detail",
-    "healthy skin with a soft natural sheen, fine texture, and believable highlights",
-    "skin with small tonal shifts, gentle texture, and realistic light falloff",
-    "natural skin with pores, a few tiny imperfections, and understated glow"
+    "clear healthy skin with a soft natural sheen, subtle blush, and slight tonal variation",
+    "clean natural complexion with even tone, soft blush, and believable skin softness",
+    "healthy skin with a soft natural glow, clear cheeks, and gentle highlights",
+    "smooth natural skin with small tonal shifts, even clean cheeks, and realistic light falloff",
+    "fresh clean skin with natural radiance, soft cheek color, and understated glow"
   ],
 
   "body_types": [
@@ -200,7 +200,7 @@
       "cropped open knit cardigan over a supportive ribbed scoop-neck tank with wide-leg lounge trousers, cozy sofa setting, fully dressed casual ease, natural upper-body contour visible",
       "lightweight open overshirt over a fitted ribbed tank and straight-leg jeans, rolled sleeves, coffee-at-home freshness, balanced feminine silhouette, no bulky layers",
       "simple softly fitted ribbed knit top with relaxed high-waisted linen trousers, natural daylight, fabric following the chest and waist without looking tight",
-      "soft wrap-style knit top with soft lounge pants, hair loosely tied back, calm kitchen-morning styling, subtle waist and collarbone line, torso visible"
+      "soft wrap-style knit top with soft lounge pants, hair loosely tied back, warm kitchen-morning styling, subtle waist and collarbone line, torso visible"
     ],
     "邻家": [
       "simple white tee tucked into relaxed denim shorts, white sneakers, ponytail, approachable everyday charm",
@@ -213,22 +213,22 @@
 
   "poses": {
     "特写": [
-      "close-up portrait shot, looking directly into camera with a clear relaxed gaze, face filling the frame with natural detail",
-      "face close-up with chin slightly tilted down, soft eyes, calm expression, neck and collarbone partially visible",
-      "quiet close portrait with relaxed eyelids, natural lips, and soft hair falling lightly across one side of the face",
-      "profile close-up showing an elegant jawline and neck, one hand gently touching the face, calm natural posture",
-      "close-up from slightly above, looking up at camera with bright eyes, hands framing face, gentle approachable mood"
+      "close-up portrait shot, looking directly into camera with lively smiling eyes, face filling the frame with clean natural detail",
+      "face close-up with chin slightly tilted down, soft eyes, tiny natural smile, neck and collarbone partially visible",
+      "quiet close portrait with bright engaged eyes, natural lips, and soft hair falling lightly across one side of the face",
+      "three-quarter close-up showing an elegant jawline and neck, one hand gently touching the hair, warm natural posture",
+      "close-up from slightly above, looking up at camera with bright eyes, hands lightly framing face, gentle approachable mood"
     ],
     "半身": [
       "waist-up shot with one hand moving lightly through the hair, relaxed shoulders, and an easy natural gesture",
-      "upper-body portrait leaning slightly toward camera, open posture, steady eye contact, and a conversational feel",
-      "seated half-body shot with hands resting naturally in the lap, upright but relaxed posture, calm presence",
-      "side-angle waist-up shot with the body turned slightly three-quarters toward camera, one arm resting near the waist, looking over shoulder naturally",
+      "upper-body portrait leaning slightly toward camera, open posture, lively eye contact, and a conversational feel",
+      "seated half-body shot with hands resting naturally in the lap, upright posture, soft easy smile",
+      "front-facing three-quarter waist-up shot, one arm resting near the waist, bright eyes and a natural smile toward camera",
       "standing half-body portrait with hands adjusting the hair or collar, subtle movement, and unforced body language"
     ],
     "职场半身": [
       "waist-up office-fashion portrait at a three-quarter angle, one hand lightly touching the blazer lapel, relaxed shoulders, direct bright eye contact",
-      "half-body portrait leaning lightly against the edge of a desk, one hand near the waist, tailored lines visible, calm confident presence",
+      "half-body portrait leaning lightly against the edge of a desk, one hand near the waist, tailored lines visible, bright confident presence",
       "standing by the office window in a waist-up frame, one hand adjusting hair near the ear, collarbones and neckline subtly emphasized, natural posture",
       "seated half-body portrait with one elbow resting on the conference table, body turned slightly sideways, steady eye contact, refined professional allure",
       "over-the-shoulder half-body pose near a glass wall, chin slightly turned back, elegant neck line, soft smile, polished after-work mood"
@@ -252,17 +252,17 @@
       "seated portrait on a chair or bench, one leg folded comfortably, hands resting naturally, intimate but grounded mood",
       "sitting with knees drawn up loosely, arms around the legs, head tilted slightly, quiet reflective presence",
       "standing near a window or wall with one hand adjusting the hair, natural weight shift, understated elegance",
-      "kneeling or crouching in a relaxed way with a straight back and calm expression, composed documentary feel",
-      "reclining in a simple pose with one knee bent and one arm resting nearby, full body visible, calm lived-in atmosphere"
+      "kneeling or crouching in a relaxed way with a straight back and warm expression, composed documentary feel",
+      "reclining in a simple pose with one knee bent and one arm resting nearby, full body visible, warm lived-in atmosphere"
     ]
   },
 
   "expressions": {
     "微笑": [
-      "warm genuine smile with eyes crinkled in delight, head tilted slightly, radiating approachable charm",
-      "subtle natural smile with bright relaxed eyes, soft cheek fullness, and a fresh early-twenties mood",
-      "bright easy smile showing teeth, eyes alive with relaxed warmth",
-      "soft closed-lip smile with relaxed brows, natural peach lips, and an approachable youthful look"
+      "warm genuine smile with lively smiling eyes, soft cheek lift, relaxed mouth corners, and approachable charm",
+      "subtle natural smile with bright engaged eyes, soft cheek fullness, and a fresh early-twenties mood",
+      "bright easy smile showing teeth, eyes alive with candid warmth and natural attractiveness",
+      "soft closed-lip smile with relaxed brows, natural peach lips, gentle cheek lift, and an approachable youthful look"
     ],
     "性感": [
       "warm confident gaze with bright open eyes, natural peach lips slightly parted, and tasteful youthful adult charm",
@@ -273,7 +273,7 @@
     ],
     "挑逗": [
       "playful wink with one eye, bright grin, soft cheeks, and lively early-twenties charm",
-      "looking over shoulder with a playful smile, bright relaxed eyes, and natural peach lips",
+      "front-facing three-quarter pose with a playful smile, bright relaxed eyes, and natural peach lips",
       "coy shy smile while glancing upward, soft cheek fullness, relaxed brows, and lighthearted charm",
       "small teasing smile with eyes twinkling, natural blush, and youthful confident warmth",
       "carefree laugh with eyes closed, relaxed neck, soft cheeks, and bright candid warmth"
@@ -286,17 +286,17 @@
       "shy downcast eyes with a tiny smile, natural flush on cheeks, relaxed brows, and soft youthful mood"
     ],
     "冷艳": [
-      "cool clear gaze with relaxed brows, soft cheeks, polished styling, and a still-youthful early-twenties look",
-      "quiet distant gaze with bright catchlights, natural lips, and calm young-adult elegance",
+      "cool clear gaze with soft brows, lifted eyes, soft cheeks, polished styling, and a still-youthful early-twenties look",
+      "quiet distant gaze with bright catchlights, natural lips, and graceful young-adult elegance",
       "sharp but relaxed eye contact, clean facial planes, soft lower-face contours, and no severe expression"
     ],
     "忧郁": [
       "soft wistful gaze looking away into distance, fresh eyes, relaxed lips, and poetic quietness",
       "thoughtful distant look with natural lips, relaxed brows, youthful softness, and gentle emotional depth",
-      "gentle reflective expression gazing out window, bright eyes, soft cheeks, and calm poetic mood"
+      "gentle reflective expression gazing out window, bright eyes, soft cheeks, and warm poetic mood"
     ],
     "自信": [
-      "confident direct gaze with level chin, bright open eyes, relaxed youthful expression, and fresh adult poise",
+      "confident direct gaze with level chin, bright open eyes, slight natural smile, and fresh adult poise",
       "self-assured soft smile with bright steady eyes, youthful confident presence that feels composed and approachable",
       "focused determined expression with relaxed brows, clear bright eyes, soft lower-face contours, and approachable strength"
     ]
@@ -321,7 +321,7 @@
       "luxury hotel lobby, marble and gold, sophisticated elegance"
     ],
     "室内": [
-      "sunlit apartment corner, morning light through sheer curtains, warm everyday calm",
+      "sunlit apartment corner, morning light through sheer curtains, warm everyday atmosphere",
       "cozy coffee shop corner, warm ambient lighting, lifestyle aesthetic",
       "minimalist studio, clean white background, professional setting",
       "vintage library, leather books, intellectual atmosphere",
@@ -400,7 +400,7 @@
     "50mm f/1.4 lens, natural perspective, classic portrait",
     "135mm f/2 lens, compressed background, beautiful subject isolation",
     "35mm f/1.8 lens, environmental portrait, context and subject",
-    "100mm f/2.8 macro lens, extreme detail, skin texture visible"
+    "100mm f/2.8 portrait lens, crisp eyes, soft flattering skin detail"
   ],
 
   "art_styles": {
@@ -427,17 +427,17 @@
   },
 
   "enhancement_keywords": [
-    "with a few flyaway hairs, mild skin texture around the nose, and real fabric creases",
-    "with slight asymmetry in the smile, faint cheek texture, and believable catchlights",
+    "with a few flyaway hairs, clean cheek highlights, and real fabric creases",
+    "with slight asymmetry in the smile, soft cheek glow, and believable catchlights",
     "with a relaxed shoulder line, gentle hand tension, and natural breathing posture",
     "with subtle wrinkles in clothing, small light falloff across the face, and grounded depth",
-    "with a tiny mole, fine baby hairs, and the texture of lived-in materials around her"
+    "with fine baby hairs, clean facial highlights, and the texture of lived-in materials around her"
   ],
 
   "negative_prompts": {
     "standard": "cartoon, anime, 3d render, cgi, sketch, drawing, painting, illustration, disfigured, deformed, blurry, watermark, text, extra limbs, extra fingers, mutated hands, bad anatomy",
     "asian_focused": "Western face, Caucasian features, European features, blonde hair, blue eyes, green eyes, non-Asian features, Westernized mixed-race face, non-Chinese facial structure, heavy Western glam makeup",
     "quality": "low quality, pixelated, overexposed, underexposed, amateur, poorly lit, oversharpened skin, HDR halo, crunchy detail, artificial contrast",
-    "anti_ai": "beauty filter, over-retouched skin, plastic skin, waxy skin, overly smooth skin, porcelain doll, mannequin, uncanny valley, too perfect, extreme symmetry, digital art look, artificial lighting, studio render, hyperrealistic 3d, unrealistically large eyes, impossible body proportions, unnaturally tiny waist, distorted chest anatomy, flattened chest, flat chest, small chest, underdeveloped figure, boxy torso, shapeless oversized clothing, bulky shapeless sleeves, hands covering chest, arms blocking torso, side profile hiding torso, countertop hiding body, androgynous torso, collapsed upper-body silhouette, exaggerated fake curves, glam retouch, instagram face, teen, underage, childlike face, school uniform, childish styling, middle-aged, older woman, woman in her 30s, over 30 years old, aged face, mature face, mature executive, older manager, aged professional, gaunt cheeks, hollow cheeks, deep wrinkles, heavy nasolabial folds, pronounced smile lines, tired under-eye bags, tired face, sagging skin, stern expression, severe expression, world-weary expression, tired half-lidded eyes, mature seductive smirk, manager-like composure, cold intimidating stare, hard cheekbones, sharp mature jawline, dark red lipstick, burgundy lips, purple lipstick, mauve lips, wine-colored lips, red-brown lipstick, brown lipstick, brick-red lips, dark rose lipstick, heavy lipstick, thick lip makeup, overdrawn lips, heavy smoky eye makeup, blonde highlights, balayage hair, bleached hair, orange-brown dyed hair"
+    "anti_ai": "beauty filter, over-retouched skin, plastic skin, waxy skin, overly smooth skin, porcelain doll, mannequin, uncanny valley, too perfect, extreme symmetry, digital art look, artificial lighting, studio render, hyperrealistic 3d, unrealistically large eyes, impossible body proportions, unnaturally tiny waist, distorted chest anatomy, flattened chest, flat chest, small chest, underdeveloped figure, boxy torso, shapeless oversized clothing, bulky shapeless sleeves, hands covering chest, arms blocking torso, side profile hiding torso, countertop hiding body, androgynous torso, collapsed upper-body silhouette, exaggerated fake curves, glam retouch, instagram face, teen, underage, childlike face, school uniform, childish styling, middle-aged, older woman, woman in her 30s, over 30 years old, aged face, mature face, mature executive, older manager, aged professional, gaunt cheeks, hollow cheeks, deep wrinkles, heavy nasolabial folds, pronounced smile lines, tired under-eye bags, tired face, sagging skin, acne, pimples, facial blemishes, skin breakouts, red bumps, acne scars, rash, dark spots, dirty skin, many moles, mole clusters, freckle clusters, stiff expression, rigid expression, blank stare, awkward smile, forced smile, dead eyes, stern expression, severe expression, world-weary expression, tired half-lidded eyes, mature seductive smirk, manager-like composure, cold intimidating stare, hard cheekbones, sharp mature jawline, dark red lipstick, burgundy lips, purple lipstick, mauve lips, wine-colored lips, red-brown lipstick, brown lipstick, brick-red lips, dark rose lipstick, heavy lipstick, thick lip makeup, overdrawn lips, heavy smoky eye makeup, blonde highlights, balayage hair, bleached hair, orange-brown dyed hair"
   }
 }

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-美女生成 V12.10 - Google Imagen 4 Ultra 双 Key 主力 + 豆包 Seedream 4.5 备选
+美女生成 V12.11 - Google Imagen 4 Ultra 双 Key 主力 + 豆包 Seedream 4.5 备选
 - Google Imagen 4 Ultra 作为主力引擎，支持主备 Key 轮换
 - 豆包 Seedream 4.5 作为 fallback
 - 自动重试 + 429 指数退避（最多 3 次）
@@ -24,7 +24,7 @@ from datetime import date, datetime
 from pathlib import Path
 
 
-VERSION = "12.10.0"
+VERSION = "12.11.0"
 
 
 def _get_ssl_context():
@@ -150,7 +150,7 @@ def get_default_library() -> dict:
     """内置默认元素库（prompt_library.json 缺失时的 fallback）"""
     return {
         "base_quality": [
-            "Candid photograph taken on a Sony A7IV, natural ambient light, unretouched skin",
+            "Candid photograph taken on a Sony A7IV, natural ambient light, clean healthy skin",
             "Documentary-style portrait, shot on Fujifilm X-T5, film simulation, available light only",
             "Street photography portrait, captured mid-moment, shallow depth of field, Leica Q3",
             "Natural light portrait, shot through a window, soft diffused shadows, Canon R5",
@@ -178,7 +178,7 @@ def get_default_library() -> dict:
                 "fresh-faced beauty, dewy skin, natural brows, innocent gaze",
                 "youthful pristine face, clear luminous skin, natural pink lips slightly parted, gentle captivating eyes",
                 "delicate porcelain face, wide clear eyes with long natural lashes, barely-there makeup, clean adult innocence",
-                "fresh oval face, calm bright brown eyes, straight nose, bare lips with natural rose tint, quiet youthful beauty",
+                "fresh oval face, bright brown eyes, straight nose, bare lips with natural rose tint, quiet youthful beauty",
                 "clean minimalist face, sharp yet soft features, clear single-eyelid eyes, thin natural brows, literary goddess",
                 "gentle round face, large sparkling eyes, small nose bridge, natural dewy lips, heart-skip beauty"
             ],
@@ -208,11 +208,11 @@ def get_default_library() -> dict:
             ],
             "邻家女孩系": [
                 "woman-next-door face, natural unfiltered beauty, warm genuine smile, approachable adult charm",
-                "friendly natural face, soft features, bright cheerful eyes, light freckles across nose, everyday beauty",
+                "friendly natural face, soft features, bright cheerful eyes, clean cheeks, everyday beauty",
                 "cute wholesome face, natural rosy cheeks, warm brown eyes, authentic smile showing teeth",
                 "adorable everyday face, minimal makeup, natural skin glow, playful innocent eyes, coffee-shop beauty",
                 "sun-kissed casual face, bright smiling eyes, slightly windblown hair, outdoor active girl charm",
-                "bookish adult face, clear skin with tiny moles, wire-frame glasses, intelligent gentle appeal",
+                "bookish adult face, clear clean skin, wire-frame glasses, intelligent gentle appeal",
                 "cheerful tomboy-ish face, short layered hair, bright toothy grin, healthy outdoorsy complexion"
             ],
             "国风系": [
@@ -234,13 +234,13 @@ def get_default_library() -> dict:
                 "polished Chinese professional face with approachable warmth, natural brows, dark almond eyes, soft smile, natural low-saturation peach-beige lips"
             ],
             "生活场景系": [
-                "fresh everyday young-adult Chinese face, dewy skin, bright rested eyes, soft cheeks, relaxed warm expression",
-                "cozy homebody beauty with minimal skincare glow, gentle smile, clear eyes, youthful lower-face softness",
-                "natural no-makeup look, warm gentle expression, slightly tousled hair, comfortable everyday beauty",
-                "fresh washed face with realistic skin texture, smooth lower-face contours, relaxed half-smile, morning coffee calm",
-                "casual weekend face with bright eyes, soft cheek fullness, simple neat hair, approachable charm",
-                "cooking-at-home beauty, flour-dusted cheek, tied-back hair with loose strands, focused concentrated look",
-                "young adult lifestyle face with light blush, clean brows, soft oval face, lively 22-23 age impression"
+                "photogenic everyday young-adult Chinese face, clean dewy skin, bright rested eyes, soft cheeks, warm easy smile",
+                "cozy homebody beauty with minimal skincare glow, gentle smile, clear eyes, youthful lower-face softness, and delicate facial balance",
+                "natural no-makeup look with balanced delicate features, warm gentle smile, slightly tousled hair, comfortable everyday beauty",
+                "fresh washed face with clear healthy skin, smooth lower-face contours, lively half-smile, morning coffee warmth, and clean oval contours",
+                "photogenic casual weekend face with bright smiling eyes, soft cheek fullness, delicate nose bridge, clean oval contours, approachable charm",
+                "cooking-at-home beauty, clean cheek, tied-back hair with loose strands, bright focused smile",
+                "photogenic young adult lifestyle face with light blush, clean brows, soft oval face, lively attractive 22-23 age impression"
             ]
         },
         "hair_styles": [
@@ -256,11 +256,11 @@ def get_default_library() -> dict:
             "half-up half-down style, romantic braids, ethereal beauty"
         ],
         "skin_textures": [
-            "flawless porcelain skin, visible pores, natural skin texture, healthy glow",
-            "dewy glass skin, luminous complexion, subtle skin details, radiant",
-            "creamy smooth skin, natural texture, soft focus, photorealistic",
-            "honey-toned skin, warm undertones, healthy natural glow, detailed texture",
-            "milky white skin, translucent quality, delicate texture, ethereal glow"
+            "clear healthy skin, natural soft glow, subtle blush",
+            "dewy clean skin, luminous complexion, even tone, radiant",
+            "creamy smooth skin, soft focus, photorealistic and clean",
+            "honey-toned skin, warm undertones, healthy natural glow, clear cheeks",
+            "milky fresh skin, translucent quality, soft detail, ethereal glow"
         ],
         "body_types": [
             "balanced adult feminine proportions, natural medium-to-full upper-body contour, defined waist, soft hips, and healthy legs",
@@ -334,16 +334,16 @@ def get_default_library() -> dict:
         },
         "poses": {
             "特写": [
-                "close-up portrait, looking directly at camera, clear relaxed gaze",
-                "face close-up, chin slightly tilted, calm natural expression",
-                "quiet close portrait, relaxed eyelids, natural lips, soft hair detail",
-                "profile close-up, elegant side angle, natural neck line visible"
+                "close-up portrait, looking directly at camera, lively smiling eyes",
+                "face close-up, chin slightly tilted, tiny natural smile",
+                "quiet close portrait, bright engaged eyes, natural lips, soft hair detail",
+                "three-quarter close-up, elegant side angle, natural neck line visible"
             ],
             "半身": [
                 "waist-up portrait with relaxed shoulders and one hand touching hair, natural pose",
-                "upper-body portrait leaning slightly toward camera, open posture, steady eye contact",
-                "elegant seated half-body pose, hands in lap, refined but relaxed posture",
-                "side-angle waist-up portrait, one arm resting near the waist, conversational mood"
+                "upper-body portrait leaning slightly toward camera, open posture, lively eye contact",
+                "elegant seated half-body pose, hands in lap, refined posture with soft easy smile",
+                "front-facing three-quarter waist-up portrait, one arm resting near the waist, conversational smile"
             ],
             "全身": [
                 "full body standing pose, weight resting naturally on one leg, grounded proportions",
@@ -355,7 +355,7 @@ def get_default_library() -> dict:
                 "hair moving lightly as she turns, believable candid motion",
                 "twirling in dress, fabric flowing softly, joyful energy",
                 "reaching up in a relaxed stretch, elongated posture, dancer-like ease",
-                "looking back over shoulder while turning naturally, curious glance"
+                "turning slightly toward camera with a bright curious smile"
             ],
             "写真": [
                 "standing portrait with a gentle shoulder turn, hands relaxed, editorial but believable stance",
@@ -366,9 +366,9 @@ def get_default_library() -> dict:
         },
         "expressions": {
             "微笑": [
-                "gentle natural smile, eyes crinkled with joy, warm genuine",
-                "subtle natural smile with bright relaxed eyes, soft cheek fullness, fresh early-twenties mood",
-                "bright cheerful smile, showing teeth, infectious happiness, relaxed youthful brows"
+                "warm genuine smile with lively smiling eyes, soft cheek lift, relaxed mouth corners",
+                "subtle natural smile with bright engaged eyes, soft cheek fullness, fresh early-twenties mood",
+                "bright cheerful smile, showing teeth, infectious happiness, candid warmth"
             ],
             "性感": [
                 "warm confident gaze with bright open eyes, natural peach lips slightly parted, tasteful youthful adult charm",
@@ -386,8 +386,8 @@ def get_default_library() -> dict:
                 "gentle youthful face, clear bright eyes, naturally flushed cheeks, clearly adult presence"
             ],
             "冷艳": [
-                "cool clear gaze with relaxed brows, soft cheeks, polished styling, still youthful",
-                "quiet distant expression with bright catchlights, natural lips, calm young-adult elegance",
+                "cool clear gaze with soft brows, lifted eyes, soft cheeks, polished styling, still youthful",
+                "quiet distant expression with bright catchlights, natural lips, graceful young-adult elegance",
                 "sharp but relaxed eye contact, clean facial planes, soft lower-face contours"
             ],
             "忧郁": [
@@ -395,7 +395,7 @@ def get_default_library() -> dict:
                 "thoughtful distant look, relaxed brows, youthful softness, gentle emotional depth"
             ],
             "自信": [
-                "confident direct gaze, level chin, bright open eyes, relaxed youthful expression",
+                "confident direct gaze, level chin, bright open eyes, slight natural smile",
                 "self-assured soft smile, bright steady eyes, youthful confident presence",
                 "focused determined expression, relaxed brows, clear bright eyes, approachable strength"
             ]
@@ -478,7 +478,7 @@ def get_default_library() -> dict:
             "50mm f/1.4 lens, natural perspective, classic portrait",
             "135mm f/2 lens, compressed background, beautiful subject isolation",
             "35mm f/1.8 lens, environmental portrait, context and subject",
-            "100mm f/2.8 macro lens, extreme detail, skin texture visible"
+            "100mm f/2.8 portrait lens, crisp eyes, soft flattering skin detail"
         ],
         "art_styles": {
             "电影感": [
@@ -503,16 +503,16 @@ def get_default_library() -> dict:
         },
         "enhancement_keywords": [
             "a few stray hairs catching the light, slight asymmetry in smile, one earring slightly tilted",
-            "tiny smile creases at the eye corners, barely visible freckle near nose, natural skin unevenness",
+            "soft smile creases at the eye corners, clean cheek highlights, natural skin softness",
             "fabric wrinkle near elbow, a crease in the shirt collar, wind-blown strand across cheek",
             "subtle motion blur on fingertips, slight squint from sunlight, genuine unposed moment",
-            "visible collarbone shadow, faint cheek texture, tiny beauty mark on jawline"
+            "visible collarbone shadow, clean facial highlights, soft cheek glow"
         ],
         "negative_prompts": {
             "standard": "deformed, bad anatomy, disfigured, ugly, extra fingers, mutated hands, extra limbs, missing limbs, fused fingers, too many fingers, long neck",
             "asian_focused": "Western face, Caucasian features, blonde hair, blue eyes, green eyes, non-Asian features",
             "quality": "3D render, CGI, digital art, illustration, painting, cartoon, anime, plastic skin, airbrushed, over-retouched, wax figure, doll-like, uncanny valley, symmetrical face, too perfect, flawless porcelain, studio backdrop, stock photo, watermark",
-            "anti_ai": "impossible body proportions, unnaturally tiny waist, distorted chest anatomy, flattened chest, unnaturally flat chest, flat chest, small chest, missing bust contour, underdeveloped figure, boxy torso, shapeless oversized clothing, bulky shapeless sleeves, hands covering chest, arms blocking torso, side profile hiding torso, countertop hiding body, androgynous torso, collapsed upper-body silhouette, exaggerated fake curves, teen, underage, childlike face, school uniform, childish styling, middle-aged, older woman, woman in her 30s, over 30 years old, aged face, mature face, mature executive, older manager, aged professional, gaunt cheeks, hollow cheeks, deep wrinkles, heavy nasolabial folds, pronounced smile lines, tired under-eye bags, tired face, sagging skin, stern expression, severe expression, world-weary expression, tired half-lidded eyes, mature seductive smirk, manager-like composure, cold intimidating stare, hard cheekbones, sharp mature jawline"
+            "anti_ai": "impossible body proportions, unnaturally tiny waist, distorted chest anatomy, flattened chest, unnaturally flat chest, flat chest, small chest, missing bust contour, underdeveloped figure, boxy torso, shapeless oversized clothing, bulky shapeless sleeves, hands covering chest, arms blocking torso, side profile hiding torso, countertop hiding body, androgynous torso, collapsed upper-body silhouette, exaggerated fake curves, teen, underage, childlike face, school uniform, childish styling, middle-aged, older woman, woman in her 30s, over 30 years old, aged face, mature face, mature executive, older manager, aged professional, gaunt cheeks, hollow cheeks, deep wrinkles, heavy nasolabial folds, pronounced smile lines, tired under-eye bags, tired face, sagging skin, acne, pimples, facial blemishes, skin breakouts, red bumps, acne scars, rash, dark spots, dirty skin, many moles, mole clusters, freckle clusters, stiff expression, rigid expression, blank stare, awkward smile, forced smile, dead eyes, stern expression, severe expression, world-weary expression, tired half-lidded eyes, mature seductive smirk, manager-like composure, cold intimidating stare, hard cheekbones, sharp mature jawline"
         }
     }
 
@@ -645,22 +645,22 @@ class SmartPromptGenerator:
     def _build_realism_clauses(self, style: str = None, pose_type: str = None) -> list[str]:
         """补充真实摄影约束，降低 AI 味和过度美化。"""
         clauses = [
-            "Keep the image grounded in real-world photography with believable skin texture, faint facial asymmetry, and restrained retouching",
-            "Preserve relaxed posture, natural hand placement, and the subtle imperfections of a candid portrait",
-            "Keep the subject clearly adult but visibly 22 to 23 years old: youthful cheek fullness, bright eyes, smooth lower-face contours, and no mature managerial or tired 30s facial impression",
-            "Keep her facial expression unmistakably early-twenties: bright open eyes, relaxed brows, soft cheek volume, natural low-saturation lips, and light youthful confidence; avoid stern authority, mature seductive smirks, heavy half-lidded eyes, severe coldness, manager-like composure, or a world-weary gaze",
-            "Keep the body clearly adult and feminine with a natural medium-full upper-body contour, defined waist suggestion, and realistic proportions; avoid a flat, boxy, or shapeless torso"
+            "Keep the image grounded in real-world photography with clean healthy skin, faint natural facial asymmetry, and restrained retouching",
+            "Preserve relaxed posture, natural hand placement, smooth healthy cheeks, clean facial highlights, and candid portrait detail",
+            "Keep the subject clearly adult but visibly 22 to 23 years old: youthful cheek fullness, bright eyes, smooth lower-face contours, fresh rested energy, and a soft early-twenties facial impression",
+            "Keep her facial expression attractive and unmistakably early-twenties: lively smiling eyes, relaxed brows, soft cheek lift, natural low-saturation lips, a warm candid smile, and open friendly energy",
+            "Keep the body clearly adult and feminine with a natural medium-full upper-body contour, defined waist suggestion, realistic proportions, and a softly fitted silhouette"
         ]
 
         if pose_type in {"特写", "半身", "职场半身"}:
-            clauses.append("Prioritize a fresh early-twenties face and expression while keeping a refined feminine neckline, collarbones, and natural medium-full upper-body curve visible")
+            clauses.append("Prioritize a fresh early-twenties face with clean healthy skin, lively eyes, and an easy natural smile while keeping a refined feminine neckline, collarbones, and natural medium-full upper-body curve visible")
         else:
             clauses.append("Keep refined feminine curves visible but realistic, with natural bust-to-waist and hip proportions rather than cartoon exaggeration")
 
         if style == "性感系":
-            clauses.append("Use tasteful sensual fashion styling, form-flattering fabric, confident eye contact, and youthful adult glamour without nudity")
+            clauses.append("Use tasteful sensual fashion styling, form-flattering fabric, confident eye contact, fully clothed elegance, and youthful adult glamour")
         elif style == "生活场景系":
-            clauses.append("Use fresh everyday lifestyle styling in public or shared home spaces, fully dressed softly fitted casual clothing, rested eyes, a lively 22-23 adult face, and flattering fabric that follows the chest and waist without looking tight; prefer a front-facing or three-quarter composition with torso and waist visible; avoid bedroom, bed, pajama, post-shower, private bathroom, intimate morning-after cues, side profile hiding the torso, hands covering the chest, bulky sleeves, or a counter cropping the body")
+            clauses.append("Use fresh everyday lifestyle styling in public or shared home spaces, fully dressed softly fitted casual clothing, clean healthy skin, rested eyes, a lively 22-23 adult face, flattering fabric that follows the chest and waist naturally, a front-facing or three-quarter composition with torso and waist visible, and a natural smile")
         elif style in {"清纯系", "邻家女孩系"}:
             clauses.append("Use understated makeup, lived-in wardrobe detail, and ordinary available light")
         elif style == "职场系":
@@ -693,9 +693,9 @@ class SmartPromptGenerator:
                 "candid neighborhood photography mood, grounded color, and unforced styling"
             ],
             "生活场景系": [
-                "fresh everyday lifestyle photography tone, natural color, soft practical light",
-                "quiet home-life editorial realism with restrained contrast and tactile detail",
-                "documentary lifestyle treatment with believable indoor light and lived-in texture"
+                "fresh lifestyle magazine portrait tone, natural color, clean soft light, and flattering facial detail",
+                "quiet home-life editorial realism with warm soft contrast, clean skin, and attractive everyday polish",
+                "clean lifestyle editorial treatment with believable indoor light, lively eyes, and soft flattering skin"
             ],
             "职场系": [
                 "premium office fashion editorial with crisp window light, soft rim light, catchlights, and quiet sensual tension",
