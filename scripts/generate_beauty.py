@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-美女生成 V12.27 - Google Imagen 4 Ultra 双 Key 主力 + 豆包 Seedream 4.5 备选
+美女生成 V12.28 - Google Imagen 4 Ultra 双 Key 主力 + 豆包 Seedream 4.5 备选
 - Google Imagen 4 Ultra 作为主力引擎，支持主备 Key 轮换
 - 豆包 Seedream 4.5 作为 fallback
 - 自动重试 + 429 指数退避（最多 3 次）
@@ -24,7 +24,7 @@ from datetime import date, datetime
 from pathlib import Path
 
 
-VERSION = "12.27.0"
+VERSION = "12.28.0"
 
 
 def _get_ssl_context():
@@ -160,7 +160,7 @@ def get_default_library() -> dict:
             "adult Chinese woman in her early twenties, 22 to 23 years old, contemporary East Asian first-love facial aesthetic, transparent lip-balm lips",
             "adult East Asian Chinese woman around 22 or 23 with a graceful oval-melon face, dark almond eyes, natural black hair, a smooth slim cheek-to-jaw line, and a narrow youthful lower face",
             "mainland Chinese / East Asian woman in her early twenties with gentle facial planes, neat natural brows, soft first-love face styling, and fresh rested energy",
-            "Chinese woman around 23 with lively East Asian facial features, slim oval-melon facial outline, dark eyes looking gently toward camera, barely tinted pale nude-pink lips with transparent lip-balm finish, smooth narrow cheek-to-jaw transition, and relaxed adult charm",
+            "Chinese woman around 23 with lively East Asian facial features, slim oval-melon facial outline, dark eyes looking gently toward camera, bright rose-peach glossy lips with transparent lip-balm finish, smooth narrow cheek-to-jaw transition, and relaxed adult charm",
             "adult East Asian Chinese woman with fresh 22-23 age impression, natural black or very dark brown hair, and soft youthful feminine appeal"
         ],
         "face_types": {
@@ -236,7 +236,7 @@ def get_default_library() -> dict:
             "生活场景系": [
                 "photogenic everyday young-adult East Asian Chinese first-love face, graceful oval-melon facial outline, fair-to-light neutral skin, bright rested dark eyes looking gently toward camera, smooth slim cheek-to-jaw line, transparent pale peach-pink lip-balm lips, tiny closed-lip smile",
                 "cozy homebody East Asian clean-beauty face with clean skincare glow, gentle closed-mouth smile, dark almond eyes, youthful lower-face softness, delicate East Asian facial balance",
-                "barely-there East Asian makeup with balanced delicate features, relaxed closed-lip small smile, almost bare pale nude-pink lips, slightly tousled natural black hair, fresh everyday beauty",
+                "clean East Asian makeup with balanced delicate features, relaxed closed-lip small smile, bright translucent peach-pink jelly-balm lips, slightly tousled natural black hair, fresh everyday beauty",
                 "fresh clear complexion with smooth lower-face contours, tiny relaxed half-smile, morning coffee warmth, clean soft oval East Asian facial balance",
                 "photogenic casual weekend Chinese first-love face with bright clear dark eyes, narrow cheek-to-jaw taper, delicate nose bridge, clean oval-melon contours, approachable charm",
                 "warm cooking-at-home East Asian lifestyle beauty, clean cheeks, natural black hair tied back with loose strands, tiny fresh closed-lip smile, photogenic East Asian facial balance",
@@ -270,9 +270,9 @@ def get_default_library() -> dict:
             "graceful feminine silhouette with clear full bust-to-waist proportion, soft hips, and grounded balance"
         ],
         "adult_lifestyle_face_moods": [
-            "reference-style elegant Chinese beauty profile: graceful oval-melon face, soft high forehead, smooth narrow cheek-to-jaw taper, rounded small chin, warm almond eyes with subtle double eyelids, bright catchlights, and gentle eye contact back toward camera, soft arched willow brows, straight high nose bridge with a small nose base, petal-shaped medium-small smile lips with barely tinted pale nude-pink clear balm and no visible lipstick, and calm gentle warmth",
-            "young newlywed softness profile: long oval-melon face, narrow but not sharp lower face, gentle willow brows, luminous almond eyes with lifted outer corners and delicate lower-lid softness, refined straight East Asian nose bridge, compact nostrils, softly full petal mouth with a clear cupid's bow, barely tinted pale nude-pink clear-balm lips, and polished low-makeup femininity",
-            "Jiangnan refined beauty profile: elegant oval face with melon-seed lower line, smooth cheek plane, fine arched brows, clear almond-phoenix eyes, long clean nose highlight, small nose tip and nostrils, relaxed petal-shaped smile lips, light apricot-pink lip-balm color, and quiet gentle charm"
+            "fresh young-adult Chinese beauty profile: slim oval-melon face, smooth narrow cheek-to-jaw taper, soft small chin, clean willow brows, bright almond eyes with subtle double eyelids and sparkling catchlights, small straight high nose, compact nostrils, medium-small petal smile lips with bright translucent peach-pink jelly balm, and lively sweet warmth",
+            "sweet mainland Chinese camera-beauty profile: narrow oval lower face, soft cheek plane, lifted almond eyes with lower-lid glow, neat natural brows, delicate high nose bridge, small nose base, softly full rosebud-petal lips in clear rosy-pink gloss, and relaxed bright eye contact",
+            "fresh East Asian first-love adult profile: graceful melon-seed lower face, smooth jaw transition, bright clear pupils, slightly lifted almond eye corners, tidy soft brows, slender straight nose highlight, compact nostrils, small petal mouth with glossy light peach-rose tint, and an easy warm smile"
         ],
         "lifestyle_reference_hair_styles": [
             "long natural black hair with a deep soft side part, airy volume at the crown, loose waves flowing behind one shoulder, and a few face-framing strands slimming the cheek line",
@@ -281,7 +281,7 @@ def get_default_library() -> dict:
         ],
         "body_types_lifestyle_full": [
             "a clearly adult tasteful sensual art-portrait silhouette with fuller rounded upper-body fullness, defined waist suggestion, relaxed shoulders, and believable proportions shaped by a modest supportive fitted knit top",
-            "a fine-art glamour inspired young-adult body silhouette with a noticeably fuller but realistic upper-body-to-waist curve, soft waist definition, balanced hips, and fully dressed artistic portrait styling",
+            "a bright fresh young-adult body silhouette with a noticeably fuller but realistic upper-body-to-waist curve, soft waist definition, balanced hips, and fully dressed lifestyle portrait styling",
             "a natural adult feminine build with visible well-supported upper-body fullness, gentle collarbone line, relaxed posture, and structured ribbed fabric creating a fuller rounded art-photo silhouette"
         ],
         "body_types_sexy": [
@@ -340,7 +340,7 @@ def get_default_library() -> dict:
             "居家": [
                 "supportive ivory ribbed knit top with a modest scoop neckline tucked into relaxed high-waisted lounge pants, clear waist definition, fuller rounded upper-body fullness visible through structured fabric, and soft art-portrait window light",
                 "light cream short cardigan worn open over a supportive ribbed tank with wide-leg lounge trousers, fully dressed tasteful sensual portrait styling, soft collarbone line, and fuller rounded upper-body-to-waist contour through the fabric",
-                "lightweight open overshirt over a structured ribbed fitted tank and straight-leg jeans, rolled sleeves, fine-art glamour home portrait freshness, fuller balanced feminine silhouette, and torso clearly visible from the front"
+                "lightweight open white overshirt over a soft rose-pink structured ribbed fitted tank and straight-leg jeans, rolled sleeves, bright fresh home portrait styling, fuller balanced feminine silhouette, and torso clearly visible from the front"
             ],
             "邻家": [
                 "simple white tee tucked into denim shorts, casual sneakers, natural effortless style",
@@ -389,7 +389,7 @@ def get_default_library() -> dict:
             "清新微笑": [
                 "soft youthful closed-lip small smile with bright clear eyes looking back toward camera, relaxed brows, smooth narrow lower-face line, fresh 22-23 adult softness",
                 "gentle relaxed closed-mouth smile with lively dark eyes returning to camera, smooth slim cheek-to-jaw line, clean young-adult charm",
-                "fresh tiny half-smile with rested eyes, smooth lower-face contours, barely tinted pale nude-pink lip-balm lips, understated clean makeup",
+                "fresh tiny half-smile with rested eyes, smooth lower-face contours, bright translucent peach-pink jelly-balm lips, clean fresh makeup",
                 "light closed-lip candid smile with open friendly eyes, relaxed mouth corners, soft cheek fullness, clean East Asian young-adult look",
                 "quiet sweet closed-mouth smile with clear catchlights, relaxed jaw, smooth cheek area, fresh early-twenties warmth"
             ],
@@ -535,7 +535,7 @@ def get_default_library() -> dict:
             "standard": "deformed, bad anatomy, disfigured, ugly, extra fingers, mutated hands, extra limbs, missing limbs, fused fingers, too many fingers, long neck",
             "asian_focused": "Western face, Caucasian features, European features, Southeast Asian face, South Asian face, Latin face, mixed-race Eurasian face, blonde hair, blue eyes, green eyes, non-Asian features, Westernized mixed-race face, bronzed tan skin, heavy Western glam makeup",
             "quality": "3D render, CGI, digital art, illustration, painting, cartoon, anime, plastic skin, airbrushed, over-retouched, wax figure, doll-like, uncanny valley, symmetrical face, too perfect, flawless porcelain, studio backdrop, stock photo, watermark",
-            "anti_ai": "impossible body proportions, unnaturally tiny waist, distorted chest anatomy, flattened chest, unnaturally flat chest, flat chest, small chest, missing bust contour, underdeveloped figure, boxy torso, shapeless oversized clothing, bulky shapeless sleeves, hands covering chest, arms blocking torso, side profile hiding torso, countertop hiding body, androgynous torso, collapsed upper-body silhouette, exaggerated fake curves, wide face, broad face, wide round face, short round face, puffy cheeks, chubby cheeks, square jaw, broad jawline, wide lower face, heavy jaw, wide chin, short hair, bob haircut, chin-length hair, flat full-frontal passport angle, flat face angle, no head turn, looking away, strong side gaze, face turned too far away, large nostrils, flared nostrils, wide nostril wings, bulbous nose, wide nose base, wide mouth, broad mouth, over-wide lips, teen, underage, childlike face, school uniform, childish styling, middle-aged, older woman, woman in her 30s, over 30 years old, aged face, mature face, mature executive, older manager, aged professional, gaunt cheeks, hollow cheeks, deep wrinkles, heavy nasolabial folds, pronounced smile lines, tired under-eye bags, tired face, sagging skin, acne, pimples, facial blemishes, skin breakouts, red bumps, acne scars, rash, dark spots, dirty skin, many moles, mole clusters, freckle clusters, stiff expression, rigid expression, blank stare, awkward smile, forced smile, dead eyes, stern expression, severe expression, world-weary expression, tired half-lidded eyes, mature seductive smirk, manager-like composure, cold intimidating stare, hard cheekbones, sharp mature jawline, visible lipstick, strong lip tint, red lip tint, lipstick-heavy mouth, dark red lipstick, burgundy lips, purple lipstick, mauve lips, wine-colored lips, red-brown lipstick, brown lipstick, brick-red lips, dark rose lipstick, heavy lipstick, thick lip makeup, overdrawn lips, saturated red lips, vivid red lips, orange-red lips, coral lipstick"
+            "anti_ai": "impossible body proportions, unnaturally tiny waist, distorted chest anatomy, flattened chest, unnaturally flat chest, flat chest, small chest, missing bust contour, underdeveloped figure, boxy torso, shapeless oversized clothing, bulky shapeless sleeves, hands covering chest, arms blocking torso, side profile hiding torso, countertop hiding body, androgynous torso, collapsed upper-body silhouette, exaggerated fake curves, wide face, broad face, wide round face, short round face, puffy cheeks, chubby cheeks, square jaw, broad jawline, wide lower face, heavy jaw, wide chin, short hair, bob haircut, chin-length hair, flat full-frontal passport angle, flat face angle, no head turn, looking away, strong side gaze, face turned too far away, large nostrils, flared nostrils, wide nostril wings, bulbous nose, wide nose base, wide mouth, broad mouth, over-wide lips, teen, underage, childlike face, school uniform, childish styling, middle-aged, older woman, woman in her 30s, over 30 years old, aged face, mature face, mature executive, older manager, aged professional, gaunt cheeks, hollow cheeks, deep wrinkles, heavy nasolabial folds, pronounced smile lines, tired under-eye bags, tired face, sagging skin, acne, pimples, facial blemishes, skin breakouts, red bumps, acne scars, rash, dark spots, dirty skin, many moles, mole clusters, freckle clusters, stiff expression, rigid expression, blank stare, awkward smile, forced smile, dead eyes, stern expression, severe expression, world-weary expression, tired half-lidded eyes, mature seductive smirk, manager-like composure, cold intimidating stare, hard cheekbones, sharp mature jawline, harsh contour makeup, heavy eyeliner, over-arched brows, muddy lip color, dull brown lip tint, dark red lipstick, burgundy lips, purple lipstick, mauve lips, wine-colored lips, red-brown lipstick, brown lipstick, brick-red lips, dark rose lipstick, heavy lipstick, thick lip makeup, overdrawn lips, saturated red lips, vivid red lips, orange-red lips, coral lipstick, dull gray beige color grading, muddy taupe clothing, desaturated lifeless colors"
         }
     }
 
@@ -638,14 +638,14 @@ class SmartPromptGenerator:
                 "a soft high forehead, elongated oval-melon facial outline, smooth narrow cheek-to-jaw taper, softly rounded small chin, and soft arched willow brows; "
                 "warm almond eyes with subtle double-eyelid creases, tiny catchlights, delicate lower-lid softness, gently lifted outer corners, and gentle eye contact back toward the camera; "
                 "a refined straight high East Asian nose bridge with a clean highlight line, narrow nose base, compact nostrils, and a delicate nose tip; fair-to-light neutral skin; natural black side-parted hair; barely-there makeup; "
-                "and petal-shaped medium-small smile lips with a soft cupid's bow, moderate narrow mouth width, barely tinted pale nude-pink clear balm, no visible lipstick, and a clear-balm finish"
+                "and petal-shaped medium-small smile lips with a soft cupid's bow, moderate narrow mouth width, bright translucent peach-pink or rose-pink jelly balm, glossy clear-balm finish, and no dark lipstick"
             )
 
         return (
             "Her face should read unmistakably as contemporary East Asian Chinese first-love clean-beauty styling: "
             "soft oval facial outline, fair-to-light neutral complexion, dark almond-shaped eyes, neat natural straight brows, "
             "a natural gentle nose bridge, smooth slim cheek-to-jaw transition, youthful lower-face contours, natural black or very dark brown hair, "
-            "barely-there makeup, transparent lip-balm finish, and almost bare pale nude-pink lips"
+            "clean fresh makeup, transparent lip-balm finish, and bright peach-pink glossy lips"
         )
 
     def _build_feminine_presence_clause(self, style: str = None, pose_type: str = None) -> str:
@@ -660,8 +660,8 @@ class SmartPromptGenerator:
         if style == "生活场景系":
             return (
                 "Make the image read as a fresh relaxed 22-23 year old adult Chinese lifestyle portrait. The attraction should come from "
-                "the selected adult youthful or young-wife facial profile, warm almond eyes with subtle double eyelids, a refined straight high nose bridge with compact nostrils, petal-shaped medium-small smile lips, a smooth narrow lower face, "
-                "side-parted long black hair softly framing one side of the cheek, tasteful sensual art-portrait styling, soft sculpting light, a supportive structured fitted casual knit top, fuller rounded upper-body fullness, clear upper-body-to-waist curve, a gentle waist cue, and a three-quarter waist-up camera angle; "
+                "the selected fresh adult youthful Chinese beauty profile, bright almond eyes with subtle double eyelids, a small straight high nose bridge with compact nostrils, glossy flower-petal lips, a smooth narrow lower face, "
+                "side-parted long black hair softly framing one side of the cheek, bright fresh sensual lifestyle styling, soft sculpting light, a supportive structured fitted casual knit top, fuller rounded upper-body fullness, clear upper-body-to-waist curve, a gentle waist cue, and a three-quarter waist-up camera angle; "
                 "keep the outfit fully dressed, modest, artistic, everyday, and restrained"
             )
 
@@ -691,12 +691,12 @@ class SmartPromptGenerator:
             return [
                 "Keep the image grounded in real-world lifestyle photography with natural daylight, restrained retouching, believable skin texture, and relaxed candid posture",
                 "Keep the face clearly adult but visibly 22 to 23 years old: a smooth slim cheek-to-jaw line, bright rested eyes looking gently toward camera, slim smooth lower-face contours, relaxed brows, and a soft early-twenties adult expression",
-                "Use the selected face profile as a unique individual identity; preserve adult youthful freshness or young-wife softness while keeping a graceful oval-melon face, smooth narrow cheek-to-jaw taper, softly rounded small chin, varied arched brow shape, warm almond eye openness, refined straight high nose bridge, and petal-shaped medium-small mouth",
+                "Use the selected face profile as a unique individual identity; preserve fresh adult youthful sweetness while keeping a graceful oval-melon face, smooth narrow cheek-to-jaw taper, softly rounded small chin, varied natural brow shape, bright almond eye openness, small straight high nose bridge, and petal-shaped medium-small mouth",
                 "Use classic Chinese beauty-word structure in a modern natural face: graceful oval-melon face, narrow lower jaw without harsh sharpness, willow-leaf arched brows, warm lifted almond eyes with subtle double eyelids, refined high East Asian nose bridge with a clean highlight line, compact nostrils, petal-shaped smile lips, and clear fair skin",
-                "Make the expression gentle and fresh: lively clear eyes, relaxed facial muscles, tiny closed-mouth smile, calm mouth corners, and approachable warmth",
-                "Keep the complexion fair-to-light neutral and clean, with soft even cheek color, clear skin texture, restrained makeup, and a transparent natural finish",
-                "Keep the lips fresh and youthful: medium-small petal shape, moderate narrow mouth width, softly full natural lower lip, defined but soft cupid's bow, transparent lip-balm sheen, barely tinted pale nude-pink natural color, and no visible lipstick",
-                "Keep her body clearly adult and feminine through tasteful sensual art-photo styling and fully dressed casual clothing: fuller rounded upper-body fullness, defined waist suggestion, soft shoulders, realistic proportions, supportive structured ribbed knit fabric, soft side light shaping the silhouette, and a three-quarter half-body frame with torso and waist visible",
+                "Make the expression gentle and fresh: lively clear eyes, relaxed facial muscles, tiny sweet closed-mouth smile, softly lifted mouth corners, and approachable warmth",
+                "Keep the complexion fair-to-light neutral and clean, with bright soft cheek color, clear skin texture, fresh clean makeup, and a transparent natural finish",
+                "Keep the lips attractive and youthful-adult: medium-small petal shape, moderate narrow mouth width, softly full natural lower lip, defined but soft cupid's bow, glossy transparent lip-balm sheen, bright translucent peach-pink or rose-pink color, and no dark lipstick",
+                "Keep her body clearly adult and feminine through bright tasteful sensual lifestyle-photo styling and fully dressed casual clothing: fuller rounded upper-body fullness, defined waist suggestion, soft shoulders, realistic proportions, supportive structured ribbed knit fabric, soft side light shaping the silhouette, and a three-quarter half-body frame with torso and waist visible",
                 "Use contemporary mainland Chinese clean-beauty cues: side-parted natural black hair, slender softly arched brows, warm almond eyes, graceful oval-melon face, smooth narrow lower jaw, refined straight high nose line, compact nostrils, petal smile lips, and a relaxed first-meeting smile"
             ]
 
@@ -750,9 +750,9 @@ class SmartPromptGenerator:
                 "candid neighborhood photography mood, grounded color, and unforced styling"
             ],
             "生活场景系": [
-                "tasteful sensual home-life art portrait photography, soft sculpting window light, neutral daylight color, and face-led early-twenties adult softness",
-                "fine-art glamour inspired home portrait realism with soft neutral contrast, fair clean skin, relaxed expression, and fully dressed intimate warmth",
-                "natural candid art-portrait treatment with believable indoor side light, lively eyes, transparent lip-balm lips, soft flattering skin, and a sculpted feminine silhouette"
+                "bright fresh sensual home-life portrait photography, soft sculpting window light, clean rose-peach color accents, and face-led early-twenties adult sweetness",
+                "fresh lifestyle cover realism with clear daylight contrast, fair clean skin, lively expression, glossy peach-pink lips, and fully dressed intimate warmth",
+                "natural candid lifestyle portrait treatment with believable indoor side light, lively eyes, glossy rose-pink lip-balm lips, soft flattering skin, and a sculpted feminine silhouette"
             ],
             "职场系": [
                 "premium office fashion editorial with crisp window light, soft rim light, catchlights, and quiet sensual tension",
@@ -821,7 +821,7 @@ class SmartPromptGenerator:
             sections.append(
                 f"A realistic fresh adult Chinese lifestyle half-body portrait in soft neutral daylight, featuring {asian_id}. "
                 "The face and expression are the priority: classically beautiful contemporary mainland Chinese East Asian facial aesthetics with visible variation, gentle first-meeting warmth, "
-                "warm lifted almond eyes with subtle double eyelids and gentle eye contact back toward camera, refined straight high nose bridge with compact nostrils, graceful oval-melon lower face, petal-shaped medium-small smile lips, barely tinted pale nude-pink clear balm with no visible lipstick, fair neutral skin, and relaxed early-twenties adult presence"
+                "warm lifted almond eyes with subtle double eyelids and gentle eye contact back toward camera, small straight high nose bridge with compact nostrils, graceful oval-melon lower face, petal-shaped medium-small smile lips, bright translucent peach-pink jelly balm, fair neutral skin, and relaxed early-twenties adult presence"
             )
         else:
             sections.append(f"{quality}, featuring {asian_id}")
