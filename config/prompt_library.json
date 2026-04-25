@@ -1,6 +1,6 @@
 {
-  "version": "12.16",
-  "description": "Imagen 4 Ultra 优化版 - 年轻成熟女性自然语言摄影描述风格，强化当代东亚中日韩审美脸、22-23 岁年轻成人感、清新放松表情、干净健康肤质、轻精致生活杂志吸引力、自然深色发型、自然唇色、安全日常场景、自然丰满女性轮廓和无遮挡构图",
+  "version": "12.17",
+  "description": "Imagen 4 Ultra 优化版 - 年轻成熟女性自然语言摄影描述风格，强化当代东亚中日韩审美脸、22-23 岁年轻成人感、闭唇小笑和初恋脸成人感、干净健康肤质、轻精致生活杂志吸引力、自然深色发型、自然唇色、安全日常场景、自然丰满女性轮廓和无遮挡构图",
 
   "base_quality": [
     "A clean lifestyle beauty editorial photographed in flattering available light, with healthy skin, natural color response, and warm attractive presence",
@@ -11,11 +11,11 @@
   ],
 
   "asian_identity": [
-    "an adult Chinese woman in her early twenties, 22 to 23 years old, with contemporary East Asian clean-beauty facial aesthetics, youthful cheek fullness, fair-to-light neutral complexion, and fresh feminine presence",
-    "a clearly adult East Asian Chinese woman around 22 or 23 with a soft oval face, dark almond eyes, natural black hair, bright rested eyes, and a smooth youthful lower face",
-    "an adult mainland Chinese / East Asian woman in her early twenties with fresh young femininity, gentle facial planes, neat natural brows, clean East Asian styling, and fresh rested energy",
-    "a Chinese woman around 23 with lively East Asian facial features, soft facial outline, dark eyes, low-saturation peach-beige lips, youthful softness, and relaxed adult charm",
-    "an adult East Asian Chinese woman with an unforced real-life presence, fresh 22-23 age impression, natural black or very dark brown hair, and soft feminine appeal"
+    "an adult Chinese woman in her early twenties, 22 to 23 years old, with contemporary East Asian first-love facial aesthetics, youthful cheek fullness, fair-to-light neutral complexion, and fresh feminine presence",
+    "a clearly adult East Asian Chinese woman around 22 or 23 with a soft oval face, dark almond eyes, natural black hair, bright rested eyes, rounded cheek softness, and a smooth youthful lower face",
+    "an adult mainland Chinese / East Asian woman in her early twenties with fresh young femininity, gentle facial planes, neat natural brows, soft first-love face styling, and fresh rested energy",
+    "a Chinese woman around 23 with lively East Asian facial features, soft facial outline, dark eyes, low-saturation peach-beige lips, youthful rounded cheeks, and relaxed adult charm",
+    "an adult East Asian Chinese woman with an unforced real-life presence, fresh 22-23 age impression, natural black or very dark brown hair, and soft youthful feminine appeal"
   ],
 
   "face_types": {
@@ -74,13 +74,13 @@
       "polished Chinese professional face with approachable warmth, natural brows, dark almond eyes, soft smile, natural low-saturation peach-beige lips, refined adult femininity"
     ],
     "生活场景系": [
-      "photogenic everyday young-adult East Asian Chinese face, soft oval facial outline, fair-to-light neutral skin, bright rested dark eyes, soft cheeks, and warm easy smile",
-      "cozy homebody East Asian clean-beauty face with clean skincare glow, gentle small smile, dark almond eyes, youthful lower-face softness, and delicate East Asian facial balance",
-      "clean understated East Asian makeup with balanced delicate features, relaxed small smile, slightly tousled natural black hair, and fresh everyday beauty",
-      "fresh clear complexion with smooth lower-face contours, lively half-smile, morning coffee warmth, and clean soft oval East Asian facial balance",
-      "photogenic casual weekend Chinese face with bright smiling dark eyes, soft cheek fullness, delicate nose bridge, clean oval contours, and approachable charm",
-      "warm cooking-at-home East Asian lifestyle beauty, clean cheeks, natural black hair tied back with loose strands, soft fresh smile, and photogenic East Asian facial balance",
-      "photogenic young adult Chinese lifestyle face with light peach blush, clean brows, soft oval face, dark almond eyes, and lively attractive 22-23 age impression"
+      "photogenic everyday young-adult East Asian Chinese first-love face, soft oval facial outline, fair-to-light neutral skin, bright rested dark eyes, rounded cheeks, and tiny closed-lip smile",
+      "cozy homebody East Asian clean-beauty face with clean skincare glow, gentle closed-mouth smile, dark almond eyes, youthful lower-face softness, and delicate East Asian facial balance",
+      "clean understated East Asian makeup with balanced delicate features, relaxed closed-lip small smile, slightly tousled natural black hair, and fresh everyday beauty",
+      "fresh clear complexion with smooth lower-face contours, tiny relaxed half-smile, morning coffee warmth, and clean soft oval East Asian facial balance",
+      "photogenic casual weekend Chinese first-love face with bright clear dark eyes, soft cheek fullness, delicate nose bridge, clean oval contours, and approachable charm",
+      "warm cooking-at-home East Asian lifestyle beauty, clean cheeks, natural black hair tied back with loose strands, tiny fresh closed-lip smile, and photogenic East Asian facial balance",
+      "photogenic young adult Chinese lifestyle face with light peach blush, clean brows, soft oval face, dark almond eyes, rounded cheeks, and lively attractive 22-23 age impression"
     ]
   },
 
@@ -222,8 +222,8 @@
     "半身": [
       "waist-up shot with one hand moving lightly through the hair, relaxed shoulders, and an easy natural gesture",
       "upper-body portrait leaning slightly toward camera, open posture, lively eye contact, and a conversational feel",
-      "seated half-body shot with hands resting naturally in the lap, upright posture, soft easy smile",
-      "front-facing three-quarter waist-up shot, one arm resting near the waist, bright eyes and a natural smile toward camera",
+      "seated half-body shot with hands resting naturally in the lap, upright posture, gentle closed-lip smile",
+      "front-facing three-quarter waist-up shot, one arm resting near the waist, bright eyes and a tiny closed-lip smile toward camera",
       "standing half-body portrait with hands adjusting the hair or collar, subtle movement, and unforced body language"
     ],
     "职场半身": [
@@ -259,17 +259,17 @@
 
   "expressions": {
     "微笑": [
-      "light fresh smile with lively clear eyes, relaxed mouth corners, soft rounded cheeks, and approachable early-twenties charm",
-      "subtle natural smile with bright engaged eyes, smooth lower-face contours, and a fresh 22-23 mood",
-      "gentle small smile with lips softly parted, eyes alive with candid warmth and natural attractiveness",
+      "light closed-lip smile with lively clear eyes, relaxed mouth corners, soft rounded cheeks, and approachable early-twenties charm",
+      "subtle closed-mouth smile with bright engaged eyes, smooth lower-face contours, and a fresh 22-23 mood",
+      "gentle tiny smile with lips softly closed, eyes alive with candid warmth and natural attractiveness",
       "soft closed-lip smile with relaxed brows, natural peach lips, smooth cheek area, and an approachable youthful look"
     ],
     "清新微笑": [
-      "soft youthful small smile with bright clear eyes, relaxed brows, smooth cheeks, and fresh 22-23 adult softness",
-      "gentle relaxed smile with lips softly closed, lively dark eyes, soft rounded cheeks, and clean young-adult charm",
-      "fresh easy half-smile with rested eyes, smooth lower-face contours, natural peach-beige lips, and understated clean makeup",
-      "light candid smile with open friendly eyes, relaxed mouth corners, soft cheek fullness, and a clean East Asian young-adult look",
-      "quiet sweet smile with clear catchlights, relaxed jaw, smooth cheek area, and fresh early-twenties warmth"
+      "soft youthful closed-lip small smile with bright clear eyes, relaxed brows, smooth cheeks, and fresh 22-23 adult softness",
+      "gentle relaxed closed-mouth smile with lively dark eyes, soft rounded cheeks, and clean young-adult charm",
+      "fresh tiny half-smile with rested eyes, smooth lower-face contours, natural peach-beige lips, and understated clean makeup",
+      "light closed-lip candid smile with open friendly eyes, relaxed mouth corners, soft cheek fullness, and a clean East Asian young-adult look",
+      "quiet sweet closed-mouth smile with clear catchlights, relaxed jaw, smooth cheek area, and fresh early-twenties warmth"
     ],
     "性感": [
       "warm confident gaze with bright open eyes, natural peach lips slightly parted, and tasteful youthful adult charm",

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-美女生成 V12.16 - Google Imagen 4 Ultra 双 Key 主力 + 豆包 Seedream 4.5 备选
+美女生成 V12.17 - Google Imagen 4 Ultra 双 Key 主力 + 豆包 Seedream 4.5 备选
 - Google Imagen 4 Ultra 作为主力引擎，支持主备 Key 轮换
 - 豆包 Seedream 4.5 作为 fallback
 - 自动重试 + 429 指数退避（最多 3 次）
@@ -24,7 +24,7 @@ from datetime import date, datetime
 from pathlib import Path
 
 
-VERSION = "12.16.0"
+VERSION = "12.17.0"
 
 
 def _get_ssl_context():
@@ -157,11 +157,11 @@ def get_default_library() -> dict:
             "Magazine-quality portrait that still feels human, lightly retouched, clean skin, attractive facial balance"
         ],
         "asian_identity": [
-            "adult Chinese woman in her early twenties, 22 to 23 years old, contemporary East Asian clean-beauty facial aesthetic",
-            "adult East Asian Chinese woman around 22 or 23 with a soft oval face, dark almond eyes, natural black hair, and a smooth youthful lower face",
-            "mainland Chinese / East Asian woman in her early twenties with gentle facial planes, neat natural brows, clean East Asian styling, and fresh rested energy",
-            "Chinese woman around 23 with lively East Asian facial features, soft facial outline, dark eyes, low-saturation peach-beige lips, youthful softness, and relaxed adult charm",
-            "adult East Asian Chinese woman with fresh 22-23 age impression, natural black or very dark brown hair, and soft feminine appeal"
+            "adult Chinese woman in her early twenties, 22 to 23 years old, contemporary East Asian first-love facial aesthetic",
+            "adult East Asian Chinese woman around 22 or 23 with a soft oval face, dark almond eyes, natural black hair, rounded cheek softness, and a smooth youthful lower face",
+            "mainland Chinese / East Asian woman in her early twenties with gentle facial planes, neat natural brows, soft first-love face styling, and fresh rested energy",
+            "Chinese woman around 23 with lively East Asian facial features, soft facial outline, dark eyes, low-saturation peach-beige lips, youthful rounded cheeks, and relaxed adult charm",
+            "adult East Asian Chinese woman with fresh 22-23 age impression, natural black or very dark brown hair, and soft youthful feminine appeal"
         ],
         "face_types": {
             "甜美系": [
@@ -234,13 +234,13 @@ def get_default_library() -> dict:
                 "polished Chinese professional face with approachable warmth, natural brows, dark almond eyes, soft smile, natural low-saturation peach-beige lips"
             ],
             "生活场景系": [
-                "photogenic everyday young-adult East Asian Chinese face, soft oval facial outline, fair-to-light neutral skin, bright rested dark eyes, soft cheeks, warm easy smile",
-                "cozy homebody East Asian clean-beauty face with clean skincare glow, gentle small smile, dark almond eyes, youthful lower-face softness, delicate East Asian facial balance",
-                "clean understated East Asian makeup with balanced delicate features, relaxed small smile, slightly tousled natural black hair, fresh everyday beauty",
-                "fresh clear complexion with smooth lower-face contours, lively half-smile, morning coffee warmth, clean soft oval East Asian facial balance",
-                "photogenic casual weekend Chinese face with bright smiling dark eyes, soft cheek fullness, delicate nose bridge, clean oval contours, approachable charm",
-                "warm cooking-at-home East Asian lifestyle beauty, clean cheeks, natural black hair tied back with loose strands, soft fresh smile, photogenic East Asian facial balance",
-                "photogenic young adult Chinese lifestyle face with light peach blush, clean brows, soft oval face, dark almond eyes, lively attractive 22-23 age impression"
+                "photogenic everyday young-adult East Asian Chinese first-love face, soft oval facial outline, fair-to-light neutral skin, bright rested dark eyes, rounded cheeks, tiny closed-lip smile",
+                "cozy homebody East Asian clean-beauty face with clean skincare glow, gentle closed-mouth smile, dark almond eyes, youthful lower-face softness, delicate East Asian facial balance",
+                "clean understated East Asian makeup with balanced delicate features, relaxed closed-lip small smile, slightly tousled natural black hair, fresh everyday beauty",
+                "fresh clear complexion with smooth lower-face contours, tiny relaxed half-smile, morning coffee warmth, clean soft oval East Asian facial balance",
+                "photogenic casual weekend Chinese first-love face with bright clear dark eyes, soft cheek fullness, delicate nose bridge, clean oval contours, approachable charm",
+                "warm cooking-at-home East Asian lifestyle beauty, clean cheeks, natural black hair tied back with loose strands, tiny fresh closed-lip smile, photogenic East Asian facial balance",
+                "photogenic young adult Chinese lifestyle face with light peach blush, clean brows, soft oval face, dark almond eyes, rounded cheeks, lively attractive 22-23 age impression"
             ]
         },
         "hair_styles": [
@@ -343,8 +343,8 @@ def get_default_library() -> dict:
             "半身": [
                 "waist-up portrait with relaxed shoulders and one hand touching hair, natural pose",
                 "upper-body portrait leaning slightly toward camera, open posture, lively eye contact",
-                "elegant seated half-body pose, hands in lap, refined posture with soft easy smile",
-                "front-facing three-quarter waist-up portrait, one arm resting near the waist, conversational smile"
+                "elegant seated half-body pose, hands in lap, relaxed posture with gentle closed-lip smile",
+                "front-facing three-quarter waist-up portrait, one arm resting near the waist, tiny closed-lip smile"
             ],
             "全身": [
                 "full body standing pose, weight resting naturally on one leg, grounded proportions",
@@ -367,16 +367,16 @@ def get_default_library() -> dict:
         },
         "expressions": {
             "微笑": [
-                "light fresh smile with lively clear eyes, relaxed mouth corners, soft rounded cheeks, approachable early-twenties charm",
-                "subtle natural smile with bright engaged eyes, smooth lower-face contours, fresh 22-23 mood",
-                "gentle small smile with lips softly parted, eyes alive with candid warmth, natural attractiveness"
+                "light closed-lip smile with lively clear eyes, relaxed mouth corners, soft rounded cheeks, approachable early-twenties charm",
+                "subtle closed-mouth smile with bright engaged eyes, smooth lower-face contours, fresh 22-23 mood",
+                "gentle tiny smile with lips softly closed, eyes alive with candid warmth, natural attractiveness"
             ],
             "清新微笑": [
-                "soft youthful small smile with bright clear eyes, relaxed brows, smooth cheeks, fresh 22-23 adult softness",
-                "gentle relaxed smile with lips softly closed, lively dark eyes, soft rounded cheeks, clean young-adult charm",
-                "fresh easy half-smile with rested eyes, smooth lower-face contours, natural peach-beige lips, understated clean makeup",
-                "light candid smile with open friendly eyes, relaxed mouth corners, soft cheek fullness, clean East Asian young-adult look",
-                "quiet sweet smile with clear catchlights, relaxed jaw, smooth cheek area, fresh early-twenties warmth"
+                "soft youthful closed-lip small smile with bright clear eyes, relaxed brows, smooth cheeks, fresh 22-23 adult softness",
+                "gentle relaxed closed-mouth smile with lively dark eyes, soft rounded cheeks, clean young-adult charm",
+                "fresh tiny half-smile with rested eyes, smooth lower-face contours, natural peach-beige lips, understated clean makeup",
+                "light closed-lip candid smile with open friendly eyes, relaxed mouth corners, soft cheek fullness, clean East Asian young-adult look",
+                "quiet sweet closed-mouth smile with clear catchlights, relaxed jaw, smooth cheek area, fresh early-twenties warmth"
             ],
             "性感": [
                 "warm confident gaze with bright open eyes, natural peach lips slightly parted, tasteful youthful adult charm",
@@ -617,9 +617,9 @@ class SmartPromptGenerator:
     def _build_east_asian_aesthetic_clause(self) -> str:
         """给 Google 正向提示稳定注入东亚审美脸部锚点。"""
         return (
-            "Her face should read unmistakably as contemporary East Asian Chinese clean-beauty styling: "
+            "Her face should read unmistakably as contemporary East Asian Chinese first-love clean-beauty styling: "
             "soft oval facial outline, fair-to-light neutral complexion, dark almond-shaped eyes, neat natural straight brows, "
-            "a gentle refined nose bridge, smooth youthful lower-face contours, natural black or very dark brown hair, "
+            "a gentle refined nose bridge, rounded cheek softness, smooth youthful lower-face contours, natural black or very dark brown hair, "
             "clean understated makeup, and low-saturation peach-beige lips"
         )
 
@@ -665,20 +665,20 @@ class SmartPromptGenerator:
             "Keep the image grounded in real-world photography with clean healthy skin, balanced facial structure, and restrained retouching",
             "Preserve relaxed posture, natural hand placement, smooth healthy cheeks, clean facial highlights, and candid portrait detail",
             "Keep the subject clearly adult but visibly 22 to 23 years old: youthful cheek fullness, bright eyes, smooth lower-face contours, fresh rested energy, and a soft early-twenties facial impression",
-            "Keep her facial expression attractive and unmistakably early-twenties: lively clear eyes, relaxed brows, smooth rounded cheeks, natural low-saturation lips, a small fresh smile, and open friendly energy",
+            "Keep her facial expression attractive and unmistakably early-twenties: lively clear eyes, relaxed brows, smooth rounded cheeks, natural low-saturation lips, a closed-lip small fresh smile, and open friendly energy",
             "Favor photogenic facial balance, neat natural brows, flattering catchlights, soft peach blush, clean natural makeup, and low-saturation peach lips",
             "Keep the body clearly adult and feminine with a natural full upper-body contour, defined waist suggestion, realistic proportions, and a softly fitted silhouette"
         ]
 
         if pose_type in {"特写", "半身", "职场半身"}:
-            clauses.append("Prioritize a fresh early-twenties face with clean healthy skin, lively eyes, smooth lower-face contours, and a gentle small smile while keeping a soft feminine neckline, collarbones, and natural full upper-body curve visible")
+            clauses.append("Prioritize a fresh early-twenties face with clean healthy skin, lively eyes, rounded cheek softness, smooth lower-face contours, and a gentle closed-mouth small smile while keeping a soft feminine neckline, collarbones, and natural full upper-body curve visible")
         else:
             clauses.append("Keep refined feminine curves visible but realistic, with natural full bust-to-waist and hip proportions rather than cartoon exaggeration")
 
         if style == "性感系":
             clauses.append("Use tasteful sensual fashion styling, form-flattering fabric, confident eye contact, fully clothed elegance, and youthful adult glamour")
         elif style == "生活场景系":
-            clauses.append("Use fresh relaxed lifestyle magazine styling in public or shared home spaces, fully dressed softly fitted casual clothing, clean healthy skin, rested eyes, a lively 22-23 adult East Asian Chinese face, flattering fabric that follows a naturally full bust-to-waist line, a front-facing or three-quarter composition with torso and waist visible, and a soft youthful smile")
+            clauses.append("Use fresh relaxed lifestyle magazine styling in public or shared home spaces, fully dressed softly fitted casual clothing, clean healthy skin, rested eyes, a lively 22-23 adult East Asian Chinese first-love face, flattering fabric that follows a naturally full bust-to-waist line, a front-facing or three-quarter composition with torso and waist visible, and a soft closed-lip youthful smile")
         elif style in {"清纯系", "邻家女孩系"}:
             clauses.append("Use understated makeup, lived-in wardrobe detail, and ordinary available light")
         elif style == "职场系":
