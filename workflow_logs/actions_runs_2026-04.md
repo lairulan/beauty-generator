@@ -53,3 +53,4 @@
 - 2026-04-25 22:38:47 | success | mode=t2i-manual-workflow-dispatch | run=264 | https://github.com/lairulan/beauty-generator/actions/runs/24933265650
 - 2026-04-25 22:46:44 | success | mode=t2i-manual-workflow-dispatch | run=265 | https://github.com/lairulan/beauty-generator/actions/runs/24933410741
 - 2026-04-25 22:49:48 | success | mode=t2i-manual-workflow-dispatch | run=266 | https://github.com/lairulan/beauty-generator/actions/runs/24933470647
+- 2026-04-25 22:52:41 | failure | mode=t2i-manual-workflow-dispatch | run=267 | https://github.com/lairulan/beauty-generator/actions/runs/24933527852
