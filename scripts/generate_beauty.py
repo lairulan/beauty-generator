@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-美女生成 V12.8 - Google Imagen 4 Ultra 双 Key 主力 + 豆包 Seedream 4.5 备选
+美女生成 V12.9 - Google Imagen 4 Ultra 双 Key 主力 + 豆包 Seedream 4.5 备选
 - Google Imagen 4 Ultra 作为主力引擎，支持主备 Key 轮换
 - 豆包 Seedream 4.5 作为 fallback
 - 自动重试 + 429 指数退避（最多 3 次）
@@ -24,7 +24,7 @@ from datetime import date, datetime
 from pathlib import Path
 
 
-VERSION = "12.8.0"
+VERSION = "12.9.0"
 
 
 def _get_ssl_context():
@@ -157,10 +157,10 @@ def get_default_library() -> dict:
             "Lifestyle photograph, relaxed candid moment, gentle bokeh background, Nikon Z8"
         ],
         "asian_identity": [
-            "adult Chinese woman in her early twenties, 22 to 24 years old",
+            "adult Chinese woman in her early twenties, 22 to 23 years old",
             "adult East Asian woman, Chinese, youthful cheek fullness and refined feminine presence",
-            "Chinese woman around 23 or 24 with fresh East Asian features and a soft lower face",
-            "adult woman with Chinese features, bright eyes, and fresh 22-24 age impression",
+            "Chinese woman around 22 or 23 with fresh East Asian features and a soft lower face",
+            "adult woman with Chinese features, bright eyes, and fresh 22-23 age impression",
             "East Asian woman in her early twenties with confident adult appeal and no mature office-worker fatigue"
         ],
         "face_types": {
@@ -240,7 +240,7 @@ def get_default_library() -> dict:
                 "fresh washed face with realistic skin texture, smooth lower-face contours, relaxed half-smile, morning coffee calm",
                 "casual weekend face with bright eyes, soft cheek fullness, simple neat hair, approachable charm",
                 "cooking-at-home beauty, flour-dusted cheek, tied-back hair with loose strands, focused concentrated look",
-                "young adult lifestyle face with light blush, clean brows, soft oval face, lively 22-24 age impression"
+                "young adult lifestyle face with light blush, clean brows, soft oval face, lively 22-23 age impression"
             ]
         },
         "hair_styles": [
@@ -322,9 +322,9 @@ def get_default_library() -> dict:
                 "elegant secretary look, crisp shirt with rolled sleeves, tight pencil skirt, reading glasses"
             ],
             "居家": [
-                "softly fitted ivory knit top tucked into relaxed high-waisted lounge pants, neat natural hair, bright morning apartment light, gentle waist definition",
-                "loose knit cardigan over a supportive ribbed tank with wide-leg lounge trousers, cozy sofa setting, fully dressed casual ease, natural upper-body contour visible",
-                "oversized clean white shirt left open over a fitted scoop-neck tank and straight-leg jeans, rolled sleeves, coffee-at-home freshness, balanced feminine silhouette"
+                "softly fitted ivory ribbed knit top tucked into relaxed high-waisted lounge pants, neat natural hair, bright morning apartment light, gentle waist definition, front-facing three-quarter home portrait",
+                "cropped open knit cardigan over a supportive ribbed scoop-neck tank with wide-leg lounge trousers, cozy sofa setting, fully dressed casual ease, natural upper-body contour visible",
+                "lightweight open overshirt over a fitted ribbed tank and straight-leg jeans, rolled sleeves, coffee-at-home freshness, balanced feminine silhouette, no bulky layers"
             ],
             "邻家": [
                 "simple white tee tucked into denim shorts, casual sneakers, natural effortless style",
@@ -512,7 +512,7 @@ def get_default_library() -> dict:
             "standard": "deformed, bad anatomy, disfigured, ugly, extra fingers, mutated hands, extra limbs, missing limbs, fused fingers, too many fingers, long neck",
             "asian_focused": "Western face, Caucasian features, blonde hair, blue eyes, green eyes, non-Asian features",
             "quality": "3D render, CGI, digital art, illustration, painting, cartoon, anime, plastic skin, airbrushed, over-retouched, wax figure, doll-like, uncanny valley, symmetrical face, too perfect, flawless porcelain, studio backdrop, stock photo, watermark",
-            "anti_ai": "impossible body proportions, unnaturally tiny waist, distorted chest anatomy, flattened chest, unnaturally flat chest, flat chest, small chest, missing bust contour, underdeveloped figure, boxy torso, shapeless oversized clothing, androgynous torso, collapsed upper-body silhouette, exaggerated fake curves, teen, underage, childlike face, school uniform, childish styling, middle-aged, older woman, woman in her 30s, over 30 years old, aged face, mature face, mature executive, older manager, aged professional, gaunt cheeks, hollow cheeks, deep wrinkles, heavy nasolabial folds, pronounced smile lines, tired under-eye bags, tired face, sagging skin"
+            "anti_ai": "impossible body proportions, unnaturally tiny waist, distorted chest anatomy, flattened chest, unnaturally flat chest, flat chest, small chest, missing bust contour, underdeveloped figure, boxy torso, shapeless oversized clothing, bulky shapeless sleeves, hands covering chest, arms blocking torso, side profile hiding torso, countertop hiding body, androgynous torso, collapsed upper-body silhouette, exaggerated fake curves, teen, underage, childlike face, school uniform, childish styling, middle-aged, older woman, woman in her 30s, over 30 years old, aged face, mature face, mature executive, older manager, aged professional, gaunt cheeks, hollow cheeks, deep wrinkles, heavy nasolabial folds, pronounced smile lines, tired under-eye bags, tired face, sagging skin"
         }
     }
 
@@ -615,6 +615,13 @@ class SmartPromptGenerator:
                 "all kept realistic and photographic"
             )
 
+        if style == "生活场景系":
+            return (
+                "Make the image read as a fresh 22-23 year old adult Chinese lifestyle portrait: bright youthful cheeks, "
+                "natural low-saturation lips, a softly fitted casual top, natural medium-full upper-body contour visible, "
+                "defined waist cue, and a front-facing or three-quarter camera angle; keep the outfit fully dressed and modest"
+            )
+
         if style == "职场系":
             return (
                 "Make the image read unmistakably as a modern Chinese / East Asian woman: soft oval facial structure, "
@@ -640,19 +647,19 @@ class SmartPromptGenerator:
         clauses = [
             "Keep the image grounded in real-world photography with believable skin texture, faint facial asymmetry, and restrained retouching",
             "Preserve relaxed posture, natural hand placement, and the subtle imperfections of a candid portrait",
-            "Keep the subject clearly adult but visibly 22 to 24 years old: youthful cheek fullness, bright eyes, smooth lower-face contours, and no mature managerial or tired 30s facial impression",
+            "Keep the subject clearly adult but visibly 22 to 23 years old: youthful cheek fullness, bright eyes, smooth lower-face contours, and no mature managerial or tired 30s facial impression",
             "Keep the body clearly adult and feminine with a natural medium-full upper-body contour, defined waist suggestion, and realistic proportions; avoid a flat, boxy, or shapeless torso"
         ]
 
         if pose_type in {"特写", "半身", "职场半身"}:
-            clauses.append("Prioritize a fresh early-to-mid twenties face and expression while keeping a refined feminine neckline, collarbones, and natural medium-full upper-body curve visible")
+            clauses.append("Prioritize a fresh early-twenties face and expression while keeping a refined feminine neckline, collarbones, and natural medium-full upper-body curve visible")
         else:
             clauses.append("Keep refined feminine curves visible but realistic, with natural bust-to-waist and hip proportions rather than cartoon exaggeration")
 
         if style == "性感系":
             clauses.append("Use tasteful sensual fashion styling, form-flattering fabric, confident eye contact, and youthful adult glamour without nudity")
         elif style == "生活场景系":
-            clauses.append("Use fresh everyday lifestyle styling in public or shared home spaces, fully dressed softly fitted casual clothing, rested eyes, a lively early-twenties face, and flattering fabric that follows the chest and waist without looking tight; avoid bedroom, bed, pajama, post-shower, private bathroom, or intimate morning-after cues")
+            clauses.append("Use fresh everyday lifestyle styling in public or shared home spaces, fully dressed softly fitted casual clothing, rested eyes, a lively 22-23 adult face, and flattering fabric that follows the chest and waist without looking tight; prefer a front-facing or three-quarter composition with torso and waist visible; avoid bedroom, bed, pajama, post-shower, private bathroom, intimate morning-after cues, side profile hiding the torso, hands covering the chest, bulky sleeves, or a counter cropping the body")
         elif style in {"清纯系", "邻家女孩系"}:
             clauses.append("Use understated makeup, lived-in wardrobe detail, and ordinary available light")
         elif style == "职场系":
