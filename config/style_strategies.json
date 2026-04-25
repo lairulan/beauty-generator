@@ -39,7 +39,7 @@
     "pose_types": ["半身", "全身"],
     "lighting_pool": ["自然光"],
     "expression_pool": ["微笑"],
-    "use_sexy_body": false
+    "use_sexy_body": true
   },
   "邻家女孩系": {
     "scenes": ["街头", "自然", "城市"],
