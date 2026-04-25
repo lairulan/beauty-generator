@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-美女生成 V12.13 - Google Imagen 4 Ultra 双 Key 主力 + 豆包 Seedream 4.5 备选
+美女生成 V12.14 - Google Imagen 4 Ultra 双 Key 主力 + 豆包 Seedream 4.5 备选
 - Google Imagen 4 Ultra 作为主力引擎，支持主备 Key 轮换
 - 豆包 Seedream 4.5 作为 fallback
 - 自动重试 + 429 指数退避（最多 3 次）
@@ -24,7 +24,7 @@ from datetime import date, datetime
 from pathlib import Path
 
 
-VERSION = "12.13.0"
+VERSION = "12.14.0"
 
 
 def _get_ssl_context():
@@ -150,8 +150,8 @@ def get_default_library() -> dict:
     """内置默认元素库（prompt_library.json 缺失时的 fallback）"""
     return {
         "base_quality": [
-            "Clean lifestyle editorial portrait, flattering available light, healthy skin, warm emotional realism",
-            "Fresh lifestyle magazine portrait, full-frame camera, soft flattering tones, photogenic facial detail",
+            "Clean lifestyle beauty editorial, flattering available light, healthy skin, warm attractive presence",
+            "Fresh lifestyle magazine portrait, full-frame camera, soft flattering tones, polished photogenic facial detail",
             "Polished lifestyle photograph, natural light, clear healthy complexion, soft depth of field",
             "Warm candid beauty portrait, subtle filmic color, flattering catchlights, real moment feeling",
             "Magazine-quality portrait that still feels human, lightly retouched, clean skin, attractive facial balance"
@@ -211,7 +211,7 @@ def get_default_library() -> dict:
                 "friendly natural face, soft features, bright cheerful eyes, clean cheeks, everyday beauty",
                 "cute wholesome face, natural rosy cheeks, warm brown eyes, authentic smile showing teeth",
                 "adorable everyday face, minimal makeup, natural skin glow, playful innocent eyes, coffee-shop beauty",
-                "sun-kissed casual face, bright smiling eyes, slightly windblown hair, outdoor active girl charm",
+                "fresh outdoor casual face, bright smiling eyes, slightly windblown hair, clean warm complexion, active young-adult charm",
                 "bookish adult face, clear clean skin, wire-frame glasses, intelligent gentle appeal",
                 "cheerful tomboy-ish face, short layered hair, bright toothy grin, healthy outdoorsy complexion"
             ],
@@ -236,8 +236,8 @@ def get_default_library() -> dict:
             "生活场景系": [
                 "photogenic everyday young-adult Chinese face, clean dewy skin, bright rested eyes, soft cheeks, warm easy smile",
                 "cozy homebody beauty with minimal skincare glow, gentle smile, clear eyes, youthful lower-face softness, and delicate facial balance",
-                "natural no-makeup look with balanced delicate features, warm gentle smile, slightly tousled hair, comfortable everyday beauty",
-                "fresh washed face with clear healthy skin, smooth lower-face contours, lively half-smile, morning coffee warmth, and clean oval contours",
+                "clean understated makeup with balanced delicate features, warm gentle smile, slightly tousled hair, polished everyday beauty",
+                "fresh clear complexion with smooth lower-face contours, lively half-smile, morning coffee warmth, clean oval facial balance",
                 "photogenic casual weekend face with bright smiling eyes, soft cheek fullness, delicate nose bridge, clean oval contours, approachable charm",
                 "warm cooking-at-home lifestyle beauty, clean cheeks, tied-back hair with loose strands, bright gentle smile, photogenic facial balance",
                 "photogenic young adult lifestyle face with light blush, clean brows, soft oval face, lively attractive 22-23 age impression"
@@ -502,8 +502,8 @@ def get_default_library() -> dict:
             ]
         },
         "enhancement_keywords": [
-            "a few stray hairs catching the light, slight asymmetry in smile, one earring slightly tilted",
-            "soft smile creases at the eye corners, clean cheek highlights, natural skin softness",
+            "a few stray hairs catching the light, soft cheek lift, one earring slightly tilted",
+            "bright smiling eyes, clean cheek highlights, natural skin softness",
             "fabric wrinkle near elbow, a crease in the shirt collar, wind-blown strand across cheek",
             "subtle motion blur on fingertips, slight squint from sunlight, genuine unposed moment",
             "visible collarbone shadow, clean facial highlights, soft cheek glow"
@@ -617,8 +617,8 @@ class SmartPromptGenerator:
 
         if style == "生活场景系":
             return (
-                "Make the image read as a fresh 22-23 year old adult Chinese lifestyle portrait: bright youthful cheeks, "
-                "natural low-saturation lips, a softly fitted casual top, natural medium-full upper-body contour visible, "
+                "Make the image read as a fresh polished 22-23 year old adult Chinese lifestyle beauty portrait: bright youthful cheeks, "
+                "natural low-saturation lips, a lightly fitted fashion-casual top, natural medium-full upper-body contour visible, "
                 "defined waist cue, and a front-facing or three-quarter camera angle; keep the outfit fully dressed and modest"
             )
 
@@ -645,7 +645,7 @@ class SmartPromptGenerator:
     def _build_realism_clauses(self, style: str = None, pose_type: str = None) -> list[str]:
         """补充真实摄影约束，降低 AI 味和过度美化。"""
         clauses = [
-            "Keep the image grounded in real-world photography with clean healthy skin, faint natural facial asymmetry, and restrained retouching",
+            "Keep the image grounded in real-world photography with clean healthy skin, balanced facial structure, and restrained retouching",
             "Preserve relaxed posture, natural hand placement, smooth healthy cheeks, clean facial highlights, and candid portrait detail",
             "Keep the subject clearly adult but visibly 22 to 23 years old: youthful cheek fullness, bright eyes, smooth lower-face contours, fresh rested energy, and a soft early-twenties facial impression",
             "Keep her facial expression attractive and unmistakably early-twenties: lively smiling eyes, relaxed brows, soft cheek lift, natural low-saturation lips, a warm candid smile, and open friendly energy",
@@ -661,7 +661,7 @@ class SmartPromptGenerator:
         if style == "性感系":
             clauses.append("Use tasteful sensual fashion styling, form-flattering fabric, confident eye contact, fully clothed elegance, and youthful adult glamour")
         elif style == "生活场景系":
-            clauses.append("Use fresh everyday lifestyle styling in public or shared home spaces, fully dressed softly fitted casual clothing, clean healthy skin, rested eyes, a lively 22-23 adult face, flattering fabric that follows the chest and waist naturally, a front-facing or three-quarter composition with torso and waist visible, and a natural smile")
+            clauses.append("Use fresh polished lifestyle magazine styling in public or shared home spaces, fully dressed softly fitted casual clothing, clean healthy skin, rested eyes, a lively 22-23 adult face, flattering fabric that follows the chest and waist naturally, a front-facing or three-quarter composition with torso and waist visible, and a warm natural smile")
         elif style in {"清纯系", "邻家女孩系"}:
             clauses.append("Use understated makeup, lived-in wardrobe detail, and ordinary available light")
         elif style == "职场系":
@@ -679,7 +679,7 @@ class SmartPromptGenerator:
         """按风格选择更贴近真实写真的视觉语气。"""
         grounded_styles = {
             "清纯系": [
-                "soft documentary portrait treatment, natural colors, minimal grading",
+                "soft lifestyle editorial portrait treatment, natural colors, flattering clean light",
                 "quiet lifestyle editorial realism, restrained contrast, gentle tonal roll-off",
                 "subtle film-like color with understated styling and a believable everyday mood"
             ],
@@ -689,7 +689,7 @@ class SmartPromptGenerator:
                 "gentle filmic color and a relaxed contemporary portrait mood"
             ],
             "邻家女孩系": [
-                "street-documentary portrait tone, natural colors, observed everyday atmosphere",
+                "casual lifestyle cover portrait tone, natural colors, attractive everyday polish",
                 "casual lifestyle editorial realism with minimal grading and real-world light",
                 "candid neighborhood photography mood, grounded color, and unforced styling"
             ],

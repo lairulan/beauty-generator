@@ -1,10 +1,10 @@
 {
-  "version": "12.13",
-  "description": "Imagen 4 Ultra 优化版 - 年轻成熟女性自然语言摄影描述风格，强化典型东方脸、22-23 岁年轻成人感、干净健康肤质、年轻自然表情、生活杂志吸引力、自然深色发型、自然唇色、安全日常场景、自然饱满女性轮廓和无遮挡构图",
+  "version": "12.14",
+  "description": "Imagen 4 Ultra 优化版 - 年轻成熟女性自然语言摄影描述风格，强化典型东方脸、22-23 岁年轻成人感、干净健康肤质、年轻自然表情、轻精致生活杂志吸引力、自然深色发型、自然唇色、安全日常场景、自然饱满女性轮廓和无遮挡构图",
 
   "base_quality": [
-    "A clean lifestyle editorial portrait photographed in flattering available light, with healthy skin, natural color response, and warm emotional realism",
-    "A fresh lifestyle magazine portrait captured on a full-frame camera, with soft flattering tones, restrained contrast, and photogenic facial detail",
+    "A clean lifestyle beauty editorial photographed in flattering available light, with healthy skin, natural color response, and warm attractive presence",
+    "A fresh lifestyle magazine portrait captured on a full-frame camera, with soft flattering tones, restrained contrast, and polished photogenic facial detail",
     "A polished lifestyle photograph with natural light, clear healthy complexion, soft depth of field, and unforced body language",
     "A warm candid beauty portrait with subtle filmic color, realistic light falloff, flattering catchlights, and a real moment feeling",
     "A magazine-quality portrait that still feels human and lightly retouched, with clean skin, fabric detail, attractive facial balance, and grounded composition"
@@ -51,7 +51,7 @@
       "friendly natural face, soft features, bright cheerful eyes, clean cheeks, effortless everyday beauty",
       "cute wholesome face, natural rosy cheeks, casual messy hair, warm brown eyes, authentic smile showing teeth",
       "adorable everyday face, minimal makeup, natural skin glow, playful innocent eyes, coffee-shop beauty vibes",
-      "sun-kissed casual face, bright smiling eyes, slightly windblown hair, natural tan, outdoor active girl charm",
+      "fresh outdoor casual face, bright smiling eyes, slightly windblown hair, clean warm complexion, active young-adult charm",
       "bookish adult face, clear clean skin, wire-frame glasses, bright curious eyes, intelligent gentle appeal",
       "cheerful tomboy-ish face, short layered hair, bright toothy grin, healthy outdoorsy complexion, energetic natural charm"
     ],
@@ -76,8 +76,8 @@
     "生活场景系": [
       "photogenic everyday young-adult Chinese face, clean dewy skin, bright rested eyes, soft cheeks, warm easy smile",
       "cozy homebody beauty with minimal skincare glow, gentle smile, clear eyes, youthful lower-face softness, and delicate facial balance",
-      "natural no-makeup look with balanced delicate features, warm gentle smile, slightly tousled hair, comfortable everyday beauty",
-      "fresh washed face with clear healthy skin, smooth lower-face contours, lively half-smile, morning coffee warmth, and clean oval contours",
+      "clean understated makeup with balanced delicate features, warm gentle smile, slightly tousled hair, and polished everyday beauty",
+      "fresh clear complexion with smooth lower-face contours, lively half-smile, morning coffee warmth, and clean oval facial balance",
       "photogenic casual weekend face with bright smiling eyes, soft cheek fullness, delicate nose bridge, clean oval contours, approachable charm",
       "warm cooking-at-home lifestyle beauty, clean cheeks, tied-back hair with loose strands, bright gentle smile, and photogenic facial balance",
       "photogenic young adult lifestyle face with light blush, clean brows, soft oval face, and lively attractive 22-23 age impression"
@@ -97,7 +97,7 @@
     "half-up half-down style, romantic braids, ethereal beauty, princess-like",
     "low bun with wispy strands, elegant refined look, ballet dancer aesthetic",
     "wavy lob, textured layers, trendy modern style, effortless volume",
-    "side-swept long hair over one shoulder, revealing neck and collarbone, glamorous asymmetry",
+    "side-swept long hair over one shoulder, revealing neck and collarbone, polished glamorous side sweep",
     "twin braids with loose strands, playful adult charm, soft nostalgic styling",
     "soft shoulder-length black hair with natural volume, clean side part, face-framing layers, polished but approachable",
     "loose natural waves with center part, bohemian goddess, free-spirited beauty"
@@ -252,7 +252,7 @@
       "seated portrait on a chair or bench, one leg folded comfortably, hands resting naturally, intimate but grounded mood",
       "sitting with knees drawn up loosely, arms around the legs, head tilted slightly, quiet reflective presence",
       "standing near a window or wall with one hand adjusting the hair, natural weight shift, understated elegance",
-      "kneeling or crouching in a relaxed way with a straight back and warm expression, composed documentary feel",
+      "kneeling or crouching in a relaxed way with a straight back and warm expression, composed lifestyle editorial feel",
       "reclining in a simple pose with one knee bent and one arm resting nearby, full body visible, warm lived-in atmosphere"
     ]
   },
@@ -428,7 +428,7 @@
 
   "enhancement_keywords": [
     "with a few flyaway hairs, clean cheek highlights, and real fabric creases",
-    "with slight asymmetry in the smile, soft cheek glow, and believable catchlights",
+    "with a soft cheek lift, clean cheek glow, and believable catchlights",
     "with a relaxed shoulder line, gentle hand tension, and natural breathing posture",
     "with subtle wrinkles in clothing, small light falloff across the face, and grounded depth",
     "with fine baby hairs, clean facial highlights, and the texture of lived-in materials around her"
