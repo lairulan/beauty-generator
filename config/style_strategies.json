@@ -36,7 +36,7 @@
   "生活场景系": {
     "scenes": ["居家"],
     "outfit": "居家",
-    "pose_types": ["半身"],
+    "pose_types": ["生活半身"],
     "lighting_pool": ["自然光"],
     "expression_pool": ["清新微笑"],
     "body_pool": "body_types_lifestyle_full"

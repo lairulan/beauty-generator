@@ -1,6 +1,6 @@
 {
-  "version": "12.19",
-  "description": "Imagen 4 Ultra 优化版 - 重构生活场景文生图提示链路，明确 22-23 岁年轻成人边界，强化当代中国东亚审美初恋脸成人感、清透浅中性肤色、透明润唇裸唇色、放松闭唇小笑、柔和脸部表情、自然深色发型、日常清新吸引力、自然丰满但非露骨的女性轮廓和无遮挡半身构图",
+  "version": "12.20",
+  "description": "Imagen 4 Ultra 优化版 - 重构生活场景文生图提示链路，明确 22-23 岁年轻成人边界，强化当代中国东亚审美初恋脸成人感、清透浅中性肤色、透明润唇裸唇色、放松闭唇小笑、柔和脸部表情、自然深色发型、日常清新吸引力、自然丰满但非露骨的女性轮廓、无遮挡生活半身构图和非证件照式自然姿势",
 
   "base_quality": [
     "A realistic fresh adult Chinese lifestyle portrait in soft neutral daylight, with fair neutral skin, natural color response, relaxed body language, and clean early-twenties facial softness",
@@ -231,6 +231,13 @@
       "seated half-body shot with hands resting naturally in the lap, upright posture, gentle closed-lip smile",
       "front-facing three-quarter waist-up shot, one arm resting near the waist, bright eyes and a tiny closed-lip smile toward camera",
       "standing half-body portrait with hands adjusting the hair or collar, subtle movement, and unforced body language"
+    ],
+    "生活半身": [
+      "waist-up three-quarter home portrait leaning lightly toward camera, one hand brushing hair near the cheek, relaxed shoulders, torso and waist unobstructed",
+      "standing near a bright window in a waist-up frame, one hand lightly holding the cardigan edge near the waist, the other relaxed by the side, clear bust-to-waist line visible",
+      "casual sofa-side half-body portrait with shoulders turned slightly three-quarters, hands relaxed near the waist, lively eye contact, and natural breathing posture",
+      "front-facing waist-up portrait with a subtle shoulder turn, one hand adjusting the collar near the neckline, open torso, clear waist cue, and gentle closed-mouth smile",
+      "home-life candid half-body shot captured mid-gesture, one hand tucking hair behind the ear, relaxed mouth corners, visible neckline, and natural full upper-body contour"
     ],
     "职场半身": [
       "waist-up office-fashion portrait at a three-quarter angle, one hand lightly touching the blazer lapel, relaxed shoulders, direct bright eye contact",
