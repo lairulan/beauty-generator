@@ -28,16 +28,18 @@
   "职场系": {
     "scenes": ["职场"],
     "outfit": "职场",
-    "pose_types": ["半身", "写真", "全身"],
+    "pose_types": ["职场半身"],
+    "lighting": "职场光",
     "expression_pool": ["自信", "性感", "微笑"],
     "use_sexy_body": true
   },
   "生活场景系": {
-    "scenes": ["居家"],
+    "scenes": ["居家", "街头"],
     "outfit": "居家",
-    "pose_types": ["写真", "半身", "特写", "全身"],
-    "expression_pool": ["纯欲", "性感", "微笑"],
-    "use_sexy_body": true
+    "pose_types": ["半身", "全身"],
+    "lighting_pool": ["自然光"],
+    "expression_pool": ["微笑"],
+    "use_sexy_body": false
   },
   "邻家女孩系": {
     "scenes": ["街头", "自然", "城市"],

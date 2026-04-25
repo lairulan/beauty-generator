@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-美女生成 V12.1 - Google Imagen 4 Ultra 双 Key 主力 + 豆包 Seedream 4.5 备选
+美女生成 V12.7 - Google Imagen 4 Ultra 双 Key 主力 + 豆包 Seedream 4.5 备选
 - Google Imagen 4 Ultra 作为主力引擎，支持主备 Key 轮换
 - 豆包 Seedream 4.5 作为 fallback
 - 自动重试 + 429 指数退避（最多 3 次）
@@ -24,7 +24,7 @@ from datetime import date, datetime
 from pathlib import Path
 
 
-VERSION = "12.1.0"
+VERSION = "12.7.0"
 
 
 def _get_ssl_context():
@@ -157,11 +157,11 @@ def get_default_library() -> dict:
             "Lifestyle photograph, relaxed candid moment, gentle bokeh background, Nikon Z8"
         ],
         "asian_identity": [
-            "adult Chinese woman in her mid-twenties, 24 to 27 years old",
-            "adult East Asian woman, Chinese, youthful softness and refined feminine presence",
-            "Chinese woman around 25 or 26 with a poised adult presence",
-            "adult woman with Chinese features and composed charm",
-            "East Asian woman in her mid-twenties with confident adult appeal"
+            "adult Chinese woman in her early twenties, 22 to 24 years old",
+            "adult East Asian woman, Chinese, youthful cheek fullness and refined feminine presence",
+            "Chinese woman around 23 or 24 with fresh East Asian features and a soft lower face",
+            "adult woman with Chinese features, bright eyes, and fresh 22-24 age impression",
+            "East Asian woman in her early twenties with confident adult appeal and no mature office-worker fatigue"
         ],
         "face_types": {
             "甜美系": [
@@ -201,7 +201,7 @@ def get_default_library() -> dict:
                 "seductive face, heavy-lidded almond eyes, full voluptuous lips, high cheekbones, smoldering intensity",
                 "alluring features, sultry deep-set eyes, pouty glossy lips, perfect bone structure, sensual charm",
                 "glamorous face, smoky eyes, defined cheekbones, parted moist lips, magnetic attraction",
-                "captivating beauty, bedroom eyes, sculpted jawline, seductive expression, dangerously attractive",
+                "captivating beauty, soft half-lidded gaze, sculpted jawline, seductive expression, dangerously attractive",
                 "enchanting face, half-lidded seductive gaze, cherry lips slightly parted, devastating allure",
                 "fierce fox-face beauty, upswept cat eyes, sharp nose, bold red lips, lethal hot-cold combination",
                 "refined sensual face, knowing eyes with golden shimmer, balanced brow bone, full wine-stained lips, confident young-adult allure"
@@ -225,22 +225,22 @@ def get_default_library() -> dict:
                 "Jiangnan watertown beauty, misty dreamy eyes, delicate chin, pale skin like fresh snow, gentle melancholy"
             ],
             "职场系": [
-                "confident professional beauty, sharp intelligent eyes, subtle makeup, glossy lips, powerful yet feminine",
-                "sophisticated office beauty, defined brows, light smoky eyes, coral lipstick, radiating competence",
-                "corporate goddess face, polished flawless skin, knowing smile, captivating gaze, boss-level beauty",
-                "elegant business beauty, minimal chic makeup, confident direct gaze, professional glamour",
-                "sharp-featured career woman, angular jawline, penetrating dark eyes, matte nude lips, ice-queen aura",
-                "youthful professional face, bright eager eyes behind trendy glasses, light blush, ambitious energy",
-                "young poised professional beauty, symmetrical features, arched brows, mauve lips, quiet authority expression"
+                "modern Chinese office beauty with a soft oval face, dark almond eyes, natural straight brows, gentle nose bridge, barely tinted peach-beige lips",
+                "refined East Asian Chinese face, clear dark eyes, understated brows, soft cheek contour, natural lip-balm sheen with pale nude-pink color",
+                "elegant urban Chinese professional, warm almond eyes, subtle aegyo-sal, balanced soft jawline, fresh natural makeup, soft peach nude lips",
+                "classic Eastern beauty with a slim oval face, dark brown eyes, soft brows, natural complexion, bare peach-beige lip color",
+                "young Chinese career woman with clean natural features, soft facial contour, clear eyes, neat natural black hair, barely-there makeup",
+                "Hong Kong style modern office beauty, natural black hair, luminous but realistic skin, pale nude-pink lips, restrained eye makeup",
+                "polished Chinese professional face with approachable warmth, natural brows, dark almond eyes, soft smile, natural low-saturation peach-beige lips"
             ],
             "生活场景系": [
-                "natural relaxed face, bare-faced beauty with dewy skin, sleepy morning eyes, intimate warm expression",
-                "cozy homebody beauty, minimal skincare glow, lazy smile, soft drowsy eyes, effortlessly attractive",
-                "everyday goddess face, natural no-makeup look, warm gentle expression, comfortable intimate beauty",
-                "domestic beauty, fresh washed face, natural skin texture visible, warm sleepy smile",
-                "post-shower fresh face, damp hair framing face, clean bare skin, relaxed half-smile, steamy warmth",
-                "lazy weekend face, slightly puffy morning eyes, messy bun coming undone, oversized collar exposing shoulder",
-                "cooking-at-home beauty, flour-dusted cheek, tied-back hair with loose strands, focused concentrated look"
+                "fresh everyday young-adult Chinese face, dewy skin, bright rested eyes, soft cheeks, relaxed warm expression",
+                "cozy homebody beauty with minimal skincare glow, gentle smile, clear eyes, youthful lower-face softness",
+                "natural no-makeup look, warm gentle expression, slightly tousled hair, comfortable everyday beauty",
+                "fresh washed face with realistic skin texture, smooth lower-face contours, relaxed half-smile, morning coffee calm",
+                "casual weekend face with bright eyes, soft cheek fullness, simple neat hair, approachable charm",
+                "cooking-at-home beauty, flour-dusted cheek, tied-back hair with loose strands, focused concentrated look",
+                "young adult lifestyle face with light blush, clean brows, soft oval face, lively 22-24 age impression"
             ]
         },
         "hair_styles": [
@@ -322,9 +322,9 @@ def get_default_library() -> dict:
                 "elegant secretary look, crisp shirt with rolled sleeves, tight pencil skirt, reading glasses"
             ],
             "居家": [
-                "oversized boyfriend shirt barely covering thighs, messy morning hair, bare legs, cozy intimate warmth",
-                "silk pajama set with lace trim, soft satin catching warm light, relaxed sensual comfort",
-                "cotton crop top and soft shorts, casual Sunday morning look, natural effortless beauty"
+                "soft white cotton tee tucked into relaxed high-waisted lounge pants, neat natural hair, bright morning apartment light",
+                "loose knit cardigan over a simple camisole with wide-leg lounge trousers, cozy sofa setting, fully dressed casual ease",
+                "oversized clean white shirt layered over a fitted tank top and straight-leg jeans, rolled sleeves, coffee-at-home freshness"
             ],
             "邻家": [
                 "simple white tee tucked into denim shorts, casual sneakers, natural effortless style",
@@ -372,7 +372,7 @@ def get_default_library() -> dict:
             ],
             "性感": [
                 "sultry gaze, lips slightly parted, smoldering intensity",
-                "bedroom eyes, seductive half-smile, alluring charm",
+                "soft half-lidded gaze, seductive half-smile, alluring charm",
                 "confident sexy smirk, direct eye contact, magnetic presence"
             ],
             "挑逗": [
@@ -395,9 +395,9 @@ def get_default_library() -> dict:
                 "thoughtful distant look, introspective mood, emotional depth"
             ],
             "自信": [
-                "confident direct gaze, empowered expression, boss energy",
-                "self-assured smile, knowing look, powerful feminine",
-                "fierce determined expression, unstoppable energy, inspiring"
+                "confident direct gaze, calm self-possessed expression, quiet magnetic authority",
+                "self-assured soft smile, bright steady eyes, youthful confident presence",
+                "focused determined expression, steady bright eyes, composed drive"
             ]
         },
         "scenes": {
@@ -418,7 +418,7 @@ def get_default_library() -> dict:
                 "luxury hotel lobby, marble and gold, sophisticated elegance"
             ],
             "室内": [
-                "sunlit bedroom, morning light through sheer curtains, intimate warmth",
+                "sunlit apartment corner, morning light through sheer curtains, warm everyday calm",
                 "cozy coffee shop corner, warm ambient lighting, lifestyle aesthetic",
                 "minimalist studio, clean white background, professional setting",
                 "vintage library, leather books, intellectual atmosphere",
@@ -438,7 +438,7 @@ def get_default_library() -> dict:
                 "misty mountain landscape with bamboo forest, ancient stone bridge, morning mist with warm sun"
             ],
             "居家": [
-                "cozy sunlit bedroom, morning golden light through sheer curtains, messy white sheets, warm intimate atmosphere",
+                "sunlit apartment living room, morning golden light through sheer curtains, tidy sofa and plants, warm everyday atmosphere",
                 "modern kitchen with warm pendant lights, marble counter, morning coffee steam, homey comfortable feeling",
                 "living room with large window, soft afternoon sunlight, cozy sofa with throw blanket, warm domestic scene"
             ],
@@ -512,7 +512,7 @@ def get_default_library() -> dict:
             "standard": "deformed, bad anatomy, disfigured, ugly, extra fingers, mutated hands, extra limbs, missing limbs, fused fingers, too many fingers, long neck",
             "asian_focused": "Western face, Caucasian features, blonde hair, blue eyes, green eyes, non-Asian features",
             "quality": "3D render, CGI, digital art, illustration, painting, cartoon, anime, plastic skin, airbrushed, over-retouched, wax figure, doll-like, uncanny valley, symmetrical face, too perfect, flawless porcelain, studio backdrop, stock photo, watermark",
-            "anti_ai": "impossible body proportions, unnaturally tiny waist, distorted chest anatomy, flattened chest, unnaturally flat chest, missing bust contour, exaggerated fake curves, teen, underage, childlike face, school uniform, childish styling, middle-aged, older woman, aged face, deep wrinkles, heavy nasolabial folds, tired face, sagging skin"
+            "anti_ai": "impossible body proportions, unnaturally tiny waist, distorted chest anatomy, flattened chest, unnaturally flat chest, missing bust contour, exaggerated fake curves, teen, underage, childlike face, school uniform, childish styling, middle-aged, older woman, woman in her 30s, over 30 years old, aged face, mature face, mature executive, older manager, aged professional, gaunt cheeks, hollow cheeks, deep wrinkles, heavy nasolabial folds, pronounced smile lines, tired under-eye bags, tired face, sagging skin"
         }
     }
 
@@ -573,10 +573,10 @@ class SmartPromptGenerator:
             "body": body
         }
 
-    def generate_scene(self, scene_type: str = None) -> dict:
+    def generate_scene(self, scene_type: str = None, lighting_type: str = None) -> dict:
         """生成场景"""
         scene_key, scene_desc = self.pick_from_dict(self.library.get("scenes", {}), scene_type)
-        light_key, light_desc = self.pick_from_dict(self.library.get("lighting", {}))
+        light_key, light_desc = self.pick_from_dict(self.library.get("lighting", {}), lighting_type)
 
         return {
             "type": scene_key,
@@ -615,6 +615,14 @@ class SmartPromptGenerator:
                 "all kept realistic and photographic"
             )
 
+        if style == "职场系":
+            return (
+                "Make the image read unmistakably as a modern Chinese / East Asian woman: soft oval facial structure, "
+                "dark almond eyes, natural black or very dark brown hair without highlights, clean understated makeup, "
+                "and barely tinted peach-beige lips with transparent lip-balm softness and low saturation. The executive-fashion appeal should come from confident eye contact, "
+                "tailored lines, collarbone and waist cues, and warm cinematic office depth, with understated makeup and no theatrical glam styling"
+            )
+
         if pose_type in {"特写", "半身"}:
             return (
                 "Keep a clearly adult feminine upper-body silhouette visible through the neckline, "
@@ -630,20 +638,27 @@ class SmartPromptGenerator:
         """补充真实摄影约束，降低 AI 味和过度美化。"""
         clauses = [
             "Keep the image grounded in real-world photography with believable skin texture, faint facial asymmetry, and restrained retouching",
-            "Preserve relaxed posture, natural hand placement, and the subtle imperfections of a candid portrait"
+            "Preserve relaxed posture, natural hand placement, and the subtle imperfections of a candid portrait",
+            "Keep the subject clearly adult but visibly 22 to 24 years old: youthful cheek fullness, bright eyes, smooth lower-face contours, and no mature managerial or tired 30s facial impression"
         ]
 
-        if pose_type in {"特写", "半身"}:
-            clauses.append("Prioritize a fresh mid-twenties face and expression while keeping a refined feminine neckline, collarbones, and natural upper-body curve visible")
+        if pose_type in {"特写", "半身", "职场半身"}:
+            clauses.append("Prioritize a fresh early-to-mid twenties face and expression while keeping a refined feminine neckline, collarbones, and natural upper-body curve visible")
         else:
             clauses.append("Keep refined feminine curves visible but realistic, with natural bust, waist, and hip proportions rather than cartoon exaggeration")
 
         if style == "性感系":
             clauses.append("Use tasteful sensual fashion styling, form-flattering fabric, confident eye contact, and youthful adult glamour without nudity")
-        elif style in {"清纯系", "邻家女孩系", "生活场景系"}:
+        elif style == "生活场景系":
+            clauses.append("Use fresh everyday lifestyle styling in public or shared home spaces, fully dressed casual clothing, rested eyes, and a lively early-twenties face; avoid bedroom, bed, pajama, post-shower, private bathroom, or intimate morning-after cues")
+        elif style in {"清纯系", "邻家女孩系"}:
             clauses.append("Use understated makeup, lived-in wardrobe detail, and ordinary available light")
         elif style == "职场系":
-            clauses.append("Use restrained styling, believable office posture, and clean natural light")
+            clauses.append(
+                "Use premium Chinese office-fashion styling, confident eye contact, a flattering three-quarter angle, "
+                "catchlights, refined collarbone and waist cues, warm skyline or desk-lamp depth, natural black hair, "
+                "and barely-there peach-nude lip color that stays low-saturation and close to natural skin warmth; avoid passport-photo, LinkedIn headshot, Westernized facial features, dyed highlighted hair, theatrical glam makeup, and flat office lighting"
+            )
         elif style == "国风系":
             clauses.append("Favor tactile fabric detail and grounded styling over fantasy rendering")
 
@@ -668,14 +683,14 @@ class SmartPromptGenerator:
                 "candid neighborhood photography mood, grounded color, and unforced styling"
             ],
             "生活场景系": [
-                "intimate domestic photography tone, natural color, soft practical light",
+                "fresh everyday lifestyle photography tone, natural color, soft practical light",
                 "quiet home-life editorial realism with restrained contrast and tactile detail",
                 "documentary lifestyle treatment with believable indoor light and lived-in texture"
             ],
             "职场系": [
-                "clean contemporary portrait treatment, restrained contrast, and polished realism",
-                "modern editorial office photography with believable light and understated grading",
-                "professional lifestyle portrait tone with natural color and controlled highlights"
+                "premium executive fashion editorial with crisp window light, soft rim light, catchlights, and quiet sensual tension",
+                "cinematic office portrait with warm skyline bokeh, tailored fabric detail, glossy hair texture, and confident eye contact",
+                "high-end lifestyle cover portrait, polished but intimate, shallow depth of field, and a magnetic professional presence"
             ],
             "国风系": [
                 "grounded historical portrait styling with tactile fabric detail and restrained color",
@@ -730,6 +745,10 @@ class SmartPromptGenerator:
         if style == "性感系":
             sections.append(
                 f"A tasteful young-adult sensual fashion portrait with refined adult femininity, natural full-bust silhouette, defined waist, youthful softness, and confident feminine allure, featuring {asian_id}"
+            )
+        elif style == "职场系":
+            sections.append(
+                f"A refined modern Chinese office-fashion portrait featuring {asian_id}, with unmistakable East Asian Chinese facial features, natural black or very dark brown hair, clean understated makeup, and barely tinted peach-beige lips with a transparent lip-balm finish and low-saturation natural color"
             )
         else:
             sections.append(f"{quality}, featuring {asian_id}")
@@ -1378,7 +1397,10 @@ def _apply_style_strategy(generator, style, scene_type, outfit_style,
     # 场景
     scenes = strategy.get("scenes", [])
     r_scene = scene_type or (generator.pick_one(scenes) if scenes else None)
-    scene = generator.generate_scene(r_scene)
+    r_lighting = strategy.get("lighting") or (
+        generator.pick_one(strategy["lighting_pool"]) if "lighting_pool" in strategy else None
+    )
+    scene = generator.generate_scene(r_scene, r_lighting)
 
     # 姿势
     pose_types = strategy.get("pose_types", ["半身"])
@@ -1493,7 +1515,8 @@ def generate_series(count: int = 3,
                     style: str = None,
                     scene_type: str = None,
                     outfit_style: str = None,
-                    emotion: str = None) -> dict:
+                    emotion: str = None,
+                    seed: int = None) -> dict:
     """生成系列图片"""
 
     if not os.environ.get("DOUBAO_API_KEY") and not _has_google_key_configured():
@@ -1507,7 +1530,7 @@ def generate_series(count: int = 3,
 
     # 加载元素库
     library = load_prompt_library()
-    generator = SmartPromptGenerator(library)
+    generator = SmartPromptGenerator(library, seed=seed)
 
     # 每次生成全新随机人物（不再用日期种子，确保每天都是不同的人）
     character = generator.generate_character(style)
@@ -1650,6 +1673,7 @@ def main():
     parser.add_argument("--scene", help="场景类型: 自然, 城市, 室内, 特殊")
     parser.add_argument("--outfit", "-o", help="穿搭风格: 优雅, 性感, 清新, 时尚, 古典, 运动")
     parser.add_argument("--emotion", "-e", help="情绪: 挑逗, 性感, 温柔, 俏皮, 自信, 高冷, 忧郁, 纯欲")
+    parser.add_argument("--seed", type=int, help="随机种子：用于复现某次 prompt 组合")
     parser.add_argument("--list-options", "-l", action="store_true", help="列出所有可用选项")
     parser.add_argument("--preview", "-p", action="store_true", help="只预览 Prompt，不生成图片")
 
@@ -1670,24 +1694,33 @@ def main():
         return 1
 
     if args.preview:
-        generator = SmartPromptGenerator(library)
+        generator = SmartPromptGenerator(library, seed=args.seed)
         character = generator.generate_character(args.style)
-        scene = generator.generate_scene(args.scene)
-        styling = generator.generate_styling(args.outfit)
+        resolved_expression = EMOTION_EXPRESSION_MAP.get(args.emotion) if args.emotion else None
 
         print("\n" + "=" * 60)
         print(f"Prompt 预览 (V{VERSION})")
         print("=" * 60)
 
-        for pose_type in ["特写", "半身", "全身"]:
+        for i in range(3):
+            scene, pose_type, resolved_outfit, resolved_expression, preview_character = \
+                _apply_style_strategy(
+                    generator, args.style, args.scene, args.outfit,
+                    resolved_expression, character, i
+                )
+            styling = generator.generate_styling(resolved_outfit, resolved_expression)
             prompt = generator.build_prompt(
-                character=character,
+                character=preview_character,
                 scene=scene,
                 styling=styling,
                 pose_type=pose_type,
                 style=args.style
             )
-            print(f"\n【{pose_type}】")
+            print(
+                f"\n【{pose_type} | 场景:{scene.get('type', '随机')} | "
+                f"穿搭:{styling.get('outfit_style', '随机')} | 表情:{styling.get('expression_type', '随机')} | "
+                f"光影:{scene.get('lighting_type', '随机')}】"
+            )
             print(prompt)
             print(f"\n【Negative Prompt - {pose_type}】")
             print(generator.get_negative_prompt(pose_type))
@@ -1707,7 +1740,8 @@ def main():
             style=args.style,
             scene_type=args.scene,
             outfit_style=args.outfit,
-            emotion=args.emotion
+            emotion=args.emotion,
+            seed=args.seed
         )
 
     if result["success"]:
