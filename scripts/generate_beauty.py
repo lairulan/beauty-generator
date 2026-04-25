@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-美女生成 V12.7 - Google Imagen 4 Ultra 双 Key 主力 + 豆包 Seedream 4.5 备选
+美女生成 V12.8 - Google Imagen 4 Ultra 双 Key 主力 + 豆包 Seedream 4.5 备选
 - Google Imagen 4 Ultra 作为主力引擎，支持主备 Key 轮换
 - 豆包 Seedream 4.5 作为 fallback
 - 自动重试 + 429 指数退避（最多 3 次）
@@ -24,7 +24,7 @@ from datetime import date, datetime
 from pathlib import Path
 
 
-VERSION = "12.7.0"
+VERSION = "12.8.0"
 
 
 def _get_ssl_context():
@@ -263,11 +263,11 @@ def get_default_library() -> dict:
             "milky white skin, translucent quality, delicate texture, ethereal glow"
         ],
         "body_types": [
-            "balanced adult feminine proportions, natural bust line, defined waist, soft hips, and healthy legs",
-            "soft natural curves, modest-to-full natural bust, realistic waist-to-hip ratio, and believable silhouette",
-            "lean everyday build with visible feminine curves, natural chest shape, relaxed posture, and realistic proportions",
-            "tall slim frame with natural bust, soft hips, and long legs, photographed without exaggeration",
-            "graceful feminine silhouette with natural bust-to-waist proportion, soft hips, and grounded balance"
+            "balanced adult feminine proportions, natural medium-to-full upper-body contour, defined waist, soft hips, and healthy legs",
+            "soft natural curves, proportionate medium-full bust-to-waist line, realistic waist-to-hip ratio, and believable silhouette",
+            "healthy everyday build with visible feminine curves, natural rounded chest contour, relaxed posture, and realistic proportions",
+            "graceful frame with soft shoulders, natural upper-body volume, defined waist, and balanced hips, photographed without exaggeration",
+            "graceful feminine silhouette with clear bust-to-waist proportion, soft hips, and grounded balance"
         ],
         "body_types_sexy": [
             "confident curvy figure with natural feminine volume, fuller but realistic bust, defined waist, and rounded hips",
@@ -290,10 +290,10 @@ def get_default_library() -> dict:
                 "satin slip dress, delicate straps, elegant curves"
             ],
             "清新": [
-                "white cotton sundress with floral embroidery, fresh innocent",
-                "light blue oversized shirt, effortless casual, woman-next-door",
-                "pastel cardigan with white tee, soft feminine layers",
-                "linen midi skirt with simple blouse, natural aesthetic"
+                "white cotton sundress with floral embroidery, modest neckline, soft waist seam, fresh everyday charm",
+                "light blue linen shirt softly tucked into high-waisted relaxed denim, clear waist line, effortless casual",
+                "pastel wrap top with gentle front gathering and a white linen midi skirt, soft feminine layers",
+                "cream knit tank under a light cardigan with a high-waisted floral skirt, literary natural aesthetic"
             ],
             "时尚": [
                 "designer trench coat, street style chic, fashion-forward",
@@ -322,9 +322,9 @@ def get_default_library() -> dict:
                 "elegant secretary look, crisp shirt with rolled sleeves, tight pencil skirt, reading glasses"
             ],
             "居家": [
-                "soft white cotton tee tucked into relaxed high-waisted lounge pants, neat natural hair, bright morning apartment light",
-                "loose knit cardigan over a simple camisole with wide-leg lounge trousers, cozy sofa setting, fully dressed casual ease",
-                "oversized clean white shirt layered over a fitted tank top and straight-leg jeans, rolled sleeves, coffee-at-home freshness"
+                "softly fitted ivory knit top tucked into relaxed high-waisted lounge pants, neat natural hair, bright morning apartment light, gentle waist definition",
+                "loose knit cardigan over a supportive ribbed tank with wide-leg lounge trousers, cozy sofa setting, fully dressed casual ease, natural upper-body contour visible",
+                "oversized clean white shirt left open over a fitted scoop-neck tank and straight-leg jeans, rolled sleeves, coffee-at-home freshness, balanced feminine silhouette"
             ],
             "邻家": [
                 "simple white tee tucked into denim shorts, casual sneakers, natural effortless style",
@@ -334,34 +334,34 @@ def get_default_library() -> dict:
         },
         "poses": {
             "特写": [
-                "extreme close-up portrait, looking directly at camera, captivating gaze",
-                "face close-up, chin slightly tilted, mysterious expression",
-                "intimate portrait, eyes half-closed, dreamy sensual look",
-                "profile close-up, perfect side angle, elegant neck line visible"
+                "close-up portrait, looking directly at camera, clear relaxed gaze",
+                "face close-up, chin slightly tilted, calm natural expression",
+                "quiet close portrait, relaxed eyelids, natural lips, soft hair detail",
+                "profile close-up, elegant side angle, natural neck line visible"
             ],
             "半身": [
-                "upper body shot, hands near face, graceful gesture",
-                "waist-up portrait, one hand touching hair, natural pose",
-                "elegant seated pose, hands in lap, refined posture",
-                "leaning forward slightly, engaging expression, dynamic composition"
+                "waist-up portrait with relaxed shoulders and one hand touching hair, natural pose",
+                "upper-body portrait leaning slightly toward camera, open posture, steady eye contact",
+                "elegant seated half-body pose, hands in lap, refined but relaxed posture",
+                "side-angle waist-up portrait, one arm resting near the waist, conversational mood"
             ],
             "全身": [
-                "full body standing pose, weight on one leg, natural S-curve",
-                "walking pose, hair and clothes in motion, dynamic energy",
-                "seated cross-legged, relaxed elegant posture, approachable",
-                "leaning against wall, casual confident stance, editorial style"
+                "full body standing pose, weight resting naturally on one leg, grounded proportions",
+                "walking pose, hair and clothes moving gently, believable confident stride",
+                "seated on chair or bench, both feet grounded, relaxed elegant posture",
+                "leaning lightly against wall, casual confident stance, realistic posture"
             ],
             "动态": [
-                "hair flipping in motion, dynamic movement, frozen moment",
-                "twirling in dress, fabric flowing, joyful energy",
-                "reaching up gracefully, elongated silhouette, dancer-like",
-                "looking back over shoulder, mysterious allure, dynamic angle"
+                "hair moving lightly as she turns, believable candid motion",
+                "twirling in dress, fabric flowing softly, joyful energy",
+                "reaching up in a relaxed stretch, elongated posture, dancer-like ease",
+                "looking back over shoulder while turning naturally, curious glance"
             ],
             "写真": [
-                "full body side pose, arching back slightly, showcasing curves, hands on waist",
-                "sitting with legs crossed, leaning back on hands, body fully visible, confident sensual",
-                "standing with one hand on hip, slight twist at waist, accentuating silhouette",
-                "leaning against wall with hip pushed out, hands above head, full body S-curve visible"
+                "standing portrait with a gentle shoulder turn, hands relaxed, editorial but believable stance",
+                "seated portrait on a chair or bench, one leg folded comfortably, hands resting naturally",
+                "standing with one hand near the waist, slight natural twist, graceful silhouette",
+                "leaning near a window or wall with natural weight shift, full body visible"
             ]
         },
         "expressions": {
@@ -512,7 +512,7 @@ def get_default_library() -> dict:
             "standard": "deformed, bad anatomy, disfigured, ugly, extra fingers, mutated hands, extra limbs, missing limbs, fused fingers, too many fingers, long neck",
             "asian_focused": "Western face, Caucasian features, blonde hair, blue eyes, green eyes, non-Asian features",
             "quality": "3D render, CGI, digital art, illustration, painting, cartoon, anime, plastic skin, airbrushed, over-retouched, wax figure, doll-like, uncanny valley, symmetrical face, too perfect, flawless porcelain, studio backdrop, stock photo, watermark",
-            "anti_ai": "impossible body proportions, unnaturally tiny waist, distorted chest anatomy, flattened chest, unnaturally flat chest, missing bust contour, exaggerated fake curves, teen, underage, childlike face, school uniform, childish styling, middle-aged, older woman, woman in her 30s, over 30 years old, aged face, mature face, mature executive, older manager, aged professional, gaunt cheeks, hollow cheeks, deep wrinkles, heavy nasolabial folds, pronounced smile lines, tired under-eye bags, tired face, sagging skin"
+            "anti_ai": "impossible body proportions, unnaturally tiny waist, distorted chest anatomy, flattened chest, unnaturally flat chest, flat chest, small chest, missing bust contour, underdeveloped figure, boxy torso, shapeless oversized clothing, androgynous torso, collapsed upper-body silhouette, exaggerated fake curves, teen, underage, childlike face, school uniform, childish styling, middle-aged, older woman, woman in her 30s, over 30 years old, aged face, mature face, mature executive, older manager, aged professional, gaunt cheeks, hollow cheeks, deep wrinkles, heavy nasolabial folds, pronounced smile lines, tired under-eye bags, tired face, sagging skin"
         }
     }
 
@@ -611,7 +611,7 @@ class SmartPromptGenerator:
         if style == "性感系":
             return (
                 "Her refined young-adult feminine presence is central: graceful neck and collarbones, "
-                "a natural fuller bust, a defined waist, soft rounded hips, and confident feminine posture, "
+                "a natural medium-to-full upper-body contour, a defined waist, soft rounded hips, and confident feminine posture, "
                 "all kept realistic and photographic"
             )
 
@@ -620,17 +620,18 @@ class SmartPromptGenerator:
                 "Make the image read unmistakably as a modern Chinese / East Asian woman: soft oval facial structure, "
                 "dark almond eyes, natural black or very dark brown hair without highlights, clean understated makeup, "
                 "and barely tinted peach-beige lips with transparent lip-balm softness and low saturation. The executive-fashion appeal should come from confident eye contact, "
-                "tailored lines, collarbone and waist cues, and warm cinematic office depth, with understated makeup and no theatrical glam styling"
+                "tailored lines, collarbone and waist cues, a natural medium-full upper-body contour through refined garment structure, "
+                "and warm cinematic office depth, with understated makeup and no theatrical glam styling"
             )
 
         if pose_type in {"特写", "半身"}:
             return (
                 "Keep a clearly adult feminine upper-body silhouette visible through the neckline, "
-                "collarbones, natural bust contour, shoulder line, and waist suggestion"
+                "collarbones, natural medium-full upper-body contour, shoulder line, and waist suggestion"
             )
 
         return (
-            "Keep her refined adult femininity visible through natural bust-to-waist proportion, "
+            "Keep her refined adult femininity visible through clear bust-to-waist proportion, "
             "soft hips, graceful legs, and believable full-body balance"
         )
 
@@ -639,18 +640,19 @@ class SmartPromptGenerator:
         clauses = [
             "Keep the image grounded in real-world photography with believable skin texture, faint facial asymmetry, and restrained retouching",
             "Preserve relaxed posture, natural hand placement, and the subtle imperfections of a candid portrait",
-            "Keep the subject clearly adult but visibly 22 to 24 years old: youthful cheek fullness, bright eyes, smooth lower-face contours, and no mature managerial or tired 30s facial impression"
+            "Keep the subject clearly adult but visibly 22 to 24 years old: youthful cheek fullness, bright eyes, smooth lower-face contours, and no mature managerial or tired 30s facial impression",
+            "Keep the body clearly adult and feminine with a natural medium-full upper-body contour, defined waist suggestion, and realistic proportions; avoid a flat, boxy, or shapeless torso"
         ]
 
         if pose_type in {"特写", "半身", "职场半身"}:
-            clauses.append("Prioritize a fresh early-to-mid twenties face and expression while keeping a refined feminine neckline, collarbones, and natural upper-body curve visible")
+            clauses.append("Prioritize a fresh early-to-mid twenties face and expression while keeping a refined feminine neckline, collarbones, and natural medium-full upper-body curve visible")
         else:
-            clauses.append("Keep refined feminine curves visible but realistic, with natural bust, waist, and hip proportions rather than cartoon exaggeration")
+            clauses.append("Keep refined feminine curves visible but realistic, with natural bust-to-waist and hip proportions rather than cartoon exaggeration")
 
         if style == "性感系":
             clauses.append("Use tasteful sensual fashion styling, form-flattering fabric, confident eye contact, and youthful adult glamour without nudity")
         elif style == "生活场景系":
-            clauses.append("Use fresh everyday lifestyle styling in public or shared home spaces, fully dressed casual clothing, rested eyes, and a lively early-twenties face; avoid bedroom, bed, pajama, post-shower, private bathroom, or intimate morning-after cues")
+            clauses.append("Use fresh everyday lifestyle styling in public or shared home spaces, fully dressed softly fitted casual clothing, rested eyes, a lively early-twenties face, and flattering fabric that follows the chest and waist without looking tight; avoid bedroom, bed, pajama, post-shower, private bathroom, or intimate morning-after cues")
         elif style in {"清纯系", "邻家女孩系"}:
             clauses.append("Use understated makeup, lived-in wardrobe detail, and ordinary available light")
         elif style == "职场系":
