@@ -1,12 +1,12 @@
 ---
 name: beauty-generator
-version: 12.32.0
-description: 独立文生图写真仓库。Google Imagen 4 Ultra 主力，Doubao Seedream 4.5 回退，支持 22-23 岁年轻成人女性写真 prompt、明亮清透中国东方审美脸部档案、高键清透曝光、冷中性白皙瓷白东亚肤色、脸颊淡粉气色、淡裸粉透明水润唇、凤眼感杏眼/狐狸杏眼、眼尾上扬、强 catchlight 眼神吸引力、侧分长黑发修饰脸侧、鹅蛋瓜子脸/窄颌柔下巴、小巧高鼻梁和小鼻翼小鼻孔、五官和谐漂亮、鲜亮性感但非露骨的生活写真色彩、日常丰满但非露骨的女性轮廓、无遮挡生活半身构图、场景/情绪控制、手动 prompt、公众号草稿箱发布与 7 天风格轮换。Use when user asks to generate beauty images ("生成美女", "每日美女", "发布美女", "艺术写真", "文生图美女").
+version: 12.33.0
+description: 独立文生图写真仓库。Google Imagen 4 Ultra 主力，Doubao Seedream 4.5 回退，支持 22-23 岁年轻成人女性写真 prompt、生活场景文生图短强正向约束、明亮清透中国东方审美脸部档案、高键清透曝光、冷中性白里透红/奶白东亚肤色、淡婴儿粉透明水润唇、凤眼感杏眼/狐狸杏眼、眼尾上扬、强 catchlight 眼神吸引力、侧分长黑发修饰脸侧、鹅蛋瓜子脸/窄颌柔下巴、小巧高鼻梁和小鼻翼小鼻孔、五官和谐漂亮、鲜亮性感但非露骨的生活写真色彩、日常丰满但非露骨的女性轮廓、无遮挡生活半身构图、场景/情绪控制、手动 prompt、公众号草稿箱发布与 7 天风格轮换。Use when user asks to generate beauty images ("生成美女", "每日美女", "发布美女", "艺术写真", "文生图美女").
 author: rulanlai
 tags: [image-generation, beauty, wechat, google, doubao, seedream]
 ---
 
-# Beauty Generator - 文生图写真 V12.32
+# Beauty Generator - 文生图写真 V12.33
 
 纯文生图模式：Google Imagen 4 Ultra（主力）+ 豆包 Seedream 4.5（兜底）。从元素库随机组合人物、场景、穿搭、光线和艺术风格，生成高质量年轻成熟女性艺术写真，并可直接发布到微信公众号草稿箱。
 
