@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-美女生成 V12.26 - Google Imagen 4 Ultra 双 Key 主力 + 豆包 Seedream 4.5 备选
+美女生成 V12.27 - Google Imagen 4 Ultra 双 Key 主力 + 豆包 Seedream 4.5 备选
 - Google Imagen 4 Ultra 作为主力引擎，支持主备 Key 轮换
 - 豆包 Seedream 4.5 作为 fallback
 - 自动重试 + 429 指数退避（最多 3 次）
@@ -24,7 +24,7 @@ from datetime import date, datetime
 from pathlib import Path
 
 
-VERSION = "12.26.0"
+VERSION = "12.27.0"
 
 
 def _get_ssl_context():
@@ -270,8 +270,8 @@ def get_default_library() -> dict:
             "graceful feminine silhouette with clear full bust-to-waist proportion, soft hips, and grounded balance"
         ],
         "adult_lifestyle_face_moods": [
-            "reference-style elegant Chinese beauty profile: graceful oval-melon face, soft high forehead, smooth narrow cheek-to-jaw taper, rounded small chin, warm almond eyes with subtle double eyelids, bright catchlights, and gentle eye contact back toward camera, soft arched willow brows, straight high nose bridge with a small nose base, petal-shaped medium-small smile lips in low-saturation sheer peach-pink balm, and calm gentle warmth",
-            "young newlywed softness profile: long oval-melon face, narrow but not sharp lower face, gentle willow brows, luminous almond eyes with lifted outer corners and delicate lower-lid softness, refined straight East Asian nose bridge, compact nostrils, softly full petal mouth with a clear cupid's bow, pale translucent peach-pink lips, and polished low-makeup femininity",
+            "reference-style elegant Chinese beauty profile: graceful oval-melon face, soft high forehead, smooth narrow cheek-to-jaw taper, rounded small chin, warm almond eyes with subtle double eyelids, bright catchlights, and gentle eye contact back toward camera, soft arched willow brows, straight high nose bridge with a small nose base, petal-shaped medium-small smile lips with barely tinted pale nude-pink clear balm and no visible lipstick, and calm gentle warmth",
+            "young newlywed softness profile: long oval-melon face, narrow but not sharp lower face, gentle willow brows, luminous almond eyes with lifted outer corners and delicate lower-lid softness, refined straight East Asian nose bridge, compact nostrils, softly full petal mouth with a clear cupid's bow, barely tinted pale nude-pink clear-balm lips, and polished low-makeup femininity",
             "Jiangnan refined beauty profile: elegant oval face with melon-seed lower line, smooth cheek plane, fine arched brows, clear almond-phoenix eyes, long clean nose highlight, small nose tip and nostrils, relaxed petal-shaped smile lips, light apricot-pink lip-balm color, and quiet gentle charm"
         ],
         "lifestyle_reference_hair_styles": [
@@ -535,7 +535,7 @@ def get_default_library() -> dict:
             "standard": "deformed, bad anatomy, disfigured, ugly, extra fingers, mutated hands, extra limbs, missing limbs, fused fingers, too many fingers, long neck",
             "asian_focused": "Western face, Caucasian features, European features, Southeast Asian face, South Asian face, Latin face, mixed-race Eurasian face, blonde hair, blue eyes, green eyes, non-Asian features, Westernized mixed-race face, bronzed tan skin, heavy Western glam makeup",
             "quality": "3D render, CGI, digital art, illustration, painting, cartoon, anime, plastic skin, airbrushed, over-retouched, wax figure, doll-like, uncanny valley, symmetrical face, too perfect, flawless porcelain, studio backdrop, stock photo, watermark",
-            "anti_ai": "impossible body proportions, unnaturally tiny waist, distorted chest anatomy, flattened chest, unnaturally flat chest, flat chest, small chest, missing bust contour, underdeveloped figure, boxy torso, shapeless oversized clothing, bulky shapeless sleeves, hands covering chest, arms blocking torso, side profile hiding torso, countertop hiding body, androgynous torso, collapsed upper-body silhouette, exaggerated fake curves, wide face, broad face, wide round face, short round face, puffy cheeks, chubby cheeks, square jaw, broad jawline, wide lower face, heavy jaw, wide chin, flat full-frontal passport angle, flat face angle, no head turn, looking away, strong side gaze, face turned too far away, large nostrils, flared nostrils, wide nostril wings, bulbous nose, wide nose base, wide mouth, broad mouth, over-wide lips, teen, underage, childlike face, school uniform, childish styling, middle-aged, older woman, woman in her 30s, over 30 years old, aged face, mature face, mature executive, older manager, aged professional, gaunt cheeks, hollow cheeks, deep wrinkles, heavy nasolabial folds, pronounced smile lines, tired under-eye bags, tired face, sagging skin, acne, pimples, facial blemishes, skin breakouts, red bumps, acne scars, rash, dark spots, dirty skin, many moles, mole clusters, freckle clusters, stiff expression, rigid expression, blank stare, awkward smile, forced smile, dead eyes, stern expression, severe expression, world-weary expression, tired half-lidded eyes, mature seductive smirk, manager-like composure, cold intimidating stare, hard cheekbones, sharp mature jawline, dark red lipstick, burgundy lips, purple lipstick, mauve lips, wine-colored lips, red-brown lipstick, brown lipstick, brick-red lips, dark rose lipstick, heavy lipstick, thick lip makeup, overdrawn lips, saturated red lips, vivid red lips, orange-red lips, coral lipstick"
+            "anti_ai": "impossible body proportions, unnaturally tiny waist, distorted chest anatomy, flattened chest, unnaturally flat chest, flat chest, small chest, missing bust contour, underdeveloped figure, boxy torso, shapeless oversized clothing, bulky shapeless sleeves, hands covering chest, arms blocking torso, side profile hiding torso, countertop hiding body, androgynous torso, collapsed upper-body silhouette, exaggerated fake curves, wide face, broad face, wide round face, short round face, puffy cheeks, chubby cheeks, square jaw, broad jawline, wide lower face, heavy jaw, wide chin, short hair, bob haircut, chin-length hair, flat full-frontal passport angle, flat face angle, no head turn, looking away, strong side gaze, face turned too far away, large nostrils, flared nostrils, wide nostril wings, bulbous nose, wide nose base, wide mouth, broad mouth, over-wide lips, teen, underage, childlike face, school uniform, childish styling, middle-aged, older woman, woman in her 30s, over 30 years old, aged face, mature face, mature executive, older manager, aged professional, gaunt cheeks, hollow cheeks, deep wrinkles, heavy nasolabial folds, pronounced smile lines, tired under-eye bags, tired face, sagging skin, acne, pimples, facial blemishes, skin breakouts, red bumps, acne scars, rash, dark spots, dirty skin, many moles, mole clusters, freckle clusters, stiff expression, rigid expression, blank stare, awkward smile, forced smile, dead eyes, stern expression, severe expression, world-weary expression, tired half-lidded eyes, mature seductive smirk, manager-like composure, cold intimidating stare, hard cheekbones, sharp mature jawline, visible lipstick, strong lip tint, red lip tint, lipstick-heavy mouth, dark red lipstick, burgundy lips, purple lipstick, mauve lips, wine-colored lips, red-brown lipstick, brown lipstick, brick-red lips, dark rose lipstick, heavy lipstick, thick lip makeup, overdrawn lips, saturated red lips, vivid red lips, orange-red lips, coral lipstick"
         }
     }
 
@@ -638,7 +638,7 @@ class SmartPromptGenerator:
                 "a soft high forehead, elongated oval-melon facial outline, smooth narrow cheek-to-jaw taper, softly rounded small chin, and soft arched willow brows; "
                 "warm almond eyes with subtle double-eyelid creases, tiny catchlights, delicate lower-lid softness, gently lifted outer corners, and gentle eye contact back toward the camera; "
                 "a refined straight high East Asian nose bridge with a clean highlight line, narrow nose base, compact nostrils, and a delicate nose tip; fair-to-light neutral skin; natural black side-parted hair; barely-there makeup; "
-                "and petal-shaped medium-small smile lips with a soft cupid's bow, moderate narrow mouth width, low-saturation translucent peach-pink or pale rose-pink lip balm, and a clear-balm finish"
+                "and petal-shaped medium-small smile lips with a soft cupid's bow, moderate narrow mouth width, barely tinted pale nude-pink clear balm, no visible lipstick, and a clear-balm finish"
             )
 
         return (
@@ -695,7 +695,7 @@ class SmartPromptGenerator:
                 "Use classic Chinese beauty-word structure in a modern natural face: graceful oval-melon face, narrow lower jaw without harsh sharpness, willow-leaf arched brows, warm lifted almond eyes with subtle double eyelids, refined high East Asian nose bridge with a clean highlight line, compact nostrils, petal-shaped smile lips, and clear fair skin",
                 "Make the expression gentle and fresh: lively clear eyes, relaxed facial muscles, tiny closed-mouth smile, calm mouth corners, and approachable warmth",
                 "Keep the complexion fair-to-light neutral and clean, with soft even cheek color, clear skin texture, restrained makeup, and a transparent natural finish",
-                "Keep the lips fresh and youthful: medium-small petal shape, moderate narrow mouth width, softly full natural lower lip, defined but soft cupid's bow, transparent lip-balm sheen, and low-saturation translucent peach-pink or pale rose-pink natural color close to a clear-balm look",
+                "Keep the lips fresh and youthful: medium-small petal shape, moderate narrow mouth width, softly full natural lower lip, defined but soft cupid's bow, transparent lip-balm sheen, barely tinted pale nude-pink natural color, and no visible lipstick",
                 "Keep her body clearly adult and feminine through tasteful sensual art-photo styling and fully dressed casual clothing: fuller rounded upper-body fullness, defined waist suggestion, soft shoulders, realistic proportions, supportive structured ribbed knit fabric, soft side light shaping the silhouette, and a three-quarter half-body frame with torso and waist visible",
                 "Use contemporary mainland Chinese clean-beauty cues: side-parted natural black hair, slender softly arched brows, warm almond eyes, graceful oval-melon face, smooth narrow lower jaw, refined straight high nose line, compact nostrils, petal smile lips, and a relaxed first-meeting smile"
             ]
@@ -821,7 +821,7 @@ class SmartPromptGenerator:
             sections.append(
                 f"A realistic fresh adult Chinese lifestyle half-body portrait in soft neutral daylight, featuring {asian_id}. "
                 "The face and expression are the priority: classically beautiful contemporary mainland Chinese East Asian facial aesthetics with visible variation, gentle first-meeting warmth, "
-                "warm lifted almond eyes with subtle double eyelids and gentle eye contact back toward camera, refined straight high nose bridge with compact nostrils, graceful oval-melon lower face, petal-shaped medium-small smile lips, low-saturation sheer peach-pink balm, fair neutral skin, and relaxed early-twenties adult presence"
+                "warm lifted almond eyes with subtle double eyelids and gentle eye contact back toward camera, refined straight high nose bridge with compact nostrils, graceful oval-melon lower face, petal-shaped medium-small smile lips, barely tinted pale nude-pink clear balm with no visible lipstick, fair neutral skin, and relaxed early-twenties adult presence"
             )
         else:
             sections.append(f"{quality}, featuring {asian_id}")
