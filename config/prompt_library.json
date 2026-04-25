@@ -1,30 +1,30 @@
 {
-  "version": "12.22",
-  "description": "Imagen 4 Ultra 优化版 - 拆分生活场景脸部变体，避免同质化脸；基于中国传统美女词汇重构成年年轻感/年轻少妇感五官锚点，强化多种鹅蛋脸/瓜子脸/心形鹅蛋脸、柳叶眉、丹凤眼/杏凤眼、挺秀东方鼻、樱桃小口形状、淡雅明亮桃粉润唇、清透美女感、低妆感、自然深色发型、日常丰满但非露骨的女性轮廓、无遮挡生活半身构图和非证件照式自然姿势",
+  "version": "12.23",
+  "description": "Imagen 4 Ultra 优化版 - 收紧生活场景脸部结构，优先瓜子脸/小V线下颌/窄下半脸/柔和尖下巴，强化挺秀鼻梁、小巧鼻翼和小鼻孔、窄小樱桃口形状、淡雅明亮桃粉润唇；减少宽脸、宽下颌、宽嘴和大鼻孔倾向，同时用支撑型合身针织、无遮挡正面半身构图强化日常丰满但非露骨的女性轮廓",
 
   "base_quality": [
     "A realistic fresh adult Chinese lifestyle portrait in soft neutral daylight, with fair neutral skin, natural color response, relaxed body language, and clean early-twenties facial softness",
     "A candid everyday portrait of a clearly adult 22-23 year old Chinese woman, photographed in available light with gentle contrast, clear eyes, smooth youthful cheeks, and a real moment feeling",
     "A clean home-life photograph with natural window light, soft face detail, transparent lip-balm lips, fair-to-light neutral complexion, and unforced warmth",
-    "A fresh relaxed portrait with practical indoor daylight, believable fabric texture, bright rested eyes, rounded cheek softness, and restrained natural retouching",
+    "A fresh relaxed portrait with practical indoor daylight, believable fabric texture, bright rested eyes, delicate cheek softness, and restrained natural retouching",
     "A natural lifestyle photograph with the face as the emotional center, soft clean skin, relaxed closed-mouth smile, calm daylight color, and grounded everyday composition"
   ],
 
   "asian_identity": [
-    "an unmistakably adult mainland Chinese woman, 22 to 23 years old, with classic Chinese beauty facial structure, an elegant oval face, elongated phoenix-shaped almond eyes, refined natural nose bridge, petite rosebud mouth shape, fair-to-light neutral complexion, and fresh gentle presence",
-    "a clearly adult East Asian Chinese woman around 22 or 23 with a soft egg-shaped face, willow-leaf brows, bright almond-phoenix eyes with slightly lifted outer corners, natural black hair, smooth youthful lower-face contours, and a light closed-mouth smile",
-    "an adult Chinese / East Asian woman in her early twenties with clean mainland Chinese facial balance, slender natural brows, tapered almond eyes, a delicate high East Asian nose bridge, softly full small lips in a bright sheer peach-pink balm, barely-there makeup, and bright rested energy",
-    "a Chinese woman around 23 with lively dark almond-phoenix eyes, a graceful oval facial outline, natural black or very dark brown hair, compact rosebud mouth with bright sheer peach-pink balm, and a fresh early-twenties adult expression",
-    "an adult East Asian Chinese woman with unforced real-life presence, clear 22-23 age impression, fair neutral skin, soft rounded cheeks, fine willow-like brows, clear bright eyes, and quiet youthful feminine appeal"
+    "an unmistakably adult mainland Chinese woman, 22 to 23 years old, with classic Chinese beauty facial structure, a slim melon-seed face, narrow V-line lower face, elongated phoenix-shaped almond eyes, refined high East Asian nose bridge, small refined nostrils, petite narrow rosebud mouth shape, fair-to-light neutral complexion, and fresh gentle presence",
+    "a clearly adult East Asian Chinese woman around 22 or 23 with a delicate melon-seed oval face, softly tapered chin, willow-leaf brows, bright almond-phoenix eyes with slightly lifted outer corners, natural black hair, smooth narrow lower-face contours, and a light closed-mouth smile",
+    "an adult Chinese / East Asian woman in her early twenties with clean mainland Chinese facial balance, slender natural brows, tapered almond eyes, a delicate high East Asian nose bridge with a narrow nose base, small refined nostrils, softly full small lips in a bright sheer peach-pink balm, barely-there makeup, and bright rested energy",
+    "a Chinese woman around 23 with lively dark almond-phoenix eyes, a graceful slim melon-seed facial outline, natural black or very dark brown hair, compact narrow rosebud mouth with bright sheer peach-pink balm, and a fresh early-twenties adult expression",
+    "an adult East Asian Chinese woman with unforced real-life presence, clear 22-23 age impression, fair neutral skin, slim cheek-to-jaw transition, fine willow-like brows, clear bright eyes, small delicate nose, and quiet youthful feminine appeal"
   ],
 
   "adult_lifestyle_face_moods": [
-    "adult first-love freshness profile: soft heart-oval face, bright clear apricot-almond eyes with a slight phoenix lift, delicate straight nose bridge, compact rosebud mouth shape, sheer peach-pink lip balm, rounded cheeks, and light curious warmth",
-    "young newlywed softness profile: graceful egg-shaped face, gentle willow brows, elongated warm almond eyes, refined higher East Asian nose bridge, small softly full mouth with a clear cupid's bow, bright translucent pink-coral lips, calm affectionate smile, and polished but low-makeup femininity",
-    "Jiangnan-style delicate beauty profile: slim oval face with soft cheek volume, fine arched willow brows, narrow luminous phoenix eyes, elegant straight nose line, petite rosebud mouth shape, clear light apricot-pink lip-balm color, and quiet gentle charm",
-    "modern sweet Chinese beauty profile: soft round-oval face, crescent smiling eyes with lifted outer corners, neat natural brows, small refined nose tip, compact bow-shaped lips, fresh glossy peach-pink lip balm, and lively relaxed expression",
-    "elegant young wife profile: soft melon-seed oval face, balanced cheek fullness, calm elongated almond eyes, defined but natural nose bridge, small full lips in sheer bright rose-pink balm, composed warm gaze, and fresh adult softness",
-    "clean young-adult neighbor-style beauty profile: small oval face, smooth youthful lower face, clear dark almond eyes, soft straight brows, delicate natural nose, petite rosebud mouth shape with light pink balm, relaxed friendly smile, and airy low-makeup freshness"
+    "adult first-love freshness profile: slim heart-shaped melon-seed face, softly narrow cheek contour, bright clear apricot-almond eyes with a slight phoenix lift, delicate straight high nose bridge, small refined nostrils, petite narrow rosebud mouth shape, sheer peach-pink lip balm, and light curious warmth",
+    "young newlywed softness profile: graceful melon-seed oval face, narrow V-line lower face, gentle willow brows, elongated warm almond eyes, refined higher East Asian nose bridge with a small nose base, softly full but narrow mouth with a clear cupid's bow, bright translucent pink-coral lips, calm affectionate smile, and polished low-makeup femininity",
+    "Jiangnan-style delicate beauty profile: slim melon-seed face with delicate cheek softness, fine arched willow brows, narrow luminous phoenix eyes, elegant straight nose line, small refined nostrils, petite narrow rosebud mouth shape, clear light apricot-pink lip-balm color, and quiet gentle charm",
+    "modern sweet Chinese beauty profile: small melon-seed face, crescent smiling eyes with lifted outer corners, neat natural brows, taller refined nose bridge, small nose tip and nostrils, compact bow-shaped narrow lips, fresh glossy peach-pink lip balm, and lively relaxed expression",
+    "elegant young wife profile: slim melon-seed face, softly tapered chin, calm elongated almond eyes, defined but natural high nose bridge, small refined nostrils, small full lips with narrow mouth width in sheer bright rose-pink balm, composed warm gaze, and fresh adult softness",
+    "clean young-adult neighbor-style beauty profile: slim small melon-seed face, smooth narrow youthful lower face, clear dark almond eyes, soft straight brows, delicate tall nose bridge with small nostrils, petite narrow rosebud mouth shape with light pink balm, relaxed friendly smile, and airy low-makeup freshness"
   ],
 
   "face_types": {
@@ -83,13 +83,13 @@
       "polished Chinese professional face with approachable warmth, natural brows, dark almond eyes, soft smile, natural low-saturation peach-beige lips, refined adult femininity"
     ],
     "生活场景系": [
-      "classic young-adult Chinese beauty face, soft egg-shaped oval outline, willow-leaf brows, elongated almond-phoenix eyes, refined natural high nose bridge, compact rosebud mouth shape with bright sheer peach-pink balm, and a tiny closed-mouth smile",
-      "clean mainland Chinese East Asian beauty face with fair neutral skin, soft cheek fullness, slender curved brows, bright almond eyes with slightly lifted outer corners, delicate nose tip, light translucent rose-pink lips, and a gentle candid smile",
-      "fresh adult Chinese first-love beauty face with graceful heart-oval facial balance, tapered eye corners, clear dark pupils, a slim but natural East Asian nose bridge, petite softly full mouth, smooth cheeks, and warm approachable eyes",
-      "fresh washed-face adult beauty with smooth cheeks, subtle under-eye softness, calm bright almond-phoenix eyes, refined nose bridge, bright peach-pink lip-balm lips, and a relaxed first-look-at-camera expression",
-      "casual home-life Chinese beauty face with rounded cheeks, elegant oval jawline, delicate lifted eye shape, fine natural brows, a defined but soft nose bridge, compact rosebud mouth, and an unforced closed-lip smile",
-      "bright early-twenties adult East Asian Chinese beauty face with fair-to-light neutral complexion, willow-like brows, luminous elongated almond eyes, smooth youthful lower face, soft cheek curve, and a curious gentle expression",
-      "natural everyday Chinese clean-beauty face with soft facial planes, refined lifted almond-eye silhouette, delicate nose bridge, bright sheer pink small lips, relaxed brows, and fresh 22-23 adult warmth"
+      "classic young-adult Chinese beauty face, slim melon-seed outline, willow-leaf brows, elongated almond-phoenix eyes, refined natural high nose bridge, small refined nostrils, compact narrow rosebud mouth shape with bright sheer peach-pink balm, and a tiny closed-mouth smile",
+      "clean mainland Chinese East Asian beauty face with fair neutral skin, slim cheek-to-jaw transition, slender curved brows, bright almond eyes with slightly lifted outer corners, delicate raised nose bridge, small nose tip and nostrils, light translucent rose-pink narrow lips, and a gentle candid smile",
+      "fresh adult Chinese first-love beauty face with graceful melon-seed facial balance, tapered eye corners, clear dark pupils, a slim but natural high East Asian nose bridge, narrow nose base, petite softly full narrow mouth, smooth small lower face, and warm approachable eyes",
+      "fresh washed-face adult beauty with smooth cheeks, narrow lower-face contour, softly tapered chin, calm bright almond-phoenix eyes, refined higher nose bridge, bright peach-pink lip-balm lips with compact mouth width, and a relaxed first-look-at-camera expression",
+      "casual home-life Chinese beauty face with an elegant slim jawline, small V-line lower face, delicate lifted eye shape, fine natural brows, a defined but soft high nose bridge, small nostrils, compact narrow rosebud mouth, and an unforced closed-lip smile",
+      "bright early-twenties adult East Asian Chinese beauty face with fair-to-light neutral complexion, willow-like brows, luminous elongated almond eyes, smooth narrow youthful lower face, softly tapered chin, petite nose base, and a curious gentle expression",
+      "natural everyday Chinese clean-beauty face with soft facial planes, refined lifted almond-eye silhouette, delicate taller nose bridge, small refined nostrils, bright sheer pink small narrow lips, relaxed brows, and fresh 22-23 adult warmth"
     ]
   },
 
@@ -113,7 +113,7 @@
     "fresh fair neutral complexion with faint healthy cheek warmth, restrained cheek color, and believable skin softness",
     "smooth clean skin with rested under-eye area, soft cheek highlights, and a transparent natural finish",
     "healthy fair neutral skin with restrained glow, cool-neutral undertone, soft natural contour, and realistic pore-level detail",
-    "fresh clean early-twenties skin with soft cheek fullness, natural color, and understated low-makeup texture"
+    "fresh clean early-twenties skin with delicate cheek softness, natural color, slim lower-face clarity, and understated low-makeup texture"
   ],
 
   "body_types": [
@@ -130,12 +130,12 @@
   ],
 
   "body_types_lifestyle_full": [
-    "a clearly adult but soft everyday feminine figure with natural rounded upper-body fullness, a defined waist suggestion, relaxed shoulders, and believable proportions through a modest fitted knit top",
-    "a fresh young-adult body silhouette with a naturally fuller upper-body-to-waist curve, soft waist definition, balanced hips, and fully dressed lifestyle styling",
-    "a natural adult feminine build with visible upper-body fullness, gentle collarbone line, relaxed posture, and supportive ribbed fabric creating a soft rounded silhouette",
-    "a softly rounded adult figure with realistic upper-body volume, clear waist cue, ordinary healthy proportions, and comfortable fitted casual clothing",
-    "a balanced early-twenties adult silhouette with soft shoulders, naturally rounded upper-body contour, defined waist line, and unforced home-life body language",
-    "a healthy everyday feminine figure with natural fullness through the upper body, subtle waist-to-hip shape, grounded posture, and relaxed everyday posing"
+    "a clearly adult but soft everyday feminine figure with fuller rounded upper-body fullness, a defined waist suggestion, relaxed shoulders, and believable proportions through a modest supportive fitted knit top",
+    "a fresh young-adult body silhouette with a noticeably fuller but realistic upper-body-to-waist curve, soft waist definition, balanced hips, and fully dressed lifestyle styling",
+    "a natural adult feminine build with visible well-supported upper-body fullness, gentle collarbone line, relaxed posture, and structured ribbed fabric creating a fuller rounded silhouette",
+    "a softly rounded adult figure with realistic fuller upper-body volume, clear waist cue, ordinary healthy proportions, and comfortable fitted casual clothing",
+    "a balanced early-twenties adult silhouette with soft shoulders, naturally fuller rounded upper-body contour, defined waist line, and unforced home-life body language",
+    "a healthy everyday feminine figure with natural fullness through the upper body, subtle waist-to-hip shape, grounded posture, and relaxed everyday posing with the torso unobstructed"
   ],
 
   "body_types_sexy": [
@@ -210,12 +210,12 @@
       "champagne silk blouse with sleeves rolled once, high-waisted wool trousers, blazer draped over shoulders, subtle fabric sheen, understated office-fashion sensuality"
     ],
     "居家": [
-      "supportive ivory ribbed knit top with a modest scoop neckline tucked into relaxed high-waisted lounge pants, clear waist definition, natural rounded upper-body fullness visible, and bright morning apartment light",
-      "light cream short cardigan worn open over a supportive ribbed tank with wide-leg lounge trousers, fully dressed casual ease, soft collarbone line, and rounded upper-body-to-waist contour through the fabric",
-      "lightweight open overshirt over a structured ribbed fitted tank and straight-leg jeans, rolled sleeves, coffee-at-home freshness, balanced feminine silhouette, and torso clearly visible",
-      "simple pale blue fitted cotton tee with high-waisted linen trousers, natural daylight, fabric smoothly following a realistic rounded upper-body shape and waist line",
-      "soft wrap-style knit top with relaxed lounge pants, hair loosely tied back, warm kitchen-morning styling, clean neckline, clear waist cue, and natural rounded upper-body contour",
-      "clean white short cardigan over a modest fitted knit camisole-style top and relaxed jeans, fully dressed home-life styling, soft neckline, visible waist, and natural feminine fullness"
+      "supportive ivory ribbed knit top with a modest scoop neckline tucked into relaxed high-waisted lounge pants, clear waist definition, fuller rounded upper-body fullness visible through structured fabric, and bright morning apartment light",
+      "light cream short cardigan worn open over a supportive ribbed tank with wide-leg lounge trousers, fully dressed casual ease, soft collarbone line, and fuller rounded upper-body-to-waist contour through the fabric",
+      "lightweight open overshirt over a structured ribbed fitted tank and straight-leg jeans, rolled sleeves, coffee-at-home freshness, fuller balanced feminine silhouette, and torso clearly visible from the front",
+      "simple pale blue fitted cotton tee with high-waisted linen trousers, natural daylight, fabric smoothly following a realistic fuller rounded upper-body shape and waist line",
+      "soft wrap-style knit top with relaxed lounge pants, hair loosely tied back, warm kitchen-morning styling, clean neckline, clear waist cue, and fuller rounded upper-body contour",
+      "clean white short cardigan over a modest fitted knit camisole-style top and relaxed jeans, fully dressed home-life styling, soft neckline, visible waist, and natural fuller feminine fullness"
     ],
     "邻家": [
       "simple white tee tucked into relaxed denim shorts, white sneakers, ponytail, approachable everyday charm",
@@ -242,11 +242,11 @@
       "standing half-body portrait with hands adjusting the hair or collar, subtle movement, and unforced body language"
     ],
     "生活半身": [
-      "waist-up three-quarter home portrait leaning lightly toward camera, one hand brushing hair near the cheek, relaxed shoulders, torso and waist unobstructed",
-      "standing near a bright window in a waist-up frame, one hand lightly holding the cardigan edge near the waist, the other relaxed by the side, clear bust-to-waist line visible",
-      "casual sofa-side half-body portrait with shoulders turned slightly three-quarters, hands relaxed near the waist, lively eye contact, and natural breathing posture",
-      "front-facing waist-up portrait with a subtle shoulder turn, one hand adjusting the collar near the neckline, open torso, clear waist cue, and gentle closed-mouth smile",
-      "home-life candid half-body shot captured mid-gesture, one hand tucking hair behind the ear, relaxed mouth corners, visible neckline, and natural full upper-body contour"
+      "front-facing waist-up home portrait leaning lightly toward camera, one hand brushing hair near the cheek, relaxed shoulders, torso and waist unobstructed",
+      "standing near a bright window in a front-facing waist-up frame, one hand lightly holding the cardigan edge near the waist, the other relaxed by the side, clear fuller upper-body-to-waist line visible",
+      "casual sofa-side half-body portrait with shoulders turned only slightly three-quarters, hands relaxed near the waist, open torso, lively eye contact, and natural breathing posture",
+      "front-facing waist-up portrait with a subtle shoulder turn, one hand adjusting the collar near the neckline, open torso, clear waist cue, fuller upper-body silhouette, and gentle closed-mouth smile",
+      "home-life candid half-body shot captured mid-gesture, one hand tucking hair behind the ear, relaxed mouth corners, visible neckline, open torso, and natural fuller upper-body contour"
     ],
     "职场半身": [
       "waist-up office-fashion portrait at a three-quarter angle, one hand lightly touching the blazer lapel, relaxed shoulders, direct bright eye contact",
@@ -281,18 +281,18 @@
 
   "expressions": {
     "微笑": [
-      "light closed-mouth smile with lively clear eyes, relaxed brows, soft rounded cheeks, transparent lip-balm lips, and approachable 22-23 adult warmth",
+      "light closed-mouth smile with lively clear eyes, relaxed brows, delicate cheek softness, transparent lip-balm lips, and approachable 22-23 adult warmth",
       "subtle tiny smile with lips gently closed, bright engaged eyes, smooth lower-face contours, and a fresh early-twenties adult mood",
-      "gentle candid smile with relaxed mouth corners, clear dark eyes, soft cheek fullness, and natural low-makeup warmth",
+      "gentle candid smile with relaxed mouth corners, clear dark eyes, delicate cheek softness, and natural low-makeup warmth",
       "soft closed-lip smile with calm brows, smooth cheek area, compact small mouth shape with bright translucent peach-pink balm, and a relaxed friendly expression"
     ],
     "清新微笑": [
-      "soft fresh closed-mouth small smile with clear dark eyes, relaxed brows, smooth rounded cheeks, transparent balm lips, and a 22-23 adult first-love softness",
-      "gentle relaxed closed-lip smile with lively eyes, soft cheek volume, candid easy posing, and clean mainland Chinese young-adult warmth",
+      "soft fresh closed-mouth small smile with clear dark eyes, relaxed brows, smooth delicate cheeks, transparent balm lips, and a 22-23 adult first-love softness",
+      "gentle relaxed closed-lip smile with lively eyes, delicate cheek softness, candid easy posing, and clean mainland Chinese young-adult warmth",
       "tiny natural half-smile with rested eyes, smooth lower-face contours, barely tinted bright peach-pink lip-balm lips, and understated clean makeup",
-      "light candid smile with open friendly eyes, relaxed jaw, soft cheek fullness, fair neutral skin, and a fresh adult East Asian expression",
+      "light candid smile with open friendly eyes, relaxed narrow jaw, delicate cheek softness, fair neutral skin, and a fresh adult East Asian expression",
       "quiet sweet closed-mouth smile with clear catchlights, calm mouth corners, soft friendly warmth, and relaxed early-twenties ease",
-      "fresh first-meeting smile with bright eyes, relaxed facial muscles, compact petite mouth shape, light glossy peach-pink balm, rounded cheeks, and gentle approachable energy"
+      "fresh first-meeting smile with bright eyes, relaxed facial muscles, compact petite mouth shape, light glossy peach-pink balm, delicate cheeks, and gentle approachable energy"
     ],
     "性感": [
       "warm confident gaze with bright open eyes, natural peach lips slightly parted, and tasteful youthful adult charm",
@@ -459,7 +459,7 @@
 
   "enhancement_keywords": [
     "with a few fine flyaway hairs, clean cheek highlights, relaxed facial muscles, and real fabric creases",
-    "with soft rounded cheeks, bright believable catchlights, transparent lip-balm sheen, and natural skin texture",
+    "with delicate cheek softness, bright believable catchlights, transparent lip-balm sheen, and natural skin texture",
     "with relaxed shoulders, gentle hand tension, visible waist line, and natural breathing posture",
     "with subtle clothing wrinkles, soft light falloff across the face, clean fair skin color, and grounded depth",
     "with fine baby hairs near the temples, smooth youthful cheek softness, and lived-in home materials around her"
@@ -469,6 +469,6 @@
     "standard": "cartoon, anime, 3d render, cgi, sketch, drawing, painting, illustration, disfigured, deformed, blurry, watermark, text, extra limbs, extra fingers, mutated hands, bad anatomy",
     "asian_focused": "Western face, Caucasian features, European features, Southeast Asian face, South Asian face, Latin face, mixed-race Eurasian face, blonde hair, blue eyes, green eyes, non-Asian features, Westernized mixed-race face, non-Chinese facial structure, bronzed tan skin, heavy Western glam makeup",
     "quality": "low quality, pixelated, overexposed, underexposed, amateur, poorly lit, oversharpened skin, HDR halo, crunchy detail, artificial contrast",
-    "anti_ai": "beauty filter, over-retouched skin, plastic skin, waxy skin, overly smooth skin, porcelain doll, mannequin, uncanny valley, too perfect, extreme symmetry, digital art look, artificial lighting, studio render, hyperrealistic 3d, unrealistically large eyes, impossible body proportions, unnaturally tiny waist, distorted chest anatomy, flattened chest, flat chest, small chest, underdeveloped figure, boxy torso, shapeless oversized clothing, bulky shapeless sleeves, hands covering chest, arms blocking torso, side profile hiding torso, countertop hiding body, androgynous torso, collapsed upper-body silhouette, exaggerated fake curves, glam retouch, instagram face, teen, underage, childlike face, school uniform, childish styling, middle-aged, older woman, woman in her 30s, over 30 years old, aged face, mature face, mature executive, older manager, aged professional, gaunt cheeks, hollow cheeks, deep wrinkles, heavy nasolabial folds, pronounced smile lines, tired under-eye bags, tired face, sagging skin, acne, pimples, facial blemishes, skin breakouts, red bumps, acne scars, rash, dark spots, dirty skin, many moles, mole clusters, freckle clusters, stiff expression, rigid expression, blank stare, awkward smile, forced smile, dead eyes, stern expression, severe expression, world-weary expression, tired half-lidded eyes, mature seductive smirk, manager-like composure, cold intimidating stare, hard cheekbones, sharp mature jawline, dark red lipstick, burgundy lips, purple lipstick, mauve lips, wine-colored lips, red-brown lipstick, brown lipstick, brick-red lips, dark rose lipstick, heavy lipstick, thick lip makeup, overdrawn lips, heavy smoky eye makeup, blonde highlights, balayage hair, bleached hair, orange-brown dyed hair"
+    "anti_ai": "beauty filter, over-retouched skin, plastic skin, waxy skin, overly smooth skin, porcelain doll, mannequin, uncanny valley, too perfect, extreme symmetry, digital art look, artificial lighting, studio render, hyperrealistic 3d, unrealistically large eyes, impossible body proportions, unnaturally tiny waist, distorted chest anatomy, flattened chest, flat chest, small chest, underdeveloped figure, boxy torso, shapeless oversized clothing, bulky shapeless sleeves, hands covering chest, arms blocking torso, side profile hiding torso, countertop hiding body, androgynous torso, collapsed upper-body silhouette, exaggerated fake curves, wide face, broad face, wide round face, square jaw, broad jawline, wide lower face, heavy jaw, wide chin, large nostrils, flared nostrils, wide nostril wings, bulbous nose, wide nose base, wide mouth, broad mouth, over-wide lips, glam retouch, instagram face, teen, underage, childlike face, school uniform, childish styling, middle-aged, older woman, woman in her 30s, over 30 years old, aged face, mature face, mature executive, older manager, aged professional, gaunt cheeks, hollow cheeks, deep wrinkles, heavy nasolabial folds, pronounced smile lines, tired under-eye bags, tired face, sagging skin, acne, pimples, facial blemishes, skin breakouts, red bumps, acne scars, rash, dark spots, dirty skin, many moles, mole clusters, freckle clusters, stiff expression, rigid expression, blank stare, awkward smile, forced smile, dead eyes, stern expression, severe expression, world-weary expression, tired half-lidded eyes, mature seductive smirk, manager-like composure, cold intimidating stare, hard cheekbones, sharp mature jawline, dark red lipstick, burgundy lips, purple lipstick, mauve lips, wine-colored lips, red-brown lipstick, brown lipstick, brick-red lips, dark rose lipstick, heavy lipstick, thick lip makeup, overdrawn lips, heavy smoky eye makeup, blonde highlights, balayage hair, bleached hair, orange-brown dyed hair"
   }
 }
