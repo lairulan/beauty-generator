@@ -1,21 +1,21 @@
 {
-  "version": "12.15",
-  "description": "Imagen 4 Ultra 优化版 - 年轻成熟女性自然语言摄影描述风格，强化当代东亚中日韩审美脸、22-23 岁年轻成人感、干净健康肤质、年轻自然表情、轻精致生活杂志吸引力、自然深色发型、自然唇色、安全日常场景、自然丰满女性轮廓和无遮挡构图",
+  "version": "12.16",
+  "description": "Imagen 4 Ultra 优化版 - 年轻成熟女性自然语言摄影描述风格，强化当代东亚中日韩审美脸、22-23 岁年轻成人感、清新放松表情、干净健康肤质、轻精致生活杂志吸引力、自然深色发型、自然唇色、安全日常场景、自然丰满女性轮廓和无遮挡构图",
 
   "base_quality": [
     "A clean lifestyle beauty editorial photographed in flattering available light, with healthy skin, natural color response, and warm attractive presence",
-    "A fresh lifestyle magazine portrait captured on a full-frame camera, with soft flattering tones, restrained contrast, and polished photogenic facial detail",
-    "A polished lifestyle photograph with natural light, clear healthy complexion, soft depth of field, and unforced body language",
+    "A fresh lifestyle magazine portrait captured on a full-frame camera, with soft flattering tones, restrained contrast, and clean photogenic facial detail",
+    "A fresh lifestyle photograph with natural light, clear healthy complexion, soft depth of field, and unforced body language",
     "A warm candid beauty portrait with subtle filmic color, realistic light falloff, flattering catchlights, and a real moment feeling",
     "A magazine-quality portrait that still feels human and lightly retouched, with clean skin, fabric detail, attractive facial balance, and grounded composition"
   ],
 
   "asian_identity": [
-    "an adult Chinese woman in her early twenties, 22 to 23 years old, with contemporary East Asian C-beauty facial aesthetics, youthful cheek fullness, fair-to-light neutral complexion, and refined feminine presence",
+    "an adult Chinese woman in her early twenties, 22 to 23 years old, with contemporary East Asian clean-beauty facial aesthetics, youthful cheek fullness, fair-to-light neutral complexion, and fresh feminine presence",
     "a clearly adult East Asian Chinese woman around 22 or 23 with a soft oval face, dark almond eyes, natural black hair, bright rested eyes, and a smooth youthful lower face",
-    "an adult mainland Chinese / East Asian woman in her early twenties with elegant young femininity, gentle facial planes, neat natural brows, clean C-beauty styling, and fresh rested energy",
-    "a Chinese woman around 23 with lively East Asian facial features, soft facial outline, dark eyes, low-saturation peach-beige lips, youthful softness, and confident adult charm",
-    "an adult East Asian Chinese woman with an unforced real-life presence, fresh 22-23 age impression, natural black or very dark brown hair, and refined feminine appeal"
+    "an adult mainland Chinese / East Asian woman in her early twenties with fresh young femininity, gentle facial planes, neat natural brows, clean East Asian styling, and fresh rested energy",
+    "a Chinese woman around 23 with lively East Asian facial features, soft facial outline, dark eyes, low-saturation peach-beige lips, youthful softness, and relaxed adult charm",
+    "an adult East Asian Chinese woman with an unforced real-life presence, fresh 22-23 age impression, natural black or very dark brown hair, and soft feminine appeal"
   ],
 
   "face_types": {
@@ -75,11 +75,11 @@
     ],
     "生活场景系": [
       "photogenic everyday young-adult East Asian Chinese face, soft oval facial outline, fair-to-light neutral skin, bright rested dark eyes, soft cheeks, and warm easy smile",
-      "cozy homebody C-beauty face with clean skincare glow, gentle smile, dark almond eyes, youthful lower-face softness, and delicate East Asian facial balance",
-      "clean understated C-beauty makeup with balanced delicate East Asian features, warm gentle smile, slightly tousled natural black hair, and polished everyday beauty",
+      "cozy homebody East Asian clean-beauty face with clean skincare glow, gentle small smile, dark almond eyes, youthful lower-face softness, and delicate East Asian facial balance",
+      "clean understated East Asian makeup with balanced delicate features, relaxed small smile, slightly tousled natural black hair, and fresh everyday beauty",
       "fresh clear complexion with smooth lower-face contours, lively half-smile, morning coffee warmth, and clean soft oval East Asian facial balance",
       "photogenic casual weekend Chinese face with bright smiling dark eyes, soft cheek fullness, delicate nose bridge, clean oval contours, and approachable charm",
-      "warm cooking-at-home East Asian lifestyle beauty, clean cheeks, natural black hair tied back with loose strands, bright gentle smile, and photogenic C-beauty facial balance",
+      "warm cooking-at-home East Asian lifestyle beauty, clean cheeks, natural black hair tied back with loose strands, soft fresh smile, and photogenic East Asian facial balance",
       "photogenic young adult Chinese lifestyle face with light peach blush, clean brows, soft oval face, dark almond eyes, and lively attractive 22-23 age impression"
     ]
   },
@@ -198,7 +198,7 @@
     "居家": [
       "softly fitted ivory ribbed knit top with a modest neckline tucked into relaxed high-waisted lounge pants, neat natural black hair, bright morning apartment light, clear waist definition, and natural full upper-body shape visible",
       "cropped open knit cardigan over a supportive ribbed scoop-neck tank with wide-leg lounge trousers, cozy sofa setting, fully dressed casual ease, natural full bust-to-waist contour visible",
-      "lightweight open overshirt over a fitted ribbed tank and straight-leg jeans, rolled sleeves, coffee-at-home freshness, balanced feminine silhouette, no bulky layers, fabric following a natural full upper-body curve",
+      "lightweight open overshirt over a fitted ribbed tank and straight-leg jeans, rolled sleeves, coffee-at-home freshness, balanced feminine silhouette, light fitted layers, fabric following a natural full upper-body curve",
       "simple softly fitted ribbed knit top with relaxed high-waisted linen trousers, natural daylight, fabric gently shaping the bust and waist without looking tight",
       "soft wrap-style knit top with soft lounge pants, hair loosely tied back, warm kitchen-morning styling, clear waist and collarbone line, torso visible, natural rounded upper-body contour"
     ],
@@ -259,10 +259,17 @@
 
   "expressions": {
     "微笑": [
-      "warm genuine smile with lively smiling eyes, soft cheek lift, relaxed mouth corners, and approachable charm",
-      "subtle natural smile with bright engaged eyes, soft cheek fullness, and a fresh early-twenties mood",
-      "bright easy smile showing teeth, eyes alive with candid warmth and natural attractiveness",
-      "soft closed-lip smile with relaxed brows, natural peach lips, gentle cheek lift, and an approachable youthful look"
+      "light fresh smile with lively clear eyes, relaxed mouth corners, soft rounded cheeks, and approachable early-twenties charm",
+      "subtle natural smile with bright engaged eyes, smooth lower-face contours, and a fresh 22-23 mood",
+      "gentle small smile with lips softly parted, eyes alive with candid warmth and natural attractiveness",
+      "soft closed-lip smile with relaxed brows, natural peach lips, smooth cheek area, and an approachable youthful look"
+    ],
+    "清新微笑": [
+      "soft youthful small smile with bright clear eyes, relaxed brows, smooth cheeks, and fresh 22-23 adult softness",
+      "gentle relaxed smile with lips softly closed, lively dark eyes, soft rounded cheeks, and clean young-adult charm",
+      "fresh easy half-smile with rested eyes, smooth lower-face contours, natural peach-beige lips, and understated clean makeup",
+      "light candid smile with open friendly eyes, relaxed mouth corners, soft cheek fullness, and a clean East Asian young-adult look",
+      "quiet sweet smile with clear catchlights, relaxed jaw, smooth cheek area, and fresh early-twenties warmth"
     ],
     "性感": [
       "warm confident gaze with bright open eyes, natural peach lips slightly parted, and tasteful youthful adult charm",
@@ -428,7 +435,7 @@
 
   "enhancement_keywords": [
     "with a few flyaway hairs, clean cheek highlights, and real fabric creases",
-    "with a soft cheek lift, clean cheek glow, and believable catchlights",
+    "with soft rounded cheeks, clean cheek glow, and believable catchlights",
     "with a relaxed shoulder line, gentle hand tension, and natural breathing posture",
     "with subtle wrinkles in clothing, small light falloff across the face, and grounded depth",
     "with fine baby hairs, clean facial highlights, and the texture of lived-in materials around her"
