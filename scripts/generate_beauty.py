@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-美女生成 V12.17 - Google Imagen 4 Ultra 双 Key 主力 + 豆包 Seedream 4.5 备选
+美女生成 V12.18 - Google Imagen 4 Ultra 双 Key 主力 + 豆包 Seedream 4.5 备选
 - Google Imagen 4 Ultra 作为主力引擎，支持主备 Key 轮换
 - 豆包 Seedream 4.5 作为 fallback
 - 自动重试 + 429 指数退避（最多 3 次）
@@ -24,7 +24,7 @@ from datetime import date, datetime
 from pathlib import Path
 
 
-VERSION = "12.17.0"
+VERSION = "12.18.0"
 
 
 def _get_ssl_context():
@@ -150,17 +150,17 @@ def get_default_library() -> dict:
     """内置默认元素库（prompt_library.json 缺失时的 fallback）"""
     return {
         "base_quality": [
-            "Clean lifestyle beauty editorial, flattering available light, healthy skin, warm attractive presence",
-            "Fresh lifestyle magazine portrait, full-frame camera, soft flattering tones, clean photogenic facial detail",
+            "Clean lifestyle beauty portrait, flattering available light, fair neutral skin, natural color response, fresh relaxed presence",
+            "Fresh relaxed lifestyle portrait, full-frame camera, soft neutral daylight tones, clean youthful facial detail",
             "Fresh lifestyle photograph, natural light, clear healthy complexion, soft depth of field",
             "Warm candid beauty portrait, subtle filmic color, flattering catchlights, real moment feeling",
-            "Magazine-quality portrait that still feels human, lightly retouched, clean skin, attractive facial balance"
+            "Clean everyday beauty portrait that still feels human, lightly retouched, fresh skin, youthful facial softness"
         ],
         "asian_identity": [
-            "adult Chinese woman in her early twenties, 22 to 23 years old, contemporary East Asian first-love facial aesthetic",
+            "adult Chinese woman in her early twenties, 22 to 23 years old, contemporary East Asian first-love facial aesthetic, transparent lip-balm lips",
             "adult East Asian Chinese woman around 22 or 23 with a soft oval face, dark almond eyes, natural black hair, rounded cheek softness, and a smooth youthful lower face",
             "mainland Chinese / East Asian woman in her early twenties with gentle facial planes, neat natural brows, soft first-love face styling, and fresh rested energy",
-            "Chinese woman around 23 with lively East Asian facial features, soft facial outline, dark eyes, low-saturation peach-beige lips, youthful rounded cheeks, and relaxed adult charm",
+            "Chinese woman around 23 with lively East Asian facial features, soft facial outline, dark eyes, barely tinted pale nude-pink lips with transparent lip-balm finish, youthful rounded cheeks, and relaxed adult charm",
             "adult East Asian Chinese woman with fresh 22-23 age impression, natural black or very dark brown hair, and soft youthful feminine appeal"
         ],
         "face_types": {
@@ -234,13 +234,13 @@ def get_default_library() -> dict:
                 "polished Chinese professional face with approachable warmth, natural brows, dark almond eyes, soft smile, natural low-saturation peach-beige lips"
             ],
             "生活场景系": [
-                "photogenic everyday young-adult East Asian Chinese first-love face, soft oval facial outline, fair-to-light neutral skin, bright rested dark eyes, rounded cheeks, tiny closed-lip smile",
+                "photogenic everyday young-adult East Asian Chinese first-love face, soft oval facial outline, fair-to-light neutral skin, bright rested dark eyes, rounded cheeks, transparent lip-balm lips, tiny closed-lip smile",
                 "cozy homebody East Asian clean-beauty face with clean skincare glow, gentle closed-mouth smile, dark almond eyes, youthful lower-face softness, delicate East Asian facial balance",
-                "clean understated East Asian makeup with balanced delicate features, relaxed closed-lip small smile, slightly tousled natural black hair, fresh everyday beauty",
+                "barely-there East Asian makeup with balanced delicate features, relaxed closed-lip small smile, almost bare pale nude-pink lips, slightly tousled natural black hair, fresh everyday beauty",
                 "fresh clear complexion with smooth lower-face contours, tiny relaxed half-smile, morning coffee warmth, clean soft oval East Asian facial balance",
                 "photogenic casual weekend Chinese first-love face with bright clear dark eyes, soft cheek fullness, delicate nose bridge, clean oval contours, approachable charm",
                 "warm cooking-at-home East Asian lifestyle beauty, clean cheeks, natural black hair tied back with loose strands, tiny fresh closed-lip smile, photogenic East Asian facial balance",
-                "photogenic young adult Chinese lifestyle face with light peach blush, clean brows, soft oval face, dark almond eyes, rounded cheeks, lively attractive 22-23 age impression"
+                "photogenic young adult Chinese lifestyle face with faint baby-pink cheek warmth, clean brows, soft oval face, dark almond eyes, rounded cheeks, transparent lip-balm lips, lively attractive 22-23 age impression"
             ]
         },
         "hair_styles": [
@@ -256,9 +256,9 @@ def get_default_library() -> dict:
             "half-up half-down style, romantic braids, ethereal beauty"
         ],
         "skin_textures": [
-            "clear healthy skin, natural soft glow, subtle blush",
-            "dewy clean skin, luminous complexion, even tone, radiant",
-            "creamy smooth skin, soft focus, photorealistic and clean",
+            "clear fair-to-light neutral skin, natural soft glow, faint cheek warmth",
+            "dewy clean fair skin, luminous complexion, even neutral tone",
+            "creamy smooth fair skin, soft focus, photorealistic and clean",
             "fair-to-light neutral skin, healthy natural glow, clear cheeks",
             "milky fresh skin, translucent quality, soft detail, ethereal glow"
         ],
@@ -374,7 +374,7 @@ def get_default_library() -> dict:
             "清新微笑": [
                 "soft youthful closed-lip small smile with bright clear eyes, relaxed brows, smooth cheeks, fresh 22-23 adult softness",
                 "gentle relaxed closed-mouth smile with lively dark eyes, soft rounded cheeks, clean young-adult charm",
-                "fresh tiny half-smile with rested eyes, smooth lower-face contours, natural peach-beige lips, understated clean makeup",
+                "fresh tiny half-smile with rested eyes, smooth lower-face contours, barely tinted pale nude-pink lip-balm lips, understated clean makeup",
                 "light closed-lip candid smile with open friendly eyes, relaxed mouth corners, soft cheek fullness, clean East Asian young-adult look",
                 "quiet sweet closed-mouth smile with clear catchlights, relaxed jaw, smooth cheek area, fresh early-twenties warmth"
             ],
@@ -620,7 +620,7 @@ class SmartPromptGenerator:
             "Her face should read unmistakably as contemporary East Asian Chinese first-love clean-beauty styling: "
             "soft oval facial outline, fair-to-light neutral complexion, dark almond-shaped eyes, neat natural straight brows, "
             "a gentle refined nose bridge, rounded cheek softness, smooth youthful lower-face contours, natural black or very dark brown hair, "
-            "clean understated makeup, and low-saturation peach-beige lips"
+            "barely-there makeup, transparent lip-balm finish, and almost bare pale nude-pink lips"
         )
 
     def _build_feminine_presence_clause(self, style: str = None, pose_type: str = None) -> str:
@@ -635,7 +635,7 @@ class SmartPromptGenerator:
         if style == "生活场景系":
             return (
                 "Make the image read as a fresh relaxed 22-23 year old adult Chinese lifestyle beauty portrait: bright youthful cheeks, "
-                "natural low-saturation lips, a lightly fitted fashion-casual top, a naturally full but realistic upper-body contour visible, "
+                "barely tinted transparent lip-balm lips, a lightly fitted fashion-casual top, a naturally full but realistic upper-body contour visible, "
                 "clear bust-to-waist shape, defined waist cue, and a front-facing or three-quarter camera angle; keep the outfit fully dressed and modest"
             )
 
@@ -665,8 +665,8 @@ class SmartPromptGenerator:
             "Keep the image grounded in real-world photography with clean healthy skin, balanced facial structure, and restrained retouching",
             "Preserve relaxed posture, natural hand placement, smooth healthy cheeks, clean facial highlights, and candid portrait detail",
             "Keep the subject clearly adult but visibly 22 to 23 years old: youthful cheek fullness, bright eyes, smooth lower-face contours, fresh rested energy, and a soft early-twenties facial impression",
-            "Keep her facial expression attractive and unmistakably early-twenties: lively clear eyes, relaxed brows, smooth rounded cheeks, natural low-saturation lips, a closed-lip small fresh smile, and open friendly energy",
-            "Favor photogenic facial balance, neat natural brows, flattering catchlights, soft peach blush, clean natural makeup, and low-saturation peach lips",
+            "Keep her facial expression attractive and unmistakably early-twenties: lively clear eyes, relaxed brows, smooth rounded cheeks, barely tinted transparent lip-balm lips, a closed-lip small fresh smile, and open friendly energy",
+            "Favor youthful facial softness, neat natural brows, flattering catchlights, faint baby-pink cheek warmth, barely-there makeup, and almost bare pale nude-pink lips",
             "Keep the body clearly adult and feminine with a natural full upper-body contour, defined waist suggestion, realistic proportions, and a softly fitted silhouette"
         ]
 
@@ -678,7 +678,7 @@ class SmartPromptGenerator:
         if style == "性感系":
             clauses.append("Use tasteful sensual fashion styling, form-flattering fabric, confident eye contact, fully clothed elegance, and youthful adult glamour")
         elif style == "生活场景系":
-            clauses.append("Use fresh relaxed lifestyle magazine styling in public or shared home spaces, fully dressed softly fitted casual clothing, clean healthy skin, rested eyes, a lively 22-23 adult East Asian Chinese first-love face, flattering fabric that follows a naturally full bust-to-waist line, a front-facing or three-quarter composition with torso and waist visible, and a soft closed-lip youthful smile")
+            clauses.append("Use fresh relaxed lifestyle styling in public or shared home spaces, fully dressed softly fitted casual clothing, fair-to-light neutral skin, rested eyes, a lively 22-23 adult East Asian Chinese first-love face, transparent lip-balm lips, flattering fabric that follows a naturally full bust-to-waist line, a front-facing or three-quarter composition with torso and waist visible, and a soft closed-lip youthful smile")
         elif style in {"清纯系", "邻家女孩系"}:
             clauses.append("Use understated makeup, lived-in wardrobe detail, and ordinary available light")
         elif style == "职场系":
@@ -706,13 +706,13 @@ class SmartPromptGenerator:
                 "gentle filmic color and a relaxed contemporary portrait mood"
             ],
             "邻家女孩系": [
-                "casual lifestyle cover portrait tone, natural colors, attractive everyday polish",
+                "casual lifestyle portrait tone, natural colors, fresh relaxed everyday softness",
                 "casual lifestyle editorial realism with minimal grading and real-world light",
                 "candid neighborhood photography mood, grounded color, and unforced styling"
             ],
             "生活场景系": [
-                "fresh lifestyle magazine portrait tone, natural color, clean soft light, and flattering facial detail",
-                "quiet home-life editorial realism with warm soft contrast, clean skin, and attractive everyday polish",
+                "fresh lifestyle portrait tone, neutral daylight color, clean soft light, and youthful facial softness",
+                "quiet home-life realism with soft neutral contrast, fair clean skin, and relaxed everyday freshness",
                 "clean lifestyle editorial treatment with believable indoor light, lively eyes, and soft flattering skin"
             ],
             "职场系": [
