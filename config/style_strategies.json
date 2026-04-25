@@ -10,7 +10,7 @@
     "scenes": ["室内", "自然", "居家"],
     "outfit_pool": ["清新", "居家", "邻家"],
     "pose_types": ["写真", "半身", "特写", "全身"],
-    "expression_pool": ["纯欲", "微笑", "性感"]
+    "expression_pool": ["纯欲", "微笑"]
   },
   "甜美系": {
     "scenes": ["自然", "城市", "室内"],
@@ -22,7 +22,7 @@
     "scenes": ["国风"],
     "outfit": "国风",
     "pose_types": ["半身", "全身", "写真"],
-    "expression_pool": ["冷艳", "性感", "忧郁"],
+    "expression_pool": ["微笑", "忧郁", "自信"],
     "use_sexy_body": true
   },
   "职场系": {
@@ -30,7 +30,7 @@
     "outfit": "职场",
     "pose_types": ["职场半身"],
     "lighting": "职场光",
-    "expression_pool": ["自信", "性感", "微笑"],
+    "expression_pool": ["自信", "微笑"],
     "use_sexy_body": true
   },
   "生活场景系": {

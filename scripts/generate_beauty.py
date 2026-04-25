@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-美女生成 V12.9 - Google Imagen 4 Ultra 双 Key 主力 + 豆包 Seedream 4.5 备选
+美女生成 V12.10 - Google Imagen 4 Ultra 双 Key 主力 + 豆包 Seedream 4.5 备选
 - Google Imagen 4 Ultra 作为主力引擎，支持主备 Key 轮换
 - 豆包 Seedream 4.5 作为 fallback
 - 自动重试 + 429 指数退避（最多 3 次）
@@ -24,7 +24,7 @@ from datetime import date, datetime
 from pathlib import Path
 
 
-VERSION = "12.9.0"
+VERSION = "12.10.0"
 
 
 def _get_ssl_context():
@@ -178,14 +178,14 @@ def get_default_library() -> dict:
                 "fresh-faced beauty, dewy skin, natural brows, innocent gaze",
                 "youthful pristine face, clear luminous skin, natural pink lips slightly parted, gentle captivating eyes",
                 "delicate porcelain face, wide clear eyes with long natural lashes, barely-there makeup, clean adult innocence",
-                "serene oval face, calm deep brown eyes, straight nose, bare lips with natural rose tint, quiet beauty",
+                "fresh oval face, calm bright brown eyes, straight nose, bare lips with natural rose tint, quiet youthful beauty",
                 "clean minimalist face, sharp yet soft features, clear single-eyelid eyes, thin natural brows, literary goddess",
                 "gentle round face, large sparkling eyes, small nose bridge, natural dewy lips, heart-skip beauty"
             ],
             "御姐系": [
-                "refined young-adult elegant face, sharp jawline, sophisticated features, intense gaze",
-                "queen-like features, high cheekbones, defined brows, powerful presence",
-                "fierce beautiful face, strong bone structure, captivating eyes, confident expression"
+                "refined young-adult elegant face, soft jawline, fresh features, bright confident gaze",
+                "elegant young-adult features, soft cheek volume, defined brows, warm confident presence",
+                "beautiful young-adult face, balanced soft bone structure, captivating eyes, relaxed expression"
             ],
             "知性系": [
                 "intellectual beauty, refined features, wise gentle eyes, elegant expression",
@@ -193,18 +193,18 @@ def get_default_library() -> dict:
                 "classic beauty, timeless features, intelligent eyes, poised expression"
             ],
             "冷艳系": [
-                "cold beauty, sharp features, icy gaze, mysterious allure, pale skin",
-                "aloof gorgeous face, sculpted features, distant expression, ethereal beauty",
-                "frost queen features, piercing eyes, perfect bone structure, cool elegance"
+                "cool beauty, soft features, clear gaze, mysterious allure, natural skin",
+                "quiet gorgeous face, softly sculpted features, calm expression, ethereal beauty",
+                "cool elegant young-adult features, bright eyes, soft cheek volume, polished calm"
             ],
             "性感系": [
-                "seductive face, heavy-lidded almond eyes, full voluptuous lips, high cheekbones, smoldering intensity",
-                "alluring features, sultry deep-set eyes, pouty glossy lips, perfect bone structure, sensual charm",
-                "glamorous face, smoky eyes, defined cheekbones, parted moist lips, magnetic attraction",
-                "captivating beauty, soft half-lidded gaze, sculpted jawline, seductive expression, dangerously attractive",
-                "enchanting face, half-lidded seductive gaze, cherry lips slightly parted, devastating allure",
-                "fierce fox-face beauty, upswept cat eyes, sharp nose, bold red lips, lethal hot-cold combination",
-                "refined sensual face, knowing eyes with golden shimmer, balanced brow bone, full wine-stained lips, confident young-adult allure"
+                "fresh sensual Chinese face, bright almond eyes, soft cheek fullness, natural peach-pink lips, youthful adult allure",
+                "alluring East Asian face, clear warm eyes, relaxed eyelids, softly rounded cheeks, natural lip-balm sheen, refined feminine charm",
+                "radiant young-adult face, clean eye makeup, smooth lower-face contours, gently parted natural lips, magnetic but fresh",
+                "captivating beauty with bright direct gaze, soft jawline, natural blush, relaxed brows, tasteful youthful attraction",
+                "enchanting face with clear eyes and soft smile, cherry-pink natural lips slightly parted, fresh realistic skin, elegant allure",
+                "playful fox-face beauty, lifted clear eyes, soft nose bridge, natural peach lips, confident warm-cool balance",
+                "refined sensual face, lively eyes with subtle catchlights, balanced soft brow bone, full natural low-saturation lips, fresh young-adult allure"
             ],
             "邻家女孩系": [
                 "woman-next-door face, natural unfiltered beauty, warm genuine smile, approachable adult charm",
@@ -216,13 +216,13 @@ def get_default_library() -> dict:
                 "cheerful tomboy-ish face, short layered hair, bright toothy grin, healthy outdoorsy complexion"
             ],
             "国风系": [
-                "classical Chinese beauty face, willow-leaf eyebrows, phoenix eyes, cherry red lips, elegant oval face",
+                "classical Chinese beauty face, willow-leaf eyebrows, clear phoenix eyes, natural peach lips, elegant oval face",
                 "ancient Chinese court beauty, delicate features, almond-shaped eyes, jade-like skin, refined noble elegance",
-                "traditional Eastern beauty, graceful serene expression, porcelain complexion, timeless oriental allure",
+                "traditional Eastern beauty, graceful bright expression, natural complexion, timeless oriental allure",
                 "poetic Chinese beauty, gentle curved brows, clear luminous eyes, subtle rouge, classical warm charm",
                 "Tang Dynasty full-moon face, arched moth brows, small rosebud mouth, plump fair skin, imperial beauty",
-                "Song Dynasty scholar-beauty, slender face, distant poetic gaze, elegant long nose, understated grace",
-                "Jiangnan watertown beauty, misty dreamy eyes, delicate chin, pale skin like fresh snow, gentle melancholy"
+                "Song Dynasty scholar-beauty, slender face with soft cheek volume, clear poetic gaze, elegant long nose, understated grace",
+                "Jiangnan watertown beauty, misty bright eyes, delicate chin, fresh fair skin, gentle poetic charm"
             ],
             "职场系": [
                 "modern Chinese office beauty with a soft oval face, dark almond eyes, natural straight brows, gentle nose bridge, barely tinted peach-beige lips",
@@ -367,37 +367,37 @@ def get_default_library() -> dict:
         "expressions": {
             "微笑": [
                 "gentle natural smile, eyes crinkled with joy, warm genuine",
-                "subtle mysterious smile, Mona Lisa expression, intriguing",
-                "bright cheerful smile, showing teeth, infectious happiness"
+                "subtle natural smile with bright relaxed eyes, soft cheek fullness, fresh early-twenties mood",
+                "bright cheerful smile, showing teeth, infectious happiness, relaxed youthful brows"
             ],
             "性感": [
-                "sultry gaze, lips slightly parted, smoldering intensity",
-                "soft half-lidded gaze, seductive half-smile, alluring charm",
-                "confident sexy smirk, direct eye contact, magnetic presence"
+                "warm confident gaze with bright open eyes, natural peach lips slightly parted, tasteful youthful adult charm",
+                "soft direct eye contact with relaxed eyelids, a light smile, fresh cheeks, refined feminine allure",
+                "confident relaxed smile with level chin, bright eyes, soft lower-face contours, natural adult appeal"
             ],
             "挑逗": [
-                "teasing playful look, one eyebrow slightly raised, mischievous charm",
-                "coy sideways glance, lips curving into a knowing smile, flirtatious energy",
-                "playful wink with head tilted, irresistible come-hither expression"
+                "playful wink with one eye, bright grin, soft cheeks, lively early-twenties charm",
+                "coy sideways glance, lips curving into a light smile, youthful confident warmth",
+                "playful wink with head tilted, relaxed brows, natural peach lips, lighthearted charm"
             ],
             "纯欲": [
-                "innocent yet alluring gaze, doe eyes with lips barely parted, pure temptation",
-                "wide-eyed innocence mixed with subtle sensuality, dewy fresh expression",
-                "angelic face with a hint of desire, clear bright eyes, naturally flushed cheeks"
+                "wide soft doe eyes with lips barely parted, soft-faced adult allure, fresh cheek fullness",
+                "wide bright eyes with subtle adult charm, dewy fresh expression, natural low-saturation lips",
+                "gentle youthful face, clear bright eyes, naturally flushed cheeks, clearly adult presence"
             ],
             "冷艳": [
-                "icy cold stare, emotionless beauty, intimidating elegance",
-                "aloof distant expression, untouchable aura, mysterious",
-                "piercing intense gaze, strong silent type, powerful presence"
+                "cool clear gaze with relaxed brows, soft cheeks, polished styling, still youthful",
+                "quiet distant expression with bright catchlights, natural lips, calm young-adult elegance",
+                "sharp but relaxed eye contact, clean facial planes, soft lower-face contours"
             ],
             "忧郁": [
-                "melancholic gaze, wistful expression, poetic sadness",
-                "thoughtful distant look, introspective mood, emotional depth"
+                "soft wistful gaze, fresh eyes, relaxed lips, poetic quietness",
+                "thoughtful distant look, relaxed brows, youthful softness, gentle emotional depth"
             ],
             "自信": [
-                "confident direct gaze, calm self-possessed expression, quiet magnetic authority",
+                "confident direct gaze, level chin, bright open eyes, relaxed youthful expression",
                 "self-assured soft smile, bright steady eyes, youthful confident presence",
-                "focused determined expression, steady bright eyes, composed drive"
+                "focused determined expression, relaxed brows, clear bright eyes, approachable strength"
             ]
         },
         "scenes": {
@@ -449,7 +449,7 @@ def get_default_library() -> dict:
             ],
             "职场": [
                 "modern office with floor-to-ceiling windows, city skyline view, warm afternoon light, sleek corporate interior",
-                "elegant executive office, mahogany desk, warm desk lamp, leather chair, professional sophisticated setting",
+                "elegant modern office, warm desk lamp, soft leather chair, professional but youthful setting",
                 "trendy co-working space, natural light, green plants, warm modern minimalist office design"
             ]
         },
@@ -503,16 +503,16 @@ def get_default_library() -> dict:
         },
         "enhancement_keywords": [
             "a few stray hairs catching the light, slight asymmetry in smile, one earring slightly tilted",
-            "faint laugh lines around eyes, barely visible freckle near nose, natural skin unevenness",
+            "tiny smile creases at the eye corners, barely visible freckle near nose, natural skin unevenness",
             "fabric wrinkle near elbow, a crease in the shirt collar, wind-blown strand across cheek",
             "subtle motion blur on fingertips, slight squint from sunlight, genuine unposed moment",
-            "visible collarbone shadow, natural under-eye texture, tiny beauty mark on jawline"
+            "visible collarbone shadow, faint cheek texture, tiny beauty mark on jawline"
         ],
         "negative_prompts": {
             "standard": "deformed, bad anatomy, disfigured, ugly, extra fingers, mutated hands, extra limbs, missing limbs, fused fingers, too many fingers, long neck",
             "asian_focused": "Western face, Caucasian features, blonde hair, blue eyes, green eyes, non-Asian features",
             "quality": "3D render, CGI, digital art, illustration, painting, cartoon, anime, plastic skin, airbrushed, over-retouched, wax figure, doll-like, uncanny valley, symmetrical face, too perfect, flawless porcelain, studio backdrop, stock photo, watermark",
-            "anti_ai": "impossible body proportions, unnaturally tiny waist, distorted chest anatomy, flattened chest, unnaturally flat chest, flat chest, small chest, missing bust contour, underdeveloped figure, boxy torso, shapeless oversized clothing, bulky shapeless sleeves, hands covering chest, arms blocking torso, side profile hiding torso, countertop hiding body, androgynous torso, collapsed upper-body silhouette, exaggerated fake curves, teen, underage, childlike face, school uniform, childish styling, middle-aged, older woman, woman in her 30s, over 30 years old, aged face, mature face, mature executive, older manager, aged professional, gaunt cheeks, hollow cheeks, deep wrinkles, heavy nasolabial folds, pronounced smile lines, tired under-eye bags, tired face, sagging skin"
+            "anti_ai": "impossible body proportions, unnaturally tiny waist, distorted chest anatomy, flattened chest, unnaturally flat chest, flat chest, small chest, missing bust contour, underdeveloped figure, boxy torso, shapeless oversized clothing, bulky shapeless sleeves, hands covering chest, arms blocking torso, side profile hiding torso, countertop hiding body, androgynous torso, collapsed upper-body silhouette, exaggerated fake curves, teen, underage, childlike face, school uniform, childish styling, middle-aged, older woman, woman in her 30s, over 30 years old, aged face, mature face, mature executive, older manager, aged professional, gaunt cheeks, hollow cheeks, deep wrinkles, heavy nasolabial folds, pronounced smile lines, tired under-eye bags, tired face, sagging skin, stern expression, severe expression, world-weary expression, tired half-lidded eyes, mature seductive smirk, manager-like composure, cold intimidating stare, hard cheekbones, sharp mature jawline"
         }
     }
 
@@ -626,7 +626,7 @@ class SmartPromptGenerator:
             return (
                 "Make the image read unmistakably as a modern Chinese / East Asian woman: soft oval facial structure, "
                 "dark almond eyes, natural black or very dark brown hair without highlights, clean understated makeup, "
-                "and barely tinted peach-beige lips with transparent lip-balm softness and low saturation. The executive-fashion appeal should come from confident eye contact, "
+                "and barely tinted peach-beige lips with transparent lip-balm softness and low saturation. The office-fashion appeal should come from confident eye contact, "
                 "tailored lines, collarbone and waist cues, a natural medium-full upper-body contour through refined garment structure, "
                 "and warm cinematic office depth, with understated makeup and no theatrical glam styling"
             )
@@ -648,6 +648,7 @@ class SmartPromptGenerator:
             "Keep the image grounded in real-world photography with believable skin texture, faint facial asymmetry, and restrained retouching",
             "Preserve relaxed posture, natural hand placement, and the subtle imperfections of a candid portrait",
             "Keep the subject clearly adult but visibly 22 to 23 years old: youthful cheek fullness, bright eyes, smooth lower-face contours, and no mature managerial or tired 30s facial impression",
+            "Keep her facial expression unmistakably early-twenties: bright open eyes, relaxed brows, soft cheek volume, natural low-saturation lips, and light youthful confidence; avoid stern authority, mature seductive smirks, heavy half-lidded eyes, severe coldness, manager-like composure, or a world-weary gaze",
             "Keep the body clearly adult and feminine with a natural medium-full upper-body contour, defined waist suggestion, and realistic proportions; avoid a flat, boxy, or shapeless torso"
         ]
 
@@ -697,7 +698,7 @@ class SmartPromptGenerator:
                 "documentary lifestyle treatment with believable indoor light and lived-in texture"
             ],
             "职场系": [
-                "premium executive fashion editorial with crisp window light, soft rim light, catchlights, and quiet sensual tension",
+                "premium office fashion editorial with crisp window light, soft rim light, catchlights, and quiet sensual tension",
                 "cinematic office portrait with warm skyline bokeh, tailored fabric detail, glossy hair texture, and confident eye contact",
                 "high-end lifestyle cover portrait, polished but intimate, shallow depth of field, and a magnetic professional presence"
             ],

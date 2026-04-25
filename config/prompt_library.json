@@ -1,6 +1,6 @@
 {
-  "version": "12.9",
-  "description": "Imagen 4 Ultra 优化版 - 年轻成熟女性自然语言摄影描述风格，强化典型东方脸、22-23 岁年轻成人感、自然唇色、安全日常场景、自然饱满女性轮廓和无遮挡构图",
+  "version": "12.10",
+  "description": "Imagen 4 Ultra 优化版 - 年轻成熟女性自然语言摄影描述风格，强化典型东方脸、22-23 岁年轻成人感、年轻脸部表情、自然唇色、安全日常场景、自然饱满女性轮廓和无遮挡构图",
 
   "base_quality": [
     "A candid editorial portrait photographed in available light, with lifelike skin detail, natural color response, and quiet emotional realism",
@@ -33,18 +33,18 @@
       "fresh-faced beauty, dewy glass skin, natural brows, innocent yet alluring gaze, soft warm blush",
       "youthful pristine face, clear luminous skin, natural pink lips slightly parted, gentle captivating eyes",
       "delicate porcelain face, wide clear eyes with long natural lashes, barely-there makeup, clean adult innocence with hidden depth",
-      "serene oval face, calm deep brown eyes, straight nose, bare lips with natural rose tint, quiet understated beauty",
+      "fresh oval face, calm bright brown eyes, straight nose, bare lips with natural rose tint, quiet youthful beauty",
       "clean minimalist face, sharp yet soft features, clear single-eyelid eyes, thin natural brows, literary campus goddess vibe",
       "gentle round face, large sparkling eyes, small nose bridge, natural dewy lips, the pure beauty that makes hearts skip"
     ],
     "性感系": [
-      "seductive face, heavy-lidded almond eyes, full voluptuous lips, high cheekbones, smoldering intensity",
-      "alluring face, sultry deep-set eyes, pouty glossy lips, perfect bone structure, irresistible sensual charm",
-      "glamorous face, smoky eyes, defined cheekbones, parted moist lips, magnetic fatal attraction",
-      "captivating beauty, soft half-lidded gaze, sculpted jawline, seductive expression, dangerously attractive",
-      "enchanting face, half-lidded seductive gaze, cherry lips slightly parted, flawless silk skin, devastating allure",
-      "fierce fox-face beauty, upswept cat eyes, sharp nose, bold red lips, lethal combination of cold and hot",
-      "refined sensual face, knowing eyes with golden shimmer, balanced brow bone, full lips with wine stain, confident young-adult allure"
+      "fresh sensual Chinese face, bright almond eyes, soft cheek fullness, natural peach-pink lips, youthful adult allure",
+      "alluring East Asian face, clear warm eyes, relaxed eyelids, softly rounded cheeks, natural lip-balm sheen, refined feminine charm",
+      "radiant young-adult face, clean eye makeup, smooth lower-face contours, gently parted natural lips, magnetic but fresh",
+      "captivating beauty with bright direct gaze, soft jawline, natural blush, relaxed brows, tasteful youthful attraction",
+      "enchanting face with clear eyes and soft smile, cherry-pink natural lips slightly parted, fresh realistic skin, elegant allure",
+      "playful fox-face beauty, lifted clear eyes, soft nose bridge, natural peach lips, confident warm-cool balance",
+      "refined sensual face, lively eyes with subtle catchlights, balanced soft brow bone, full natural low-saturation lips, fresh young-adult allure"
     ],
     "邻家女孩系": [
       "woman-next-door face, natural unfiltered beauty, warm genuine smile, approachable adult charm, no heavy makeup, relatable softness",
@@ -56,19 +56,19 @@
       "cheerful tomboy-ish face, short layered hair, bright toothy grin, healthy outdoorsy complexion, energetic natural charm"
     ],
     "国风系": [
-      "classical Chinese beauty face, willow-leaf eyebrows, phoenix eyes, cherry red lips, elegant oval face, traditional oriental charm",
+      "classical Chinese beauty face, willow-leaf eyebrows, clear phoenix eyes, natural peach lips, elegant oval face, traditional oriental charm",
       "ancient Chinese court beauty, delicate features, almond-shaped eyes with gentle gaze, jade-like skin, refined noble elegance",
-      "traditional Eastern beauty, ink-wash painting aesthetics, graceful serene expression, porcelain complexion, timeless oriental allure",
+      "traditional Eastern beauty, ink-wash painting aesthetics, graceful bright expression, natural complexion, timeless oriental allure",
       "poetic Chinese beauty, gentle curved brows, clear luminous eyes, subtle rouge on cheeks, classical elegance with warm charm",
       "Tang Dynasty full-moon face, arched moth brows, small rosebud mouth, plump fair skin, prosperous imperial beauty",
-      "Song Dynasty scholar-beauty, slender face, distant poetic gaze, elegant long nose, understated refined grace",
-      "Jiangnan watertown beauty, misty dreamy eyes, delicate chin, pale skin like fresh snow, gentle melancholy charm"
+      "Song Dynasty scholar-beauty, slender face with soft cheek volume, clear poetic gaze, elegant long nose, understated refined grace",
+      "Jiangnan watertown beauty, misty bright eyes, delicate chin, fresh fair skin, gentle poetic charm"
     ],
     "职场系": [
-      "modern Chinese office beauty with a soft oval face, dark almond eyes, natural straight brows, gentle nose bridge, barely tinted peach-beige lips, calm magnetic gaze",
-      "refined East Asian Chinese face, clean facial planes, clear dark eyes, understated brows, soft cheek contour, natural lip-balm sheen with pale nude-pink color, poised confidence",
+      "modern Chinese office beauty with a soft oval face, dark almond eyes, natural straight brows, gentle nose bridge, barely tinted peach-beige lips, bright approachable gaze",
+      "refined East Asian Chinese face, clean facial planes, clear dark eyes, understated brows, soft cheek contour, natural lip-balm sheen with pale nude-pink color, fresh confident warmth",
       "elegant urban Chinese professional, warm almond eyes, subtle aegyo-sal, balanced soft jawline, fresh natural makeup, soft peach nude lips, intelligent allure",
-      "classic Eastern beauty with a slim oval face, dark brown eyes, soft brows, natural complexion, bare peach-beige lip color, composed but attractive expression",
+      "classic Eastern beauty with a soft oval face, dark brown eyes, relaxed brows, natural complexion, bare peach-beige lip color, bright quietly attractive expression",
       "young Chinese career woman with clean natural features, soft facial contour, clear eyes, neat natural black hair, barely-there makeup, quiet confident charm",
       "Hong Kong style modern office beauty, natural black hair, luminous but realistic skin, pale nude-pink lips, restrained eye makeup, cinematic urban presence",
       "polished Chinese professional face with approachable warmth, natural brows, dark almond eyes, soft smile, natural low-saturation peach-beige lips, refined adult femininity"
@@ -99,13 +99,13 @@
     "wavy lob, textured layers, trendy modern style, effortless volume",
     "side-swept long hair over one shoulder, revealing neck and collarbone, glamorous asymmetry",
     "twin braids with loose strands, playful adult charm, soft nostalgic styling",
-    "wet-look slicked-back hair, editorial high fashion, sharp cheekbones exposed, fierce",
+    "wet-look slicked-back hair, editorial high fashion, soft cheek contours visible, polished",
     "loose natural waves with center part, bohemian goddess, free-spirited beauty"
   ],
 
   "skin_textures": [
     "real skin texture with visible pores, soft sheen, and slight tonal variation",
-    "natural complexion with faint under-eye texture, subtle blush, and honest detail",
+    "natural complexion with faint cheek texture, subtle blush, and honest detail",
     "healthy skin with a soft natural sheen, fine texture, and believable highlights",
     "skin with small tonal shifts, gentle texture, and realistic light falloff",
     "natural skin with pores, a few tiny imperfections, and understated glow"
@@ -137,21 +137,21 @@
 
   "outfits": {
     "优雅": [
-      "floor-length champagne silk evening gown with plunging neckline, liquid fabric draping over every curve and clinging to the waist, bare back to lower spine, light catching the silhouette, old Hollywood glamour",
+      "floor-length champagne silk evening gown with a soft V neckline, liquid fabric draping over natural curves and defining the waist, elegant open upper back, light catching the silhouette, classic evening glamour",
       "form-fitting black velvet cocktail dress with sweetheart neckline, fabric hugging curves like second skin, subtle slit above knee, diamond earrings, timeless sophisticated allure",
-      "ivory satin wrap dress with deep V-neckline, thin waist tie accentuating feminine proportions, skirt flowing over hips, exposed collarbone and decolletage, soft romantic elegance",
+      "ivory satin wrap dress with a soft V neckline, thin waist tie accentuating feminine proportions, skirt flowing over hips, exposed collarbone line, soft romantic elegance",
       "delicate organza blouse layered over lace camisole, sheer fabric creating subtle depth, tucked into high-waisted silk palazzo pants, pearl necklace, refined feminine sensuality",
       "one-shoulder draped grecian gown in dusty rose, fabric gathered at the waist cascading over curves to the floor, bare shoulder and arm, goddess-like ethereal elegance"
     ],
     "性感": [
-      "skin-tight red mini dress with deep plunging V-neckline, fabric molded to every feminine curve, thigh-high hemline revealing long legs, bold confident allure",
-      "black lace bodysuit with intricate pattern tracing the body, high-cut legs, worn with sheer stockings, dangerous seduction that leaves everything to imagination",
-      "white silk slip dress with razor-thin spaghetti straps, smooth satin gliding over feminine curves to mid-thigh, effortless sensuality in simplicity",
-      "form-fitting qipao with extreme high side slit to hip, silk clinging to every curve, mandarin collar framing face, body-as-art showcasing hourglass figure",
-      "deep-cut halter top with open back, fabric draping beautifully over feminine form, micro skirt, maximum skin exposure with editorial elegance",
-      "off-shoulder bodycon with ruched fabric emphasizing feminine proportions, fabric clinging to every curve, rear zipper half-open revealing spine, deeply alluring",
-      "oversized blazer worn on bare skin, open front hinting at curves beneath, cinched at waist with belt, bare legs, power-sexy editorial look",
-      "form-fitting mesh and lace cocktail dress, fabric creating peek-a-boo effect with strategic coverage, body outlined in sultry silhouette, red-carpet provocative glamour"
+      "structured red knit dress with a square neckline, softly fitted bodice, defined waist seam, knee-length hem, and confident feminine allure",
+      "black lace-trimmed camisole layered under a tailored cropped jacket with a high-waisted skirt, refined sensual styling with secure coverage",
+      "white silk slip dress with wider straps, smooth satin softly skimming natural curves to the knee, effortless elegant sensuality",
+      "form-fitting qipao with an elegant side slit below mid-thigh, silk following the waist and hips, mandarin collar framing the face, refined hourglass silhouette",
+      "halter-neck satin top with a supportive cut paired with a high-waisted midi skirt, fabric draping over natural curves with editorial elegance",
+      "off-shoulder ruched midi dress emphasizing feminine proportions, secure coverage, polished evening allure",
+      "tailored oversized blazer over a silk camisole, cinched at the waist with a belt, slim trousers or knee-length skirt, modern power sensuality",
+      "fitted lace-overlay cocktail dress with opaque lining, strategic texture rather than exposure, natural curves outlined with refined red-carpet glamour"
     ],
     "清新": [
       "white cotton sundress with delicate floral embroidery, modest neckline, soft waist seam, and a skirt moving naturally in the breeze",
@@ -189,11 +189,11 @@
       "Tang Dynasty-inspired court dress in imperial gold, wide neckline exposing shoulders in historical style, fitted silhouette with flowing multi-layered skirt, opulent historical elegance"
     ],
     "职场": [
-      "fitted ivory blouse with one soft open collar button, tucked into a high-waisted pencil skirt, narrow leather belt, elegant collarbone line, polished executive-fashion allure",
+      "fitted ivory blouse with one soft open collar button, tucked into a high-waisted pencil skirt, narrow leather belt, elegant collarbone line, polished office-fashion allure",
       "tailored cream blazer worn over a satin camisole, nipped waist, slim trousers, delicate gold necklace, confident magazine-editorial office styling",
       "charcoal cashmere sweater dress with a clean body-skimming line, reading glasses, pearl earrings, refined intelligent charm and soft feminine shape",
       "black structured work dress with a square neckline, statement belt, knee-length slit, glossy hair, and a calm but magnetic professional presence",
-      "champagne silk blouse with sleeves rolled once, high-waisted wool trousers, blazer draped over shoulders, subtle fabric sheen, understated executive sensuality"
+      "champagne silk blouse with sleeves rolled once, high-waisted wool trousers, blazer draped over shoulders, subtle fabric sheen, understated office-fashion sensuality"
     ],
     "居家": [
       "softly fitted ivory ribbed knit top tucked into relaxed high-waisted lounge pants, neat natural hair, bright morning apartment light, gentle waist definition, front-facing three-quarter home portrait",
@@ -227,7 +227,7 @@
       "standing half-body portrait with hands adjusting the hair or collar, subtle movement, and unforced body language"
     ],
     "职场半身": [
-      "waist-up executive-fashion portrait at a three-quarter angle, one hand lightly touching the blazer lapel, relaxed shoulders, direct magnetic eye contact",
+      "waist-up office-fashion portrait at a three-quarter angle, one hand lightly touching the blazer lapel, relaxed shoulders, direct bright eye contact",
       "half-body portrait leaning lightly against the edge of a desk, one hand near the waist, tailored lines visible, calm confident presence",
       "standing by the office window in a waist-up frame, one hand adjusting hair near the ear, collarbones and neckline subtly emphasized, natural posture",
       "seated half-body portrait with one elbow resting on the conference table, body turned slightly sideways, steady eye contact, refined professional allure",
@@ -260,45 +260,45 @@
   "expressions": {
     "微笑": [
       "warm genuine smile with eyes crinkled in delight, head tilted slightly, radiating approachable charm",
-      "subtle natural smile with calm eyes, as if caught in a private thought",
+      "subtle natural smile with bright relaxed eyes, soft cheek fullness, and a fresh early-twenties mood",
       "bright easy smile showing teeth, eyes alive with relaxed warmth",
-      "soft closed-lip smile with a slightly raised eyebrow, serene and observant"
+      "soft closed-lip smile with relaxed brows, natural peach lips, and an approachable youthful look"
     ],
     "性感": [
-      "sultry half-lidded gaze looking directly into camera, lips slightly parted and glistening, smoldering with barely contained desire",
-      "soft half-lidded gaze with warm direct eye contact, lips gently parted with a knowing look, seductive and inviting",
-      "intense eye contact with a slow confident smirk, chin slightly lowered, looking up through long lashes, dangerously attractive",
-      "sensual pout with full glossy lips, dreamy unfocused gaze, head tilted back exposing neck, irresistible vulnerability",
-      "biting lower lip gently while maintaining piercing eye contact, flushed cheeks, the look of someone about to be kissed"
+      "warm confident gaze with bright open eyes, natural peach lips slightly parted, and tasteful youthful adult charm",
+      "soft direct eye contact with relaxed eyelids, a light smile, fresh cheeks, and refined feminine allure",
+      "confident relaxed smile with level chin, bright eyes, soft lower-face contours, and natural adult appeal",
+      "gentle parted-lip expression with fresh cheeks, clear eyes, low-saturation natural lips, and elegant attraction",
+      "playful adult gaze with soft blush, relaxed brows, clear catchlights, and no heavy glam makeup"
     ],
     "挑逗": [
-      "playful wink with one eye, mischievous grin, tongue peeking at corner of mouth, teasing and irresistible",
-      "looking over shoulder with a come-hither glance, lips curved in a knowing smile, daring you to follow",
-      "coy shy smile while looking up through lashes, one finger touching lower lip, innocent yet devastatingly flirtatious",
-      "blowing a subtle kiss at camera, eyes twinkling with playful mischief, magnetic feminine charm",
-      "head thrown back in carefree laughter exposing long neck, eyes closed in pure joy, effortlessly captivating"
+      "playful wink with one eye, bright grin, soft cheeks, and lively early-twenties charm",
+      "looking over shoulder with a playful smile, bright relaxed eyes, and natural peach lips",
+      "coy shy smile while glancing upward, soft cheek fullness, relaxed brows, and lighthearted charm",
+      "small teasing smile with eyes twinkling, natural blush, and youthful confident warmth",
+      "carefree laugh with eyes closed, relaxed neck, soft cheeks, and bright candid warmth"
     ],
     "纯欲": [
-      "wide soft doe eyes gazing at camera with slightly parted dewy lips, the perfect blend of pure and sensual, soft-faced adult allure",
-      "soft dreamy expression with unfocused gaze, lips naturally pouty and pink, looking freshly woken up, angelic yet tempting",
-      "innocent surprised expression with big round eyes and slightly open mouth, blushing cheeks, the allure of unaware beauty",
-      "gentle sleepy half-smile with soft eyelids, natural bare-face glow, loose hair falling across face, slow weekend morning softness",
-      "shy downcast eyes with a tiny secret smile, natural flush on cheeks, looking like she was just caught thinking something naughty"
+      "wide soft doe eyes gazing at camera with slightly parted natural lips, soft-faced adult allure, and fresh cheek fullness",
+      "soft dreamy expression with clear eyes, naturally pink low-saturation lips, fresh 22-23 softness, and gentle charm",
+      "gentle surprised expression with round bright eyes, slightly open mouth, blushing cheeks, and clearly adult youthful beauty",
+      "relaxed half-smile with bright eyes, natural bare-face glow, loose hair falling across face, and weekend softness",
+      "shy downcast eyes with a tiny smile, natural flush on cheeks, relaxed brows, and soft youthful mood"
     ],
     "冷艳": [
-      "icy piercing stare with perfectly arched brow, emotionless porcelain beauty, intimidatingly gorgeous",
-      "aloof distant gaze with slightly narrowed eyes, untouchable ice-queen aura, mysteriously magnetic",
-      "sharp intense eye contact with zero warmth, jaw set in elegant defiance, dangerously beautiful"
+      "cool clear gaze with relaxed brows, soft cheeks, polished styling, and a still-youthful early-twenties look",
+      "quiet distant gaze with bright catchlights, natural lips, and calm young-adult elegance",
+      "sharp but relaxed eye contact, clean facial planes, soft lower-face contours, and no severe expression"
     ],
     "忧郁": [
-      "melancholic gaze looking away into distance, eyes glistening with unshed tears, hauntingly beautiful sadness",
-      "thoughtful distant look with lips slightly downturned, introspective mood, poetic emotional depth",
-      "lonely wistful expression gazing out window, chin resting on hand, rain-like melancholy, achingly artistic"
+      "soft wistful gaze looking away into distance, fresh eyes, relaxed lips, and poetic quietness",
+      "thoughtful distant look with natural lips, relaxed brows, youthful softness, and gentle emotional depth",
+      "gentle reflective expression gazing out window, bright eyes, soft cheeks, and calm poetic mood"
     ],
     "自信": [
-      "confident direct gaze with a slight chin lift, calm self-possessed expression, quiet magnetic authority",
+      "confident direct gaze with level chin, bright open eyes, relaxed youthful expression, and fresh adult poise",
       "self-assured soft smile with bright steady eyes, youthful confident presence that feels composed and approachable",
-      "focused determined expression with steady bright eyes, composed drive, approachable strength"
+      "focused determined expression with relaxed brows, clear bright eyes, soft lower-face contours, and approachable strength"
     ]
   },
 
@@ -356,8 +356,8 @@
       "quiet residential street, blooming flowers along fence, warm sunset glow, peaceful neighborhood"
     ],
     "职场": [
-      "after-hours corner office with floor-to-ceiling windows, city skyline bokeh, warm desk lamp glow, polished glass reflections, intimate executive mood",
-      "boutique hotel executive lounge with marble table, brass details, soft amber lights, city night outside the window, high-end editorial atmosphere",
+      "after-hours corner office with floor-to-ceiling windows, city skyline bokeh, warm desk lamp glow, polished glass reflections, intimate after-work mood",
+      "boutique hotel business lounge with marble table, brass details, soft amber lights, city night outside the window, high-end editorial atmosphere",
       "modern office by a large window, warm afternoon rim light on hair, green plants softened in the background, quiet confident professional mood",
       "glass-walled conference room at blue hour, city lights glowing behind her, reflective table surface, cinematic yet believable workplace depth",
       "private office doorway with warm corridor light, tailored outfit catching highlights, shallow depth of field, elegant after-work tension"
@@ -428,7 +428,7 @@
 
   "enhancement_keywords": [
     "with a few flyaway hairs, mild skin texture around the nose, and real fabric creases",
-    "with slight asymmetry in the smile, faint under-eye texture, and believable catchlights",
+    "with slight asymmetry in the smile, faint cheek texture, and believable catchlights",
     "with a relaxed shoulder line, gentle hand tension, and natural breathing posture",
     "with subtle wrinkles in clothing, small light falloff across the face, and grounded depth",
     "with a tiny mole, fine baby hairs, and the texture of lived-in materials around her"
@@ -438,6 +438,6 @@
     "standard": "cartoon, anime, 3d render, cgi, sketch, drawing, painting, illustration, disfigured, deformed, blurry, watermark, text, extra limbs, extra fingers, mutated hands, bad anatomy",
     "asian_focused": "Western face, Caucasian features, European features, blonde hair, blue eyes, green eyes, non-Asian features, Westernized mixed-race face, non-Chinese facial structure, heavy Western glam makeup",
     "quality": "low quality, pixelated, overexposed, underexposed, amateur, poorly lit, oversharpened skin, HDR halo, crunchy detail, artificial contrast",
-    "anti_ai": "beauty filter, over-retouched skin, plastic skin, waxy skin, overly smooth skin, porcelain doll, mannequin, uncanny valley, too perfect, extreme symmetry, digital art look, artificial lighting, studio render, hyperrealistic 3d, unrealistically large eyes, impossible body proportions, unnaturally tiny waist, distorted chest anatomy, flattened chest, flat chest, small chest, underdeveloped figure, boxy torso, shapeless oversized clothing, bulky shapeless sleeves, hands covering chest, arms blocking torso, side profile hiding torso, countertop hiding body, androgynous torso, collapsed upper-body silhouette, exaggerated fake curves, glam retouch, instagram face, teen, underage, childlike face, school uniform, childish styling, middle-aged, older woman, woman in her 30s, over 30 years old, aged face, mature face, mature executive, older manager, aged professional, gaunt cheeks, hollow cheeks, deep wrinkles, heavy nasolabial folds, pronounced smile lines, tired under-eye bags, tired face, sagging skin, dark red lipstick, burgundy lips, purple lipstick, mauve lips, wine-colored lips, red-brown lipstick, brown lipstick, brick-red lips, dark rose lipstick, heavy lipstick, thick lip makeup, overdrawn lips, heavy smoky eye makeup, blonde highlights, balayage hair, bleached hair, orange-brown dyed hair"
+    "anti_ai": "beauty filter, over-retouched skin, plastic skin, waxy skin, overly smooth skin, porcelain doll, mannequin, uncanny valley, too perfect, extreme symmetry, digital art look, artificial lighting, studio render, hyperrealistic 3d, unrealistically large eyes, impossible body proportions, unnaturally tiny waist, distorted chest anatomy, flattened chest, flat chest, small chest, underdeveloped figure, boxy torso, shapeless oversized clothing, bulky shapeless sleeves, hands covering chest, arms blocking torso, side profile hiding torso, countertop hiding body, androgynous torso, collapsed upper-body silhouette, exaggerated fake curves, glam retouch, instagram face, teen, underage, childlike face, school uniform, childish styling, middle-aged, older woman, woman in her 30s, over 30 years old, aged face, mature face, mature executive, older manager, aged professional, gaunt cheeks, hollow cheeks, deep wrinkles, heavy nasolabial folds, pronounced smile lines, tired under-eye bags, tired face, sagging skin, stern expression, severe expression, world-weary expression, tired half-lidded eyes, mature seductive smirk, manager-like composure, cold intimidating stare, hard cheekbones, sharp mature jawline, dark red lipstick, burgundy lips, purple lipstick, mauve lips, wine-colored lips, red-brown lipstick, brown lipstick, brick-red lips, dark rose lipstick, heavy lipstick, thick lip makeup, overdrawn lips, heavy smoky eye makeup, blonde highlights, balayage hair, bleached hair, orange-brown dyed hair"
   }
 }
