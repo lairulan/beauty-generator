@@ -717,7 +717,7 @@ class SmartPromptGenerator:
         if style == "性感系":
             clauses.append("Use tasteful sensual fashion styling, form-flattering fabric, confident eye contact, fully clothed elegance, and youthful adult glamour")
         elif style == "生活场景系":
-            clauses.append("Use fresh relaxed lifestyle styling in public or shared home spaces, fully dressed softly fitted casual clothing, fair-to-light neutral skin, rested eyes, a lively 22-23 adult East Asian Chinese first-love face, transparent lip-balm lips, flattering fabric that follows a naturally full bust-to-waist line, a front-facing or three-quarter composition with torso and waist visible, and a soft closed-lip youthful smile")
+            clauses.append("Use fresh relaxed lifestyle styling in public or shared home spaces, fully dressed softly fitted casual clothing, fair-to-light neutral skin, rested eyes, a lively 22-23 adult East Asian Chinese first-love face, transparent lip-balm lips, flattering fabric that follows a naturally full bust-to-waist line, a graceful three-quarter composition with a slight head turn, torso and waist visible, and a soft closed-lip youthful smile; avoid a flat front-facing passport-photo angle")
         elif style in {"清纯系", "邻家女孩系"}:
             clauses.append("Use understated makeup, lived-in wardrobe detail, and ordinary available light")
         elif style == "职场系":
