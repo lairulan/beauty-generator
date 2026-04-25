@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-美女生成 V12.11 - Google Imagen 4 Ultra 双 Key 主力 + 豆包 Seedream 4.5 备选
+美女生成 V12.12 - Google Imagen 4 Ultra 双 Key 主力 + 豆包 Seedream 4.5 备选
 - Google Imagen 4 Ultra 作为主力引擎，支持主备 Key 轮换
 - 豆包 Seedream 4.5 作为 fallback
 - 自动重试 + 429 指数退避（最多 3 次）
@@ -24,7 +24,7 @@ from datetime import date, datetime
 from pathlib import Path
 
 
-VERSION = "12.11.0"
+VERSION = "12.12.0"
 
 
 def _get_ssl_context():
@@ -150,18 +150,18 @@ def get_default_library() -> dict:
     """内置默认元素库（prompt_library.json 缺失时的 fallback）"""
     return {
         "base_quality": [
-            "Candid photograph taken on a Sony A7IV, natural ambient light, clean healthy skin",
-            "Documentary-style portrait, shot on Fujifilm X-T5, film simulation, available light only",
-            "Street photography portrait, captured mid-moment, shallow depth of field, Leica Q3",
-            "Natural light portrait, shot through a window, soft diffused shadows, Canon R5",
-            "Lifestyle photograph, relaxed candid moment, gentle bokeh background, Nikon Z8"
+            "Clean lifestyle editorial portrait, flattering available light, healthy skin, warm emotional realism",
+            "Fresh lifestyle magazine portrait, full-frame camera, soft flattering tones, photogenic facial detail",
+            "Polished lifestyle photograph, natural light, clear healthy complexion, soft depth of field",
+            "Warm candid beauty portrait, subtle filmic color, flattering catchlights, real moment feeling",
+            "Magazine-quality portrait that still feels human, lightly retouched, clean skin, attractive facial balance"
         ],
         "asian_identity": [
             "adult Chinese woman in her early twenties, 22 to 23 years old",
             "adult East Asian woman, Chinese, youthful cheek fullness and refined feminine presence",
             "Chinese woman around 22 or 23 with fresh East Asian features and a soft lower face",
             "adult woman with Chinese features, bright eyes, and fresh 22-23 age impression",
-            "East Asian woman in her early twenties with confident adult appeal and no mature office-worker fatigue"
+            "East Asian woman in her early twenties with confident adult appeal and fresh rested energy"
         ],
         "face_types": {
             "甜美系": [
@@ -207,7 +207,7 @@ def get_default_library() -> dict:
                 "refined sensual face, lively eyes with subtle catchlights, balanced soft brow bone, full natural low-saturation lips, fresh young-adult allure"
             ],
             "邻家女孩系": [
-                "woman-next-door face, natural unfiltered beauty, warm genuine smile, approachable adult charm",
+                "woman-next-door face, natural unfiltered beauty, warm genuine smile, approachable adult charm, clean light makeup",
                 "friendly natural face, soft features, bright cheerful eyes, clean cheeks, everyday beauty",
                 "cute wholesome face, natural rosy cheeks, warm brown eyes, authentic smile showing teeth",
                 "adorable everyday face, minimal makeup, natural skin glow, playful innocent eyes, coffee-shop beauty",
@@ -239,7 +239,7 @@ def get_default_library() -> dict:
                 "natural no-makeup look with balanced delicate features, warm gentle smile, slightly tousled hair, comfortable everyday beauty",
                 "fresh washed face with clear healthy skin, smooth lower-face contours, lively half-smile, morning coffee warmth, and clean oval contours",
                 "photogenic casual weekend face with bright smiling eyes, soft cheek fullness, delicate nose bridge, clean oval contours, approachable charm",
-                "cooking-at-home beauty, clean cheek, tied-back hair with loose strands, bright focused smile",
+                "warm cooking-at-home lifestyle beauty, clean cheeks, tied-back hair with loose strands, bright gentle smile, photogenic facial balance",
                 "photogenic young adult lifestyle face with light blush, clean brows, soft oval face, lively attractive 22-23 age impression"
             ]
         },
@@ -649,6 +649,7 @@ class SmartPromptGenerator:
             "Preserve relaxed posture, natural hand placement, smooth healthy cheeks, clean facial highlights, and candid portrait detail",
             "Keep the subject clearly adult but visibly 22 to 23 years old: youthful cheek fullness, bright eyes, smooth lower-face contours, fresh rested energy, and a soft early-twenties facial impression",
             "Keep her facial expression attractive and unmistakably early-twenties: lively smiling eyes, relaxed brows, soft cheek lift, natural low-saturation lips, a warm candid smile, and open friendly energy",
+            "Favor photogenic facial balance, neat natural brows, flattering catchlights, soft peach blush, clean natural makeup, and low-saturation peach lips",
             "Keep the body clearly adult and feminine with a natural medium-full upper-body contour, defined waist suggestion, realistic proportions, and a softly fitted silhouette"
         ]
 

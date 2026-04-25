@@ -1,19 +1,19 @@
 {
-  "version": "12.11",
-  "description": "Imagen 4 Ultra 优化版 - 年轻成熟女性自然语言摄影描述风格，强化典型东方脸、22-23 岁年轻成人感、干净健康肤质、年轻自然表情、自然唇色、安全日常场景、自然饱满女性轮廓和无遮挡构图",
+  "version": "12.12",
+  "description": "Imagen 4 Ultra 优化版 - 年轻成熟女性自然语言摄影描述风格，强化典型东方脸、22-23 岁年轻成人感、干净健康肤质、年轻自然表情、生活杂志吸引力、自然唇色、安全日常场景、自然饱满女性轮廓和无遮挡构图",
 
   "base_quality": [
-    "A candid editorial portrait photographed in available light, with clean healthy skin, natural color response, and warm emotional realism",
-    "A documentary-style portrait captured on a full-frame camera, with believable tones, restrained contrast, and an authentic atmosphere",
-    "A lifestyle photograph with natural light, clear healthy complexion, soft depth of field, and unforced body language",
-    "An observed portrait photograph with subtle filmic color, realistic light falloff, and the feeling of a real moment",
-    "A magazine-quality portrait that still feels human and lightly retouched, with clean skin, fabric detail, and grounded composition"
+    "A clean lifestyle editorial portrait photographed in flattering available light, with healthy skin, natural color response, and warm emotional realism",
+    "A fresh lifestyle magazine portrait captured on a full-frame camera, with soft flattering tones, restrained contrast, and photogenic facial detail",
+    "A polished lifestyle photograph with natural light, clear healthy complexion, soft depth of field, and unforced body language",
+    "A warm candid beauty portrait with subtle filmic color, realistic light falloff, flattering catchlights, and a real moment feeling",
+    "A magazine-quality portrait that still feels human and lightly retouched, with clean skin, fabric detail, attractive facial balance, and grounded composition"
   ],
 
   "asian_identity": [
     "an adult Chinese woman in her early twenties, 22 to 23 years old, with youthful cheek fullness and refined feminine presence",
     "a clearly adult Chinese woman around 22 or 23 with fresh East Asian features, bright eyes, and a soft lower face",
-    "an adult East Asian Chinese woman in her early twenties with elegant young femininity, smooth lower-face contours, and no mature office-worker fatigue",
+    "an adult East Asian Chinese woman in her early twenties with elegant young femininity, smooth lower-face contours, and fresh rested energy",
     "a Chinese woman around 23 with lively natural facial features, youthful softness, and confident adult charm",
     "an adult Chinese woman with an unforced real-life presence, fresh 22-23 age impression, and refined feminine appeal"
   ],
@@ -47,7 +47,7 @@
       "refined sensual face, lively eyes with subtle catchlights, balanced soft brow bone, full natural low-saturation lips, fresh young-adult allure"
     ],
     "邻家女孩系": [
-      "woman-next-door face, natural unfiltered beauty, warm genuine smile, approachable adult charm, no heavy makeup, relatable softness",
+      "woman-next-door face, natural unfiltered beauty, warm genuine smile, approachable adult charm, clean light makeup, relatable softness",
       "friendly natural face, soft features, bright cheerful eyes, clean cheeks, effortless everyday beauty",
       "cute wholesome face, natural rosy cheeks, casual messy hair, warm brown eyes, authentic smile showing teeth",
       "adorable everyday face, minimal makeup, natural skin glow, playful innocent eyes, coffee-shop beauty vibes",
@@ -79,7 +79,7 @@
       "natural no-makeup look with balanced delicate features, warm gentle smile, slightly tousled hair, comfortable everyday beauty",
       "fresh washed face with clear healthy skin, smooth lower-face contours, lively half-smile, morning coffee warmth, and clean oval contours",
       "photogenic casual weekend face with bright smiling eyes, soft cheek fullness, delicate nose bridge, clean oval contours, approachable charm",
-      "cooking-at-home beauty, clean cheek, tied-back hair with loose strands, bright focused smile",
+      "warm cooking-at-home lifestyle beauty, clean cheeks, tied-back hair with loose strands, bright gentle smile, and photogenic facial balance",
       "photogenic young adult lifestyle face with light blush, clean brows, soft oval face, and lively attractive 22-23 age impression"
     ]
   },
@@ -269,7 +269,7 @@
       "soft direct eye contact with relaxed eyelids, a light smile, fresh cheeks, and refined feminine allure",
       "confident relaxed smile with level chin, bright eyes, soft lower-face contours, and natural adult appeal",
       "gentle parted-lip expression with fresh cheeks, clear eyes, low-saturation natural lips, and elegant attraction",
-      "playful adult gaze with soft blush, relaxed brows, clear catchlights, and no heavy glam makeup"
+      "playful adult gaze with soft blush, relaxed brows, clear catchlights, and clean natural makeup"
     ],
     "挑逗": [
       "playful wink with one eye, bright grin, soft cheeks, and lively early-twenties charm",
@@ -288,7 +288,7 @@
     "冷艳": [
       "cool clear gaze with soft brows, lifted eyes, soft cheeks, polished styling, and a still-youthful early-twenties look",
       "quiet distant gaze with bright catchlights, natural lips, and graceful young-adult elegance",
-      "sharp but relaxed eye contact, clean facial planes, soft lower-face contours, and no severe expression"
+      "sharp but relaxed eye contact, clean facial planes, soft lower-face contours, and a soft confident expression"
     ],
     "忧郁": [
       "soft wistful gaze looking away into distance, fresh eyes, relaxed lips, and poetic quietness",
