@@ -34,12 +34,12 @@
     "use_sexy_body": true
   },
   "生活场景系": {
-    "scenes": ["居家", "街头"],
+    "scenes": ["居家"],
     "outfit": "居家",
-    "pose_types": ["半身", "全身"],
+    "pose_types": ["半身"],
     "lighting_pool": ["自然光"],
     "expression_pool": ["清新微笑"],
-    "use_sexy_body": true
+    "body_pool": "body_types_lifestyle_full"
   },
   "邻家女孩系": {
     "scenes": ["街头", "自然", "城市"],
