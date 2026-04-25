@@ -46,3 +46,4 @@
 - 2026-04-25 03:40:19 | success | mode=t2i-manual | prompt=A refined modern Chinese office-fashion portrait f... | run=257 | https://github.com/lairulan/beauty-generator/actions/runs/24908406571
 - 2026-04-25 12:56:03 | success | mode=t2i-manual | prompt=A refined modern Chinese office-fashion portrait f... | run=258 | https://github.com/lairulan/beauty-generator/actions/runs/24923033422
 - 2026-04-25 20:01:27 | success | mode=t2i-auto-1pic | event=repository_dispatch | run=259 | https://github.com/lairulan/beauty-generator/actions/runs/24930418755
+- 2026-04-25 20:39:56 | success | mode=t2i-auto-skipped-duplicate | reason=actions-success-today | run=260 | https://github.com/lairulan/beauty-generator/actions/runs/24931114356
