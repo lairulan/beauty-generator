@@ -1,6 +1,6 @@
 {
-  "version": "12.21",
-  "description": "Imagen 4 Ultra 优化版 - 基于中国传统美女词汇重构生活场景文生图五官锚点，明确 22-23 岁年轻成人边界，强化鹅蛋脸/瓜子脸、柳叶眉、丹凤眼/凤眼、挺秀东方鼻、樱桃小口、明眸皓齿式清透美女感、低妆感、自然深色发型、日常丰满但非露骨的女性轮廓、无遮挡生活半身构图和非证件照式自然姿势",
+  "version": "12.22",
+  "description": "Imagen 4 Ultra 优化版 - 拆分生活场景脸部变体，避免同质化脸；基于中国传统美女词汇重构成年年轻感/年轻少妇感五官锚点，强化多种鹅蛋脸/瓜子脸/心形鹅蛋脸、柳叶眉、丹凤眼/杏凤眼、挺秀东方鼻、樱桃小口形状、淡雅明亮桃粉润唇、清透美女感、低妆感、自然深色发型、日常丰满但非露骨的女性轮廓、无遮挡生活半身构图和非证件照式自然姿势",
 
   "base_quality": [
     "A realistic fresh adult Chinese lifestyle portrait in soft neutral daylight, with fair neutral skin, natural color response, relaxed body language, and clean early-twenties facial softness",
@@ -11,16 +11,25 @@
   ],
 
   "asian_identity": [
-    "an unmistakably adult mainland Chinese woman, 22 to 23 years old, with classic Chinese beauty facial structure, an elegant oval face, elongated phoenix-shaped almond eyes, refined natural nose bridge, small cherry-like lips, fair-to-light neutral complexion, and fresh gentle presence",
-    "a clearly adult East Asian Chinese woman around 22 or 23 with a soft egg-shaped face, willow-leaf brows, bright danfeng-style eyes with slightly lifted outer corners, natural black hair, smooth youthful lower-face contours, and a light closed-mouth smile",
-    "an adult Chinese / East Asian woman in her early twenties with clean mainland Chinese facial balance, slender natural brows, tapered almond eyes, a delicate high East Asian nose bridge, softly full cherry-pink small lips, barely-there makeup, and bright rested energy",
-    "a Chinese woman around 23 with lively dark phoenix-shaped eyes, a graceful oval facial outline, natural black or very dark brown hair, compact pale cherry-pink lips with transparent balm finish, and a fresh early-twenties adult expression",
+    "an unmistakably adult mainland Chinese woman, 22 to 23 years old, with classic Chinese beauty facial structure, an elegant oval face, elongated phoenix-shaped almond eyes, refined natural nose bridge, petite rosebud mouth shape, fair-to-light neutral complexion, and fresh gentle presence",
+    "a clearly adult East Asian Chinese woman around 22 or 23 with a soft egg-shaped face, willow-leaf brows, bright almond-phoenix eyes with slightly lifted outer corners, natural black hair, smooth youthful lower-face contours, and a light closed-mouth smile",
+    "an adult Chinese / East Asian woman in her early twenties with clean mainland Chinese facial balance, slender natural brows, tapered almond eyes, a delicate high East Asian nose bridge, softly full small lips in a bright sheer peach-pink balm, barely-there makeup, and bright rested energy",
+    "a Chinese woman around 23 with lively dark almond-phoenix eyes, a graceful oval facial outline, natural black or very dark brown hair, compact rosebud mouth with bright sheer peach-pink balm, and a fresh early-twenties adult expression",
     "an adult East Asian Chinese woman with unforced real-life presence, clear 22-23 age impression, fair neutral skin, soft rounded cheeks, fine willow-like brows, clear bright eyes, and quiet youthful feminine appeal"
+  ],
+
+  "adult_lifestyle_face_moods": [
+    "adult first-love freshness profile: soft heart-oval face, bright clear apricot-almond eyes with a slight phoenix lift, delicate straight nose bridge, compact rosebud mouth shape, sheer peach-pink lip balm, rounded cheeks, and light curious warmth",
+    "young newlywed softness profile: graceful egg-shaped face, gentle willow brows, elongated warm almond eyes, refined higher East Asian nose bridge, small softly full mouth with a clear cupid's bow, bright translucent pink-coral lips, calm affectionate smile, and polished but low-makeup femininity",
+    "Jiangnan-style delicate beauty profile: slim oval face with soft cheek volume, fine arched willow brows, narrow luminous phoenix eyes, elegant straight nose line, petite rosebud mouth shape, clear light apricot-pink lip-balm color, and quiet gentle charm",
+    "modern sweet Chinese beauty profile: soft round-oval face, crescent smiling eyes with lifted outer corners, neat natural brows, small refined nose tip, compact bow-shaped lips, fresh glossy peach-pink lip balm, and lively relaxed expression",
+    "elegant young wife profile: soft melon-seed oval face, balanced cheek fullness, calm elongated almond eyes, defined but natural nose bridge, small full lips in sheer bright rose-pink balm, composed warm gaze, and fresh adult softness",
+    "clean young-adult neighbor-style beauty profile: small oval face, smooth youthful lower face, clear dark almond eyes, soft straight brows, delicate natural nose, petite rosebud mouth shape with light pink balm, relaxed friendly smile, and airy low-makeup freshness"
   ],
 
   "face_types": {
     "甜美系": [
-      "sweet innocent face, round cheeks, bright sparkling eyes, cherry lips, dimples when smiling, warm radiant glow",
+      "sweet innocent face, round cheeks, bright sparkling eyes, soft peach-pink lips, dimples when smiling, warm radiant glow",
       "soft heart-shaped face, cute round eyes, small button nose, natural pink lips, warm adult sweetness, sunshine smile",
       "adorable face, aegyo sal, gradient lips, innocent expression, glowing warm skin, playful charm",
       "heart-shaped face, big doe eyes, delicate pointed chin, peach-tinted lips, tiny beauty mark near mouth, angelic sweetness",
@@ -42,7 +51,7 @@
       "alluring East Asian face, clear warm eyes, relaxed eyelids, softly rounded cheeks, natural lip-balm sheen, refined feminine charm",
       "radiant young-adult face, clean eye makeup, smooth lower-face contours, gently parted natural lips, magnetic but fresh",
       "captivating beauty with bright direct gaze, soft jawline, natural blush, relaxed brows, tasteful youthful attraction",
-      "enchanting face with clear eyes and soft smile, cherry-pink natural lips slightly parted, fresh realistic skin, elegant allure",
+      "enchanting face with clear eyes and soft smile, soft peach-pink natural lips slightly parted, fresh realistic skin, elegant allure",
       "playful East Asian cat-eye beauty, lifted clear dark eyes, soft nose bridge, natural peach lips, confident warm-cool balance",
       "refined sensual face, lively eyes with subtle catchlights, balanced soft brow bone, full natural low-saturation lips, fresh young-adult allure"
     ],
@@ -74,13 +83,13 @@
       "polished Chinese professional face with approachable warmth, natural brows, dark almond eyes, soft smile, natural low-saturation peach-beige lips, refined adult femininity"
     ],
     "生活场景系": [
-      "classic young-adult Chinese beauty face, soft egg-shaped oval outline, willow-leaf brows, elongated danfeng-style almond eyes, refined natural high nose bridge, compact cherry-like small lips with transparent balm sheen, and a tiny closed-mouth smile",
-      "clean mainland Chinese East Asian beauty face with fair neutral skin, soft cheek fullness, slender curved brows, bright phoenix-shaped eyes with slightly lifted outer corners, delicate nose tip, low-saturation cherry-pink lips, and a gentle candid smile",
-      "fresh adult Chinese first-love beauty face with graceful oval facial balance, tapered eye corners, clear dark pupils, a slim but natural East Asian nose bridge, softly full small mouth, smooth cheeks, and warm approachable eyes",
-      "fresh washed-face adult beauty with smooth cheeks, subtle under-eye softness, calm bright danfeng eyes, refined nose bridge, almost bare cherry-pink lip-balm lips, and a relaxed first-look-at-camera expression",
-      "casual home-life Chinese beauty face with rounded cheeks, elegant oval jawline, delicate lifted eye shape, fine natural brows, a defined but soft nose bridge, cherry-like compact lips, and an unforced closed-lip smile",
+      "classic young-adult Chinese beauty face, soft egg-shaped oval outline, willow-leaf brows, elongated almond-phoenix eyes, refined natural high nose bridge, compact rosebud mouth shape with bright sheer peach-pink balm, and a tiny closed-mouth smile",
+      "clean mainland Chinese East Asian beauty face with fair neutral skin, soft cheek fullness, slender curved brows, bright almond eyes with slightly lifted outer corners, delicate nose tip, light translucent rose-pink lips, and a gentle candid smile",
+      "fresh adult Chinese first-love beauty face with graceful heart-oval facial balance, tapered eye corners, clear dark pupils, a slim but natural East Asian nose bridge, petite softly full mouth, smooth cheeks, and warm approachable eyes",
+      "fresh washed-face adult beauty with smooth cheeks, subtle under-eye softness, calm bright almond-phoenix eyes, refined nose bridge, bright peach-pink lip-balm lips, and a relaxed first-look-at-camera expression",
+      "casual home-life Chinese beauty face with rounded cheeks, elegant oval jawline, delicate lifted eye shape, fine natural brows, a defined but soft nose bridge, compact rosebud mouth, and an unforced closed-lip smile",
       "bright early-twenties adult East Asian Chinese beauty face with fair-to-light neutral complexion, willow-like brows, luminous elongated almond eyes, smooth youthful lower face, soft cheek curve, and a curious gentle expression",
-      "natural everyday Chinese clean-beauty face with soft facial planes, refined phoenix-eye silhouette, delicate nose bridge, low-saturation cherry-pink small lips, relaxed brows, and fresh 22-23 adult warmth"
+      "natural everyday Chinese clean-beauty face with soft facial planes, refined lifted almond-eye silhouette, delicate nose bridge, bright sheer pink small lips, relaxed brows, and fresh 22-23 adult warmth"
     ]
   },
 
@@ -121,12 +130,12 @@
   ],
 
   "body_types_lifestyle_full": [
-    "a clearly adult but soft everyday feminine figure with natural full upper-body volume, a defined waist suggestion, relaxed shoulders, and believable proportions through a modest casual top",
-    "a fresh young-adult body silhouette with a naturally full bust-to-waist curve, soft waist definition, balanced hips, and fully dressed lifestyle styling",
-    "a natural adult feminine build with visible upper-body fullness, gentle collarbone line, relaxed posture, and fabric with a soft natural drape",
-    "a softly rounded adult figure with realistic full upper-body contour, clear waist cue, ordinary healthy proportions, and comfortable casual clothing",
-    "a balanced early-twenties adult silhouette with soft shoulders, natural full chest contour, defined waist line, and unforced home-life body language",
-    "a healthy everyday feminine figure with natural fullness at the upper body, subtle waist-to-hip shape, grounded posture, and relaxed everyday posing"
+    "a clearly adult but soft everyday feminine figure with natural rounded upper-body fullness, a defined waist suggestion, relaxed shoulders, and believable proportions through a modest fitted knit top",
+    "a fresh young-adult body silhouette with a naturally fuller upper-body-to-waist curve, soft waist definition, balanced hips, and fully dressed lifestyle styling",
+    "a natural adult feminine build with visible upper-body fullness, gentle collarbone line, relaxed posture, and supportive ribbed fabric creating a soft rounded silhouette",
+    "a softly rounded adult figure with realistic upper-body volume, clear waist cue, ordinary healthy proportions, and comfortable fitted casual clothing",
+    "a balanced early-twenties adult silhouette with soft shoulders, naturally rounded upper-body contour, defined waist line, and unforced home-life body language",
+    "a healthy everyday feminine figure with natural fullness through the upper body, subtle waist-to-hip shape, grounded posture, and relaxed everyday posing"
   ],
 
   "body_types_sexy": [
@@ -201,12 +210,12 @@
       "champagne silk blouse with sleeves rolled once, high-waisted wool trousers, blazer draped over shoulders, subtle fabric sheen, understated office-fashion sensuality"
     ],
     "居家": [
-      "softly fitted ivory ribbed knit top with a modest scoop neckline tucked into relaxed high-waisted lounge pants, clear waist definition, natural full upper-body curve visible, and bright morning apartment light",
-      "light cream knit cardigan over a supportive ribbed tank with wide-leg lounge trousers, fully dressed casual ease, soft collarbone line, and natural bust-to-waist contour through the fabric",
-      "lightweight open overshirt over a softly fitted ribbed tank and straight-leg jeans, rolled sleeves, coffee-at-home freshness, balanced feminine silhouette, and torso clearly visible",
-      "simple pale blue fitted cotton tee with high-waisted linen trousers, natural daylight, fabric gently following a realistic full upper-body shape and waist line",
+      "supportive ivory ribbed knit top with a modest scoop neckline tucked into relaxed high-waisted lounge pants, clear waist definition, natural rounded upper-body fullness visible, and bright morning apartment light",
+      "light cream short cardigan worn open over a supportive ribbed tank with wide-leg lounge trousers, fully dressed casual ease, soft collarbone line, and rounded upper-body-to-waist contour through the fabric",
+      "lightweight open overshirt over a structured ribbed fitted tank and straight-leg jeans, rolled sleeves, coffee-at-home freshness, balanced feminine silhouette, and torso clearly visible",
+      "simple pale blue fitted cotton tee with high-waisted linen trousers, natural daylight, fabric smoothly following a realistic rounded upper-body shape and waist line",
       "soft wrap-style knit top with relaxed lounge pants, hair loosely tied back, warm kitchen-morning styling, clean neckline, clear waist cue, and natural rounded upper-body contour",
-      "clean white short cardigan over a modest fitted camisole-style knit top and relaxed jeans, fully dressed home-life styling, soft neckline, visible waist, and natural feminine fullness"
+      "clean white short cardigan over a modest fitted knit camisole-style top and relaxed jeans, fully dressed home-life styling, soft neckline, visible waist, and natural feminine fullness"
     ],
     "邻家": [
       "simple white tee tucked into relaxed denim shorts, white sneakers, ponytail, approachable everyday charm",
@@ -275,15 +284,15 @@
       "light closed-mouth smile with lively clear eyes, relaxed brows, soft rounded cheeks, transparent lip-balm lips, and approachable 22-23 adult warmth",
       "subtle tiny smile with lips gently closed, bright engaged eyes, smooth lower-face contours, and a fresh early-twenties adult mood",
       "gentle candid smile with relaxed mouth corners, clear dark eyes, soft cheek fullness, and natural low-makeup warmth",
-      "soft closed-lip smile with calm brows, smooth cheek area, compact low-saturation cherry-pink lips, and a relaxed friendly expression"
+      "soft closed-lip smile with calm brows, smooth cheek area, compact small mouth shape with bright translucent peach-pink balm, and a relaxed friendly expression"
     ],
     "清新微笑": [
       "soft fresh closed-mouth small smile with clear dark eyes, relaxed brows, smooth rounded cheeks, transparent balm lips, and a 22-23 adult first-love softness",
       "gentle relaxed closed-lip smile with lively eyes, soft cheek volume, candid easy posing, and clean mainland Chinese young-adult warmth",
-      "tiny natural half-smile with rested eyes, smooth lower-face contours, barely tinted low-saturation cherry-pink lip-balm lips, and understated clean makeup",
+      "tiny natural half-smile with rested eyes, smooth lower-face contours, barely tinted bright peach-pink lip-balm lips, and understated clean makeup",
       "light candid smile with open friendly eyes, relaxed jaw, soft cheek fullness, fair neutral skin, and a fresh adult East Asian expression",
       "quiet sweet closed-mouth smile with clear catchlights, calm mouth corners, soft friendly warmth, and relaxed early-twenties ease",
-      "fresh first-meeting smile with bright eyes, relaxed facial muscles, compact cherry-like natural lip shape, rounded cheeks, and gentle approachable energy"
+      "fresh first-meeting smile with bright eyes, relaxed facial muscles, compact petite mouth shape, light glossy peach-pink balm, rounded cheeks, and gentle approachable energy"
     ],
     "性感": [
       "warm confident gaze with bright open eyes, natural peach lips slightly parted, and tasteful youthful adult charm",

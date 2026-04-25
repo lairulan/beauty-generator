@@ -39,6 +39,7 @@
     "pose_types": ["生活半身"],
     "lighting_pool": ["自然光"],
     "expression_pool": ["清新微笑"],
+    "face_mood_pool": "adult_lifestyle_face_moods",
     "body_pool": "body_types_lifestyle_full"
   },
   "邻家女孩系": {
