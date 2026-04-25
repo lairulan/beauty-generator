@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-美女生成 V12.12 - Google Imagen 4 Ultra 双 Key 主力 + 豆包 Seedream 4.5 备选
+美女生成 V12.13 - Google Imagen 4 Ultra 双 Key 主力 + 豆包 Seedream 4.5 备选
 - Google Imagen 4 Ultra 作为主力引擎，支持主备 Key 轮换
 - 豆包 Seedream 4.5 作为 fallback
 - 自动重试 + 429 指数退避（最多 3 次）
@@ -24,7 +24,7 @@ from datetime import date, datetime
 from pathlib import Path
 
 
-VERSION = "12.12.0"
+VERSION = "12.13.0"
 
 
 def _get_ssl_context():
@@ -248,8 +248,8 @@ def get_default_library() -> dict:
             "shoulder-length dark brown hair with subtle waves, natural movement",
             "elegant updo with loose face-framing tendrils, sophisticated style",
             "sleek straight black hair, mirror-like shine, razor-cut ends",
-            "soft romantic curls, chestnut brown, bouncy volume",
-            "messy beach waves, sun-kissed highlights, effortless style",
+            "soft romantic dark-brown curls, bouncy natural volume",
+            "loose natural black waves, effortless style",
             "high ponytail, sleek and polished, face-lifting effect",
             "bob cut with blunt bangs, modern chic, face-framing",
             "long layered hair with curtain bangs, soft feminine look",

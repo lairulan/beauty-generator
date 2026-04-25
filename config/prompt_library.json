@@ -1,6 +1,6 @@
 {
-  "version": "12.12",
-  "description": "Imagen 4 Ultra 优化版 - 年轻成熟女性自然语言摄影描述风格，强化典型东方脸、22-23 岁年轻成人感、干净健康肤质、年轻自然表情、生活杂志吸引力、自然唇色、安全日常场景、自然饱满女性轮廓和无遮挡构图",
+  "version": "12.13",
+  "description": "Imagen 4 Ultra 优化版 - 年轻成熟女性自然语言摄影描述风格，强化典型东方脸、22-23 岁年轻成人感、干净健康肤质、年轻自然表情、生活杂志吸引力、自然深色发型、自然唇色、安全日常场景、自然饱满女性轮廓和无遮挡构图",
 
   "base_quality": [
     "A clean lifestyle editorial portrait photographed in flattering available light, with healthy skin, natural color response, and warm emotional realism",
@@ -87,10 +87,10 @@
   "hair_styles": [
     "long silky black hair flowing in wind, glossy healthy shine, waist-length",
     "shoulder-length dark brown hair with subtle waves, natural movement, soft bounce",
-    "elegant updo with loose face-framing tendrils, sophisticated evening style, exposing slender neck",
+    "soft low ponytail with loose face-framing tendrils, natural black hair, exposing slender neck",
     "sleek straight black hair, mirror-like shine, razor-cut ends, hip-length cascade",
-    "soft romantic curls, chestnut brown, bouncy volume, tumbling over shoulders",
-    "messy beach waves, sun-kissed highlights, effortless style, tousled by wind",
+    "soft romantic dark-brown curls, bouncy natural volume, tumbling over shoulders",
+    "loose natural black waves, effortless style, softly tousled by wind",
     "high ponytail, sleek and polished, face-lifting effect, swinging with movement",
     "bob cut with blunt bangs, modern chic, face-framing, sharp clean lines",
     "long layered hair with curtain bangs, soft feminine look, framing cheekbones",
@@ -99,7 +99,7 @@
     "wavy lob, textured layers, trendy modern style, effortless volume",
     "side-swept long hair over one shoulder, revealing neck and collarbone, glamorous asymmetry",
     "twin braids with loose strands, playful adult charm, soft nostalgic styling",
-    "wet-look slicked-back hair, editorial high fashion, soft cheek contours visible, polished",
+    "soft shoulder-length black hair with natural volume, clean side part, face-framing layers, polished but approachable",
     "loose natural waves with center part, bohemian goddess, free-spirited beauty"
   ],
 
