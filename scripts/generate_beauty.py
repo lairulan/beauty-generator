@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-美女生成 V12.24 - Google Imagen 4 Ultra 双 Key 主力 + 豆包 Seedream 4.5 备选
+美女生成 V12.25 - Google Imagen 4 Ultra 双 Key 主力 + 豆包 Seedream 4.5 备选
 - Google Imagen 4 Ultra 作为主力引擎，支持主备 Key 轮换
 - 豆包 Seedream 4.5 作为 fallback
 - 自动重试 + 429 指数退避（最多 3 次）
@@ -24,7 +24,7 @@ from datetime import date, datetime
 from pathlib import Path
 
 
-VERSION = "12.24.0"
+VERSION = "12.25.0"
 
 
 def _get_ssl_context():
@@ -270,9 +270,14 @@ def get_default_library() -> dict:
             "graceful feminine silhouette with clear full bust-to-waist proportion, soft hips, and grounded balance"
         ],
         "adult_lifestyle_face_moods": [
-            "adult first-love freshness profile: slim heart-shaped melon-seed face, softly narrow cheek contour, bright clear apricot-almond eyes with a slight phoenix lift, delicate straight high nose bridge, small refined nostrils, petite narrow rosebud mouth shape, sheer peach-pink lip balm, and light curious warmth",
-            "young newlywed softness profile: graceful melon-seed oval face, narrow V-line lower face, gentle willow brows, elongated warm almond eyes, refined higher East Asian nose bridge with a small nose base, softly full but narrow mouth with a clear cupid's bow, bright translucent pink-coral lips, calm affectionate smile, and polished low-makeup femininity",
-            "Jiangnan-style delicate beauty profile: slim melon-seed face with delicate cheek softness, fine arched willow brows, narrow luminous phoenix eyes, elegant straight nose line, small refined nostrils, petite narrow rosebud mouth shape, clear light apricot-pink lip-balm color, and quiet gentle charm"
+            "reference-style elegant Chinese beauty profile: graceful oval-melon face, soft high forehead, smooth narrow cheek-to-jaw taper, rounded small chin, warm almond eyes with subtle double eyelids and bright catchlights, soft arched willow brows, straight high nose bridge with a small nose base, petal-shaped medium-small smile lips in sheer peach-coral balm, and calm gentle warmth",
+            "young newlywed softness profile: long oval-melon face, narrow but not sharp lower face, gentle willow brows, luminous almond eyes with lifted outer corners and delicate lower-lid softness, refined straight East Asian nose bridge, compact nostrils, softly full petal mouth with a clear cupid's bow, bright translucent pink-coral lips, and polished low-makeup femininity",
+            "Jiangnan refined beauty profile: elegant oval face with melon-seed lower line, smooth cheek plane, fine arched brows, clear almond-phoenix eyes, long clean nose highlight, small nose tip and nostrils, relaxed petal-shaped smile lips, light apricot-pink lip-balm color, and quiet gentle charm"
+        ],
+        "lifestyle_reference_hair_styles": [
+            "long natural black hair with a deep soft side part, airy volume at the crown, loose waves flowing behind one shoulder, and a few face-framing strands slimming the cheek line",
+            "long glossy black hair swept to one side, natural root lift, soft loose waves, one side tucked lightly behind the ear, revealing an elegant jawline and earring",
+            "soft side-parted long black hair with relaxed waves, gentle flyaway strands near the temples, hair framing only one side of the face to avoid a wide face impression"
         ],
         "body_types_lifestyle_full": [
             "a clearly adult tasteful sensual art-portrait silhouette with fuller rounded upper-body fullness, defined waist suggestion, relaxed shoulders, and believable proportions shaped by a modest supportive fitted knit top",
@@ -629,10 +634,11 @@ class SmartPromptGenerator:
         if style == "生活场景系":
             return (
                 "Face first: her face must read as a clearly adult contemporary mainland Chinese beauty face, "
-                "using the selected adult face profile as a unique individual identity. Keep the face varied but classically Chinese: "
-                "a slim melon-seed face, narrow V-line lower face, soft tapered chin, and slender willow-leaf or soft straight brows; elongated almond / phoenix eyes with tapered corners; "
-                "a refined high but natural East Asian nose bridge, narrow nose base, small refined nostrils, and a delicate nose tip; fair-to-light neutral skin; natural black hair; barely-there makeup; "
-                "and a compact petite narrow rosebud mouth shape with bright translucent peach-pink or rose-pink lip balm and a clear-balm finish"
+                "using the selected adult face profile as a unique individual identity and a graceful three-quarter head angle. Keep the face varied but classically Chinese: "
+                "a soft high forehead, elongated oval-melon facial outline, smooth narrow cheek-to-jaw taper, softly rounded small chin, and soft arched willow brows; "
+                "warm almond eyes with subtle double-eyelid creases, tiny catchlights, delicate lower-lid softness, and gently lifted outer corners; "
+                "a refined straight high East Asian nose bridge with a clean highlight line, narrow nose base, compact nostrils, and a delicate nose tip; fair-to-light neutral skin; natural black side-parted hair; barely-there makeup; "
+                "and petal-shaped medium-small smile lips with a soft cupid's bow, moderate narrow mouth width, bright translucent peach-coral or rose-pink lip balm, and a clear-balm finish"
             )
 
         return (
@@ -654,8 +660,8 @@ class SmartPromptGenerator:
         if style == "生活场景系":
             return (
                 "Make the image read as a fresh relaxed 22-23 year old adult Chinese lifestyle portrait. The attraction should come from "
-                "the selected adult youthful or young-wife facial profile, bright clear eyes, a refined higher nose bridge with small nostrils, compact petite narrow rosebud mouth shape, slim lower face, "
-                "tasteful sensual art-portrait styling, soft sculpting light, a supportive structured fitted casual knit top, fuller rounded upper-body fullness, clear upper-body-to-waist curve, a gentle waist cue, and a front-facing or very slight three-quarter camera angle; "
+                "the selected adult youthful or young-wife facial profile, warm almond eyes with subtle double eyelids, a refined straight high nose bridge with compact nostrils, petal-shaped medium-small smile lips, a smooth narrow lower face, "
+                "side-parted long black hair softly framing one side of the cheek, tasteful sensual art-portrait styling, soft sculpting light, a supportive structured fitted casual knit top, fuller rounded upper-body fullness, clear upper-body-to-waist curve, a gentle waist cue, and a three-quarter waist-up camera angle; "
                 "keep the outfit fully dressed, modest, artistic, everyday, and restrained"
             )
 
@@ -685,13 +691,13 @@ class SmartPromptGenerator:
             return [
                 "Keep the image grounded in real-world lifestyle photography with natural daylight, restrained retouching, believable skin texture, and relaxed candid posture",
                 "Keep the face clearly adult but visibly 22 to 23 years old: delicate cheek softness, bright rested eyes, slim smooth lower-face contours, relaxed brows, and a soft early-twenties adult expression",
-                "Use the selected face profile as a unique individual identity; preserve adult youthful freshness or young-wife softness while keeping a slim melon-seed face, narrow lower face, soft tapered chin, varied brow shape, varied eye openness, refined nose bridge, and narrow mouth shape",
-                "Use classic Chinese beauty-word structure in a modern natural face: slim melon-seed face, narrow V-line lower jaw, willow-leaf brows, bright lifted almond / phoenix eyes, refined high East Asian nose bridge, small refined nostrils, compact petite narrow rosebud mouth shape, and clear fair skin",
+                "Use the selected face profile as a unique individual identity; preserve adult youthful freshness or young-wife softness while keeping a graceful oval-melon face, smooth narrow cheek-to-jaw taper, softly rounded small chin, varied arched brow shape, warm almond eye openness, refined straight high nose bridge, and petal-shaped medium-small mouth",
+                "Use classic Chinese beauty-word structure in a modern natural face: graceful oval-melon face, narrow lower jaw without harsh sharpness, willow-leaf arched brows, warm lifted almond eyes with subtle double eyelids, refined high East Asian nose bridge with a clean highlight line, compact nostrils, petal-shaped smile lips, and clear fair skin",
                 "Make the expression gentle and fresh: lively clear eyes, relaxed facial muscles, tiny closed-mouth smile, calm mouth corners, and approachable warmth",
                 "Keep the complexion fair-to-light neutral and clean, with soft even cheek color, clear skin texture, restrained makeup, and a transparent natural finish",
-                "Keep the lips fresh and youthful: narrow mouth width, softly full natural lips, defined cupid's bow, transparent lip-balm sheen, and bright translucent peach-pink or rose-pink natural color close to a clear-balm look",
-                "Keep her body clearly adult and feminine through tasteful sensual art-photo styling and fully dressed casual clothing: fuller rounded upper-body fullness, defined waist suggestion, soft shoulders, realistic proportions, supportive structured ribbed knit fabric, soft side light shaping the silhouette, and a front-facing half-body frame with torso and waist visible",
-                "Use contemporary mainland Chinese clean-beauty cues: natural black hair, slender neat brows, elongated lifted almond eyes, slim melon-seed face, narrow lower jaw, refined high nose line, small nostrils, and a relaxed first-meeting smile"
+                "Keep the lips fresh and youthful: medium-small petal shape, moderate narrow mouth width, softly full natural lower lip, defined but soft cupid's bow, transparent lip-balm sheen, and bright translucent peach-coral or rose-pink natural color close to a clear-balm look",
+                "Keep her body clearly adult and feminine through tasteful sensual art-photo styling and fully dressed casual clothing: fuller rounded upper-body fullness, defined waist suggestion, soft shoulders, realistic proportions, supportive structured ribbed knit fabric, soft side light shaping the silhouette, and a three-quarter half-body frame with torso and waist visible",
+                "Use contemporary mainland Chinese clean-beauty cues: side-parted natural black hair, slender softly arched brows, warm almond eyes, graceful oval-melon face, smooth narrow lower jaw, refined straight high nose line, compact nostrils, petal smile lips, and a relaxed first-meeting smile"
             ]
 
         clauses = [
@@ -815,7 +821,7 @@ class SmartPromptGenerator:
             sections.append(
                 f"A realistic fresh adult Chinese lifestyle half-body portrait in soft neutral daylight, featuring {asian_id}. "
                 "The face and expression are the priority: classically beautiful contemporary mainland Chinese East Asian facial aesthetics with visible variation, gentle first-meeting warmth, "
-                "bright lifted almond eyes, refined higher nose bridge with small nostrils, slim melon-seed lower face, compact petite narrow rosebud mouth shape, bright sheer peach-pink balm, fair neutral skin, and relaxed early-twenties adult presence"
+                "warm lifted almond eyes with subtle double eyelids, refined straight high nose bridge with compact nostrils, graceful oval-melon lower face, petal-shaped medium-small smile lips, bright sheer peach-coral balm, fair neutral skin, and relaxed early-twenties adult presence"
             )
         else:
             sections.append(f"{quality}, featuring {asian_id}")
@@ -1498,6 +1504,13 @@ def _apply_style_strategy(generator, style, scene_type, outfit_style,
         if face_mood_list:
             character = dict(character)  # 浅拷贝避免污染原始
             character["face_mood"] = generator.pick_one(face_mood_list)
+
+    hair_pool = strategy.get("hair_pool")
+    if hair_pool:
+        hair_list = generator.library.get(hair_pool, [])
+        if hair_list:
+            character = dict(character)  # 浅拷贝避免污染原始
+            character["hair"] = generator.pick_one(hair_list)
 
     body_pool = strategy.get("body_pool")
     if body_pool:
