@@ -1,6 +1,6 @@
 {
-  "version": "12.23",
-  "description": "Imagen 4 Ultra 优化版 - 收紧生活场景脸部结构，优先瓜子脸/小V线下颌/窄下半脸/柔和尖下巴，强化挺秀鼻梁、小巧鼻翼和小鼻孔、窄小樱桃口形状、淡雅明亮桃粉润唇；减少宽脸、宽下颌、宽嘴和大鼻孔倾向，同时用支撑型合身针织、无遮挡正面半身构图强化日常丰满但非露骨的女性轮廓",
+  "version": "12.24",
+  "description": "Imagen 4 Ultra 优化版 - 生活场景升级为含蓄性感艺术写真语气，在成年边界下保留瓜子脸/小V线下颌/挺秀鼻梁/小鼻孔/窄小樱桃口，同时用 fine-art glamour / tasteful sensual art-portrait 的光影、支撑型合身针织、锁骨腰线、正面半身和自然丰满上身轮廓表达性感艺术照质感，避免露骨或夸张身体提示",
 
   "base_quality": [
     "A realistic fresh adult Chinese lifestyle portrait in soft neutral daylight, with fair neutral skin, natural color response, relaxed body language, and clean early-twenties facial softness",
@@ -130,12 +130,12 @@
   ],
 
   "body_types_lifestyle_full": [
-    "a clearly adult but soft everyday feminine figure with fuller rounded upper-body fullness, a defined waist suggestion, relaxed shoulders, and believable proportions through a modest supportive fitted knit top",
-    "a fresh young-adult body silhouette with a noticeably fuller but realistic upper-body-to-waist curve, soft waist definition, balanced hips, and fully dressed lifestyle styling",
-    "a natural adult feminine build with visible well-supported upper-body fullness, gentle collarbone line, relaxed posture, and structured ribbed fabric creating a fuller rounded silhouette",
-    "a softly rounded adult figure with realistic fuller upper-body volume, clear waist cue, ordinary healthy proportions, and comfortable fitted casual clothing",
-    "a balanced early-twenties adult silhouette with soft shoulders, naturally fuller rounded upper-body contour, defined waist line, and unforced home-life body language",
-    "a healthy everyday feminine figure with natural fullness through the upper body, subtle waist-to-hip shape, grounded posture, and relaxed everyday posing with the torso unobstructed"
+    "a clearly adult tasteful sensual art-portrait silhouette with fuller rounded upper-body fullness, defined waist suggestion, relaxed shoulders, and believable proportions shaped by a modest supportive fitted knit top",
+    "a fine-art glamour inspired young-adult body silhouette with a noticeably fuller but realistic upper-body-to-waist curve, soft waist definition, balanced hips, and fully dressed artistic portrait styling",
+    "a natural adult feminine build with visible well-supported upper-body fullness, gentle collarbone line, relaxed posture, and structured ribbed fabric creating a fuller rounded art-photo silhouette",
+    "a softly rounded adult figure with realistic fuller upper-body volume, clear waist cue, ordinary healthy proportions, and comfortable fitted art-portrait clothing",
+    "a balanced early-twenties adult silhouette with soft shoulders, naturally fuller rounded upper-body contour, defined waist line, and tasteful sensual studio-portrait body language",
+    "a healthy everyday feminine figure with natural fullness through the upper body, subtle waist-to-hip shape, grounded posture, and an unobstructed torso framed like a tasteful sensual art photo"
   ],
 
   "body_types_sexy": [
@@ -210,12 +210,12 @@
       "champagne silk blouse with sleeves rolled once, high-waisted wool trousers, blazer draped over shoulders, subtle fabric sheen, understated office-fashion sensuality"
     ],
     "居家": [
-      "supportive ivory ribbed knit top with a modest scoop neckline tucked into relaxed high-waisted lounge pants, clear waist definition, fuller rounded upper-body fullness visible through structured fabric, and bright morning apartment light",
-      "light cream short cardigan worn open over a supportive ribbed tank with wide-leg lounge trousers, fully dressed casual ease, soft collarbone line, and fuller rounded upper-body-to-waist contour through the fabric",
-      "lightweight open overshirt over a structured ribbed fitted tank and straight-leg jeans, rolled sleeves, coffee-at-home freshness, fuller balanced feminine silhouette, and torso clearly visible from the front",
-      "simple pale blue fitted cotton tee with high-waisted linen trousers, natural daylight, fabric smoothly following a realistic fuller rounded upper-body shape and waist line",
-      "soft wrap-style knit top with relaxed lounge pants, hair loosely tied back, warm kitchen-morning styling, clean neckline, clear waist cue, and fuller rounded upper-body contour",
-      "clean white short cardigan over a modest fitted knit camisole-style top and relaxed jeans, fully dressed home-life styling, soft neckline, visible waist, and natural fuller feminine fullness"
+      "supportive ivory ribbed knit top with a modest scoop neckline tucked into relaxed high-waisted lounge pants, clear waist definition, fuller rounded upper-body fullness visible through structured fabric, and soft art-portrait window light",
+      "light cream short cardigan worn open over a supportive ribbed tank with wide-leg lounge trousers, fully dressed tasteful sensual portrait styling, soft collarbone line, and fuller rounded upper-body-to-waist contour through the fabric",
+      "lightweight open overshirt over a structured ribbed fitted tank and straight-leg jeans, rolled sleeves, fine-art glamour home portrait freshness, fuller balanced feminine silhouette, and torso clearly visible from the front",
+      "simple pale blue fitted cotton tee with high-waisted linen trousers, soft side light, fabric smoothly following a realistic fuller rounded upper-body shape and waist line like a tasteful art photo",
+      "soft wrap-style knit top with relaxed lounge pants, hair loosely tied back, warm kitchen-morning art-portrait styling, clean neckline, clear waist cue, and fuller rounded upper-body contour",
+      "clean white short cardigan over a modest fitted knit camisole-style top and relaxed jeans, fully dressed tasteful sensual home-life styling, soft neckline, visible waist, and natural fuller feminine fullness"
     ],
     "邻家": [
       "simple white tee tucked into relaxed denim shorts, white sneakers, ponytail, approachable everyday charm",

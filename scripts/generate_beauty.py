@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-美女生成 V12.23 - Google Imagen 4 Ultra 双 Key 主力 + 豆包 Seedream 4.5 备选
+美女生成 V12.24 - Google Imagen 4 Ultra 双 Key 主力 + 豆包 Seedream 4.5 备选
 - Google Imagen 4 Ultra 作为主力引擎，支持主备 Key 轮换
 - 豆包 Seedream 4.5 作为 fallback
 - 自动重试 + 429 指数退避（最多 3 次）
@@ -24,7 +24,7 @@ from datetime import date, datetime
 from pathlib import Path
 
 
-VERSION = "12.23.0"
+VERSION = "12.24.0"
 
 
 def _get_ssl_context():
@@ -275,9 +275,9 @@ def get_default_library() -> dict:
             "Jiangnan-style delicate beauty profile: slim melon-seed face with delicate cheek softness, fine arched willow brows, narrow luminous phoenix eyes, elegant straight nose line, small refined nostrils, petite narrow rosebud mouth shape, clear light apricot-pink lip-balm color, and quiet gentle charm"
         ],
         "body_types_lifestyle_full": [
-            "a clearly adult but soft everyday feminine figure with fuller rounded upper-body fullness, a defined waist suggestion, relaxed shoulders, and believable proportions through a modest supportive fitted knit top",
-            "a fresh young-adult body silhouette with a noticeably fuller but realistic upper-body-to-waist curve, soft waist definition, balanced hips, and fully dressed lifestyle styling",
-            "a natural adult feminine build with visible well-supported upper-body fullness, gentle collarbone line, relaxed posture, and structured ribbed fabric creating a fuller rounded silhouette"
+            "a clearly adult tasteful sensual art-portrait silhouette with fuller rounded upper-body fullness, defined waist suggestion, relaxed shoulders, and believable proportions shaped by a modest supportive fitted knit top",
+            "a fine-art glamour inspired young-adult body silhouette with a noticeably fuller but realistic upper-body-to-waist curve, soft waist definition, balanced hips, and fully dressed artistic portrait styling",
+            "a natural adult feminine build with visible well-supported upper-body fullness, gentle collarbone line, relaxed posture, and structured ribbed fabric creating a fuller rounded art-photo silhouette"
         ],
         "body_types_sexy": [
             "confident curvy figure with natural feminine volume, fuller but realistic bust, defined waist, and rounded hips",
@@ -333,9 +333,9 @@ def get_default_library() -> dict:
                 "elegant secretary look, crisp shirt with rolled sleeves, tight pencil skirt, reading glasses"
             ],
             "居家": [
-                "supportive ivory ribbed knit top with a modest scoop neckline tucked into relaxed high-waisted lounge pants, clear waist definition, fuller rounded upper-body fullness visible through structured fabric, and bright morning apartment light",
-                "light cream short cardigan worn open over a supportive ribbed tank with wide-leg lounge trousers, fully dressed casual ease, soft collarbone line, and fuller rounded upper-body-to-waist contour through the fabric",
-                "lightweight open overshirt over a structured ribbed fitted tank and straight-leg jeans, rolled sleeves, coffee-at-home freshness, fuller balanced feminine silhouette, and torso clearly visible from the front"
+                "supportive ivory ribbed knit top with a modest scoop neckline tucked into relaxed high-waisted lounge pants, clear waist definition, fuller rounded upper-body fullness visible through structured fabric, and soft art-portrait window light",
+                "light cream short cardigan worn open over a supportive ribbed tank with wide-leg lounge trousers, fully dressed tasteful sensual portrait styling, soft collarbone line, and fuller rounded upper-body-to-waist contour through the fabric",
+                "lightweight open overshirt over a structured ribbed fitted tank and straight-leg jeans, rolled sleeves, fine-art glamour home portrait freshness, fuller balanced feminine silhouette, and torso clearly visible from the front"
             ],
             "邻家": [
                 "simple white tee tucked into denim shorts, casual sneakers, natural effortless style",
@@ -655,8 +655,8 @@ class SmartPromptGenerator:
             return (
                 "Make the image read as a fresh relaxed 22-23 year old adult Chinese lifestyle portrait. The attraction should come from "
                 "the selected adult youthful or young-wife facial profile, bright clear eyes, a refined higher nose bridge with small nostrils, compact petite narrow rosebud mouth shape, slim lower face, "
-                "a supportive structured fitted casual knit top, fuller rounded upper-body fullness, clear upper-body-to-waist curve, a gentle waist cue, and a front-facing or very slight three-quarter camera angle; "
-                "keep the outfit fully dressed, modest, and everyday with natural casual styling"
+                "tasteful sensual art-portrait styling, soft sculpting light, a supportive structured fitted casual knit top, fuller rounded upper-body fullness, clear upper-body-to-waist curve, a gentle waist cue, and a front-facing or very slight three-quarter camera angle; "
+                "keep the outfit fully dressed, modest, artistic, everyday, and restrained"
             )
 
         if style == "职场系":
@@ -690,7 +690,7 @@ class SmartPromptGenerator:
                 "Make the expression gentle and fresh: lively clear eyes, relaxed facial muscles, tiny closed-mouth smile, calm mouth corners, and approachable warmth",
                 "Keep the complexion fair-to-light neutral and clean, with soft even cheek color, clear skin texture, restrained makeup, and a transparent natural finish",
                 "Keep the lips fresh and youthful: narrow mouth width, softly full natural lips, defined cupid's bow, transparent lip-balm sheen, and bright translucent peach-pink or rose-pink natural color close to a clear-balm look",
-                "Keep her body clearly adult and feminine through fully dressed casual clothing: fuller rounded upper-body fullness, defined waist suggestion, soft shoulders, realistic proportions, supportive structured ribbed knit fabric, and a front-facing half-body frame with torso and waist visible",
+                "Keep her body clearly adult and feminine through tasteful sensual art-photo styling and fully dressed casual clothing: fuller rounded upper-body fullness, defined waist suggestion, soft shoulders, realistic proportions, supportive structured ribbed knit fabric, soft side light shaping the silhouette, and a front-facing half-body frame with torso and waist visible",
                 "Use contemporary mainland Chinese clean-beauty cues: natural black hair, slender neat brows, elongated lifted almond eyes, slim melon-seed face, narrow lower jaw, refined high nose line, small nostrils, and a relaxed first-meeting smile"
             ]
 
@@ -744,9 +744,9 @@ class SmartPromptGenerator:
                 "candid neighborhood photography mood, grounded color, and unforced styling"
             ],
             "生活场景系": [
-                "fresh everyday lifestyle photography, neutral daylight color, clean soft light, and face-led early-twenties adult softness",
-                "quiet home-life realism with soft neutral contrast, fair clean skin, relaxed expression, and low-polish everyday warmth",
-                "natural candid portrait treatment with believable indoor light, lively eyes, transparent lip-balm lips, and soft flattering skin"
+                "tasteful sensual home-life art portrait photography, soft sculpting window light, neutral daylight color, and face-led early-twenties adult softness",
+                "fine-art glamour inspired home portrait realism with soft neutral contrast, fair clean skin, relaxed expression, and fully dressed intimate warmth",
+                "natural candid art-portrait treatment with believable indoor side light, lively eyes, transparent lip-balm lips, soft flattering skin, and a sculpted feminine silhouette"
             ],
             "职场系": [
                 "premium office fashion editorial with crisp window light, soft rim light, catchlights, and quiet sensual tension",
