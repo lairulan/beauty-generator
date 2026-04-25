@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-美女生成 V12.33 - Google Imagen 4 Ultra 双 Key 主力 + 豆包 Seedream 4.5 备选
+美女生成 V12.34 - Google Imagen 4 Ultra 双 Key 主力 + 豆包 Seedream 4.5 备选
 - Google Imagen 4 Ultra 作为主力引擎，支持主备 Key 轮换
 - 豆包 Seedream 4.5 作为 fallback
 - 自动重试 + 429 指数退避（最多 3 次）
@@ -24,7 +24,7 @@ from datetime import date, datetime
 from pathlib import Path
 
 
-VERSION = "12.33.0"
+VERSION = "12.34.0"
 
 
 def _get_ssl_context():
@@ -751,8 +751,8 @@ class SmartPromptGenerator:
             ],
             "生活场景系": [
                 "bright fresh sensual home-life portrait photography, high-key clean window light, cool-neutral white-and-pink skin, pale baby-pink clear lip-balm accents, and face-led early-twenties adult sweetness",
-                "fresh lifestyle cover realism with clean daylight contrast, bright milk-fair clean skin, magnetic lifted eyes, glossy pale baby-pink lips, and fully dressed intimate freshness",
-                "natural candid lifestyle portrait treatment with believable bright indoor side light, alluring fox-almond eyes, glossy pale baby-pink lip-balm lips, soft luminous milk-fair skin, and a sculpted feminine silhouette"
+                "fresh lifestyle cover realism with clean daylight contrast, bright milk-fair clean skin, magnetic lifted eyes returning to camera, glossy near-clear pale baby-pink lips, and fully dressed intimate freshness",
+                "natural candid lifestyle portrait treatment with believable even bright indoor window light, alluring fox-almond eyes returning to camera, glossy near-clear pale baby-pink lip-balm lips, soft luminous milk-fair skin, and a sculpted feminine silhouette"
             ],
             "职场系": [
                 "premium office fashion editorial with crisp window light, soft rim light, catchlights, and quiet sensual tension",
@@ -801,21 +801,22 @@ class SmartPromptGenerator:
             (
                 "Eyes priority: luminous elongated phoenix-almond / fox-almond eyes, lifted outer corners, clear black irises, "
                 "strong glossy catchlights, delicate lower-lid softness, subtle double-eyelid creases, clean tapered eyeliner, "
-                "and a lively magnetic gaze that feels fresh, attractive, and gently sensual rather than mature or stern"
+                "both eyes fully visible with direct eye contact returning to the lens, and a lively magnetic gaze that feels fresh, attractive, "
+                "and gently sensual rather than mature, stern, looking away, or gazing out of frame"
             ),
             (
                 "Skin color rule: cool-neutral bright fair Chinese complexion, white with a faint fresh pink undertone, "
-                "milk-fair translucent cheeks, bright clean face exposure, clear pore-level texture, no warm filter, "
-                "no beige-orange cast, no amber cast, no yellow-brown cast, no tan or dusky complexion"
+                "milk-fair translucent cheeks, even bright front-window face exposure, no dark cheek shadow, clear pore-level texture, "
+                "no warm filter, no beige-orange cast, no amber cast, no yellow-brown cast, no tan or dusky complexion"
             ),
             (
                 "Lip color rule: compact medium-small flower-petal mouth with moderate narrow width, softly full natural lower lip, "
-                "clear glossy lip-balm shine with a very light pale baby-pink water tint, almost transparent and bright; "
-                "not red, not rose, not brown, not mauve, not berry, not dark, not heavy lipstick"
+                "bare-lip look with clear glossy balm, extremely low-saturation pale baby-pink water tint only at the inner lip, "
+                "almost transparent and bright, visibly lighter than cheek blush; not red, not rose, not brown, not mauve, not berry, not dark, not heavy lipstick"
             ),
             (
-                "Overall color direction: clean cool-neutral high-key grading, white-and-pink facial color, clear bright eyes, "
-                "pale baby-pink lips, no orange warmth, no golden-hour warmth, no rose-brown makeup"
+                "Overall color direction: clean cool-neutral high-key grading, white-and-pink facial color, evenly lit fair face, clear bright eyes, "
+                "near-clear pale baby-pink lips, no orange warmth, no golden-hour warmth, no rose-brown makeup"
             ),
         ]
 
@@ -855,7 +856,7 @@ class SmartPromptGenerator:
             ),
             (
                 "Keep the expression young-adult and relaxed: lively clear eyes, relaxed facial muscles, tiny sweet closed-mouth smile, "
-                "softly lifted mouth corners, smooth lower-face contours, and no stiff, tired, executive, or older-looking expression"
+                "softly lifted mouth corners, smooth lower-face contours, direct gentle eye contact, and no stiff, tired, executive, or older-looking expression"
             ),
         ])
 

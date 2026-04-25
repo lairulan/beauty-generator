@@ -1,6 +1,6 @@
 {
-  "version": "12.33",
-  "description": "Imagen 4 Ultra 优化版 - 生活场景文生图改为短而强的正向约束：22-23 岁年轻成人、东亚中国审美、高键清透曝光、冷中性白里透红肤色、清透奶白脸部曝光、淡婴儿粉透明水润唇、凤眼感杏眼/狐狸杏眼、眼尾轻上扬、清亮有吸引力眼神；因为 Google Imagen 主路径不使用 negative_prompt，所以把偏深/偏黄棕肤色、暖黄暗调、玫瑰棕/深粉/红唇、眼神呆滞和成熟脸排除项前置进正向 prompt",
+  "version": "12.34",
+  "description": "Imagen 4 Ultra 优化版 - 生活场景文生图改为短而强的正向约束：22-23 岁年轻成人、东亚中国审美、高键清透曝光、冷中性白里透红肤色、清透奶白脸部均匀曝光、近乎透明淡婴儿粉水润唇、凤眼感杏眼/狐狸杏眼、眼尾轻上扬、回看镜头的清亮有吸引力眼神；因为 Google Imagen 主路径不使用 negative_prompt，所以把偏深/偏黄棕肤色、暖黄暗调、玫瑰棕/深粉/红唇、看向画外和成熟脸排除项前置进正向 prompt",
 
   "base_quality": [
     "A realistic fresh adult Chinese lifestyle portrait in bright high-key clean daylight, with cool-neutral white-and-pink Chinese fair skin, milk-fair face exposure, clear bright eyes, pale baby-pink transparent lip-balm lips, relaxed body language, and clean early-twenties facial softness",
@@ -253,8 +253,8 @@
       "near-frontal waist-up home portrait with a gentle shoulder turn, both eyes visible, head slightly tilted, one hand brushing side-parted hair near the cheek, elegant jawline visible, torso and waist unobstructed",
       "standing near a bright window in a near-frontal waist-up frame, face softly lit, eyes gently returning to camera, one hand lightly holding the cardigan edge near the waist, clear fuller upper-body-to-waist line visible",
       "casual sofa-side half-body portrait with a soft three-quarter shoulder turn, face fully readable toward camera, open torso, lively eye contact, gentle smile, and natural breathing posture",
-      "front-facing relaxed waist-up portrait with a subtle head turn, one hand adjusting hair near the ear, slim cheek-to-jaw line visible, open torso, clear waist cue, and gentle closed-mouth smile",
-      "home-life candid half-body shot captured mid-gesture, both eyes visible, one hand tucking side-parted hair behind the ear, relaxed mouth corners, visible neckline, open torso, and natural fuller upper-body contour"
+      "front-facing relaxed waist-up portrait with a subtle head turn, one hand adjusting hair near the ear, slim cheek-to-jaw line visible, direct gentle eye contact, open torso, clear waist cue, and gentle closed-mouth smile",
+      "home-life candid half-body shot captured mid-gesture, both eyes visible and returning to camera, one hand tucking side-parted hair behind the ear, relaxed mouth corners, visible neckline, open torso, and natural fuller upper-body contour"
     ],
     "职场半身": [
       "waist-up office-fashion portrait at a three-quarter angle, one hand lightly touching the blazer lapel, relaxed shoulders, direct bright eye contact",
@@ -406,7 +406,7 @@
   "lighting": {
     "自然光": [
     "high-key clean daylight, bright face exposure, cool-neutral white-and-pink Chinese fair skin tones, and strong eye catchlights",
-    "bright cool-neutral window light with gentle falloff, milk-fair facial color, and soft even shadows",
+      "bright cool-neutral window light with even front-face illumination, milk-fair facial color, and soft minimal shadows",
     "soft overcast daylight, balanced contrast, clear alluring eyes, and bright milk-fair facial color",
       "morning apartment daylight through sheer curtains, clean cheek highlights, cool-neutral white-and-pink fair skin, and clear fresh atmosphere",
     "light dappled daylight softened by leaves, natural patterns, bright face exposure, and cool-neutral fair skin tones"
@@ -469,7 +469,7 @@
     "with a few fine flyaway hairs, clean cheek highlights, relaxed facial muscles, and real fabric creases",
     "with a smooth slim cheek-to-jaw line, bright believable catchlights, almost-clear pale baby-pink lip-balm sheen, and natural skin texture",
     "with relaxed shoulders, gentle hand tension, visible waist line, bright face exposure, and natural breathing posture",
-    "with subtle clothing wrinkles, clean cool-neutral light falloff across the face, luminous milk-fair skin color, and grounded depth",
+    "with subtle clothing wrinkles, even clean cool-neutral light across the face, luminous milk-fair skin color, and grounded depth",
     "with fine baby hairs near the temples, a smooth narrow lower-face line, and lived-in home materials around her"
   ],
 
