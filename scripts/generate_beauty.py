@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-美女生成 V12.20 - Google Imagen 4 Ultra 双 Key 主力 + 豆包 Seedream 4.5 备选
+美女生成 V12.21 - Google Imagen 4 Ultra 双 Key 主力 + 豆包 Seedream 4.5 备选
 - Google Imagen 4 Ultra 作为主力引擎，支持主备 Key 轮换
 - 豆包 Seedream 4.5 作为 fallback
 - 自动重试 + 429 指数退避（最多 3 次）
@@ -24,7 +24,7 @@ from datetime import date, datetime
 from pathlib import Path
 
 
-VERSION = "12.20.0"
+VERSION = "12.21.0"
 
 
 def _get_ssl_context():
@@ -623,11 +623,12 @@ class SmartPromptGenerator:
         """给 Google 正向提示稳定注入东亚审美脸部锚点。"""
         if style == "生活场景系":
             return (
-                "Face first: her face must read as a clearly adult contemporary mainland Chinese / East Asian clean-beauty face, "
-                "with a soft everyday facial impression. Use a soft oval facial outline, rounded cheek volume, smooth youthful lower-face contours, "
-                "dark almond-shaped eyes with clear catchlights, relaxed natural straight brows, a small-to-medium natural nose bridge, "
-                "fair-to-light neutral skin, natural black hair, barely-there makeup, transparent lip-balm finish, almost bare pale nude-pink lips, "
-                "and a gentle closed-mouth first-meeting smile"
+                "Face first: her face must read as a clearly adult contemporary mainland Chinese beauty face, "
+                "using classic Chinese beauty cues translated into photoreal facial structure. Use a soft egg-shaped oval face, "
+                "slender willow-leaf brows, elongated danfeng / phoenix-shaped almond eyes with tapered inner and outer corners, "
+                "slightly lifted outer eye corners, clear bright dark pupils, a refined high but natural East Asian nose bridge with a delicate tip, "
+                "fair-to-light neutral skin, natural black hair, barely-there makeup, transparent lip-balm finish, compact softly full cherry-like small lips "
+                "in a low-saturation cherry-pink tone, and a gentle closed-mouth first-meeting smile"
             )
 
         return (
@@ -649,7 +650,7 @@ class SmartPromptGenerator:
         if style == "生活场景系":
             return (
                 "Make the image read as a fresh relaxed 22-23 year old adult Chinese lifestyle portrait. The attraction should come from "
-                "a soft candid face, bright youthful cheeks, barely tinted transparent lip-balm lips, a softly fitted casual top, "
+                "a classically beautiful Chinese face, phoenix-shaped clear eyes, a refined natural nose bridge, compact cherry-like lips, bright youthful cheeks, a softly fitted casual top, "
                 "natural full but realistic upper-body volume, clear bust-to-waist shape, a gentle waist cue, and a front-facing or three-quarter camera angle; "
                 "keep the outfit fully dressed, modest, and everyday with natural casual styling"
             )
@@ -680,11 +681,12 @@ class SmartPromptGenerator:
             return [
                 "Keep the image grounded in real-world lifestyle photography with natural daylight, restrained retouching, believable skin texture, and relaxed candid posture",
                 "Keep the face clearly adult but visibly 22 to 23 years old: rounded cheek softness, bright rested eyes, smooth lower-face contours, relaxed brows, and a soft early-twenties adult expression",
+                "Use classic Chinese beauty-word structure in a modern natural face: egg-shaped oval face, willow-leaf brows, bright phoenix-shaped eyes, refined high East Asian nose bridge, compact cherry-like lips, and clear fair skin",
                 "Make the expression gentle and fresh: lively clear eyes, relaxed facial muscles, tiny closed-mouth smile, calm mouth corners, and approachable warmth",
                 "Keep the complexion fair-to-light neutral and clean, with soft even cheek color, clear skin texture, restrained makeup, and a transparent natural finish",
-                "Keep the lips almost bare: transparent lip-balm sheen, pale nude-pink natural lip color, low saturation, and close-to-natural skin warmth",
+                "Keep the lips small and cherry-like: compact mouth shape, softly full natural lips, defined cupid's bow, transparent lip-balm sheen, low-saturation cherry-pink natural lip color, and close-to-natural skin warmth",
                 "Keep her body clearly adult and feminine through fully dressed casual clothing: natural full upper-body contour, defined waist suggestion, soft shoulders, realistic proportions, and a front-facing or three-quarter half-body frame with torso and waist visible",
-                "Use contemporary mainland Chinese clean-beauty cues: natural black hair, neat straight brows, dark almond eyes, soft oval face, rounded cheeks, and a relaxed first-meeting smile"
+                "Use contemporary mainland Chinese clean-beauty cues: natural black hair, slender neat brows, elongated lifted almond eyes, soft oval face, rounded cheeks, refined nose line, and a relaxed first-meeting smile"
             ]
 
         clauses = [
@@ -807,8 +809,8 @@ class SmartPromptGenerator:
         elif style == "生活场景系":
             sections.append(
                 f"A realistic fresh adult Chinese lifestyle half-body portrait in soft neutral daylight, featuring {asian_id}. "
-                "The face and expression are the priority: contemporary mainland Chinese East Asian clean-beauty aesthetics, gentle first-meeting warmth, "
-                "soft rounded cheeks, fair neutral skin, transparent lip-balm lips, and relaxed early-twenties adult presence"
+                "The face and expression are the priority: classically beautiful contemporary mainland Chinese East Asian facial aesthetics, gentle first-meeting warmth, "
+                "soft oval face, willow-like brows, phoenix-shaped clear eyes, refined natural nose bridge, cherry-like small lips, fair neutral skin, and relaxed early-twenties adult presence"
             )
         else:
             sections.append(f"{quality}, featuring {asian_id}")
