@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-美女生成 V12.37 - Google Imagen 4 Ultra 双 Key 主力 + 豆包 Seedream 4.5 备选
+美女生成 V12.38 - Google Imagen 4 Ultra 双 Key 主力 + 豆包 Seedream 4.5 备选
 - Google Imagen 4 Ultra 作为主力引擎，支持主备 Key 轮换
 - 豆包 Seedream 4.5 作为 fallback
 - 自动重试 + 429 指数退避（最多 3 次）
@@ -25,7 +25,7 @@ from datetime import date, datetime
 from pathlib import Path
 
 
-VERSION = "12.37.0"
+VERSION = "12.38.0"
 
 
 MANUAL_PROMPT_LOG_PREFIX_RE = re.compile(
@@ -277,10 +277,10 @@ def get_default_library() -> dict:
         ],
         "body_types": [
             "balanced adult feminine proportions, naturally full but realistic upper-body contour, defined waist, soft hips, and healthy legs",
-            "soft natural curves, clear full bust-to-waist line, realistic waist-to-hip ratio, and believable silhouette",
+            "soft natural curves, clear fuller upper-body-to-waist line, realistic waist-to-hip ratio, and believable silhouette",
             "healthy everyday build with visible feminine curves, natural rounded upper-body contour, relaxed posture, and realistic proportions",
             "graceful frame with soft shoulders, natural full upper-body volume, defined waist, and balanced hips, photographed without exaggeration",
-            "graceful feminine silhouette with clear full bust-to-waist proportion, soft hips, and grounded balance"
+            "graceful feminine silhouette with clear fuller upper-body-to-waist proportion, soft hips, and grounded balance"
         ],
         "adult_lifestyle_face_moods": [
             "fresh young-adult Chinese beauty profile: slim oval-melon face, harmonious photogenic facial proportions, smooth narrow cheek-to-jaw taper, soft small chin, clean willow brows, attractive fox-almond eyes with lifted outer corners and sparkling catchlights, small straight high nose, compact nostrils, cool-neutral white-and-pink fair skin, medium-small petal smile lips with almost-clear pale baby-pink jelly balm, and lively sweet freshness",
@@ -298,11 +298,11 @@ def get_default_library() -> dict:
             "a natural adult feminine build with visible well-supported upper-body fullness, gentle collarbone line, relaxed posture, and thin structured fabric creating a fuller rounded art-photo silhouette without exposure"
         ],
         "body_types_sexy": [
-            "confident curvy figure with natural feminine volume, fuller but realistic bust, defined waist, and rounded hips",
-            "softly sculpted body with natural curves, graceful bust-to-waist line, long legs, and believable proportions",
+            "confident curvy figure with natural feminine volume, fuller but realistic upper-body shape, defined waist, and rounded hips",
+            "softly sculpted body with natural curves, graceful upper-body-to-waist line, long legs, and believable proportions",
             "refined young-adult feminine figure with natural full upper-body shape, relaxed posture, and clothing that follows the body without exaggeration",
-            "shapely body with realistic waistline, full hips, soft natural bust, and natural leg proportions",
-            "balanced hourglass figure with natural full bust, believable hips, and relaxed body language",
+            "shapely body with realistic waistline, full hips, soft natural upper-body volume, and natural leg proportions",
+            "balanced hourglass figure with natural upper-body fullness, believable hips, and relaxed body language",
             "curvy silhouette with balanced proportions, subtle definition, natural full upper-body contour, and understated sensuality"
         ],
         "outfits": {
@@ -542,7 +542,7 @@ def get_default_library() -> dict:
             "bright smiling eyes, clean cheek highlights, natural skin softness, and fine pores without blemishes",
             "lightweight fabric wrinkle near elbow, a crease in the shirt collar, wind-blown strand across cheek, and the torso not compressed by the pose",
             "subtle motion blur on fingertips, slight squint from sunlight, genuine unposed moment",
-            "visible collarbone shadow, clean facial highlights, soft cheek glow, open chest-to-waist framing, and readable apartment depth"
+            "visible collarbone shadow, clean facial highlights, soft cheek glow, open upper-body-to-waist framing, and readable environmental depth"
         ],
         "negative_prompts": {
             "standard": "deformed, bad anatomy, disfigured, ugly, extra fingers, mutated hands, extra limbs, missing limbs, fused fingers, too many fingers, long neck",
@@ -656,18 +656,34 @@ class SmartPromptGenerator:
 
         return (
             "Her face should read unmistakably as contemporary East Asian Chinese first-love clean-beauty styling: "
-            "soft oval facial outline, luminous porcelain-white East Asian complexion with subtle cheek-pink only, dark fox-almond eyes, neat natural straight brows, "
-            "a natural gentle nose bridge, smooth slim cheek-to-jaw transition, youthful lower-face contours, natural black or very dark brown hair, "
-            "clean fresh makeup, transparent lip-balm finish, and almost-bare nude-pink glossy lips"
+            "a slim oval-melon facial outline rather than a broad round face, softly defined cheekbone arc, smooth narrow cheek-to-jaw transition, softly rounded small chin, "
+            "luminous cool-neutral white-and-pink milk-fair Chinese complexion with subtle cheek-pink only, attractive lifted fox-almond / phoenix-almond dark eyes with strong catchlights, fine willow-like natural brows, "
+            "a refined straight high East Asian nose bridge with compact nostrils and a small nose base, balanced photogenic eyes-nose-mouth spacing, natural black or very dark brown hair, "
+            "clean fresh makeup, transparent lip-balm finish, compact flower-petal medium-small mouth, moderate narrow mouth width, and almost-clear pale baby-pink glossy lips"
         )
+
+    def _build_common_aesthetic_clause(self, style: str = None) -> str:
+        """注入跨风格通用审美原则，并叠加当前风格的适配规则。"""
+        principles = self.library.get("common_aesthetic_principles", {})
+        if not isinstance(principles, dict):
+            return ""
+
+        base = str(principles.get("base", "")).strip()
+        style_clause = str(principles.get(style or "", "")).strip()
+        parts = []
+        if base:
+            parts.append(f"Common aesthetic principles: {base}")
+        if style_clause:
+            parts.append(f"Style adaptation for {style}: {style_clause}")
+        return " ".join(parts)
 
     def _build_feminine_presence_clause(self, style: str = None, pose_type: str = None) -> str:
         """稳定强调年轻成熟女性感，同时避免夸张失真的身体比例。"""
         if style == "性感系":
             return (
-                "Her refined young-adult feminine presence is central: graceful neck and collarbones, "
-            "a naturally full but realistic upper-body contour, a defined waist, soft rounded hips, and confident feminine posture, "
-                "all kept realistic and photographic"
+                "Her refined young-adult feminine presence is central in a tasteful fully dressed fashion-art-photo way: graceful neck and collarbones, "
+                "a naturally fuller but realistic upper-body contour visible through fitted or structured fabric, a defined waist, soft rounded hips, confident bright eye contact, "
+                "and a dynamic three-quarter pose, all kept realistic, photographic, and non-explicit"
             )
 
         if style == "生活场景系":
@@ -676,6 +692,34 @@ class SmartPromptGenerator:
                 "the selected fresh adult youthful Chinese beauty profile, alluring fox-almond eyes with subtle double eyelids and lifted outer corners, a small straight high nose bridge with compact nostrils, almost-bare nude-pink glossy flower-petal lips, luminous porcelain-white skin, a smooth narrow lower face, "
                 "side-parted long black hair softly framing one side of the cheek, bright fresh sensual lifestyle styling, side-window face shaping, a lightweight fitted square-neck or scoop-neck top, fuller rounded upper-body fullness, clear upper-body-to-waist curve, a gentle waist cue, a readable lived-in apartment background, and a dynamic three-quarter waist-up camera angle; "
                 "keep the outfit fully dressed, modest, artistic, everyday, light in fabric, and restrained"
+            )
+
+        if style == "甜美系":
+            return (
+                "Keep the sweetness lively and adult: slim dimensional oval-melon face rather than a wide round face, bright fox-almond smile-eyes, "
+                "soft pastel or fresh casual styling, lightweight fitted waist cues, natural fuller upper-body-to-waist softness through fabric, "
+                "and a candid cheerful pose in a readable cafe, garden, apartment, or city scene"
+            )
+
+        if style == "清纯系":
+            return (
+                "Keep the pure style clearly adult and fresh: clean white-and-pink milk-fair skin, near-clear pale baby-pink lips, soft lifted eyes, "
+                "airy fully dressed blouse or dress styling with a light fitted torso, visible collarbone and waist suggestion, gentle movement, "
+                "and no childish school-uniform or underage cues"
+            )
+
+        if style == "邻家女孩系":
+            return (
+                "Make the girl-next-door appeal come from a real everyday moment: approachable bright eye contact, natural black hair, "
+                "casual but not oversized shapeless clothing, a clear neckline and waist cue, natural fuller upper-body curve through fabric, "
+                "and relaxed movement in a neighborhood, cafe, street, or apartment background"
+            )
+
+        if style == "国风系":
+            return (
+                "Keep the classical Chinese styling grounded and photogenic: willow brows, lifted phoenix-almond eyes, compact petal lips, "
+                "cool fair milk-white skin, tactile silk or embroidered fabric shaping a tasteful feminine silhouette, clear waist line, "
+                "and an elegant three-quarter posture in a real garden, tea room, pavilion, or Jiangnan setting"
             )
 
         if style == "职场系":
@@ -694,7 +738,7 @@ class SmartPromptGenerator:
             )
 
         return (
-            "Keep her refined adult femininity visible through a clear full bust-to-waist proportion, "
+            "Keep her refined adult femininity visible through a clear fuller upper-body-to-waist proportion, "
             "soft hips, graceful legs, and believable full-body balance"
         )
 
@@ -714,25 +758,27 @@ class SmartPromptGenerator:
             ]
 
         clauses = [
-            "Keep the image grounded in real-world photography with clean healthy skin, balanced facial structure, and restrained retouching",
-            "Preserve relaxed posture, natural hand placement, smooth healthy cheeks, clean facial highlights, and candid portrait detail",
-            "Keep the subject clearly adult but visibly 22 to 23 years old: youthful cheek fullness, bright eyes, smooth lower-face contours, fresh rested energy, and a soft early-twenties facial impression",
-            "Keep her facial expression attractive and unmistakably early-twenties: lively clear eyes looking gently toward camera, relaxed brows, smooth slim cheek-to-jaw line, barely tinted transparent lip-balm lips, a closed-lip small fresh smile, and open friendly energy",
-            "Favor youthful facial softness, neat natural brows, flattering strong catchlights, lifted fox-almond eyes, faint petal-pink cheek warmth only, luminous porcelain-white East Asian skin, barely-there makeup, and almost bare nude-pink lips",
-            "Keep the body clearly adult and feminine with a natural full upper-body contour, defined waist suggestion, realistic proportions, and a softly fitted silhouette"
+            "Keep the image grounded in real-world photography with clean healthy skin, balanced attractive Chinese facial structure, real hair texture, and restrained retouching",
+            "Preserve relaxed posture, natural hand placement, smooth healthy cheeks, clean facial highlights, subtle facial asymmetry, and candid portrait detail",
+            "Keep the subject clearly adult but visibly 22 to 23 years old: youthful cheek softness, bright rested eyes, smooth slim lower-face contours, fresh living energy, and no mature 30s facial impression",
+            "Keep her facial expression attractive and unmistakably early-twenties: lively clear eyes looking gently toward camera, relaxed brows, soft eye-smile, smooth slim cheek-to-jaw line, barely tinted transparent pale baby-pink lip-balm lips, a closed-lip small fresh smile, and open friendly energy",
+            "Favor a Chinese clean-beauty face: slim oval-melon outline, softly defined cheekbone arc, refined straight high nose bridge, compact nostrils, compact petal-shaped mouth, lifted fox-almond / phoenix-almond eyes, neat willow brows, faint petal-pink cheek warmth only, cool-neutral white-and-pink milk-fair skin, barely-there makeup, and almost-clear pale baby-pink glossy lips",
+            "Keep the body clearly adult and feminine with a natural fuller upper-body contour, defined waist suggestion, realistic proportions, tasteful fully dressed styling, and a softly fitted or structured silhouette that is not hidden by bulky layers"
         ]
 
         if pose_type in {"特写", "半身", "职场半身"}:
             clauses.append("Prioritize a fresh early-twenties face with clean healthy skin, lively eyes returning to camera, a smooth slim cheek-to-jaw line, smooth lower-face contours, and a gentle closed-mouth small smile while keeping a soft feminine neckline, collarbones, and natural full upper-body curve visible")
         else:
-            clauses.append("Keep refined feminine curves visible but realistic, with natural full bust-to-waist and hip proportions rather than cartoon exaggeration")
+            clauses.append("Keep refined feminine curves visible but realistic, with natural fuller upper-body-to-waist and hip proportions rather than cartoon exaggeration")
 
         if style == "性感系":
-            clauses.append("Use tasteful sensual fashion styling, form-flattering fabric, confident eye contact, fully clothed elegance, and youthful adult glamour")
-        elif style == "生活场景系":
-            clauses.append("Use fresh relaxed lifestyle styling in public or shared home spaces, fully dressed softly fitted casual clothing, luminous porcelain-white East Asian skin with bright high-key face exposure, magnetic lifted fox-almond eyes, a lively 22-23 adult East Asian Chinese first-love face, almost-bare nude-pink transparent lip-balm lips, flattering fabric that follows a naturally full bust-to-waist line, a graceful three-quarter composition with a slight head turn, torso and waist visible, and a soft closed-lip youthful smile; avoid a flat front-facing passport-photo angle, tan or olive complexion, amber/yellow-brown face cast, and deep red or rose-brown lip color")
-        elif style in {"清纯系", "邻家女孩系"}:
-            clauses.append("Use understated makeup, lived-in wardrobe detail, and ordinary available light")
+            clauses.append("Use tasteful fully dressed sensual fashion styling, form-flattering satin, knit, qipao, or tailoring, confident eye contact, natural fuller upper-body-to-waist curve through fabric, lounge or hotel or city-interior depth, and youthful adult glamour without explicit exposure")
+        elif style == "甜美系":
+            clauses.append("Use warm readable cafe, garden, apartment, or city details, playful candid motion, bright eye-smile, pale clear pink lips, light fresh clothing, and avoid making the face round, childish, or flat")
+        elif style == "清纯系":
+            clauses.append("Use clean natural light, airy fully dressed styling, white-and-pink fair skin, transparent pale lips, gentle but lively eyes, and clearly adult freshness without school-uniform or underage styling")
+        elif style == "邻家女孩系":
+            clauses.append("Use neighborhood, cafe, street, or apartment background depth, natural everyday clothing that is fitted enough to preserve waist and upper-body shape, approachable candid movement, and real available light")
         elif style == "职场系":
             clauses.append(
                 "Use premium Chinese office-fashion styling, confident eye contact, a flattering three-quarter angle, "
@@ -740,13 +786,18 @@ class SmartPromptGenerator:
                 "and barely-there peach-nude lip color that stays low-saturation and close to natural skin warmth; avoid passport-photo, LinkedIn headshot, Westernized facial features, dyed highlighted hair, theatrical glam makeup, and flat office lighting"
             )
         elif style == "国风系":
-            clauses.append("Favor tactile fabric detail and grounded styling over fantasy rendering")
+            clauses.append("Favor grounded modern Chinese classical portrait realism, tactile silk or embroidery, pavilion, tea room, garden, or Jiangnan background depth, elegant three-quarter posture, and side light shaping the face instead of fantasy rendering or flat painting")
 
         return clauses
 
     def _pick_art_direction(self, style: str = None) -> str:
         """按风格选择更贴近真实写真的视觉语气。"""
         grounded_styles = {
+            "性感系": [
+                "tasteful fully dressed sensual fashion-editorial realism with clean directional light, real room depth, natural black hair texture, bright catchlights, and elegant fabric shaping a realistic silhouette",
+                "refined Chinese fashion art-portrait photography with soft side light, polished but natural skin, pale clear lips, confident eye contact, and non-explicit adult glamour",
+                "cinematic lifestyle fashion portrait with lounge or city-interior depth, fitted structured clothing, natural fuller upper-body-to-waist shape through fabric, and restrained retouching"
+            ],
             "清纯系": [
                 "soft lifestyle editorial portrait treatment, natural colors, flattering clean light",
                 "quiet lifestyle editorial realism, restrained contrast, gentle tonal roll-off",
@@ -796,6 +847,7 @@ class SmartPromptGenerator:
         camera: str,
         art_style: str,
         enhancement: str,
+        style: str = None,
         custom_elements: list = None,
     ) -> str:
         """生活场景文生图使用更短、更硬的正向约束。
@@ -855,6 +907,10 @@ class SmartPromptGenerator:
             ),
         ]
 
+        common_clause = self._build_common_aesthetic_clause(style)
+        if common_clause:
+            core.append(common_clause)
+
         details = []
         for key in ("face_mood", "face", "hair", "skin", "body"):
             if character.get(key):
@@ -887,8 +943,8 @@ class SmartPromptGenerator:
         core.extend([
             (
                 "Keep the body fully dressed and tasteful like a fresh sensual art portrait: a lightweight supportive fitted square-neck, scoop-neck, or camisole-style top "
-                "with thin structured fabric that preserves a natural fuller upper-body silhouette, clear bust-to-waist contour through the fabric, visible waist cue, realistic adult proportions, "
-                "center torso visible from collarbone to waist, no thick sweater, no bulky cardigan, no high crewneck hiding the collarbone, hands away from the chest, and hair not covering the torso"
+                "with thin structured fabric that preserves a natural fuller upper-body silhouette, clear upper-body-to-waist contour through the fabric, visible waist cue, realistic adult proportions, "
+                "center torso visible from collarbone to waist, no thick sweater, no bulky cardigan, no high crewneck hiding the collarbone, hands away from the torso, and hair not covering the torso"
             ),
             (
                 "Keep the expression young-adult and relaxed: lively clear eyes, relaxed facial muscles, tiny sweet closed-mouth smile, "
@@ -949,6 +1005,7 @@ class SmartPromptGenerator:
                 camera=camera,
                 art_style=art_style,
                 enhancement=enhancement,
+                style=style,
                 custom_elements=custom_elements,
             )
 
@@ -958,7 +1015,7 @@ class SmartPromptGenerator:
         # 1. 主体描述（质量基调 + 人物身份）
         if style == "性感系":
             sections.append(
-                f"A tasteful young-adult sensual fashion portrait with refined adult femininity, natural full-bust silhouette, defined waist, youthful softness, and confident feminine allure, featuring {asian_id}"
+                f"A tasteful young-adult sensual fashion portrait with refined adult femininity, a natural fuller upper-body silhouette through structured clothing, defined waist, youthful softness, and confident feminine allure, featuring {asian_id}"
             )
         elif style == "职场系":
             sections.append(
@@ -974,6 +1031,10 @@ class SmartPromptGenerator:
             sections.append(f"{quality}, featuring {asian_id}")
 
         sections.append(self._build_east_asian_aesthetic_clause(style))
+
+        common_clause = self._build_common_aesthetic_clause(style)
+        if common_clause:
+            sections.append(common_clause)
 
         # 2. 外貌特征
         traits = []
