@@ -1,14 +1,31 @@
 ---
 name: beauty-generator
-version: 12.38.0
+version: 12.39.0
 description: 独立文生图写真仓库。Google Imagen 4 Ultra 主力，Doubao Seedream 4.5 回退，支持 22-23 岁年轻成人女性写真 prompt、跨 7 风格共用的东方审美原则、生活场景文生图短强正向约束、明亮清透中国东方审美脸部档案、高键清透但避免平面证件照、冷中性白里透红/奶白东亚肤色、近乎透明淡婴儿粉水润唇、凤眼感杏眼/狐狸杏眼、眼尾上扬、强 catchlight 回看镜头眼神吸引力、自然发缝/碎发/轻微毛躁/真实发丝密度、鹅蛋瓜子脸/窄颌柔下巴、小巧高鼻梁和小鼻翼小鼻孔、颧骨弧线、鼻梁高光、鼻侧微阴影、清晰但年轻的下颌转折、五官和谐漂亮、有生活背景和活力姿态、轻薄或结构化 fully dressed 性感艺术照式丰满但非露骨胸腰轮廓、无遮挡构图、场景/情绪控制、手动 prompt、手动模板提示词库、公众号草稿箱发布与 7 天风格轮换。Use when user asks to generate beauty images ("生成美女", "每日美女", "发布美女", "艺术写真", "文生图美女").
 author: rulanlai
 tags: [image-generation, beauty, wechat, google, doubao, seedream]
 ---
 
-# Beauty Generator - 文生图写真 V12.38
+# Beauty Generator - 文生图写真 V12.39
 
 纯文生图模式：Google Imagen 4 Ultra（主力）+ 豆包 Seedream 4.5（兜底）。从元素库随机组合人物、场景、穿搭、光线和艺术风格，生成高质量年轻成熟女性艺术写真，并可直接发布到微信公众号草稿箱。
+
+## V12.39 重要更新
+
+- **Prompt 大幅瘦身**：单条 prompt 词数 -41%（lifestyle 风格 4731 → 2702 词），Imagen 长尾约束被有效保留。
+- **Negative prompt 拆分**：原 250+ token 单串 `anti_ai` 拆为 `anti_face / anti_body / anti_hair_makeup / anti_age_mood / anti_scene` 五个 ≤75 token 子串，按 pose/style 选择拼接，避免被豆包静默截断。
+- **唇色多样化**：新增 `lip_color_palette`（每风格 3 选 1 fallback），同风格 7 张图妆感不再雷同。
+- **生活场景系净化**：移除 sensual / magnetic / alluring 措辞，调性更纯净。
+- **种族 negative 改写**：去掉具体种族枚举（Indian / Latin / Southeast Asian / Eurasian），改为 "non-East-Asian features" 单条。
+- **代码瘦身**：删除 minimax 死代码 + 内置 fallback 库（fail-fast 改造），单文件 2070 → 1601 行（-23%）；备份 JSON 归档到 `config/archive/`。
+- **风格枚举常量化**：`STYLE_LIFESTYLE / STYLE_SEXY` 等顶层常量替换散字符串。
+
+## 引擎与 negative_prompt 行为
+
+- **Google Imagen 4 Ultra（主路径）不接收 negative_prompt** — 所有肤色/唇色/比例/排他约束都必须在正向 prompt 前半段硬约束。
+- **豆包 Seedream 4.5（fallback）使用 negative_prompt** — V12.39 起按 pose/style 分类拼接，避免单串被截断。
+- **`FORCE_GOOGLE_ONLY=1`** 模式下豆包不兜底，Google 失败即返回错误，适合需要严格保证主路径成功率的场景。
+- **图床默认仅 imgbb 单点**（`config/constants.json` 中 `image_hosts` 默认配置）。需要双图床冗余时可在配置里加 `sm.ms`，代码已支持。
 
 ## 与 beauty-img2img（图生图）的区别
 

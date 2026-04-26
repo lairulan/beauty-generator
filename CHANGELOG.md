@@ -1,5 +1,34 @@
 # 版本历史
 
+## v12.39.0 (2026-04-26) - Prompt 工程精简 + 代码瘦身 + 描述净化
+
+### Prompt 优化（影响出图质量）
+- **lifestyle prompt 从 13+ 段精简到 6 段**：合并 face / eyes / skin / lip 为单段 face-anchor；合并 body / outfit / fully-dressed 三处描述为一段。Imagen 长尾约束的衰减被有效抑制。
+- **唇色 palette 多样化**：新增 `config/prompt_library.json:lip_color_palette`，每风格 3 选 1 fallback（natural lip-tone balm / pale baby-pink jelly balm / barely-tinted petal-pink gloss 等），同风格不再妆感雷同。
+- **negative_prompts 拆分**：原 250+ token `anti_ai` 单串拆为 `anti_face / anti_body / anti_hair_makeup / anti_age_mood / anti_scene` 五个 ≤75 token 子串，`get_negative_prompt(pose_type, style)` 按场景动态拼接，避免被豆包静默截断。
+- **生活场景系措辞净化**：移除 `sensual / magnetic / alluring`，统一为 `fresh / candid / lively`，调性更纯净。
+- **`asian_focused` negative 改写**：去掉具体种族枚举（Indian / Latin / Southeast Asian / Eurasian），改为 `non-East-Asian features` 单条。
+- **`_build_realism_clauses` 精简**：默认从 6 条缩到 3+1 条；生活场景系完全交给专用 prompt 不再叠加。
+
+### 代码瘦身
+- **删除 `generate_image_minimax` 死代码**（100+ 行，已不在 dispatch 链中）。
+- **删除 `get_default_library` 内置硬编码 fallback**（392 行，与 `prompt_library.json` 易 drift）→ 改为 fail-fast。
+- **风格枚举常量化**：`STYLE_LIFESTYLE / STYLE_SEXY / STYLE_OFFICE` 等顶层常量替换全文散字符串。
+- **归档 backup JSON**：`prompt_library.v10.backup.json` 与 `v11.0.backup.json` 移到 `config/archive/`。
+- **单文件总行数**：2070 → 1601（-23%）。
+
+### 工程改进
+- `--preview` 模式新增 token 估计输出（`[token≈xxx]`），便于发现长度逼近模型上限的 prompt。
+- SKILL.md 补充：① Imagen 主路径不吃 negative 的事实；② FORCE_GOOGLE_ONLY 模式说明；③ 默认图床 imgbb 单点的提示。
+
+### 验证
+- 7 风格 preview 全部 exit=0
+- 词数：34768 → 20321（-41.5%），lifestyle 单条 prompt 4731 → 2702 词
+- 唇色 palette 多样化生效（同风格 3 张图已观察到 fallback 交替）
+- API 调用链回归正常（Google primary → backup → 豆包，错误捕获明确）
+
+---
+
 ## v12.1.0 (2026-04-23) - 年轻成熟女性 Prompt 与发布前整理
 
 ### Prompt 优化
