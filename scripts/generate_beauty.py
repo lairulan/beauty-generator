@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-美女生成 V12.34 - Google Imagen 4 Ultra 双 Key 主力 + 豆包 Seedream 4.5 备选
+美女生成 V12.35 - Google Imagen 4 Ultra 双 Key 主力 + 豆包 Seedream 4.5 备选
 - Google Imagen 4 Ultra 作为主力引擎，支持主备 Key 轮换
 - 豆包 Seedream 4.5 作为 fallback
 - 自动重试 + 429 指数退避（最多 3 次）
@@ -24,7 +24,7 @@ from datetime import date, datetime
 from pathlib import Path
 
 
-VERSION = "12.34.0"
+VERSION = "12.35.0"
 
 
 def _get_ssl_context():
@@ -752,7 +752,7 @@ class SmartPromptGenerator:
             "生活场景系": [
                 "bright fresh sensual home-life portrait photography, high-key clean window light, cool-neutral white-and-pink skin, pale baby-pink clear lip-balm accents, and face-led early-twenties adult sweetness",
                 "fresh lifestyle cover realism with clean daylight contrast, bright milk-fair clean skin, magnetic lifted eyes returning to camera, glossy near-clear pale baby-pink lips, and fully dressed intimate freshness",
-                "natural candid lifestyle portrait treatment with believable even bright indoor window light, alluring fox-almond eyes returning to camera, glossy near-clear pale baby-pink lip-balm lips, soft luminous milk-fair skin, and a sculpted feminine silhouette"
+                "natural candid lifestyle portrait treatment with believable soft directional indoor window light, alluring fox-almond eyes returning to camera, glossy near-clear pale baby-pink lip-balm lips, soft luminous milk-fair skin, three-dimensional cheekbone-and-jaw facial planes, and a sculpted feminine silhouette"
             ],
             "职场系": [
                 "premium office fashion editorial with crisp window light, soft rim light, catchlights, and quiet sensual tension",
@@ -795,8 +795,10 @@ class SmartPromptGenerator:
             f"Subject identity: {asian_id}",
             (
                 "Face priority: a beautiful modern East Asian Chinese clean-beauty face, slim oval-melon facial outline, "
-                "smooth narrow cheek-to-jaw taper, softly rounded small chin, fine willow-leaf brows, "
-                "a refined straight high East Asian nose bridge, narrow nose base, compact small nostrils, and balanced photogenic eyes-nose-mouth spacing"
+                "visible three-dimensional facial planes, softly defined cheekbone arc, clear but delicate cheek-to-jaw transition, "
+                "a slim V-shaped lower face with a small softly pointed chin, fine willow-leaf brows, a refined straight high East Asian nose bridge, "
+                "subtle nose-side shading, narrow nose base, compact small nostrils, and balanced photogenic eyes-nose-mouth spacing; "
+                "not a flat round face and not over-smoothed"
             ),
             (
                 "Eyes priority: luminous elongated phoenix-almond / fox-almond eyes, lifted outer corners, clear black irises, "
@@ -806,8 +808,9 @@ class SmartPromptGenerator:
             ),
             (
                 "Skin color rule: cool-neutral bright fair Chinese complexion, white with a faint fresh pink undertone, "
-                "milk-fair translucent cheeks, even bright front-window face exposure, no dark cheek shadow, clear pore-level texture, "
-                "no warm filter, no beige-orange cast, no amber cast, no yellow-brown cast, no tan or dusky complexion"
+                "milk-fair translucent cheeks, bright clean face exposure with soft directional front-side window light, "
+                "subtle cheekbone highlight, subtle nose-bridge highlight, gentle cheek-to-jaw shadow that keeps the face dimensional, "
+                "clear pore-level texture, no warm filter, no beige-orange cast, no amber cast, no yellow-brown cast, no tan or dusky complexion"
             ),
             (
                 "Lip color rule: compact medium-small flower-petal mouth with moderate narrow width, softly full natural lower lip, "
@@ -815,8 +818,8 @@ class SmartPromptGenerator:
                 "almost transparent and bright, visibly lighter than cheek blush; not red, not rose, not brown, not mauve, not berry, not dark, not heavy lipstick"
             ),
             (
-                "Overall color direction: clean cool-neutral high-key grading, white-and-pink facial color, evenly lit fair face, clear bright eyes, "
-                "near-clear pale baby-pink lips, no orange warmth, no golden-hour warmth, no rose-brown makeup"
+                "Overall color direction: clean cool-neutral high-key grading, white-and-pink facial color, bright but dimensional fair face, "
+                "clear bright eyes, near-clear pale baby-pink lips, no orange warmth, no golden-hour warmth, no rose-brown makeup"
             ),
         ]
 
@@ -856,7 +859,7 @@ class SmartPromptGenerator:
             ),
             (
                 "Keep the expression young-adult and relaxed: lively clear eyes, relaxed facial muscles, tiny sweet closed-mouth smile, "
-                "softly lifted mouth corners, smooth lower-face contours, direct gentle eye contact, and no stiff, tired, executive, or older-looking expression"
+                "softly lifted mouth corners, delicate three-dimensional lower-face contour, direct gentle eye contact, and no stiff, tired, executive, or older-looking expression"
             ),
         ])
 
