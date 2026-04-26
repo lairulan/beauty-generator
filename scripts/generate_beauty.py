@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-美女生成 V12.36 - Google Imagen 4 Ultra 双 Key 主力 + 豆包 Seedream 4.5 备选
+美女生成 V12.37 - Google Imagen 4 Ultra 双 Key 主力 + 豆包 Seedream 4.5 备选
 - Google Imagen 4 Ultra 作为主力引擎，支持主备 Key 轮换
 - 豆包 Seedream 4.5 作为 fallback
 - 自动重试 + 429 指数退避（最多 3 次）
@@ -25,7 +25,7 @@ from datetime import date, datetime
 from pathlib import Path
 
 
-VERSION = "12.36.0"
+VERSION = "12.37.0"
 
 
 MANUAL_PROMPT_LOG_PREFIX_RE = re.compile(
@@ -163,11 +163,11 @@ def get_default_library() -> dict:
     """内置默认元素库（prompt_library.json 缺失时的 fallback）"""
     return {
         "base_quality": [
-            "Clean lifestyle beauty portrait, bright high-key available light, cool-neutral white-and-pink Chinese fair skin, pale baby-pink transparent lip-balm lips, fresh relaxed presence",
-            "Fresh relaxed lifestyle portrait, full-frame camera, soft neutral daylight tones, clean youthful facial detail",
-            "Fresh lifestyle photograph, natural light, clear healthy complexion, soft depth of field",
-            "Clean candid beauty portrait, subtle filmic color, flattering catchlights, real moment feeling",
-            "Clean everyday beauty portrait that still feels human, lightly retouched, fresh skin, youthful facial softness"
+            "Clean environmental lifestyle beauty portrait, bright side-window available light, cool-neutral white-and-pink Chinese fair skin, pale baby-pink transparent lip-balm lips, fresh relaxed presence, and visible apartment background details",
+            "Fresh relaxed lifestyle portrait, full-frame camera, soft neutral daylight tones, clean youthful facial detail, and readable room depth",
+            "Fresh lifestyle photograph, natural side light, clear healthy complexion, soft depth of field, sofa or plant visible in the background",
+            "Clean candid beauty portrait, subtle filmic color, flattering catchlights, real moment feeling, and lively body language",
+            "Clean everyday beauty portrait that still feels human, lightly retouched, fresh skin, youthful facial softness, and visible lived-in home objects"
         ],
         "asian_identity": [
             "adult Chinese woman in her early twenties, 22 to 23 years old, contemporary East Asian first-love facial aesthetic, cool-neutral white-and-pink fair skin, attractive fox-almond eyes, almost-clear pale baby-pink lip-balm lips",
@@ -293,9 +293,9 @@ def get_default_library() -> dict:
             "soft side-parted long black hair with relaxed waves, gentle frizz and flyaway strands near the temples, a realistic hairline, and one-side face framing to avoid a wide face impression"
         ],
         "body_types_lifestyle_full": [
-            "a clearly adult tasteful sensual art-portrait silhouette with fuller rounded upper-body fullness, defined waist suggestion, relaxed shoulders, and believable proportions preserved by a modest supportive fitted ribbed knit top",
-            "a bright fresh young-adult body silhouette with a noticeably fuller but realistic upper-body-to-waist curve, soft waist definition, balanced hips, and fully dressed lifestyle portrait styling that does not flatten the torso",
-            "a natural adult feminine build with visible well-supported upper-body fullness, gentle collarbone line, relaxed posture, and structured ribbed fabric creating a fuller rounded art-photo silhouette without exposure"
+            "a clearly adult tasteful sensual art-portrait silhouette with fuller rounded upper-body fullness, defined waist suggestion, relaxed shoulders, and believable proportions preserved by a lightweight supportive fitted top",
+            "a bright fresh young-adult body silhouette with a noticeably fuller but realistic upper-body-to-waist curve, soft waist definition, balanced hips, and fully dressed lifestyle portrait styling that does not flatten or hide the torso",
+            "a natural adult feminine build with visible well-supported upper-body fullness, gentle collarbone line, relaxed posture, and thin structured fabric creating a fuller rounded art-photo silhouette without exposure"
         ],
         "body_types_sexy": [
             "confident curvy figure with natural feminine volume, fuller but realistic bust, defined waist, and rounded hips",
@@ -351,9 +351,9 @@ def get_default_library() -> dict:
                 "elegant secretary look, crisp shirt with rolled sleeves, tight pencil skirt, reading glasses"
             ],
             "居家": [
-                "supportive ivory ribbed knit top with a modest scoop neckline tucked into relaxed high-waisted lounge pants, clear waist definition, structured fabric preserving natural fuller upper-body fullness, and soft art-portrait window light",
-                "light white short cardigan worn open and pulled away from the center torso over a supportive ribbed tank with wide-leg lounge trousers, fully dressed tasteful sensual portrait styling, soft collarbone line, and fuller rounded upper-body-to-waist contour through the fabric",
-                "lightweight open white overshirt kept behind the torso edges over a clear powder-pink structured ribbed fitted tank and straight-leg jeans, rolled sleeves, bright fresh home portrait styling, fuller balanced feminine silhouette, and torso clearly visible from the front"
+                "light ivory fitted ribbed sleeveless knit top with a modest square neckline tucked into high-waisted pale beige lounge trousers, thin structured fabric preserving natural fuller upper-body fullness, and soft art-portrait window light",
+                "lightweight open cropped linen shirt worn behind the torso edges over a supportive fitted pale peach camisole-style knit top with straight-leg jeans, fully dressed tasteful sensual portrait styling, soft collarbone line, and fuller rounded upper-body-to-waist contour through the fabric",
+                "soft powder-blue fitted scoop-neck cotton top with high-waisted white linen trousers, bright fresh home portrait styling, thin fabric smoothly following a realistic fuller rounded upper-body shape and waist line"
             ],
             "邻家": [
                 "simple white tee tucked into denim shorts, casual sneakers, natural effortless style",
@@ -474,9 +474,9 @@ def get_default_library() -> dict:
                 "misty mountain landscape with bamboo forest, ancient stone bridge, morning mist with warm sun"
             ],
             "居家": [
-                "sunlit apartment living room, clean morning daylight through sheer curtains, tidy sofa and plants, fresh everyday atmosphere",
-                "modern kitchen with daylight-balanced practical lights, marble counter, morning coffee steam, clean comfortable feeling",
-                "living room with large window, cool-neutral clean daylight, cozy sofa with throw blanket, relaxed domestic scene"
+                "sunlit apartment living room with clean morning daylight through sheer curtains, tidy sofa, green plants, coffee table, and readable lived-in background depth",
+                "modern kitchen with daylight-balanced practical lights, marble counter, morning coffee steam, fruit bowl, small vase, and clean comfortable feeling",
+                "living room with large window, cool-neutral clean daylight, cozy sofa with throw blanket, side table, book stack, relaxed domestic scene"
             ],
             "街头": [
                 "sunny neighborhood sidewalk, dappled tree shadows, clean neutral daylight, everyday street scene",
@@ -538,17 +538,17 @@ def get_default_library() -> dict:
             ]
         },
         "enhancement_keywords": [
-            "fine flyaway hairs catching the light, a believable scalp part, smooth slim cheek-to-jaw line, one earring slightly tilted",
+            "fine flyaway hairs catching the light, a believable scalp part, smooth slim cheek-to-jaw line, one earring slightly tilted, and visible home background details",
             "bright smiling eyes, clean cheek highlights, natural skin softness, and fine pores without blemishes",
-            "fabric wrinkle near elbow, a crease in the shirt collar, wind-blown strand across cheek, and the torso not compressed by the pose",
+            "lightweight fabric wrinkle near elbow, a crease in the shirt collar, wind-blown strand across cheek, and the torso not compressed by the pose",
             "subtle motion blur on fingertips, slight squint from sunlight, genuine unposed moment",
-            "visible collarbone shadow, clean facial highlights, soft cheek glow, and open chest-to-waist framing"
+            "visible collarbone shadow, clean facial highlights, soft cheek glow, open chest-to-waist framing, and readable apartment depth"
         ],
         "negative_prompts": {
             "standard": "deformed, bad anatomy, disfigured, ugly, extra fingers, mutated hands, extra limbs, missing limbs, fused fingers, too many fingers, long neck",
             "asian_focused": "Western face, Caucasian features, European features, Southeast Asian face, South Asian face, Indian facial features, Latin face, mixed-race Eurasian face, blonde hair, blue eyes, green eyes, non-Asian features, Westernized mixed-race face, non-Chinese facial structure, olive skin, dusky skin, caramel skin, brown skin, golden tan skin, bronzed tan skin, yellow-brown skin, beige-brown complexion, beige-orange complexion, orange-beige face, amber skin cast, warm face filter, heavy Western glam makeup",
             "quality": "3D render, CGI, digital art, illustration, painting, cartoon, anime, plastic skin, airbrushed, over-retouched, wax figure, doll-like, uncanny valley, symmetrical face, too perfect, flawless porcelain, studio backdrop, stock photo, watermark",
-            "anti_ai": "impossible body proportions, unnaturally tiny waist, distorted chest anatomy, flattened chest, unnaturally flat chest, flat chest, small chest, compression-flattened upper torso, flat knit top silhouette, missing bust contour, underdeveloped figure, boxy torso, shapeless oversized clothing, bulky shapeless sleeves, cardigan covering torso, hair covering chest, cropped bust line, torso hidden by hair, upper body compressed by pose, hands covering chest, arms blocking torso, side profile hiding torso, countertop hiding body, androgynous torso, collapsed upper-body silhouette, exaggerated fake curves, average face, plain face, unattractive facial features, awkward facial proportions, wide face, broad face, wide round face, short round face, puffy cheeks, chubby cheeks, square jaw, broad jawline, wide lower face, heavy jaw, wide chin, short hair, bob haircut, chin-length hair, wig-like hair, helmet hair, plastic hair, overly glossy hair, painted hair, solid hair mass, perfect synthetic waves, unrealistic hairline, flat full-frontal passport angle, flat face angle, no head turn, looking away, strong side gaze, face turned too far away, small dull eyes, sleepy dull eyes, flat eye shape, unattractive eyes, lifeless eyes, weak catchlights, droopy outer eye corners, heavy smoky eyeliner, large nostrils, flared nostrils, wide nostril wings, bulbous nose, wide nose base, wide mouth, broad mouth, over-wide lips, teen, underage, childlike face, school uniform, childish styling, middle-aged, older woman, woman in her 30s, over 30 years old, aged face, mature face, mature executive, older manager, aged professional, gaunt cheeks, hollow cheeks, deep wrinkles, heavy nasolabial folds, pronounced smile lines, tired under-eye bags, tired face, sagging skin, underexposed face, shadowed face, low-key lighting, muddy skin tone, yellow-brown face, orange-brown face, warm amber face cast, dark beige skin, acne, pimples, facial blemishes, skin breakouts, red bumps, acne scars, rash, dark spots, dirty skin, many moles, mole clusters, stiff expression, rigid expression, blank stare, awkward smile, forced smile, dead eyes, stern expression, severe expression, world-weary expression, tired half-lidded eyes, mature seductive smirk, manager-like composure, cold intimidating stare, hard cheekbones, sharp mature jawline, harsh contour makeup, heavy eyeliner, over-arched brows, red lips, red lip tint, colored lipstick, visible lipstick color, high-saturation lip color, dark lip stain, deep lip color, lip color darker than natural, dark pink lips, rose-pink lipstick, rose-brown lips, brown-pink lips, mauve rose gloss, plum-pink lips, berry lip tint, muddy lip color, dull brown lip tint, matte lipstick, lip liner, deep rose lips, mature rose lipstick, dark red lipstick, burgundy lips, purple lipstick, mauve lips, wine-colored lips, red-brown lipstick, brown lipstick, brick-red lips, dark rose lipstick, heavy lipstick, thick lip makeup, overdrawn lips, saturated red lips, vivid red lips, orange-red lips, coral lipstick, dull gray beige color grading, muddy taupe clothing, desaturated lifeless colors"
+            "anti_ai": "impossible body proportions, unnaturally tiny waist, distorted chest anatomy, flattened chest, unnaturally flat chest, flat chest, small chest, compression-flattened upper torso, flat knit top silhouette, missing bust contour, underdeveloped figure, boxy torso, shapeless oversized clothing, bulky shapeless sleeves, thick sweater, crewneck sweater, heavy cardigan, bulky cardigan, high neckline hiding collarbone, cardigan covering torso, hair covering chest, cropped bust line, torso hidden by hair, upper body compressed by pose, hands covering chest, arms blocking torso, side profile hiding torso, countertop hiding body, androgynous torso, collapsed upper-body silhouette, exaggerated fake curves, average face, plain face, unattractive facial features, awkward facial proportions, wide face, broad face, wide round face, short round face, puffy cheeks, chubby cheeks, square jaw, broad jawline, wide lower face, heavy jaw, wide chin, short hair, bob haircut, chin-length hair, wig-like hair, helmet hair, plastic hair, overly glossy hair, painted hair, solid hair mass, perfect synthetic waves, unrealistic hairline, flat full-frontal passport angle, flat face angle, static passport portrait, lifeless pose, plain white background, empty studio background, featureless background, blank wall, no room details, no head turn, looking away, strong side gaze, face turned too far away, small dull eyes, sleepy dull eyes, flat eye shape, unattractive eyes, lifeless eyes, weak catchlights, droopy outer eye corners, heavy smoky eyeliner, large nostrils, flared nostrils, wide nostril wings, bulbous nose, wide nose base, wide mouth, broad mouth, over-wide lips, teen, underage, childlike face, school uniform, childish styling, middle-aged, older woman, woman in her 30s, over 30 years old, aged face, mature face, mature executive, older manager, aged professional, gaunt cheeks, hollow cheeks, deep wrinkles, heavy nasolabial folds, pronounced smile lines, tired under-eye bags, tired face, sagging skin, underexposed face, shadowed face, low-key lighting, muddy skin tone, yellow-brown face, orange-brown face, warm amber face cast, dark beige skin, acne, pimples, facial blemishes, skin breakouts, red bumps, acne scars, rash, dark spots, dirty skin, many moles, mole clusters, stiff expression, rigid expression, blank stare, awkward smile, forced smile, dead eyes, stern expression, severe expression, world-weary expression, tired half-lidded eyes, mature seductive smirk, manager-like composure, cold intimidating stare, hard cheekbones, sharp mature jawline, harsh contour makeup, heavy eyeliner, over-arched brows, red lips, red lip tint, colored lipstick, visible lipstick color, high-saturation lip color, dark lip stain, deep lip color, lip color darker than natural, dark pink lips, rose-pink lipstick, rose-brown lips, brown-pink lips, mauve rose gloss, plum-pink lips, berry lip tint, muddy lip color, dull brown lip tint, matte lipstick, lip liner, deep rose lips, mature rose lipstick, dark red lipstick, burgundy lips, purple lipstick, mauve lips, wine-colored lips, red-brown lipstick, brown lipstick, brick-red lips, dark rose lipstick, heavy lipstick, thick lip makeup, overdrawn lips, saturated red lips, vivid red lips, orange-red lips, coral lipstick, dull gray beige color grading, muddy taupe clothing, desaturated lifeless colors"
         }
     }
 
@@ -674,8 +674,8 @@ class SmartPromptGenerator:
             return (
                 "Make the image read as a fresh relaxed 22-23 year old adult Chinese lifestyle portrait. The attraction should come from "
                 "the selected fresh adult youthful Chinese beauty profile, alluring fox-almond eyes with subtle double eyelids and lifted outer corners, a small straight high nose bridge with compact nostrils, almost-bare nude-pink glossy flower-petal lips, luminous porcelain-white skin, a smooth narrow lower face, "
-                "side-parted long black hair softly framing one side of the cheek, bright fresh sensual lifestyle styling, high-key clean face light, a supportive structured fitted casual knit top, fuller rounded upper-body fullness, clear upper-body-to-waist curve, a gentle waist cue, and a three-quarter waist-up camera angle; "
-                "keep the outfit fully dressed, modest, artistic, everyday, and restrained"
+                "side-parted long black hair softly framing one side of the cheek, bright fresh sensual lifestyle styling, side-window face shaping, a lightweight fitted square-neck or scoop-neck top, fuller rounded upper-body fullness, clear upper-body-to-waist curve, a gentle waist cue, a readable lived-in apartment background, and a dynamic three-quarter waist-up camera angle; "
+                "keep the outfit fully dressed, modest, artistic, everyday, light in fabric, and restrained"
             )
 
         if style == "职场系":
@@ -709,7 +709,7 @@ class SmartPromptGenerator:
                 "Make the expression gentle and fresh: lively clear eyes, relaxed facial muscles, tiny sweet closed-mouth smile, softly lifted mouth corners, and approachable warmth",
                 "Keep the complexion luminous porcelain-white to bright fair ivory and clean, with high-key face exposure, cool-neutral undertone, subtle petal-pink cheek glow only, clear skin texture, fresh clean makeup, and a transparent natural finish; avoid tan, olive, golden, dusky, yellow-brown, amber, beige-brown, or shadowed facial color",
                 "Keep the lips attractive and youthful-adult but very light in color: medium-small petal shape, moderate narrow mouth width, softly full natural lower lip, defined but soft cupid's bow, glossy transparent lip-balm sheen, almost-bare nude-pink color close to natural lip tone, and no red lipstick, rose-pink lipstick, rose-brown gloss, dark lip stain, or colored lipstick",
-                "Keep her body clearly adult and feminine through bright tasteful sensual lifestyle-photo styling and fully dressed casual clothing: fuller rounded upper-body fullness, defined waist suggestion, soft shoulders, realistic proportions, supportive structured ribbed knit fabric, soft side light shaping the silhouette, and a three-quarter half-body frame with torso and waist visible",
+                "Keep her body clearly adult and feminine through bright tasteful sensual lifestyle-photo styling and fully dressed lightweight casual clothing: fuller rounded upper-body fullness, defined waist suggestion, soft shoulders, realistic proportions, thin structured fitted fabric, soft side light shaping the silhouette, and a three-quarter half-body frame with torso and waist visible",
                 "Use contemporary mainland Chinese clean-beauty cues: side-parted natural black hair, slender softly arched brows, magnetic fox-almond eyes with lifted outer corners, graceful oval-melon face, smooth narrow lower jaw, refined straight high nose line, compact nostrils, near-nude pale pink petal smile lips, luminous porcelain-white skin, and a relaxed first-meeting smile"
             ]
 
@@ -763,9 +763,9 @@ class SmartPromptGenerator:
                 "candid neighborhood photography mood, grounded color, and unforced styling"
             ],
             "生活场景系": [
-                "bright fresh sensual home-life portrait photography, high-key clean window light, cool-neutral white-and-pink skin, pale baby-pink clear lip-balm accents, real hairline detail, and face-led early-twenties adult sweetness",
-                "fresh lifestyle cover realism with clean daylight contrast, bright milk-fair clean skin, magnetic lifted eyes returning to camera, near-clear pale baby-pink lips, believable natural hair texture, and fully dressed intimate freshness",
-                "natural candid lifestyle portrait treatment with believable soft directional indoor window light, alluring fox-almond eyes returning to camera, near-clear pale baby-pink lip-balm lips, soft luminous milk-fair skin, three-dimensional cheekbone-and-jaw facial planes, realistic strand-by-strand hair, and a sculpted feminine silhouette"
+                "bright fresh sensual home-life environmental portrait photography, side-window light, cool-neutral white-and-pink skin, pale baby-pink clear lip-balm accents, real hairline detail, lively eye-smile, and readable apartment background depth",
+                "fresh lifestyle cover realism with clean daylight contrast, bright milk-fair clean skin, magnetic lifted eyes returning to camera, near-clear pale baby-pink lips, believable natural hair texture, lightweight fitted styling, and fully dressed intimate freshness",
+                "natural candid lifestyle portrait treatment with believable soft directional indoor window light, alluring fox-almond eyes returning to camera, near-clear pale baby-pink lip-balm lips, soft luminous milk-fair skin, three-dimensional cheekbone-and-jaw facial planes, realistic strand-by-strand hair, a sculpted feminine silhouette, and visible home objects behind her"
             ],
             "职场系": [
                 "premium office fashion editorial with crisp window light, soft rim light, catchlights, and quiet sensual tension",
@@ -804,14 +804,14 @@ class SmartPromptGenerator:
         正向 prompt 的前半段，避免长提示词后段被弱化。
         """
         core = [
-            "A realistic high-key clean daylight waist-up lifestyle portrait of a clearly adult 22-23 year old mainland Chinese woman",
+            "A realistic high-key clean daylight environmental waist-up lifestyle portrait of a clearly adult 22-23 year old mainland Chinese woman in a lived-in apartment, not a plain studio portrait",
             f"Subject identity: {asian_id}",
             (
                 "Face priority: a beautiful modern East Asian Chinese clean-beauty face, slim oval-melon facial outline, "
                 "visible three-dimensional facial planes, softly defined cheekbone arc, clear but delicate cheek-to-jaw transition, "
                 "a slim V-shaped lower face with a small softly pointed chin, fine willow-leaf brows, a refined straight high East Asian nose bridge, "
-                "subtle nose-side shading, narrow nose base, compact small nostrils, and balanced photogenic eyes-nose-mouth spacing; "
-                "not a flat round face and not over-smoothed"
+                "subtle nose-side shading, narrow nose base, compact small nostrils, balanced photogenic eyes-nose-mouth spacing, "
+                "and soft side light separating cheekbone, nose bridge, and jawline; not a flat round face, not flat frontal lighting, and not over-smoothed"
             ),
             (
                 "Eyes priority: luminous elongated phoenix-almond / fox-almond eyes, lifted outer corners, clear black irises, "
@@ -843,6 +843,15 @@ class SmartPromptGenerator:
                 "Real-person rule: a real camera photograph with subtle facial asymmetry, fine skin texture around the nose and cheeks, "
                 "natural hand tension, small clothing wrinkles, believable fabric thickness, and restrained retouching; not CGI, not beauty-filter plastic skin, "
                 "not porcelain-doll smoothness, and not studio-render perfection"
+            ),
+            (
+                "Composition and energy rule: dynamic three-quarter waist-up environmental portrait, shoulders angled about 20 degrees, "
+                "head slightly turned back toward camera, lively eye-smile, softly lifted mouth corners, open posture, visible neck and collarbone, "
+                "not a static passport portrait and not a lifeless front-facing pose"
+            ),
+            (
+                "Background rule: visible lived-in apartment details such as sheer curtains, sofa, green plant, side table, coffee cup, books, or wall art; "
+                "background softly blurred but readable, not plain white, not empty studio, not blank wall"
             ),
         ]
 
@@ -877,13 +886,13 @@ class SmartPromptGenerator:
 
         core.extend([
             (
-                "Keep the body fully dressed and tasteful like a fresh sensual art portrait: a supportive fitted ribbed knit or structured cotton top "
-                "that preserves a natural fuller upper-body silhouette, clear bust-to-waist contour through the fabric, visible waist cue, realistic adult proportions, "
-                "center torso visible from collarbone to waist, cardigan or overshirt open away from the center torso, hands away from the chest, and hair not covering the torso"
+                "Keep the body fully dressed and tasteful like a fresh sensual art portrait: a lightweight supportive fitted square-neck, scoop-neck, or camisole-style top "
+                "with thin structured fabric that preserves a natural fuller upper-body silhouette, clear bust-to-waist contour through the fabric, visible waist cue, realistic adult proportions, "
+                "center torso visible from collarbone to waist, no thick sweater, no bulky cardigan, no high crewneck hiding the collarbone, hands away from the chest, and hair not covering the torso"
             ),
             (
                 "Keep the expression young-adult and relaxed: lively clear eyes, relaxed facial muscles, tiny sweet closed-mouth smile, "
-                "softly lifted mouth corners, delicate three-dimensional lower-face contour, direct gentle eye contact, and no stiff, tired, executive, or older-looking expression"
+                "softly lifted mouth corners, delicate three-dimensional lower-face contour, direct gentle eye contact, animated freshness, and no stiff, tired, executive, or older-looking expression"
             ),
         ])
 

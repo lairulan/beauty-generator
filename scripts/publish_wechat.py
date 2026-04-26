@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-公众号发布脚本 V12.36
+公众号发布脚本 V12.37
 将生成的美女图片发布到公众号草稿箱（小绿书形式）
 """
 
@@ -812,6 +812,7 @@ def main():
     parser.add_argument("--type", choices=["news", "newspic"], default="newspic", help="文章类型")
 
     args = parser.parse_args()
+    loaded_prompt_from_library = False
 
     # 列出提示词库
     if args.list_prompts:
@@ -824,6 +825,7 @@ def main():
         if not saved:
             print(f"❌ 未找到 ID={args.use_prompt} 的提示词，请用 --list-prompts 查看可用列表")
             return 1
+        loaded_prompt_from_library = True
         args.prompt = clean_manual_prompt(saved["prompt"])
         if not args.caption_text and saved.get("caption"):
             args.caption_text = saved["caption"]
@@ -846,6 +848,7 @@ def main():
 
     # 判断模式
     is_manual = bool(args.prompt)
+    should_save_manual_prompt = is_manual and bool(args.prompt) and not loaded_prompt_from_library
 
     # 生成标题
     if not args.title:
@@ -968,8 +971,8 @@ def main():
     if result.get("success") is True or result.get("code") == "SUCCESS":
         print("✅ 发布成功！")
         print(f"📱 请到公众号后台查看草稿箱")
-        # 手动模式发布成功 → 自动保存提示词到库
-        if is_manual and args.prompt:
+        # 只有直接输入的新 prompt 才自动保存；复用库内 prompt 不重复入库。
+        if should_save_manual_prompt:
             first_url = images_with_meta[0][0] if images_with_meta else ""
             save_manual_prompt(
                 prompt=args.prompt,
@@ -978,6 +981,8 @@ def main():
                 title=args.title,
                 image_url=first_url,
             )
+        elif is_manual and loaded_prompt_from_library:
+            print("  📚 使用已保存提示词，本次不重复保存到库")
         return 0
     else:
         error_msg = result.get("error", "未知错误")

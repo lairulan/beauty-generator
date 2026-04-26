@@ -10,6 +10,10 @@ on:
         description: '手动模式：自定义提示词（留空则使用自动模式）'
         required: false
         default: ''
+      prompt_id:
+        description: '手动模式：使用已保存提示词 ID（优先于自定义提示词，且不重复保存）'
+        required: false
+        default: ''
       caption_text:
         description: '手动模式：自定义配文（可选）'
         required: false
@@ -112,12 +116,19 @@ jobs:
           WECHAT_API_KEY: ${{ secrets.WECHAT_API_KEY }}
           DOUBAO_API_KEY: ${{ secrets.DOUBAO_API_KEY }}
           INPUT_PROMPT: ${{ github.event.inputs.prompt }}
+          INPUT_PROMPT_ID: ${{ github.event.inputs.prompt_id }}
           INPUT_CAPTION: ${{ github.event.inputs.caption_text }}
           INPUT_TITLE: ${{ github.event.inputs.title }}
         run: |
           cd scripts
 
-          if [ -n "$INPUT_PROMPT" ]; then
+          if [ -n "$INPUT_PROMPT_ID" ]; then
+            echo "🔧 手动模式：使用已保存提示词 ID=${INPUT_PROMPT_ID}"
+            CMD="python3 publish_wechat.py --count 1 --use-prompt \"$INPUT_PROMPT_ID\""
+            [ -n "$INPUT_CAPTION" ] && CMD="$CMD --caption-text \"$INPUT_CAPTION\""
+            [ -n "$INPUT_TITLE" ]   && CMD="$CMD --title \"$INPUT_TITLE\""
+            eval $CMD
+          elif [ -n "$INPUT_PROMPT" ]; then
             echo "🔧 手动模式：使用自定义提示词"
             CMD="python3 publish_wechat.py --count 1 --prompt \"$INPUT_PROMPT\""
             [ -n "$INPUT_CAPTION" ] && CMD="$CMD --caption-text \"$INPUT_CAPTION\""
@@ -150,6 +161,7 @@ jobs:
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           JOB_STATUS: ${{ job.status }}
           INPUT_PROMPT: ${{ github.event.inputs.prompt }}
+          INPUT_PROMPT_ID: ${{ github.event.inputs.prompt_id }}
           SHOULD_RUN: ${{ steps.dedupe.outputs.should_run }}
           SKIP_REASON: ${{ steps.dedupe.outputs.skip_reason }}
         run: |
@@ -164,8 +176,10 @@ jobs:
             AUTO_EVENT=true
           fi
 
-          if [ "$AUTO_EVENT" = "true" ] && [ -z "$INPUT_PROMPT" ] && [ "$SHOULD_RUN" != "true" ]; then
+          if [ "$AUTO_EVENT" = "true" ] && [ -z "$INPUT_PROMPT" ] && [ -z "$INPUT_PROMPT_ID" ] && [ "$SHOULD_RUN" != "true" ]; then
             MODE=" | mode=t2i-auto-skipped-duplicate | reason=${SKIP_REASON:-already-published-today}"
+          elif [ "$RUN_EVENT" = "workflow_dispatch" ] && [ -n "$INPUT_PROMPT_ID" ]; then
+            MODE=" | mode=t2i-manual-library | prompt_id=${INPUT_PROMPT_ID}"
           elif [ "$RUN_EVENT" = "workflow_dispatch" ] && [ -n "$INPUT_PROMPT" ]; then
             MODE=" | mode=t2i-manual | prompt=${INPUT_PROMPT:0:50}..."
           elif [ "$RUN_EVENT" = "workflow_dispatch" ]; then
