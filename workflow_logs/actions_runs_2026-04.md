@@ -83,3 +83,4 @@ A realis... | run=290 | https://github.com/lairulan/beauty-generator/actions/run
 - 2026-04-26 10:45:11 | failure | mode=t2i-manual-workflow-dispatch | run=293 | https://github.com/lairulan/beauty-generator/actions/runs/24946561224
 - 2026-04-26 10:47:03 | success | mode=t2i-manual-workflow-dispatch | run=294 | https://github.com/lairulan/beauty-generator/actions/runs/24946588724
 - 2026-04-26 20:01:15 | success | mode=t2i-auto-1pic | event=repository_dispatch | run=295 | https://github.com/lairulan/beauty-generator/actions/runs/24956100310
+- 2026-04-26 20:42:14 | success | mode=t2i-auto-skipped-duplicate | reason=actions-success-today | run=296 | https://github.com/lairulan/beauty-generator/actions/runs/24956891874
