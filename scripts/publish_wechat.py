@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-公众号发布脚本 V12.35
+公众号发布脚本 V12.36
 将生成的美女图片发布到公众号草稿箱（小绿书形式）
 """
 
 import argparse
 import json
 import os
+import re
 import subprocess
 import ssl
 import sys
@@ -27,6 +28,17 @@ API_BASE = "https://wx.limyai.com/api/openapi"
 
 # 公众号配置
 DEFAULT_APPID = "wx287cdb9d78a498aa"  # 三更熟
+
+MANUAL_PROMPT_LOG_PREFIX_RE = re.compile(
+    r"^\s*\[\d{4}-\d{2}-\d{2}\s+[0-9:]+\]\s+\[(?:INFO|WARN|ERROR)\]\s+随机种子:\s*\d+\s*"
+)
+
+
+def clean_manual_prompt(prompt: str) -> str:
+    """移除误复制进手动 prompt 的本地日志前缀。"""
+    if not prompt:
+        return ""
+    return MANUAL_PROMPT_LOG_PREFIX_RE.sub("", str(prompt).strip(), count=1).strip()
 
 
 def get_api_key():
@@ -383,6 +395,7 @@ def load_manual_prompts() -> dict:
 
 def save_manual_prompt(prompt: str, caption: str = "", tags: str = "", title: str = "", image_url: str = ""):
     """保存手动提示词到库中（发布成功后自动调用）"""
+    prompt = clean_manual_prompt(prompt)
     data = load_manual_prompts()
     # 计算下一个 ID
     next_id = max((p.get("id", 0) for p in data["prompts"]), default=0) + 1
@@ -811,13 +824,16 @@ def main():
         if not saved:
             print(f"❌ 未找到 ID={args.use_prompt} 的提示词，请用 --list-prompts 查看可用列表")
             return 1
-        args.prompt = saved["prompt"]
+        args.prompt = clean_manual_prompt(saved["prompt"])
         if not args.caption_text and saved.get("caption"):
             args.caption_text = saved["caption"]
         if not args.title and saved.get("title"):
             args.title = saved["title"]
         print(f"📚 已加载提示词库 ID={args.use_prompt}")
         print(f"   Prompt: {args.prompt[:80]}...")
+
+    if args.prompt:
+        args.prompt = clean_manual_prompt(args.prompt)
 
     # 发布模式才需要公众号 API Key
     if not args.test and not get_api_key():
