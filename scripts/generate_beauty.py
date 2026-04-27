@@ -79,6 +79,10 @@ LOGS_DIR = SKILL_DIR / "logs"
 # 确保目录存在
 LOGS_DIR.mkdir(parents=True, exist_ok=True)
 
+# Google 限流抑制文件：_suspend_google / _get_google_suspend_message 共用
+# 字段: {"message": str, "ts": float, "until": float (unix 秒，到期自动清除)}
+_GOOGLE_SUSPEND_FILE = LOGS_DIR / "google_suspended.json"
+
 
 # ─── 配置加载 ───────────────────────────────────────────────
 
@@ -1377,8 +1381,9 @@ def generate_series(count: int = 3,
     log(f"  脸型: {character.get('face', '')[:50]}...")
     log(f"  发型: {character.get('hair', '')[:50]}...")
 
-    # emotion -> expression 类别映射
-    resolved_expression = EMOTION_EXPRESSION_MAP.get(emotion) if emotion else None
+    # emotion -> expression 类别映射（用户显式 --emotion 时贯穿全部图，
+    # 否则每张图都从策略池里重新随机）
+    initial_expression = EMOTION_EXPRESSION_MAP.get(emotion) if emotion else None
 
     images = []
     inter_delay = GENERATION_CFG.get("inter_image_delay", 2)
@@ -1389,6 +1394,8 @@ def generate_series(count: int = 3,
     log("=" * 60)
 
     for i in range(count):
+        # 每张图前重置为初始值，避免上一张随机出的表情污染后续所有图
+        resolved_expression = initial_expression
         # 通过风格策略配置生成参数
         scene, pose_type, resolved_outfit, resolved_expression, character = \
             _apply_style_strategy(

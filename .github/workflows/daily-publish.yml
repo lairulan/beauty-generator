@@ -127,18 +127,19 @@ jobs:
         run: |
           cd scripts
 
+          ARGS=(python3 publish_wechat.py --count 1)
           if [ -n "$INPUT_PROMPT_ID" ]; then
             echo "🔧 手动模式：使用已保存提示词 ID=${INPUT_PROMPT_ID}"
-            CMD="python3 publish_wechat.py --count 1 --use-prompt \"$INPUT_PROMPT_ID\""
-            [ -n "$INPUT_CAPTION" ] && CMD="$CMD --caption-text \"$INPUT_CAPTION\""
-            [ -n "$INPUT_TITLE" ]   && CMD="$CMD --title \"$INPUT_TITLE\""
-            eval $CMD
+            ARGS+=(--use-prompt "$INPUT_PROMPT_ID")
+            [ -n "$INPUT_CAPTION" ] && ARGS+=(--caption-text "$INPUT_CAPTION")
+            [ -n "$INPUT_TITLE" ]   && ARGS+=(--title "$INPUT_TITLE")
+            "${ARGS[@]}"
           elif [ -n "$INPUT_PROMPT" ]; then
             echo "🔧 手动模式：使用自定义提示词"
-            CMD="python3 publish_wechat.py --count 1 --prompt \"$INPUT_PROMPT\""
-            [ -n "$INPUT_CAPTION" ] && CMD="$CMD --caption-text \"$INPUT_CAPTION\""
-            [ -n "$INPUT_TITLE" ]   && CMD="$CMD --title \"$INPUT_TITLE\""
-            eval $CMD
+            ARGS+=(--prompt "$INPUT_PROMPT")
+            [ -n "$INPUT_CAPTION" ] && ARGS+=(--caption-text "$INPUT_CAPTION")
+            [ -n "$INPUT_TITLE" ]   && ARGS+=(--title "$INPUT_TITLE")
+            "${ARGS[@]}"
           else
             echo "🎨 文生图模式：每日1张写真"
 

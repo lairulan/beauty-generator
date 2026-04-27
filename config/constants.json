@@ -1,5 +1,5 @@
 {
-  "version": "12.1.0",
+  "version": "12.39.0",
   "engines": {
     "doubao": {
       "endpoint": "https://ark.cn-beijing.volces.com/api/v3/images/generations",
