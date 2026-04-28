@@ -447,10 +447,47 @@ STYLE_TITLES = {
 }
 
 
-def generate_smart_caption(scene: str = "", emotion: str = "", makeup: str = "", art_style: str = "", style: str = "") -> str:
-    """生成开场文案（2段，风格感更强）"""
+def generate_smart_caption(scene: str = "", emotion: str = "", makeup: str = "",
+                           art_style: str = "", style: str = "",
+                           image_url: str = "", prompt_text: str = "",
+                           kind: str = "opener") -> str:
+    """生成开场文案。
+
+    新链路（image_url 非空时优先尝试）：Qwen-VL 看图 → DeepSeek 写文 → 历史去重 → 通过则返回。
+    任一步失败回退到原有模板池逻辑，保证发布链路不阻塞。
+    """
     from datetime import date
 
+    # ── 新链路：LLM + VLM ────────────────────────────────────────────
+    if image_url:
+        try:
+            from .llm_caption import generate_unique_caption
+        except ImportError:
+            try:
+                from llm_caption import generate_unique_caption  # type: ignore
+            except ImportError:
+                generate_unique_caption = None  # type: ignore
+
+        if generate_unique_caption is not None:
+            meta = {
+                "style": style,
+                "scene_type": scene,
+                "expression_type": emotion,
+                "lighting_type": "",
+                "outfit_style": "",
+                "art_style": art_style,
+            }
+            llm_caption = generate_unique_caption(
+                image_url=image_url,
+                meta=meta,
+                prompt_text=prompt_text,
+                kind=kind,
+            )
+            if llm_caption:
+                return llm_caption
+            print("  ⚠️ LLM 文案不可用，回退到模板池")
+
+    # ── 回退：原模板池逻辑 ───────────────────────────────────────────
     parts = []
 
     # 第1段：风格专属开场（按日期轮换，同一天同风格固定同一句）
@@ -506,3 +543,39 @@ def generate_smart_caption(scene: str = "", emotion: str = "", makeup: str = "",
 def generate_one_line_caption(style: str = "") -> str:
     """生成一句话介绍（兼容旧接口）"""
     return generate_smart_caption()
+
+
+def generate_image_caption(image_url: str = "", meta: dict | None = None,
+                           prompt_text: str = "") -> str:
+    """图片下方一句话配文。
+
+    优先走 LLM short 模式（看图 + 14-22 字），失败回退到现有 meta/prompt 模板。
+    """
+    meta = meta or {}
+
+    if image_url:
+        try:
+            from .llm_caption import generate_unique_caption
+        except ImportError:
+            try:
+                from llm_caption import generate_unique_caption  # type: ignore
+            except ImportError:
+                generate_unique_caption = None  # type: ignore
+
+        if generate_unique_caption is not None:
+            text = generate_unique_caption(
+                image_url=image_url,
+                meta=meta,
+                prompt_text=prompt_text,
+                tone="short",
+                kind="short",
+            )
+            if text:
+                return text
+
+    # 回退：原模板逻辑
+    if prompt_text:
+        return generate_caption_from_prompt(prompt_text)
+    if meta and meta.get("scene_type") and meta.get("scene_type") != "custom":
+        return generate_caption_from_meta(meta)
+    return "今日份心动瞬间。"

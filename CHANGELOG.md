@@ -1,5 +1,30 @@
 # 版本历史
 
+## v12.40.0 (2026-04-28) - LLM 文案：永不重复 + 图文匹配
+
+### 文案链路重构
+- 新增 `scripts/lib/llm_caption.py`：Qwen-VL 看图 → DeepSeek 写文 → 历史库去重 → 不通过即重生成（最多 3 次）
+- 调性：本 skill (t2i) = `cinematic`（电影叙事感，3 段 80-120 字），由 `.env` 中 `BEAUTY_CAPTION_TONE` 控制
+- 持久化历史库 `logs/caption_history.jsonl`，跨 skill 互查（与 i2i 互不撞文）
+- 三层去重：开头 12 字精确去重 + 三元组 Jaccard 相似度（阈值 0.55）+ VLM 关键词覆盖率 ≥ 2
+
+### 改动
+- `lib/captions.py::generate_smart_caption()` 增加 `image_url / prompt_text / kind` 参数，优先走 LLM 链路，失败回退原模板池
+- 新增 `lib/captions.py::generate_image_caption()`：图片下方一句话（14-22 字）也走 LLM + 历史去重
+- `publish_wechat.py`：开场文案生成位置从图片生成前移到生成后，确保拿到真实成图 URL 喂给 VLM
+- `publish_wechat.py`：增加 `_load_dotenv()`，自动加载 skill 根目录 `.env`（不覆盖已有环境变量）
+- 新增 `.env`：QWEN_API_KEY / DEEPSEEK_API_KEY / BEAUTY_CAPTION_TONE
+
+### 成本
+- 单篇文章约 1 次 VLM + 1-3 次 LLM 调用，总成本 < 0.01 元
+
+### 验证
+- E2E 测试 3 轮同图同 tone：3 篇文案完全不同，全部包含 ≥2 个 VLM 关键词
+- short / cinematic / diary 三档长度校验通过
+- 历史库正确落盘到各自 skill `logs/caption_history.jsonl`
+
+---
+
 ## v12.39.0 (2026-04-26) - Prompt 工程精简 + 代码瘦身 + 描述净化
 
 ### Prompt 优化（影响出图质量）

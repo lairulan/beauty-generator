@@ -20,9 +20,32 @@ SKILL_DIR = SCRIPT_DIR.parent
 CONFIG_DIR = SKILL_DIR / "config"
 BEAUTY_GENERATE_SCRIPT = SKILL_DIR / "scripts" / "generate_beauty.py"
 
+# 加载 skill 根目录的 .env（QWEN/DEEPSEEK 等 key），不覆盖已有环境变量
+def _load_dotenv(path: Path) -> None:
+    if not path.exists():
+        return
+    try:
+        for line in path.read_text(encoding="utf-8").splitlines():
+            line = line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            k, v = line.split("=", 1)
+            k, v = k.strip(), v.strip().strip('"').strip("'")
+            if k and k not in os.environ:
+                os.environ[k] = v
+    except Exception:
+        pass
+
+
+_load_dotenv(SKILL_DIR / ".env")
+
 # 本地 lib（与 i2i 保持同源）
 sys.path.insert(0, str(SCRIPT_DIR))
 from lib.wechat_api import publish_to_wechat, get_api_key
+from lib.captions import (  # noqa: E402
+    generate_image_caption,
+    generate_smart_caption as generate_smart_caption_llm,
+)
 
 # 公众号配置
 DEFAULT_APPID = "wx287cdb9d78a498aa"  # 三更熟
@@ -729,16 +752,6 @@ def main():
         else:
             args.title = f"📸 今日写真 · {weekday_str}"
 
-    # 智能生成开场文案（传入 style 让内容更有针对性）
-    if not args.caption:
-        args.caption = generate_smart_caption(
-            scene=args.scene or "",
-            emotion=args.emotion or "",
-            makeup=args.makeup or "",
-            art_style=args.art_style or "",
-            style=args.style or "",
-        )
-
     print("=" * 50)
     print(f"📅 日期: {today}")
     if is_manual:
@@ -747,7 +760,6 @@ def main():
     else:
         print(f"🔧 模式: 自动（元素库随机）")
     print(f"📋 标题: {args.title}")
-    print(f"💬 介绍: {args.caption}")
     if args.scene:
         print(f"🎬 场景: {args.scene}")
     if args.emotion:
@@ -769,25 +781,39 @@ def main():
 
     print(f"\n✅ 成功生成 {len(images_with_meta)} 张图片")
 
-    # 手动模式：优先用户自定义配文 > 从 prompt 智能生成 > 默认
-    if is_manual and args.caption_text:
-        manual_caption = args.caption_text
-    elif is_manual and args.prompt:
-        manual_caption = generate_caption_from_prompt(args.prompt)
-    else:
-        manual_caption = None
+    # 用第一张图喂 VLM + LLM，生成长开场（args.caption）
+    first_url = images_with_meta[0][0] if images_with_meta else ""
+    first_meta_for_opener = images_with_meta[0][1] if images_with_meta else {}
+    if not args.caption:
+        print("\n💬 正在用 VLM+LLM 生成开场文案...")
+        args.caption = generate_smart_caption_llm(
+            scene=args.scene or "",
+            emotion=args.emotion or "",
+            makeup=args.makeup or "",
+            art_style=args.art_style or "",
+            style=args.style or "",
+            image_url=first_url,
+            prompt_text=args.prompt or "",
+            kind="opener",
+        )
+    print(f"💬 介绍:\n{args.caption}")
+
+    # 手动模式：用户显式给的 caption_text 优先（覆盖 LLM 短文）
+    manual_caption_override = args.caption_text if (is_manual and args.caption_text) else None
 
     # 测试模式
     if args.test:
         print("\n🧪 测试模式：不发布到公众号")
         print("\n生成的图片链接:")
         for i, (url, meta) in enumerate(images_with_meta, 1):
-            if manual_caption:
-                caption = manual_caption
-            elif meta and meta.get("scene_type") != "custom":
-                caption = generate_caption_from_meta(meta)
+            if manual_caption_override:
+                caption = manual_caption_override
             else:
-                caption = "今日份心动瞬间。"
+                caption = generate_image_caption(
+                    image_url=url,
+                    meta=meta or {},
+                    prompt_text=args.prompt or "",
+                )
 
             if is_manual and args.prompt:
                 tags = generate_tags_from_prompt(args.prompt)
@@ -803,19 +829,19 @@ def main():
 
     print(f"\n📤 正在发布到公众号...")
 
-    # 构建图片和说明配对
+    # 构建图片和说明配对（LLM 短文 + 历史去重，撞库自动重生）
     image_pairs = []
-    first_meta = {}
+    first_meta = first_meta_for_opener
 
     for i, (img_url, meta) in enumerate(images_with_meta):
-        if i == 0:
-            first_meta = meta or {}
-        if manual_caption:
-            caption = manual_caption
-        elif meta and meta.get("scene_type") != "custom":
-            caption = generate_caption_from_meta(meta)
+        if manual_caption_override:
+            caption = manual_caption_override
         else:
-            caption = "今日份心动瞬间。"
+            caption = generate_image_caption(
+                image_url=img_url,
+                meta=meta or {},
+                prompt_text=args.prompt or "",
+            )
         image_pairs.append((img_url, caption))
 
     # 标签：手动模式从 prompt 智能生成，自动模式基于元数据
@@ -846,7 +872,7 @@ def main():
             first_url = images_with_meta[0][0] if images_with_meta else ""
             save_manual_prompt(
                 prompt=args.prompt,
-                caption=manual_caption or "",
+                caption=manual_caption_override or "",
                 tags=dynamic_tags,
                 title=args.title,
                 image_url=first_url,

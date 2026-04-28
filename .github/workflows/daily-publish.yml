@@ -120,6 +120,12 @@ jobs:
           IMGBB_API_KEY: ${{ secrets.IMGBB_API_KEY }}
           WECHAT_API_KEY: ${{ secrets.WECHAT_API_KEY }}
           DOUBAO_API_KEY: ${{ secrets.DOUBAO_API_KEY }}
+          # LLM 文案链路（VLM 看图 + DeepSeek 写文，永不重复 + 图文匹配）
+          QWEN_API_KEY: ${{ secrets.QWEN_API_KEY }}
+          QWEN_VL_MODEL: qwen-vl-plus
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          DEEPSEEK_MODEL: deepseek-chat
+          BEAUTY_CAPTION_TONE: cinematic
           INPUT_PROMPT: ${{ github.event.inputs.prompt }}
           INPUT_PROMPT_ID: ${{ github.event.inputs.prompt_id }}
           INPUT_CAPTION: ${{ github.event.inputs.caption_text }}
