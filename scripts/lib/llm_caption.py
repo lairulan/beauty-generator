@@ -652,13 +652,10 @@ def generate_unique_article(
                 last_error = why
                 continue
 
-            # 关键词覆盖：长版要求 intro 里 ≥1；短版 intro 可能太短装不下，
-            # 改为 intro+aphorism 合计 ≥1（aphorism 主要是哲思，不强制画面）
+            # 关键词覆盖：哲思模式不强制 intro 必须命中关键词，
+            # 仅要求 intro+aphorism 合计 ≥1（避免完全脱离画面但允许灵活切入）
             if keywords:
-                if tone == "philosophical_short":
-                    cov = _coverage(article["intro"] + article["aphorism"], keywords)
-                else:
-                    cov = _coverage(article["intro"], keywords)
+                cov = _coverage(article["intro"] + article["aphorism"], keywords)
                 if cov < 1:
                     last_error = f"未引用任何画面要素（{cov}/{len(keywords)}）"
                     continue
@@ -668,8 +665,9 @@ def generate_unique_article(
                 last_error = why
                 continue
 
-            # 组装 markdown 正文：intro + 分隔符 + 引用块
-            body = f"{article['intro']}\n\n· · ·\n\n> {article['aphorism']}"
+            # 组装正文（v2 plan B：公众号 newspic 不渲染 > 引用块，
+            # 改用纯文本节奏：intro + 分隔符 + aphorism 平铺，靠段落节奏做视觉层次）
+            body = f"{article['intro']}\n\n· · ·\n\n{article['aphorism']}"
             article["body"] = body
 
             if save:
