@@ -111,7 +111,7 @@ jobs:
           echo "should_run=$SHOULD_RUN" >> "$GITHUB_OUTPUT"
           echo "skip_reason=$SKIP_REASON" >> "$GITHUB_OUTPUT"
 
-      - name: 文生图·每日3张
+      - name: 文生图·每日3次贴图
         if: steps.dedupe.outputs.should_run == 'true'
         env:
           FORCE_GOOGLE_ONLY: ${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.force_google_only == 'false') && '0' || '1' }}
@@ -147,7 +147,7 @@ jobs:
             [ -n "$INPUT_TITLE" ]   && ARGS+=(--title "$INPUT_TITLE")
             "${ARGS[@]}"
           else
-            echo "🎨 文生图模式：每日3张写真"
+            echo "🎨 文生图模式：每日 3 次贴图（每次 1 张，独立草稿）"
 
             STYLES=("性感系" "甜美系" "国风系" "邻家女孩系" "职场系" "生活场景系" "清纯系")
             EMOTIONS=("挑逗"  "俏皮"   "温柔"  "温柔"       "自信"  "微笑"       "性感")
@@ -158,10 +158,29 @@ jobs:
 
             echo "📸 今日风格：${STYLE} | 表情：${EMOTION}"
 
-            python3 publish_wechat.py \
-              --count 3 \
-              --style "$STYLE" \
-              --emotion "$EMOTION"
+            FAIL_COUNT=0
+            for i in 1 2 3; do
+              echo ""
+              echo "==================== 第 ${i}/3 次贴图 ===================="
+              if python3 publish_wechat.py \
+                --count 1 \
+                --style "$STYLE" \
+                --emotion "$EMOTION"; then
+                echo "✅ 第 ${i}/3 次贴图成功"
+              else
+                FAIL_COUNT=$((FAIL_COUNT + 1))
+                echo "⚠️ 第 ${i}/3 次贴图失败，继续下一次"
+              fi
+              if [ "$i" -lt 3 ]; then
+                sleep 5
+              fi
+            done
+
+            if [ "$FAIL_COUNT" -eq 3 ]; then
+              echo "❌ 全部 3 次贴图均失败"
+              exit 1
+            fi
+            echo "📊 总结：3 次中 $((3 - FAIL_COUNT)) 次成功"
           fi
 
       - name: 记录运行日志到仓库
