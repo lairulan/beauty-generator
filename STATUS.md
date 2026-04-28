@@ -1,7 +1,7 @@
 # beauty-generator STATUS — 2026-04-28
 
 ## 当前状态
-- **版本：v12.40.0**（2026-04-28：LLM 文案永不重复 + 图文匹配）
+- **版本：v12.41.0**（2026-04-28：图启思考哲思短文 + LLM 标题 + plan B 排版）
 - 主链路：Google Imagen 4 Ultra 生成；连接或生成失败时自动回退到豆包 Seedream 4.5
 - 发布链路：`publish_wechat.py` 负责标题、开场文案、内容组装与公众号草稿箱发布
 - **文案链路（v12.40 新增）**：Qwen-VL 看实际成图 → DeepSeek 写文（cinematic 调性，电影叙事 80-120字 3 段）→ 历史库去重（跨 skill 互查）→ 不通过重生
@@ -10,14 +10,15 @@
 - 测试模式：`--test` 只生成不发布，不要求 `WECHAT_API_KEY`
 
 ## 断点（2026-04-28）
-- **本次完成**：v12.40.0 LLM 文案链路上线
-  - 新增 `lib/llm_caption.py`：Qwen-VL → DeepSeek + 历史库 + 重生
-  - `lib/captions.py::generate_smart_caption()` 增加 image_url 走 LLM 链路，失败回退模板
-  - 新增 `generate_image_caption()` 让图片下方短文也走 LLM
-  - `publish_wechat.py` 把开场文案生成移到图生成后；自动加载 `.env`
-  - workflow YAML 注入 QWEN_API_KEY/DEEPSEEK_API_KEY/BEAUTY_CAPTION_TONE=cinematic
-- **正式跑 2 次**（4-28）全部成功，文案完全不同且每篇都包含 ≥2 个 VLM 视觉关键词
-- **下一步**：等今晚 20:00 schedule 自动跑，观察文案质量；本仓库的 Google Imagen key 仍受 "paid plan only" 限制，备用 key 工作正常
+- **本次完成**：v12.41.0 图启思考短文 + LLM 标题
+  - llm_caption.py 新增 `generate_unique_article()`：JSON 输出 {title, intro, aphorism}
+  - 哲思 prompt 设计：画面 20% / 哲思 80%，禁鸡汤、禁空泛大词
+  - 文章级去重：title 头 + aphorism 头 + jaccard 0.5
+  - publish_wechat.py 优先走文章链路，标题用 LLM 输出（C 方案抽金句）
+  - **plan B 排版**：去掉 `>` 引用块（newspic 不渲染），用 `· · ·` 分隔符 + 段落节奏
+  - 调性映射：cinematic → philosophical_long（70-100 字 aphorism）
+- **v12.40.0**（同日）：LLM 文案永不重复 + 图文匹配（保留作 fallback 链路）
+- **下一步**：今晚 20:00 schedule 首次用 v12.41 哲思版自动跑（每天 3 次贴图）
 
 ## V12.40 关键变更（2026-04-28）
 - 新链路 `lib/llm_caption.py`（500+ 行）
