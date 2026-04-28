@@ -248,6 +248,19 @@ TONE_SPEC = {
         "length": "14-22 字",
         "paragraphs": 1,
     },
+    # ── v2 哲思模式（图启思考）──────────────────────────────────────
+    "philosophical_long": {
+        "label": "图启思考·长版",
+        "intro_words": "25-40",
+        "aphorism_words": "70-100",
+        "title_words": "10-15",
+    },
+    "philosophical_short": {
+        "label": "图启思考·短版",
+        "intro_words": "15-25",
+        "aphorism_words": "40-70",
+        "title_words": "8-13",
+    },
 }
 
 # 全局禁用词（陈词滥调）
@@ -380,6 +393,299 @@ def _length_ok(text: str, tone: str) -> bool:
     if tone == "short":
         return 8 <= n <= 30
     return 20 <= n <= 200
+
+
+# ── v2 哲思文章生成（图启思考）──────────────────────────────────────
+def _build_article_prompt(meta: dict, vlm_keywords: list[str],
+                          history: list[dict], tone: str) -> tuple[str, str]:
+    """组装"图启思考"模式的 system + user prompt。
+
+    输出 JSON：{title, intro, aphorism}
+      - title: 8-15 字金句感标题，能单独立得住
+      - intro: 短画面切入（visual hook）
+      - aphorism: 哲思/感悟（占主要重量）
+    """
+    spec = TONE_SPEC.get(tone, TONE_SPEC["philosophical_long"])
+    intro_words = spec.get("intro_words", "20-35")
+    aphorism_words = spec.get("aphorism_words", "60-90")
+    title_words = spec.get("title_words", "10-15")
+
+    # 历史标题/警句去重
+    recent_titles = []
+    recent_aphorism_heads = []
+    for h in history[:60]:
+        if h.get("title"):
+            recent_titles.append(h["title"])
+        if h.get("aphorism_head"):
+            recent_aphorism_heads.append(h["aphorism_head"])
+        elif h.get("head12"):
+            recent_aphorism_heads.append(h["head12"])
+    recent_titles = list(dict.fromkeys(recent_titles))[:30]
+    recent_aphorism_heads = list(dict.fromkeys(recent_aphorism_heads))[:30]
+
+    system = (
+        "你是一位为公众号美图栏目写'图启思考'短文的资深编辑。"
+        "你的任务不是描述图片，而是把图片中的某个细节作为引子，"
+        "写一段值得读者反复读的哲思或生活感悟。\n\n"
+        "核心原则：\n"
+        "1. 画面只占 20%——给读者一个进入文字的入口\n"
+        "2. 哲思占 80%——一句话能让读者停下来想想\n"
+        "3. 拒绝鸡汤、拒绝假深刻、拒绝'人生''世界''生活'这种空泛词\n"
+        "4. 哲思要有具体的钩子：一个动作、一种感觉、一个矛盾、一种边界\n"
+        "5. 不要总结，不要点透，让读者自己接住"
+    )
+
+    parts = [
+        "【任务】基于下面这张人像照片写一段「图启思考」短文。",
+        "图片只是引子，重点是哲思/生活观察。",
+        "",
+        "【画面要素】（仅供你抓一个细节做引子，不要罗列）",
+    ]
+    if vlm_keywords:
+        parts.append("  - " + "、".join(vlm_keywords))
+    else:
+        parts.append("  -（无）")
+
+    if meta:
+        meta_bits = []
+        for k in ("style", "scene_type", "expression_type"):
+            v = meta.get(k)
+            if v:
+                meta_bits.append(f"{k}={v}")
+        if meta_bits:
+            parts.append(f"【元信息】{', '.join(meta_bits)}")
+
+    parts.extend([
+        "",
+        "【输出严格 JSON】",
+        "{",
+        f'  "title":    "{title_words} 字金句标题，要能单独立得住，不要泛泛之词",',
+        f'  "intro":    "{intro_words} 字画面切入，1-2 句，从画面里挑一个细节",',
+        f'  "aphorism": "{aphorism_words} 字哲思 / 生活感悟，从画面引子延伸到具体观察。允许 2-3 句，可以有一个温和的转折"',
+        "}",
+        "",
+        "【硬性禁止】",
+        "- 不要写'人生''世界''生活'这种空泛大词；用具体的事物代替",
+        "- 不要鸡汤式金句结尾（'愿你''要相信''请记得'之类）",
+        "- 不要在 aphorism 里描述图片，要从画面跳脱出来谈别的事",
+        "- 不要 emoji，不要引号包裹整段，不要'你''我'指代",
+        "- 不要罗列画面要素，要自然融入",
+    ])
+
+    if recent_titles:
+        parts.append("")
+        parts.append("【避免与最近的标题雷同】")
+        for t in recent_titles[:20]:
+            parts.append(f"  · {t}")
+
+    if recent_aphorism_heads:
+        parts.append("")
+        parts.append("【避免与最近的开头雷同】")
+        for h in recent_aphorism_heads[:20]:
+            parts.append(f"  · {h}……")
+
+    if _BANNED_WORDS:
+        parts.append("")
+        parts.append("【陈词滥调禁用】")
+        parts.append("  · " + "、".join(_BANNED_WORDS))
+
+    parts.extend([
+        "",
+        "【只输出严格 JSON】不要 markdown code block，不要解释，不要前言后语。",
+    ])
+
+    return system, "\n".join(parts)
+
+
+def _parse_article_json(raw: str) -> dict | None:
+    """从 LLM 输出中解析 JSON。容错 markdown code block 包裹。"""
+    if not raw:
+        return None
+    s = raw.strip()
+    # 去掉可能的 markdown code block
+    s = re.sub(r"^```(?:json)?\s*", "", s)
+    s = re.sub(r"\s*```$", "", s)
+    # 找第一个完整的 JSON 对象
+    m = re.search(r"\{.*\}", s, re.DOTALL)
+    if not m:
+        return None
+    try:
+        obj = json.loads(m.group(0))
+    except Exception:
+        return None
+    if not isinstance(obj, dict):
+        return None
+    title = (obj.get("title") or "").strip()
+    intro = (obj.get("intro") or "").strip()
+    aphorism = (obj.get("aphorism") or "").strip()
+    if not title or not intro or not aphorism:
+        return None
+    return {"title": title, "intro": intro, "aphorism": aphorism}
+
+
+def _length_ok_article(article: dict, tone: str) -> tuple[bool, str]:
+    """校验 title/intro/aphorism 长度是否符合 tone spec。"""
+    spec = TONE_SPEC.get(tone, TONE_SPEC["philosophical_long"])
+
+    def _range(s: str) -> tuple[int, int]:
+        m = re.match(r"(\d+)-(\d+)", s)
+        if not m:
+            return (0, 9999)
+        return int(m.group(1)), int(m.group(2))
+
+    def _len(t: str) -> int:
+        return len(re.sub(r"\s+", "", t))
+
+    t_min, t_max = _range(spec["title_words"])
+    i_min, i_max = _range(spec["intro_words"])
+    a_min, a_max = _range(spec["aphorism_words"])
+
+    title_n = _len(article["title"])
+    intro_n = _len(article["intro"])
+    aph_n = _len(article["aphorism"])
+
+    # 上下宽 30% 的容差，避免 LLM 死扣字数
+    if title_n < int(t_min * 0.7) or title_n > int(t_max * 1.5):
+        return False, f"标题字数{title_n}（期望{t_min}-{t_max}）"
+    if intro_n < int(i_min * 0.7) or intro_n > int(i_max * 1.5):
+        return False, f"intro 字数{intro_n}（期望{i_min}-{i_max}）"
+    if aph_n < int(a_min * 0.7) or aph_n > int(a_max * 1.5):
+        return False, f"aphorism 字数{aph_n}（期望{a_min}-{a_max}）"
+    return True, ""
+
+
+def _is_duplicate_article(article: dict, history: list[dict]) -> tuple[bool, str]:
+    """文章级去重：检查 title 头部 + aphorism 头部 + aphorism 整体相似度。"""
+    title = article["title"]
+    aphorism = article["aphorism"]
+    title_head = _head_n(title, 8)
+    aph_head = _head_n(aphorism, 12)
+
+    for h in history:
+        if h.get("title") and _head_n(h["title"], 8) == title_head:
+            return True, f"标题与 {h.get('date','?')} 雷同"
+        if h.get("aphorism_head") and h["aphorism_head"] == aph_head:
+            return True, f"哲思开头与 {h.get('date','?')} 雷同"
+        if h.get("aphorism"):
+            score = jaccard(aphorism, h["aphorism"])
+            if score >= 0.5:
+                return True, f"哲思与 {h.get('date','?')} 相似度 {score:.2f}"
+    return False, ""
+
+
+def append_article_history(article: dict, image_url: str) -> None:
+    """落库整篇文章（title + intro + aphorism + 指纹）。"""
+    fp = _own_history_file()
+    fp.parent.mkdir(parents=True, exist_ok=True)
+    entry = {
+        "date": date.today().isoformat(),
+        "ts": datetime.now().isoformat(timespec="seconds"),
+        "kind": "article",
+        "title": article["title"],
+        "intro": article["intro"],
+        "aphorism": article["aphorism"],
+        "title_head": _head_n(article["title"], 8),
+        "aphorism_head": _head_n(article["aphorism"], 12),
+        "head12": _head_n(article["aphorism"], 12),  # 兼容旧 schema
+        "image": image_url,
+        "tone": os.environ.get("BEAUTY_CAPTION_TONE", "cinematic"),
+    }
+    with open(fp, "a", encoding="utf-8") as f:
+        f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+
+
+def generate_unique_article(
+    image_url: str,
+    meta: dict | None = None,
+    prompt_text: str = "",
+    tone: str | None = None,
+    max_retries: int = 3,
+    save: bool = True,
+) -> dict | None:
+    """生成"图启思考"哲思短文。
+
+    Returns:
+        {
+          "title": "金句标题",
+          "intro": "画面切入",
+          "aphorism": "哲思感悟",
+          "body":  "intro\n\n· · ·\n\n> aphorism"  (markdown 格式好的正文)
+        }
+        失败返回 None。
+    """
+    _ = prompt_text
+    if not image_url:
+        return None
+
+    # 调性映射：cinematic → philosophical_long, diary → philosophical_short
+    raw_tone = tone or os.environ.get("BEAUTY_CAPTION_TONE", "cinematic")
+    tone_map = {
+        "cinematic": "philosophical_long",
+        "diary": "philosophical_short",
+    }
+    tone = tone_map.get(raw_tone, raw_tone if raw_tone.startswith("philosophical_") else "philosophical_long")
+    if tone not in TONE_SPEC:
+        tone = "philosophical_long"
+
+    meta = meta or {}
+    keywords = vlm_extract_keywords(image_url)
+    history = load_history(days=90, limit=200)
+
+    last_error = ""
+    for attempt in range(1, max_retries + 1):
+        try:
+            system, user = _build_article_prompt(meta, keywords, history, tone)
+            if attempt > 1:
+                user += (
+                    f"\n\n【重要】上次尝试不通过（{last_error}）。"
+                    "请彻底换一个切入角度——从声音、温度、距离、边界、矛盾、空缺、习惯、克制中任选一个全新意象，"
+                    "title 也要彻底换掉。"
+                )
+            raw = llm_call(system, user, temperature=min(1.0, 0.9 + 0.03 * attempt))
+            article = _parse_article_json(raw)
+            if not article:
+                last_error = f"JSON 解析失败：{raw[:80]}"
+                continue
+
+            ok, why = _length_ok_article(article, tone)
+            if not ok:
+                last_error = why
+                continue
+
+            # 关键词覆盖：长版要求 intro 里 ≥1；短版 intro 可能太短装不下，
+            # 改为 intro+aphorism 合计 ≥1（aphorism 主要是哲思，不强制画面）
+            if keywords:
+                if tone == "philosophical_short":
+                    cov = _coverage(article["intro"] + article["aphorism"], keywords)
+                else:
+                    cov = _coverage(article["intro"], keywords)
+                if cov < 1:
+                    last_error = f"未引用任何画面要素（{cov}/{len(keywords)}）"
+                    continue
+
+            dup, why = _is_duplicate_article(article, history)
+            if dup:
+                last_error = why
+                continue
+
+            # 组装 markdown 正文：intro + 分隔符 + 引用块
+            body = f"{article['intro']}\n\n· · ·\n\n> {article['aphorism']}"
+            article["body"] = body
+
+            if save:
+                try:
+                    append_article_history(article, image_url)
+                except Exception as e:
+                    print(f"  ⚠️ 历史库写入失败: {e}", file=sys.stderr)
+            return article
+
+        except Exception as e:
+            last_error = str(e)
+            print(f"  ⚠️ 文章生成第 {attempt} 次失败: {e}", file=sys.stderr)
+            time.sleep(0.8)
+
+    print(f"  ⚠️ 文章生成 {max_retries} 次均未通过：{last_error}", file=sys.stderr)
+    return None
 
 
 # ── 对外主函数 ────────────────────────────────────────────────────────

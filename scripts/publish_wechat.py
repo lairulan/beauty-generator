@@ -44,6 +44,7 @@ sys.path.insert(0, str(SCRIPT_DIR))
 from lib.wechat_api import publish_to_wechat, get_api_key
 from lib.captions import (  # noqa: E402
     generate_image_caption,
+    generate_smart_article,
     generate_smart_caption as generate_smart_caption_llm,
 )
 
@@ -743,14 +744,16 @@ def main():
     is_manual = bool(args.prompt)
     should_save_manual_prompt = is_manual and bool(args.prompt) and not loaded_prompt_from_library
 
-    # 生成标题
+    # 标题：优先用户 --title；否则等图生成后由 LLM "图启思考"输出 title 字段填充
+    # 模板兜底（v2 已不再使用，仅在 LLM 全失败时启用）
+    fallback_title = None
     if not args.title:
         if is_manual:
-            args.title = f"📸 每日写真 | 手动精选"
+            fallback_title = "📸 每日写真 | 手动精选"
         elif args.style and args.style in STYLE_TITLES:
-            args.title = f"📸 {STYLE_TITLES[args.style]}"
+            fallback_title = f"📸 {STYLE_TITLES[args.style]}"
         else:
-            args.title = f"📸 今日写真 · {weekday_str}"
+            fallback_title = f"📸 今日写真 · {weekday_str}"
 
     print("=" * 50)
     print(f"📅 日期: {today}")
@@ -759,7 +762,7 @@ def main():
         print(f"📝 Prompt: {args.prompt[:100]}...")
     else:
         print(f"🔧 模式: 自动（元素库随机）")
-    print(f"📋 标题: {args.title}")
+    print(f"📋 标题: {args.title or '(待 LLM 生成)'}")
     if args.scene:
         print(f"🎬 场景: {args.scene}")
     if args.emotion:
@@ -785,17 +788,37 @@ def main():
     first_url = images_with_meta[0][0] if images_with_meta else ""
     first_meta_for_opener = images_with_meta[0][1] if images_with_meta else {}
     if not args.caption:
-        print("\n💬 正在用 VLM+LLM 生成开场文案...")
-        args.caption = generate_smart_caption_llm(
-            scene=args.scene or "",
-            emotion=args.emotion or "",
-            makeup=args.makeup or "",
-            art_style=args.art_style or "",
-            style=args.style or "",
+        print("\n💬 正在用 VLM+LLM 生成图启思考短文（标题+正文）...")
+        article = generate_smart_article(
             image_url=first_url,
+            meta=first_meta_for_opener,
             prompt_text=args.prompt or "",
-            kind="opener",
+            style=args.style or "",
         )
+        if article:
+            # 用 LLM 生成的标题（覆盖 fallback）
+            if not args.title:
+                args.title = article["title"]
+            args.caption = article["body"]
+            print(f"📋 标题: {args.title}")
+        else:
+            # 全失败回退：用模板标题 + 老的 generate_smart_caption_llm
+            print("  ⚠️ 哲思短文生成失败，回退到旧文案链路")
+            if not args.title:
+                args.title = fallback_title
+            args.caption = generate_smart_caption_llm(
+                scene=args.scene or "",
+                emotion=args.emotion or "",
+                makeup=args.makeup or "",
+                art_style=args.art_style or "",
+                style=args.style or "",
+                image_url=first_url,
+                prompt_text=args.prompt or "",
+                kind="opener",
+            )
+    elif not args.title:
+        # 用户给了 caption 但没给标题，用 fallback
+        args.title = fallback_title
     print(f"💬 介绍:\n{args.caption}")
 
     # 手动模式：用户显式给的 caption_text 优先（覆盖 LLM 短文）

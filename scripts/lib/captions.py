@@ -545,6 +545,39 @@ def generate_one_line_caption(style: str = "") -> str:
     return generate_smart_caption()
 
 
+def generate_smart_article(image_url: str = "", meta: dict | None = None,
+                           prompt_text: str = "", style: str = "") -> dict | None:
+    """v2 哲思文章生成器（图启思考）。
+
+    返回结构化 dict: {title, intro, aphorism, body}
+      - title: 8-15 字金句感标题
+      - intro: 短画面切入
+      - aphorism: 哲思感悟（占主体重量）
+      - body: 已组装好的 markdown 正文（intro + 分隔符 + 引用块）
+
+    失败返回 None；上层（publish_wechat）应回退到模板标题 + 旧 generate_smart_caption。
+    """
+    if not image_url:
+        return None
+    meta = meta or {}
+    if style and "style" not in meta:
+        meta["style"] = style
+
+    try:
+        from .llm_caption import generate_unique_article
+    except ImportError:
+        try:
+            from llm_caption import generate_unique_article  # type: ignore
+        except ImportError:
+            return None
+
+    return generate_unique_article(
+        image_url=image_url,
+        meta=meta,
+        prompt_text=prompt_text,
+    )
+
+
 def generate_image_caption(image_url: str = "", meta: dict | None = None,
                            prompt_text: str = "") -> str:
     """图片下方一句话配文。
