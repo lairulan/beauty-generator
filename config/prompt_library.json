@@ -321,11 +321,11 @@
       "playful adult gaze with soft blush, relaxed brows, clear catchlights, and clean natural makeup"
     ],
     "挑逗": [
-      "playful wink with one eye, bright grin, soft cheeks, and lively early-twenties charm",
-      "front-facing three-quarter pose with a playful smile, bright relaxed eyes, and natural peach lips",
-      "coy shy smile while glancing upward, soft cheek fullness, relaxed brows, and lighthearted charm",
-      "small teasing smile with eyes twinkling, natural blush, and youthful confident warmth",
-      "carefree laugh with eyes closed, relaxed neck, soft cheeks, and bright candid warmth"
+      "playful tilted-head smile with both eyes wide open and bright catchlights, slight side-glance toward camera, soft cheeks, and lively early-twenties charm",
+      "front-facing three-quarter pose with a playful smile, both eyes fully open and bright relaxed, and natural peach lips",
+      "coy shy smile while glancing upward, both eyes open and visible, soft cheek fullness, relaxed brows, and lighthearted charm",
+      "small teasing smile with both eyes wide open and twinkling, natural blush, and youthful confident warmth",
+      "bright candid smile with both eyes fully open and engaged, soft cheeks, relaxed neck, and warm early-twenties charm"
     ],
     "纯欲": [
       "wide soft doe eyes gazing at camera with slightly parted natural lips, soft-faced adult allure, and fresh cheek fullness",
@@ -522,7 +522,7 @@
     "anti_face": "wide round face, broad jawline, flat face, pancake face, puffy cheeks, square jaw, no cheekbone definition, small dull eyes, droopy outer corners, large nostrils, flared nostrils, wide nose base, wide mouth, over-wide lips, average plain face, instagram face, extreme symmetry, unrealistically large eyes",
     "anti_body": "impossible body proportions, unnaturally tiny waist, distorted chest anatomy, flat chest, missing bust contour, boxy torso, androgynous torso, shapeless oversized clothing, thick sweater, bulky cardigan, high neckline hiding collarbone, hands covering chest, hair covering chest, exaggerated fake curves",
     "anti_hair_makeup": "wig-like hair, helmet hair, plastic hair, solid hair mass, painted hair, perfect synthetic waves, blonde highlights, balayage, bleached hair, red lips, dark lipstick, mauve lips, berry lip tint, brown lipstick, matte lipstick, lip liner, heavy lipstick, overdrawn lips, heavy smoky eyeliner, harsh contour makeup",
-    "anti_age_mood": "teen, underage, childlike face, school uniform, childish styling, middle-aged, woman in her 30s, mature executive, aged face, deep wrinkles, nasolabial folds, tired under-eye bags, sagging skin, gaunt cheeks, hollow cheeks, stiff expression, blank stare, forced smile, dead eyes, stern expression, cold intimidating stare",
+    "anti_age_mood": "teen, underage, childlike face, school uniform, childish styling, middle-aged, woman in her 30s, mature executive, aged face, deep wrinkles, nasolabial folds, tired under-eye bags, sagging skin, gaunt cheeks, hollow cheeks, stiff expression, blank stare, forced smile, dead eyes, stern expression, cold intimidating stare, closed eyes, eyes closed, half-closed eyes, half-lidded eyes, narrowed eyes, squinting eyes, wink, winking, one eye closed, asymmetric eyes, hair covering one eye, eyes hidden by hair",
     "anti_scene": "flat full-frontal passport angle, lifeless pose, plain white background, empty studio, blank wall, no room details, looking away, face turned too far away, low-key lighting, underexposed face, muddy skin tone, yellow-brown face, beige-orange face, warm amber face cast, dull gray color grading, desaturated lifeless colors"
   }
 }

@@ -374,15 +374,25 @@ class SmartPromptGenerator:
         return "Refined adult femininity with realistic full-body proportions and believable balance"
 
     def _build_realism_clauses(self, style: str = None, pose_type: str = None) -> list[str]:
-        """V12.39 精简：从 6-9 条缩到 3-4 条；生活场景系交给专用 prompt，不再叠加。"""
+        """V12.39 精简：从 6-9 条缩到 3-4 条；生活场景系交给专用 prompt，不再叠加。
+
+        v12.42: 加入眼睛硬约束 — Imagen 主路径不读 negative_prompt，必须在正向 prompt
+        前置"both eyes fully open"以避免随机出闭眼/眨眼/半闭眼。"""
+        eyes_open_clause = (
+            "Both eyes are fully open, symmetric, bright, and engaged with direct or "
+            "near-camera gaze; no wink, no closed eyes, no half-lidded eyes, no "
+            "narrowed or squinting eyes, no hair covering one eye, no asymmetric eye opening"
+        )
+
         if style == STYLE_LIFESTYLE:
-            # 生活场景系完全由 _build_lifestyle_prompt 控制，realism 不再叠加
-            return []
+            # 生活场景系完全由 _build_lifestyle_prompt 控制，仅追加眼睛硬约束
+            return [eyes_open_clause]
 
         clauses = [
             "Real-world photography with healthy skin, real hair texture, restrained retouching, and natural hand placement",
             "Subject clearly adult but visibly 22-23: youthful cheek softness, bright rested eyes, smooth lower-face contours; no mature 30s impression",
-            "Realistic body proportions with a softly fitted or structured silhouette, not hidden by bulky layers, not cartoon-exaggerated"
+            "Realistic body proportions with a softly fitted or structured silhouette, not hidden by bulky layers, not cartoon-exaggerated",
+            eyes_open_clause,
         ]
 
         # 风格细化：单句风格补充
@@ -492,6 +502,12 @@ class SmartPromptGenerator:
                 "natural feminine silhouette through fabric, visible neckline and waist cue, realistic adult proportions; "
                 "three-quarter waist-up framing with shoulders angled, head slightly turned toward camera, lively eye-smile; "
                 "no thick sweater, no bulky cardigan, no high crewneck hiding collarbone, hands not covering torso"
+            ),
+            # 4.5 眼睛硬约束（v12.42 - 防止闭眼/眨眼/单眼闭）
+            (
+                "Both eyes are fully open, symmetric, bright, and engaged with direct or near-camera gaze; "
+                "no wink, no closed eyes, no half-lidded eyes, no narrowed or squinting eyes, "
+                "no hair covering one eye, no asymmetric eye opening"
             ),
             # 5. 背景
             (
