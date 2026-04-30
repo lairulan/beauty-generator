@@ -2,9 +2,27 @@
 # -*- coding: utf-8 -*-
 """配文与标签生成。两 repo 共用，纯函数无副作用。"""
 
+from __future__ import annotations
+
+import json
 import random
 import re
-from datetime import date
+from datetime import date, datetime
+from pathlib import Path
+
+# CONFIG_DIR 在被宿主脚本（generate_beauty.py）import 时由模块级注入，
+# 这里给出基于本文件路径的兜底，避免独立调用时 NameError。
+CONFIG_DIR = Path(__file__).resolve().parent.parent.parent / "config"
+
+
+def clean_manual_prompt(prompt: str) -> str:
+    """移除误复制进 prompt 的本地日志前缀。与 generate_beauty.py 同名函数等价。"""
+    if not prompt:
+        return ""
+    pattern = re.compile(
+        r"^\s*\[\d{4}-\d{2}-\d{2}\s+[0-9:]+\]\s+\[(?:INFO|WARN|ERROR)\]\s+随机种子:\s*\d+\s*"
+    )
+    return pattern.sub("", str(prompt).strip(), count=1).strip()
 
 
 def generate_caption_from_meta(meta: dict) -> str:
@@ -376,43 +394,13 @@ def generate_tags_from_prompt(prompt: str) -> str:
     return " ".join(tags[:6])
 
 
-# ── 风格开场文案（3条/风格，按日期轮换） ──────────────────────────
+# ── 风格开场文案（性感系固定） ────────────────────────────────
 _STYLE_OPENERS = {
     "性感系": [
         "不经意间，眼神轻抬，万种风情自然流露。这种美，不需要解释。",
         "美从来不是刻意摆出来的，而是那一刻突然涌现的心跳。",
         "靠近，是本能。今日这帧，记得多看一眼。",
-    ],
-    "甜美系": [
-        "笑起来眼睛弯弯的，甜度爆表，让人心情瞬间好起来。",
-        "春风十里，不如今天这个微笑来得直接。",
-        "今日份甜蜜准时送达，请查收。",
-    ],
-    "国风系": [
-        "一袭古风，把岁月的柔情都装进了镜头里，东方美学从不过时。",
-        "青砖黛瓦，美人如画。古典与现代之间，美总是共通的。",
-        "千年审美，一帧定格。今天的国风，今天的她。",
-    ],
-    "邻家女孩系": [
-        "转角遇见的美好，就是这种感觉——自然又温柔，不用力。",
-        "不需要刻意，清新感扑面而来，像邻家姑娘的一个眼神。",
-        "最喜欢这种不加滤镜的真实，干净，让人放松。",
-    ],
-    "职场系": [
-        "干练中透着温柔，自信是最好的妆容。这种气场，无法复制。",
-        "精致不失亲切，职场里最迷人的，是那份从容与笃定。",
-        "气场全开，眼神里依然有温度。今日这帧，请认真欣赏。",
-    ],
-    "生活场景系": [
-        "生活里最真实的美好，往往藏在平凡的瞬间。今天这一帧也是。",
-        "烟火气里的她，才是最动人的模样——真实，鲜活，有温度。",
-        "不是舞台，是生活，但每一帧都值得被珍藏。",
-    ],
-    "清纯系": [
-        "干净的眼神，比任何滤镜都好看。清水出芙蓉，天然去雕饰。",
-        "最纯粹的美，是不需要任何装饰的那种，自然天成。",
-        "简单的美好，像一阵清风，让人心里安静下来。",
-    ],
+    ]
 }
 
 # ── workflow emotion 值 → 补充结尾句 ───────────────────────────────
@@ -437,13 +425,7 @@ _EMOTION_ALIAS = {
 
 # ── 风格标题（更有辨识度） ──────────────────────────────────────────
 STYLE_TITLES = {
-    "性感系": "今日写真 · 性感系",
-    "甜美系": "今日写真 · 甜美系",
-    "国风系": "今日写真 · 国风",
-    "邻家女孩系": "今日写真 · 邻家女孩",
-    "职场系": "今日写真 · 职场气质",
-    "生活场景系": "今日写真 · 烟火日常",
-    "清纯系": "今日写真 · 清纯系",
+    "性感系": "今日写真 · 性感系"
 }
 
 
@@ -490,7 +472,7 @@ def generate_smart_caption(scene: str = "", emotion: str = "", makeup: str = "",
     # ── 回退：原模板池逻辑 ───────────────────────────────────────────
     parts = []
 
-    # 第1段：风格专属开场（按日期轮换，同一天同风格固定同一句）
+    # 第1段：性感写真开场（同一天固定同一句，保持发布稳定）
     if style and style in _STYLE_OPENERS:
         idx = date.today().toordinal() % len(_STYLE_OPENERS[style])
         parts.append(_STYLE_OPENERS[style][idx])

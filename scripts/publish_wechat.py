@@ -50,6 +50,8 @@ from lib.captions import (  # noqa: E402
 
 # 公众号配置
 DEFAULT_APPID = "wx287cdb9d78a498aa"  # 三更熟
+FORCED_STYLE = "性感系"
+FORCED_EMOTION = "性感"
 
 MANUAL_PROMPT_LOG_PREFIX_RE = re.compile(
     r"^\s*\[\d{4}-\d{2}-\d{2}\s+[0-9:]+\]\s+\[(?:INFO|WARN|ERROR)\]\s+随机种子:\s*\d+\s*"
@@ -326,66 +328,34 @@ def generate_caption_from_prompt(prompt: str) -> str:
 
 
 def load_manual_prompts() -> dict:
-    """加载手动提示词库"""
-    prompts_file = CONFIG_DIR / "manual_prompts.json"
-    if prompts_file.exists():
-        with open(prompts_file, "r", encoding="utf-8") as f:
-            return json.load(f)
-    return {"version": "1.0", "prompts": []}
+    """加载手动提示词库（thin wrapper over lib.manual_prompts.load_manual_prompts）。"""
+    from lib.manual_prompts import load_manual_prompts as _lib_load
+    return _lib_load(CONFIG_DIR / "manual_prompts.json")
 
 
-def save_manual_prompt(prompt: str, caption: str = "", tags: str = "", title: str = "", image_url: str = ""):
-    """保存手动提示词到库中（发布成功后自动调用）"""
-    prompt = clean_manual_prompt(prompt)
-    data = load_manual_prompts()
-    # 计算下一个 ID
-    next_id = max((p.get("id", 0) for p in data["prompts"]), default=0) + 1
-    entry = {
-        "id": next_id,
-        "prompt": prompt,
-        "caption": caption,
-        "tags": tags,
-        "title": title,
-        "image_url": image_url,
-        "created_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-    }
-    data["prompts"].append(entry)
-    prompts_file = CONFIG_DIR / "manual_prompts.json"
-    with open(prompts_file, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
-    print(f"  📚 提示词已保存到库（ID: {next_id}）")
-    return next_id
+def save_manual_prompt(prompt: str, caption: str = "", tags: str = "", title: str = "", image_url: str = "") -> int:
+    """保存手动提示词到库中。"""
+    from lib.manual_prompts import save_manual_prompt as _lib_save
+    return _lib_save(
+        CONFIG_DIR / "manual_prompts.json",
+        prompt=prompt,
+        caption=caption,
+        tags=tags,
+        title=title,
+        image_url=image_url,
+    )
 
 
 def list_manual_prompts():
-    """列出所有已保存的手动提示词"""
-    data = load_manual_prompts()
-    prompts = data.get("prompts", [])
-    if not prompts:
-        print("📚 提示词库为空，还没有保存过手动提示词。")
-        return
-    print(f"📚 手动提示词库（共 {len(prompts)} 条）")
-    print("=" * 60)
-    for p in prompts:
-        pid = p.get("id", "?")
-        created = p.get("created_at", "")
-        prompt_text = p.get("prompt", "")
-        preview = prompt_text[:80] + "..." if len(prompt_text) > 80 else prompt_text
-        caption = p.get("caption", "")
-        print(f"  [{pid}] {created}")
-        print(f"      Prompt: {preview}")
-        if caption:
-            print(f"      配文: {caption}")
-        print()
+    """列出所有已保存的手动提示词。"""
+    from lib.manual_prompts import list_manual_prompts as _lib_list
+    return _lib_list(CONFIG_DIR / "manual_prompts.json")
 
 
 def get_manual_prompt(prompt_id: int) -> dict:
-    """按 ID 获取已保存的提示词"""
-    data = load_manual_prompts()
-    for p in data.get("prompts", []):
-        if p.get("id") == prompt_id:
-            return p
-    return {}
+    """按 ID 获取已保存的提示词。"""
+    from lib.manual_prompts import get_manual_prompt as _lib_get
+    return _lib_get(CONFIG_DIR / "manual_prompts.json", prompt_id)
 
 
 def generate_tags_from_prompt(prompt: str) -> str:
@@ -432,43 +402,13 @@ def generate_tags_from_prompt(prompt: str) -> str:
     return " ".join(tags[:6])
 
 
-# ── 风格开场文案（3条/风格，按日期轮换） ──────────────────────────
+# ── 风格开场文案（性感系固定） ────────────────────────────────
 _STYLE_OPENERS = {
     "性感系": [
         "不经意间，眼神轻抬，万种风情自然流露。这种美，不需要解释。",
         "美从来不是刻意摆出来的，而是那一刻突然涌现的心跳。",
         "靠近，是本能。今日这帧，记得多看一眼。",
-    ],
-    "甜美系": [
-        "笑起来眼睛弯弯的，甜度爆表，让人心情瞬间好起来。",
-        "春风十里，不如今天这个微笑来得直接。",
-        "今日份甜蜜准时送达，请查收。",
-    ],
-    "国风系": [
-        "一袭古风，把岁月的柔情都装进了镜头里，东方美学从不过时。",
-        "青砖黛瓦，美人如画。古典与现代之间，美总是共通的。",
-        "千年审美，一帧定格。今天的国风，今天的她。",
-    ],
-    "邻家女孩系": [
-        "转角遇见的美好，就是这种感觉——自然又温柔，不用力。",
-        "不需要刻意，清新感扑面而来，像邻家姑娘的一个眼神。",
-        "最喜欢这种不加滤镜的真实，干净，让人放松。",
-    ],
-    "职场系": [
-        "干练中透着温柔，自信是最好的妆容。这种气场，无法复制。",
-        "精致不失亲切，职场里最迷人的，是那份从容与笃定。",
-        "气场全开，眼神里依然有温度。今日这帧，请认真欣赏。",
-    ],
-    "生活场景系": [
-        "生活里最真实的美好，往往藏在平凡的瞬间。今天这一帧也是。",
-        "烟火气里的她，才是最动人的模样——真实，鲜活，有温度。",
-        "不是舞台，是生活，但每一帧都值得被珍藏。",
-    ],
-    "清纯系": [
-        "干净的眼神，比任何滤镜都好看。清水出芙蓉，天然去雕饰。",
-        "最纯粹的美，是不需要任何装饰的那种，自然天成。",
-        "简单的美好，像一阵清风，让人心里安静下来。",
-    ],
+    ]
 }
 
 # ── workflow emotion 值 → 补充结尾句 ───────────────────────────────
@@ -493,13 +433,7 @@ _EMOTION_ALIAS = {
 
 # ── 风格标题（更有辨识度） ──────────────────────────────────────────
 STYLE_TITLES = {
-    "性感系": "今日写真 · 性感系",
-    "甜美系": "今日写真 · 甜美系",
-    "国风系": "今日写真 · 国风",
-    "邻家女孩系": "今日写真 · 邻家女孩",
-    "职场系": "今日写真 · 职场气质",
-    "生活场景系": "今日写真 · 烟火日常",
-    "清纯系": "今日写真 · 清纯系",
+    "性感系": "今日写真 · 性感系"
 }
 
 
@@ -509,7 +443,7 @@ def generate_smart_caption(scene: str = "", emotion: str = "", makeup: str = "",
 
     parts = []
 
-    # 第1段：风格专属开场（按日期轮换，同一天同风格固定同一句）
+    # 第1段：性感写真开场（同一天固定同一句，保持发布稳定）
     if style and style in _STYLE_OPENERS:
         idx = date.today().toordinal() % len(_STYLE_OPENERS[style])
         parts.append(_STYLE_OPENERS[style][idx])
@@ -565,12 +499,46 @@ def generate_one_line_caption(style: str = "") -> str:
 
 
 def _extract_images_with_meta(output: str) -> list:
-    """从脚本输出中提取图片 URL 和 META 元数据
+    """从脚本输出中提取图片 URL 和 META 元数据。
+
+    优先解析结构化 JSON 行（v12.43+ 增加）：
+        RESULT_JSON: {"images": [{"url": "...", "scene_type": "...", ...}, ...]}
+    若未找到 RESULT_JSON，回退到旧版 stdout 双行扫描：
+        <url>
+        META:场景|穿搭|表情|光影|艺术风格
 
     返回: [(url, meta_dict), ...]
-    META 行格式: META:场景|穿搭|表情|光影|艺术风格
     """
     import re
+    import json as _json
+
+    # 1) 优先解析结构化 JSON
+    for line in output.split("\n"):
+        s = line.strip()
+        if not s.startswith("RESULT_JSON:"):
+            continue
+        try:
+            payload = _json.loads(s[len("RESULT_JSON:"):].strip())
+        except (ValueError, TypeError):
+            continue
+        images = payload.get("images") or []
+        results = []
+        for img in images:
+            url = img.get("url")
+            if not url:
+                continue
+            meta = {
+                "scene_type": img.get("scene_type", ""),
+                "outfit_style": img.get("outfit_style", ""),
+                "expression_type": img.get("expression_type", ""),
+                "lighting_type": img.get("lighting_type", ""),
+                "art_style": img.get("art_style", ""),
+            }
+            results.append((url, meta))
+        if results:
+            return results
+
+    # 2) 回退到旧版 META: 行扫描（向下兼容）
     results = []
     lines = output.split("\n")
 
@@ -634,7 +602,13 @@ def generate_daily_images(
     if prompt:
         print(f"\n🎨 [手动模式] 正在使用自定义提示词生成 {count} 张图片...")
     else:
-        print(f"\n🎨 [自动模式] 正在生成 {count} 张图片 (Google Imagen 4 Ultra → 豆包 Seedream 4.5 fallback)...")
+        if style and style != FORCED_STYLE:
+            print(f"⚠️ 自动文生图已固定为{FORCED_STYLE}，忽略传入风格：{style}")
+        if emotion and emotion != FORCED_EMOTION:
+            print(f"⚠️ 自动文生图已固定为{FORCED_EMOTION}表达，忽略传入情绪：{emotion}")
+        style = FORCED_STYLE
+        emotion = FORCED_EMOTION
+        print(f"\n🎨 [自动模式] 正在生成 {count} 张{FORCED_STYLE}图片 (Google Imagen 4 Ultra → 豆包 Seedream 4.5 fallback)...")
 
     cmd = [
         "python3", str(BEAUTY_GENERATE_SCRIPT),
@@ -692,9 +666,9 @@ def main():
     parser.add_argument("--count", "-c", type=int, default=1, help="生成图片数量（默认1张）")
     parser.add_argument("--prompt", help="手动模式：直接使用自定义提示词生成（跳过随机元素库）")
     parser.add_argument("--caption-text", help="手动模式下的自定义配文（可选，不提供则用默认）")
-    parser.add_argument("--style", "-s", help="风格描述")
-    parser.add_argument("--scene", help="场景关键词：影响图片生成和介绍文案")
-    parser.add_argument("--emotion", help="情绪关键词：影响图片生成和介绍文案")
+    parser.add_argument("--style", "-s", help="自动模式固定为性感系；其他值仅兼容接收")
+    parser.add_argument("--scene", help="自动模式只保留性感系场景：室内、城市、特殊")
+    parser.add_argument("--emotion", help="自动模式固定为性感表达；其他值仅兼容接收")
     parser.add_argument("--makeup", help="妆容关键词：用于补充介绍文案")
     parser.add_argument("--art-style", help="艺术风格关键词：用于补充介绍文案")
     parser.add_argument("--appid", help="公众号 AppID（默认：三更熟）")
@@ -742,6 +716,13 @@ def main():
 
     # 判断模式
     is_manual = bool(args.prompt)
+    if not is_manual:
+        if args.style and args.style != FORCED_STYLE:
+            print(f"⚠️ 自动文生图已固定为{FORCED_STYLE}，忽略传入风格：{args.style}")
+        if args.emotion and args.emotion != FORCED_EMOTION:
+            print(f"⚠️ 自动文生图已固定为{FORCED_EMOTION}表达，忽略传入情绪：{args.emotion}")
+        args.style = FORCED_STYLE
+        args.emotion = FORCED_EMOTION
     should_save_manual_prompt = is_manual and bool(args.prompt) and not loaded_prompt_from_library
 
     # 标题：优先用户 --title；否则等图生成后由 LLM "图启思考"输出 title 字段填充

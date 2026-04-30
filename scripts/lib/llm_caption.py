@@ -39,19 +39,54 @@ DEEPSEEK_MODEL = os.environ.get("DEEPSEEK_MODEL", "deepseek-chat")
 QWEN_ENDPOINT = "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions"
 DEEPSEEK_ENDPOINT = "https://api.deepseek.com/v1/chat/completions"
 
-# 两个 skill 的历史库路径 —— 互相加载
-HISTORY_FILES = [
-    Path.home() / "beauty-generator/logs/caption_history.jsonl",
-    Path.home() / "beauty-img2img/logs/caption_history.jsonl",
-]
+# ── 历史库路径 ────────────────────────────────────────────────────────
+# 设计原则（v12.43）：
+#   1. 落盘以"当前 skill 根目录"为准（基于 __file__ 推算），保证在 GitHub Actions
+#      checkout 任意路径下也能正确写入仓库目录，便于 git commit 回去。
+#   2. 跨 skill 互查（去重）：本 skill 自己 + 邻居 skill。邻居路径优先读 env
+#      `BEAUTY_PEER_HISTORY_FILE`，否则回退到 ~/{邻居 skill}/logs/caption_history.jsonl。
 
-# 本 skill 自己的历史库（落盘用），由 publish_wechat 注入
+# 当前 skill 根目录（lib/llm_caption.py → ../../）
+_SELF_ROOT = Path(__file__).resolve().parent.parent.parent
+_SELF_HISTORY = _SELF_ROOT / "logs" / "caption_history.jsonl"
+
+# 邻居 skill 根目录推断
+_PEER_NAME_MAP = {
+    "beauty-img2img": "beauty-generator",
+    "beauty-generator": "beauty-img2img",
+}
+_peer_name = _PEER_NAME_MAP.get(_SELF_ROOT.name)
+
+
+def _peer_history_file() -> Path | None:
+    """返回邻居 skill 的历史文件路径。优先 env，其次约定路径，找不到返回 None。"""
+    override = os.environ.get("BEAUTY_PEER_HISTORY_FILE", "").strip()
+    if override:
+        return Path(override).expanduser()
+    if not _peer_name:
+        return None
+    sibling = _SELF_ROOT.parent / _peer_name / "logs" / "caption_history.jsonl"
+    if sibling.exists():
+        return sibling
+    return Path.home() / _peer_name / "logs" / "caption_history.jsonl"
+
+
+def _all_history_files() -> list[Path]:
+    """返回所有需要互查去重的历史文件（自己 + 邻居）。"""
+    files = [_SELF_HISTORY]
+    peer = _peer_history_file()
+    if peer is not None and peer != _SELF_HISTORY:
+        files.append(peer)
+    return files
+
+
+# 兼容旧 API：HISTORY_FILES 仍然导出供外部读取
+HISTORY_FILES = _all_history_files()
+
+
 def _own_history_file() -> Path:
-    """根据 BEAUTY_CAPTION_TONE 决定写入哪份历史库。"""
-    tone = os.environ.get("BEAUTY_CAPTION_TONE", "cinematic")
-    if tone == "diary":
-        return HISTORY_FILES[1]
-    return HISTORY_FILES[0]
+    """本 skill 自己的历史库（落盘用）。永远写在当前 skill 根目录下。"""
+    return _SELF_HISTORY
 
 
 # ── VLM 视觉关键词提取 ────────────────────────────────────────────────
@@ -146,7 +181,7 @@ def load_history(days: int = 90, limit: int = 200) -> list[dict]:
     """加载两个 skill 最近 N 天的文案历史。"""
     cutoff = (date.today() - timedelta(days=days)).isoformat()
     out: list[dict] = []
-    for fp in HISTORY_FILES:
+    for fp in _all_history_files():
         if not fp.exists():
             continue
         try:

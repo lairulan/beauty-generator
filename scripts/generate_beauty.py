@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-美女生成 V12.38 - Google Imagen 4 Ultra 双 Key 主力 + 豆包 Seedream 4.5 备选
+美女生成 V12.44 - Google Imagen 4 Ultra 双 Key 主力 + 豆包 Seedream 4.5 备选
 - Google Imagen 4 Ultra 作为主力引擎，支持主备 Key 轮换
-- 豆包 Seedream 4.5 作为 fallback
+- 豆包 Seedream 4.5 作为 fallback（含 URLError 重试）
 - 自动重试 + 429 指数退避（最多 3 次）
 - 配置驱动风格策略（style_strategies.json）
 - 多图床容错上传 + 重试机制
+- SSL fail-closed（仅 BEAUTY_ALLOW_INSECURE_SSL=1 时回退）
+- 自动文生图固定为性感/吸引力写真风格，不再轮换其他风格
 """
 
 import argparse
@@ -25,7 +27,7 @@ from datetime import date, datetime
 from pathlib import Path
 
 
-VERSION = "12.39.0"
+VERSION = "12.44.0"
 
 
 # ─── 风格枚举常量（避免散字符串） ─────────────────────────────
@@ -37,13 +39,16 @@ STYLE_GUOFENG = "国风系"
 STYLE_OFFICE = "职场系"
 STYLE_LIFESTYLE = "生活场景系"
 
-ALL_STYLES = {
-    STYLE_SWEET, STYLE_PURE, STYLE_SEXY, STYLE_GIRL_NEXT_DOOR,
-    STYLE_GUOFENG, STYLE_OFFICE, STYLE_LIFESTYLE
-}
+ALL_STYLES = {STYLE_SEXY}
+FORCED_STYLE = STYLE_SEXY
+FORCED_OUTFIT = "性感"
+FORCED_EXPRESSION = "性感"
+FORCED_SCENES = ("室内", "城市", "特殊")
+FORCED_LIGHTING = ("写真光", "氛围", "影棚")
+FORCED_POSES = ("写真",)
 
 # 哪些风格在豆包负面里需要补 anti_hair_makeup（强约束唇/发）
-HAIR_MAKEUP_STYLES = {STYLE_SEXY, STYLE_OFFICE, STYLE_GUOFENG, STYLE_LIFESTYLE}
+HAIR_MAKEUP_STYLES = {STYLE_SEXY}
 
 # 半身/全身/写真类 pose 才需要 body+scene 负面
 WIDE_FRAME_POSES = {"半身", "全身", "写真", "动态", "职场半身", "生活半身"}
@@ -61,13 +66,31 @@ def clean_manual_prompt(prompt: str) -> str:
     return MANUAL_PROMPT_LOG_PREFIX_RE.sub("", str(prompt).strip(), count=1).strip()
 
 
+def _normalize_generation_style(style: str = None, warn: bool = True) -> str:
+    """自动文生图统一使用性感系；非性感 style 仅作为历史兼容输入。"""
+    requested = (style or "").strip()
+    if warn and requested and requested != FORCED_STYLE:
+        log(f"  ⚠️ 自动文生图已固定为{FORCED_STYLE}，忽略传入风格：{requested}", "WARN")
+    return FORCED_STYLE
+
+
 def _get_ssl_context():
-    """获取 SSL context：优先使用系统证书，失败则回退到不验证"""
+    """获取 SSL context。
+
+    安全策略（fail-closed）：
+      - 默认始终返回 ssl.create_default_context()，证书校验严格开启。
+      - 若系统证书 bundle 不可用（极少见），抛出原异常，由调用方决定是否捕获。
+      - 仅当显式设置环境变量 BEAUTY_ALLOW_INSECURE_SSL=1 时，才允许回退到不校验证书；
+        回退时打印 WARN，提示手动启用了不安全模式。
+    """
     try:
-        ctx = ssl.create_default_context()
-        return ctx
-    except Exception:
-        return ssl._create_unverified_context()
+        return ssl.create_default_context()
+    except Exception as exc:
+        allow = os.environ.get("BEAUTY_ALLOW_INSECURE_SSL", "0").strip().lower() in {"1", "true", "yes"}
+        if allow:
+            print(f"⚠️  [SSL] create_default_context 失败 ({exc})，BEAUTY_ALLOW_INSECURE_SSL=1 已启用不校验证书回退。建议尽快修复系统证书 bundle。")
+            return ssl._create_unverified_context()
+        raise
 
 
 # 脚本目录
@@ -1132,7 +1155,13 @@ def generate_image_doubao(prompt: str, negative_prompt: str) -> dict:
             return {"success": False, "error": f"HTTP Error {e.code}: {err_body}"}
 
         except urllib.error.URLError as e:
-            return {"success": False, "error": f"豆包连接失败: {e.reason}"}
+            # 网络错误（DNS、连接超时、reset 等）也走重试，与 5xx 行为一致
+            if attempt < DOUBAO_RETRY_MAX_ATTEMPTS - 1:
+                delay = min(DOUBAO_RETRY_MAX_DELAY, DOUBAO_RETRY_BASE_DELAY * (2 ** attempt))
+                log(f"  [豆包] 连接失败: {e.reason}，{delay}s 后重试 ({attempt + 1}/{DOUBAO_RETRY_MAX_ATTEMPTS})", "WARN")
+                time.sleep(delay)
+                continue
+            return {"success": False, "error": f"豆包连接失败（已重试 {DOUBAO_RETRY_MAX_ATTEMPTS} 次）: {e.reason}"}
 
         except json.JSONDecodeError:
             return {"success": False, "error": "豆包 API 响应 JSON 解析失败"}
@@ -1215,17 +1244,28 @@ def _apply_style_strategy(generator, style, scene_type, outfit_style,
 
     返回: (scene, pose_type, resolved_outfit, resolved_expression, character)
     """
+    style = _normalize_generation_style(style, warn=False)
     strategy = STYLE_STRATEGIES.get(style) if style else None
 
     if not strategy:
-        # 默认逻辑：循环姿势 + 场景映射穿搭
-        scene = generator.generate_scene(scene_type)
-        default_poses = ["特写", "半身", "全身", "动态", "写真"]
-        pose_type = default_poses[i % len(default_poses)]
-        resolved_outfit = _resolve_default_outfit(generator, scene, outfit_style)
-        return scene, pose_type, resolved_outfit, resolved_expression, character
+        # 配置缺失时仍保持性感系兜底，不回退到其他风格。
+        if scene_type and scene_type not in FORCED_SCENES:
+            log(
+                f"  ⚠️ 自动文生图只保留性感系场景 {','.join(FORCED_SCENES)}，忽略传入场景：{scene_type}",
+                "WARN",
+            )
+            scene_type = None
+        scene = generator.generate_scene(scene_type or generator.pick_one(FORCED_SCENES))
+        return scene, "写真", FORCED_OUTFIT, FORCED_EXPRESSION, {"style": style}
 
     # 场景
+    allowed_scenes = set(strategy.get("scenes") or FORCED_SCENES)
+    if scene_type and scene_type not in allowed_scenes:
+        log(
+            f"  ⚠️ 自动文生图只保留性感系场景 {','.join(FORCED_SCENES)}，忽略传入场景：{scene_type}",
+            "WARN",
+        )
+        scene_type = None
     scenes = strategy.get("scenes", [])
     r_scene = scene_type or (generator.pick_one(scenes) if scenes else None)
     r_lighting = strategy.get("lighting") or (
@@ -1237,19 +1277,10 @@ def _apply_style_strategy(generator, style, scene_type, outfit_style,
     pose_types = strategy.get("pose_types", ["半身"])
     pose_type = generator.pick_one(pose_types)
 
-    # 穿搭：CLI 参数 > 固定值 > 随机池
-    r_outfit = outfit_style or strategy.get("outfit") or (
-        generator.pick_one(strategy["outfit_pool"]) if "outfit_pool" in strategy else None
-    )
+    # 性感系为硬约束：忽略外部传入的非性感 outfit/emotion，避免回到其他图片风格。
+    r_outfit = strategy.get("outfit") or FORCED_OUTFIT
 
-    # 表情：已有值优先 > 固定值 > 随机池
-    if style == "生活场景系" and resolved_expression == "微笑":
-        resolved_expression = "清新微笑"
-
-    if not resolved_expression:
-        resolved_expression = strategy.get("expression") or (
-            generator.pick_one(strategy["expression_pool"]) if "expression_pool" in strategy else None
-        )
+    resolved_expression = strategy.get("expression") or FORCED_EXPRESSION
 
     # 体态池：生活场景使用单独的日常丰满池，避免性感池污染脸部气质。
     face_mood_pool = strategy.get("face_mood_pool")
@@ -1278,6 +1309,8 @@ def _apply_style_strategy(generator, style, scene_type, outfit_style,
             character = dict(character)  # 浅拷贝避免污染原始
             character["body"] = generator.pick_one(sexy_list)
 
+    character = dict(character)
+    character["style"] = style
     return scene, pose_type, r_outfit, resolved_expression, character
 
 
@@ -1387,11 +1420,16 @@ def generate_series(count: int = 3,
     # 加载元素库
     library = load_prompt_library()
     generator = SmartPromptGenerator(library, seed=seed)
+    requested_style = style
+    style = _normalize_generation_style(style)
+    if emotion and EMOTION_EXPRESSION_MAP.get(emotion) != FORCED_EXPRESSION:
+        log(f"  ⚠️ 自动文生图已固定为{FORCED_STYLE}/{FORCED_EXPRESSION}，忽略传入情绪：{emotion}", "WARN")
 
     # 每次生成全新随机人物（不再用日期种子，确保每天都是不同的人）
     character = generator.generate_character(style)
 
     log(f"日期: {date.today()}")
+    log(f"自动风格: {style}（固定性感/吸引力写真，原始输入：{requested_style or '自动'}）")
     log(f"人物特征:")
     log(f"  风格: {character.get('style', '随机')}")
     log(f"  脸型: {character.get('face', '')[:50]}...")
@@ -1399,7 +1437,7 @@ def generate_series(count: int = 3,
 
     # emotion -> expression 类别映射（用户显式 --emotion 时贯穿全部图，
     # 否则每张图都从策略池里重新随机）
-    initial_expression = EMOTION_EXPRESSION_MAP.get(emotion) if emotion else None
+    initial_expression = FORCED_EXPRESSION
 
     images = []
     inter_delay = GENERATION_CFG.get("inter_image_delay", 2)
@@ -1484,27 +1522,24 @@ def list_options(library: dict):
     print("=" * 60)
 
     print("\n人物风格 (--style):")
-    for key in library.get("face_types", {}).keys():
-        print(f"   - {key}")
+    print(f"   - {FORCED_STYLE}（固定）")
 
     print("\n体态类型:")
     for item in library.get("body_types", []):
         print(f"   - {item[:40]}...")
 
     print("\n场景类型 (--scene):")
-    for key in library.get("scenes", {}).keys():
+    for key in FORCED_SCENES:
         print(f"   - {key}")
 
     print("\n穿搭风格 (--outfit):")
-    for key in library.get("outfits", {}).keys():
-        print(f"   - {key}")
+    print(f"   - {FORCED_OUTFIT}（自动模式固定）")
 
     print("\n表情类型:")
-    for key in library.get("expressions", {}).keys():
-        print(f"   - {key}")
+    print(f"   - {FORCED_EXPRESSION}（自动模式固定）")
 
     print("\n光影类型:")
-    for key in library.get("lighting", {}).keys():
+    for key in FORCED_LIGHTING:
         print(f"   - {key}")
 
     print("\n艺术风格:")
@@ -1512,12 +1547,11 @@ def list_options(library: dict):
         print(f"   - {key}")
 
     print("\n姿势类型:")
-    for key in library.get("poses", {}).keys():
+    for key in FORCED_POSES:
         print(f"   - {key}")
 
     print("\n情绪 (--emotion):")
-    for key in EMOTION_EXPRESSION_MAP.keys():
-        print(f"   - {key} -> {EMOTION_EXPRESSION_MAP[key]}")
+    print(f"   - {FORCED_EXPRESSION}（自动模式固定）")
 
 
 def main():
@@ -1528,10 +1562,10 @@ def main():
     parser.add_argument("--count", "-c", type=int, default=GENERATION_CFG.get("default_count", 3),
                         help=f"生成数量 (默认: {GENERATION_CFG.get('default_count', 3)})")
     parser.add_argument("--prompt", help="手动模式：直接使用自定义提示词生成（跳过随机元素库）")
-    parser.add_argument("--style", "-s", help="人物风格: 甜美系, 清纯系, 性感系, 邻家女孩系, 国风系, 职场系, 生活场景系")
-    parser.add_argument("--scene", help="场景类型: 自然, 城市, 室内, 特殊")
-    parser.add_argument("--outfit", "-o", help="穿搭风格: 优雅, 性感, 清新, 时尚, 古典, 运动")
-    parser.add_argument("--emotion", "-e", help="情绪: 挑逗, 性感, 温柔, 俏皮, 自信, 高冷, 忧郁, 纯欲")
+    parser.add_argument("--style", "-s", help="人物风格固定为性感系；传其他值会自动归一为性感系")
+    parser.add_argument("--scene", help="自动模式只保留性感系场景: 室内, 城市, 特殊")
+    parser.add_argument("--outfit", "-o", help="自动模式固定为性感穿搭；该参数仅保留兼容")
+    parser.add_argument("--emotion", "-e", help="自动模式固定为性感表达；该参数仅保留兼容")
     parser.add_argument("--seed", type=int, help="随机种子：用于复现某次 prompt 组合")
     parser.add_argument("--list-options", "-l", action="store_true", help="列出所有可用选项")
     parser.add_argument("--preview", "-p", action="store_true", help="只预览 Prompt，不生成图片")
@@ -1554,8 +1588,9 @@ def main():
 
     if args.preview:
         generator = SmartPromptGenerator(library, seed=args.seed)
-        character = generator.generate_character(args.style)
-        resolved_expression = EMOTION_EXPRESSION_MAP.get(args.emotion) if args.emotion else None
+        preview_style = _normalize_generation_style(args.style)
+        character = generator.generate_character(preview_style)
+        resolved_expression = FORCED_EXPRESSION
 
         print("\n" + "=" * 60)
         print(f"Prompt 预览 (V{VERSION})")
@@ -1573,7 +1608,7 @@ def main():
                 scene=scene,
                 styling=styling,
                 pose_type=pose_type,
-                style=args.style
+                style=preview_style
             )
             print(
                 f"\n【{pose_type} | 场景:{scene.get('type', '随机')} | "
@@ -1585,7 +1620,7 @@ def main():
             print(f"  [token≈{token_est}]")
             print(prompt)
             print(f"\n【Negative Prompt - {pose_type}】")
-            neg = generator.get_negative_prompt(pose_type, style=args.style)
+            neg = generator.get_negative_prompt(pose_type, style=preview_style)
             print(f"  [neg-token≈{len(neg.split())}]")
             print(neg)
 
@@ -1614,6 +1649,27 @@ def main():
             print(f"  {img['index']}. [{img['pose_type']}] {img['scene_type']} | {img['outfit_style']}")
             print(f"     {img['url']}")
             print(f"     META:{img.get('scene_type','')}|{img.get('outfit_style','')}|{img.get('expression_type','')}|{img.get('lighting_type','')}|{img.get('art_style','')}")
+
+        # v12.43: 同时输出结构化 JSON（publish_wechat 优先消费此行；META: 行作为兼容 fallback）
+        json_payload = {
+            "version": VERSION,
+            "count": len(result["images"]),
+            "images": [
+                {
+                    "index": img.get("index"),
+                    "url": img.get("url"),
+                    "pose_type": img.get("pose_type", ""),
+                    "scene_type": img.get("scene_type", ""),
+                    "outfit_style": img.get("outfit_style", ""),
+                    "expression_type": img.get("expression_type", ""),
+                    "lighting_type": img.get("lighting_type", ""),
+                    "art_style": img.get("art_style", ""),
+                    "style": img.get("style", ""),
+                }
+                for img in result["images"]
+            ],
+        }
+        print("RESULT_JSON: " + json.dumps(json_payload, ensure_ascii=False))
         return 0
     else:
         print(f"\n部分失败 ({result['count']}/{result['total']})")

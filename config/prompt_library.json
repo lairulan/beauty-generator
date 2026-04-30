@@ -1,16 +1,10 @@
 {
-  "version": "12.39",
-  "description": "Imagen 4 Ultra 优化版 - V12.38 将已验证有效的生活场景审美抽成通用原则，并适配到 7 个自动轮换风格：22-23 岁年轻成人、典型东亚中国审美、瓜子鹅蛋脸、凤眼感杏眼/狐狸杏眼、挺鼻梁小鼻翼小鼻孔、樱桃感花瓣小嘴、冷中性白里透红奶白肤色、近乎透明淡婴儿粉水润唇、自然黑发真实发丝、侧向塑形光、脸部立体骨相、可读场景背景、轻薄或结构化 fully dressed 艺术照穿搭、自然丰满但不夸张的胸腰轮廓、动态三分之四姿态和有生机的眼神笑；因为 Google Imagen 主路径不使用 negative_prompt，所以把偏南亚/欧美脸、偏深肤色、暖黄暗调、深唇、平面脸、假发感、厚衣服、空背景、宽脸宽嘴宽鼻孔和成熟僵硬表情排除项前置进正向 prompt",
+  "version": "12.44",
+  "description": "Imagen 4 Ultra 优化版 - V12.44 自动文生图固定为性感系/相近吸引力写真风格，不再轮换其他风格：22-23 岁年轻成人、典型东亚中国审美、瓜子鹅蛋脸、凤眼感杏眼/狐狸杏眼、挺鼻梁小鼻翼小鼻孔、樱桃感花瓣小嘴、冷中性白里透红奶白肤色、近乎透明淡婴儿粉水润唇、自然黑发真实发丝、侧向塑形光、脸部立体骨相、可读场景背景、轻薄或结构化 fully dressed 性感艺术照穿搭、自然丰满但不夸张的胸腰轮廓、动态三分之四姿态和有生机的眼神笑；因为 Google Imagen 主路径不使用 negative_prompt，所以把偏南亚/欧美脸、偏深肤色、暖黄暗调、深唇、平面脸、假发感、厚衣服、空背景、宽脸宽嘴宽鼻孔和成熟僵硬表情排除项前置进正向 prompt",
 
   "common_aesthetic_principles": {
     "base": "Universal aesthetic direction for every generated style: a clearly adult 22-23 year old mainland Chinese / East Asian beauty, slim oval-melon face with softly defined cheekbone arc and a clean narrow cheek-to-jaw transition, softly rounded small chin, fine willow brows, attractive lifted phoenix-almond / fox-almond eyes with strong catchlights and lively eye-smile, refined straight high East Asian nose bridge with compact nostrils, compact flower-petal medium-small mouth, near-clear pale baby-pink glossy lip-balm color, cool-neutral white-and-pink milk-fair Chinese complexion, natural black hair with real scalp part and flyaway strands, side or front-side light shaping cheekbone, nose bridge and jawline, readable scene-matching background depth, dynamic three-quarter posture, fully dressed lightweight or structured clothing that preserves a tasteful natural fuller upper-body-to-waist silhouette, restrained real-camera retouching, and no plain white background, thick shapeless clothing, flat frontal passport angle, lifeless expression, wide face, wide mouth, large nostrils, tan skin, amber skin cast, deep lipstick, mature executive face, or plastic hair",
-    "性感系": "Sexy style adaptation: make it a tasteful fully dressed fashion art portrait, with fitted satin, knit, qipao or tailored pieces, confident bright eye contact, refined collarbone and waist cues, natural fuller upper-body curve through fabric, lounge / hotel / city interior depth, and elegant sensuality without explicit exposure.",
-    "甜美系": "Sweet style adaptation: keep the face slim and dimensional rather than round, use playful lively eye-smile, fresh pale pink lips, light pastel or bright casual styling, warm cafe / garden / apartment details, candid motion, and a soft cheerful adult energy.",
-    "国风系": "Chinese classical style adaptation: keep the modern Chinese beauty face under the classical styling, with willow brows, phoenix-almond eyes, compact petal lips, fair milk-white skin, tactile silk or qipao / hanfu fabric, pavilion / tea room / Jiangnan garden depth, and elegant posture shaped by side light rather than fantasy flatness.",
-    "邻家女孩系": "Girl-next-door style adaptation: use relaxed neighborhood / cafe / street / apartment scenes, natural black hair, light casual fitted layers that do not hide the silhouette, bright approachable eye contact, candid movement, and fresh everyday Chinese attractiveness.",
-    "职场系": "Office style adaptation: use premium Chinese office-fashion portrait language, tailored blouse / blazer / dress with clean waist and collarbone cues, natural black hair, low-saturation peach-nude balm lips, confident but young 22-23 expression, warm office depth and skyline / desk-lamp bokeh, never a stiff LinkedIn headshot.",
-    "生活场景系": "Lifestyle style adaptation: preserve the winning lifestyle direction: lived-in apartment details, side-window shaping light, lightweight fitted fully dressed art-photo top, center torso and waist visible, hair behind one shoulder, lively eye-smile, and a fresh relaxed home-life moment.",
-    "清纯系": "Pure style adaptation: keep the subject clearly adult while fresh and clean, with white-and-pink milk-fair skin, transparent pale baby-pink lips, soft but lifted eyes, airy blouse / dress / casual fitted top, clean campus / cafe / apartment light, and gentle living energy without childish school styling."
+    "性感系": "Sexy and attractive style adaptation: make every automatic generation a tasteful fully dressed fashion art portrait, with fitted satin, knit, qipao or tailored pieces, confident bright eye contact, refined collarbone and waist cues, natural fuller upper-body curve through fabric, lounge / hotel / city interior depth, and elegant sensuality without explicit exposure."
   },
 
   "base_quality": [
@@ -332,17 +326,17 @@
       "soft dreamy expression with clear eyes, naturally pink low-saturation lips, fresh 22-23 softness, and gentle charm",
       "gentle surprised expression with round bright eyes, slightly open mouth, blushing cheeks, and clearly adult youthful beauty",
       "relaxed half-smile with bright eyes, natural bare-face glow, loose hair falling across face, and weekend softness",
-      "shy downcast eyes with a tiny smile, natural flush on cheeks, relaxed brows, and soft youthful mood"
+      "shy small smile with cheeks softly flushed, both eyes wide open and meeting the camera, relaxed brows, and soft youthful mood"
     ],
     "冷艳": [
       "cool clear gaze with soft brows, lifted eyes, soft cheeks, polished styling, and a still-youthful early-twenties look",
-      "quiet distant gaze with bright catchlights, natural lips, and graceful young-adult elegance",
+      "quiet steady gaze straight to camera with bright catchlights, both eyes wide open, natural lips, and graceful young-adult elegance",
       "sharp but relaxed eye contact, clean facial planes, soft lower-face contours, and a soft confident expression"
     ],
     "忧郁": [
-      "soft wistful gaze near the camera, fresh eyes, relaxed lips, and poetic quietness",
-      "thoughtful distant look with natural lips, relaxed brows, youthful softness, and gentle emotional depth",
-      "gentle reflective expression gazing out window, bright eyes, soft cheeks, and warm poetic mood"
+      "soft wistful gaze toward the lens with both eyes wide open, fresh eyes, relaxed lips, and poetic quietness",
+      "thoughtful steady look returning to camera with both eyes open, natural lips, relaxed brows, and gentle emotional depth",
+      "gentle reflective expression with bright open eyes turned to camera by the window, soft cheeks, and warm poetic mood"
     ],
     "自信": [
       "confident direct gaze with level chin, bright open eyes, slight natural smile, and fresh adult poise",
@@ -505,14 +499,8 @@
   ],
 
   "lip_color_palette": {
-    "甜美系": ["clear pale baby-pink jelly balm", "soft peach-pink translucent gloss", "barely-tinted natural rose-pink balm"],
-    "清纯系": ["near-clear pale baby-pink lip balm", "transparent natural lip-tone balm", "barely-there pale petal-pink gloss"],
     "性感系": ["glossy pale baby-pink balm", "soft peach-nude jelly gloss", "low-saturation natural rose balm"],
-    "邻家女孩系": ["natural lip-tone balm", "barely-tinted peach-pink gloss", "clear pale baby-pink balm"],
-    "国风系": ["clear pale petal-pink balm", "soft natural rose tint", "near-clear cherry-petal balm"],
-    "职场系": ["barely-tinted peach-beige balm", "low-saturation peach-nude gloss", "natural lip-tone balm"],
-    "生活场景系": ["near-clear pale baby-pink jelly balm", "transparent natural lip-tone balm", "barely-tinted petal-pink gloss"],
-    "default": ["near-clear pale baby-pink balm", "natural lip-tone balm", "barely-tinted petal-pink gloss"]
+    "default": ["glossy pale baby-pink balm", "soft peach-nude jelly gloss", "low-saturation natural rose balm"]
   },
 
   "negative_prompts": {

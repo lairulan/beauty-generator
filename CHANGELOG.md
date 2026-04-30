@@ -1,5 +1,26 @@
 # 版本历史
 
+## v12.44.0 (2026-05-01) - 自动文生图固定性感/吸引力写真风格
+
+### 改动
+- **自动风格固定**：GitHub Actions 自动发布固定 `STYLE=性感系`、`EMOTION=性感`，去掉按星期轮换到其他风格。
+- **生成入口规范化**：`generate_beauty.py` 自动模式会把旧 `style / emotion` 入参规范为性感系/性感，避免历史参数导致风格漂移。
+- **场景保护**：自动模式只保留室内/城市/特殊三类性感系适配场景，旧 `国风/职场/居家` 等场景入参会被忽略。
+- **策略收口**：`config/style_strategies.json` 只保留性感系策略，穿搭固定为 `性感`，场景保留室内/城市/特殊以维持变化。
+- **发布文案同步**：`publish_wechat.py` 与 `scripts/lib/captions.py` 只保留性感/吸引力写真标题和开场语。
+- **配置说明同步**：`README / SKILL / STATUS / WORKFLOW / prompt_library / constants` 更新到 v12.44。
+
+## v12.43.0 (2026-04-28) - 工程稳定性强化（codex 审查后修复）
+
+### 修复
+- **Python 3.9 兼容**：`scripts/lib/captions.py` 加 `from __future__ import annotations`，修 `dict | None` 在 3.9 下导入崩溃
+- **SSL fail-closed**：`_get_ssl_context()` 默认严格校验，仅在 `BEAUTY_ALLOW_INSECURE_SSL=1` 显式开启时回退到不验证证书
+- **豆包 URLError 重试**：网络错误从直接失败改为指数退避重试（与 5xx 一致）
+- **历史库路径修复**：`scripts/lib/llm_caption.py` 不再硬编码 `~/beauty-generator`，改用 `__file__` 推算 skill 根目录；邻居路径支持 `BEAUTY_PEER_HISTORY_FILE` env 覆盖
+- **CI 历史库提交**：`.github/workflows/daily-publish.yml` 把 `logs/caption_history.jsonl` 加入 git add；`.gitignore` 加例外
+- **prompt_library 弱冲突词清理**：删除 `downcast/distant gaze/distant look/looking away into distance` 等与「双眼全开/回看镜头」冲突的措辞
+- **lib/captions.py 修缺失依赖**：补 `json/datetime/CONFIG_DIR/clean_manual_prompt`，使 `load_manual_prompts/save_manual_prompt` 可独立调用
+
 ## v12.40.0 (2026-04-28) - LLM 文案：永不重复 + 图文匹配
 
 ### 文案链路重构

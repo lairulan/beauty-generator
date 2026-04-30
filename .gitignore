@@ -1,6 +1,10 @@
 # 日志
 logs/
 *.log
+# 例外：caption 历史库需要随仓库走（跨 skill 互查去重 + CI 持续累积）
+!logs/
+logs/*
+!logs/caption_history.jsonl
 
 # 临时文件
 output/
