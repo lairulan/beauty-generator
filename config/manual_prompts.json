@@ -127,6 +127,15 @@
       "title": "📸 生活场景系 V12.38 模板",
       "image_url": "",
       "created_at": "2026-04-26 09:12:48"
+    },
+    {
+      "id": 15,
+      "prompt": "3D建模质感与真人写真融合的写实风格，呈现一位明确成年、约25岁的中国女性时尚写真，精致小巧的东方审美脸型，茶色长发大波浪，身高约1米75，肤色白皙通透，五官清秀漂亮，长腿比例优雅。她穿着肉色紧身贴身体恤，但必须清楚呈现真实布料质感、缝线和衣物边界，完全着装、不裸露；搭配白色高腰紧身牛仔喇叭裤，腰线清晰，腿部线条修长。上围饱满但表达克制自然，时尚写真感，不低俗。一只手提奢华风格手提包，不出现真实品牌logo或可识别商标；另一只手自然抓着扶手。正面对镜头，低位仰拍视角，近景特写，强视觉冲击力，真实感，写实摄影风格，超高清画质，极致细腻清晰的皮肤纹理、发丝、布料纹理和牛仔细节，自然光影，电影级构图，photorealistic, ultra realistic, high detail, 8k, cinematic low-angle fashion portrait. Avoid celebrity likeness, avoid logos, avoid nudity, avoid transparent clothing, avoid explicit pose.",
+      "caption": "",
+      "tags": "#每日美女 #写真 #电影感 #人像摄影",
+      "title": "低位仰拍时尚写真",
+      "image_url": "https://i.ibb.co/CK5FyDTM/beauty.png",
+      "created_at": "2026-05-04 16:27:21"
     }
   ]
 }
