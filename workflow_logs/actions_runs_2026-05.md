@@ -10,3 +10,4 @@
 - 2026-05-05 00:31:10 | success | mode=t2i-manual | prompt=masterpiece, best quality, ultra-detailed, 8K. 一位明... | run=319 | https://github.com/lairulan/beauty-generator/actions/runs/25330500069
 - 2026-05-05 00:33:43 | success | mode=t2i-manual | prompt=masterpiece, best quality, ultra-detailed, 8K. 一位明... | run=320 | https://github.com/lairulan/beauty-generator/actions/runs/25330619328
 - 2026-05-05 00:35:50 | success | mode=t2i-manual | prompt=超高清但带有平庸 iPhone 日常抓拍质感的法式街拍风格照片，镜头平视拍摄，略带动态模糊，角度略尴... | run=321 | https://github.com/lairulan/beauty-generator/actions/runs/25330722236
+- 2026-05-05 00:44:10 | success | mode=t2i-manual | prompt=秋天红叶主题的超高清中国风人像写真，画面清晰，树叶纹理清楚可见，红叶层次丰富。主体是一位明确成年的中... | run=322 | https://github.com/lairulan/beauty-generator/actions/runs/25331110774
