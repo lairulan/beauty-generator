@@ -1,4 +1,4 @@
-# Beauty Generator V12.44
+# Beauty Generator V12.45
 
 > 双引擎艺术写真生成 + 性感/吸引力写真固定风格 + 公众号自动发布
 
@@ -27,8 +27,10 @@
 
 | 引擎 | 用途 | 说明 |
 |------|------|------|
-| Google Imagen 4 Ultra | 主力生成 | 高质量，生成后上传 imgbb 获取 URL；429 限流时会退避重试，并在当前运行内短暂跳过后续 Google 尝试 |
+| Google Imagen 4 Ultra | 主力生成 | 当前模型为 `imagen-4.0-ultra-generate-001`，适合纯文生图高质量写真；生成后上传 imgbb 获取 URL；429 限流时会退避重试，并在当前运行内短暂跳过后续 Google 尝试 |
 | 豆包 Seedream 4.5 | 自动回退 | Google 失败时自动切换，自带图片 URL |
+
+> 文生图继续使用 Imagen 4 Ultra，不切到 Gemini 图像编辑模型；图生图/参考图编辑更适合 Gemini 图像模型，纯文生图写真更适合 Imagen 4 Ultra。
 
 ## 自动风格（V12.44 固定）
 
@@ -80,7 +82,7 @@ python3 scripts/generate_beauty.py --list-options
 ### 环境变量
 
 ```bash
-export GOOGLE_API_KEY="..."    # Google Imagen 4 Ultra（主力）
+export GEMINI_API_KEY="..."    # Google Imagen 4 Ultra 统一 Key（主力，兼容旧 GOOGLE_API_KEY）
 export DOUBAO_API_KEY="..."    # 豆包 Seedream 4.5（回退）
 export IMGBB_API_KEY="..."     # imgbb 图片托管（Google 生成的图片需上传）
 export WECHAT_API_KEY="..."    # 微信公众号 API
@@ -88,6 +90,8 @@ export WECHAT_API_ALLOW_INSECURE_SSL="1"  # 可选：证书异常时允许临时
 ```
 
 `publish_wechat.py --test` 不需要 `WECHAT_API_KEY`，但仍需要生图相关环境变量。
+
+GitHub Actions 里仍复用现有 secret `GOOGLE_API_KEY`，但运行时注入为 `GEMINI_API_KEY`，与图生图链路保持统一。
 
 ## 文件结构
 
@@ -110,8 +114,8 @@ beauty-generator/
 
 ## 版本
 
-**V12.44.0** - 2026-05-01
+**V12.45.0** - 2026-05-07
 
-自动文生图和自动发布固定为性感系/相近吸引力写真风格，去掉按星期轮换到甜美、国风、职场、生活场景、清纯等其他风格的路径。
+文生图确认继续使用 `imagen-4.0-ultra-generate-001`，并统一改用 `GEMINI_API_KEY` 作为运行时 Key；旧 `GOOGLE_API_KEY` 仅保留本地兼容。
 
 详见 [CHANGELOG.md](CHANGELOG.md)

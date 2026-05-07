@@ -1,5 +1,14 @@
 # 版本历史
 
+## v12.45.0 (2026-05-07) - 文生图统一 Gemini Key，确认 Imagen 4 Ultra 主路径
+
+### 改动
+- **模型确认**：纯文生图继续使用 `imagen-4.0-ultra-generate-001`，保持 Imagen 4 Ultra 高质量照片路径，不切换到更适合图生图/参考图编辑的 Gemini 图像模型。
+- **统一 Key**：运行时优先读取 `GEMINI_API_KEY`，旧 `GOOGLE_API_KEY` 仅作为本地兼容兜底。
+- **移除 backup 分支**：不再读取 `GOOGLE_API_KEY_BACKUP`，日志、错误提示和运行时描述同步去掉双 Key 表述。
+- **Actions 兼容**：GitHub Actions 仍复用现有 secret `GOOGLE_API_KEY`，但注入为 `GEMINI_API_KEY`，与图生图链路保持同一套 Key 命名。
+- **文档同步**：README / SKILL / STATUS / WORKFLOW / constants 更新到 v12.45。
+
 ## v12.44.0 (2026-05-01) - 自动文生图固定性感/吸引力写真风格
 
 ### 改动

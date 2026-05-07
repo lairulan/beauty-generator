@@ -1,5 +1,5 @@
 {
-  "version": "12.44.0",
+  "version": "12.45.0",
   "engines": {
     "doubao": {
       "endpoint": "https://ark.cn-beijing.volces.com/api/v3/images/generations",
@@ -15,6 +15,7 @@
     "google": {
       "model": "imagen-4.0-ultra-generate-001",
       "endpoint": "https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-ultra-generate-001:predict",
+      "api_key_env": "GEMINI_API_KEY",
       "timeout": 120,
       "sample_count": 1,
       "aspect_ratio": "3:4",

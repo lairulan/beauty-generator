@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-美女生成 V12.44 - Google Imagen 4 Ultra 双 Key 主力 + 豆包 Seedream 4.5 备选
-- Google Imagen 4 Ultra 作为主力引擎，支持主备 Key 轮换
+美女生成 V12.45 - Google Imagen 4 Ultra 统一 Gemini Key 主力 + 豆包 Seedream 4.5 备选
+- Google Imagen 4 Ultra 作为纯文生图主力引擎，使用 GEMINI_API_KEY（兼容旧 GOOGLE_API_KEY）
 - 豆包 Seedream 4.5 作为 fallback（含 URLError 重试）
 - 自动重试 + 429 指数退避（最多 3 次）
 - 配置驱动风格策略（style_strategies.json）
@@ -27,7 +27,7 @@ from datetime import date, datetime
 from pathlib import Path
 
 
-VERSION = "12.44.0"
+VERSION = "12.45.0"
 
 
 # ─── 风格枚举常量（避免散字符串） ─────────────────────────────
@@ -152,6 +152,7 @@ GOOGLE_TIMEOUT = _google_cfg.get("timeout", 120)
 GOOGLE_SAMPLE_COUNT = _google_cfg.get("sample_count", 1)
 GOOGLE_ASPECT_RATIO = _google_cfg.get("aspect_ratio", "3:4")
 GOOGLE_IMAGE_SIZE = _google_cfg.get("image_size", "2K")
+GOOGLE_API_KEY_ENV = _google_cfg.get("api_key_env", "GEMINI_API_KEY")
 GOOGLE_RETRY_MAX_ATTEMPTS = _google_retry_cfg.get("max_attempts", 2)
 GOOGLE_RETRY_BASE_DELAY = _google_retry_cfg.get("base_delay", 15)
 GOOGLE_RETRY_MAX_DELAY = _google_retry_cfg.get("max_delay", 120)
@@ -892,18 +893,18 @@ def _get_google_suspend_message():
 
 
 def _get_google_key_candidates() -> list[tuple[str, str]]:
-    """返回按优先级排序的 Google API Key 候选。"""
-    candidates = []
-    seen = set()
-    for env_name, label in [
-        ("GOOGLE_API_KEY", "primary"),
-        ("GOOGLE_API_KEY_BACKUP", "backup")
-    ]:
-        value = os.environ.get(env_name, "").strip()
-        if value and value not in seen:
-            candidates.append((label, value))
-            seen.add(value)
-    return candidates
+    """返回 Google Imagen 使用的统一 Key；优先 GEMINI_API_KEY，兼容旧 GOOGLE_API_KEY。"""
+    primary_env = GOOGLE_API_KEY_ENV or "GEMINI_API_KEY"
+    primary_key = os.environ.get(primary_env, "").strip()
+    if primary_key:
+        return [(primary_env, primary_key)]
+
+    if primary_env != "GOOGLE_API_KEY":
+        legacy_key = os.environ.get("GOOGLE_API_KEY", "").strip()
+        if legacy_key:
+            return [("GOOGLE_API_KEY legacy", legacy_key)]
+
+    return []
 
 
 def _has_google_key_configured() -> bool:
@@ -1053,10 +1054,10 @@ def _generate_image_google_with_key(prompt: str, google_key: str) -> dict:
 
 
 def generate_image_google(prompt: str) -> dict:
-    """调用 Google Imagen 生成图片，支持主备 Key 轮换。"""
+    """调用 Google Imagen 4 Ultra 生成图片，使用统一 Gemini API Key。"""
     google_keys = _get_google_key_candidates()
     if not google_keys:
-        return {"success": False, "error": "GOOGLE_API_KEY / GOOGLE_API_KEY_BACKUP 均未设置"}
+        return {"success": False, "error": f"{GOOGLE_API_KEY_ENV} 未设置（兼容旧 GOOGLE_API_KEY）"}
 
     suspended = _get_google_suspend_message()
     if suspended:
@@ -1065,7 +1066,7 @@ def generate_image_google(prompt: str) -> dict:
     last_result = {"success": False, "error": "Google API 未返回结果"}
 
     for index, (label, google_key) in enumerate(google_keys, start=1):
-        log(f"  [Google] 尝试第 {index} 把 Key ({label})")
+        log(f"  [Google] 使用 Key: {label}")
         result = _generate_image_google_with_key(prompt, google_key)
         if result["success"]:
             return result
@@ -1208,25 +1209,25 @@ def _describe_runtime_engine() -> tuple[str, str]:
     """返回当前运行时的引擎描述与生成文案。"""
     google_keys = _get_google_key_candidates()
     has_google = bool(google_keys)
-    has_google_backup = len(google_keys) > 1
+    google_key_label = google_keys[0][0] if google_keys else ""
     has_doubao = bool(os.environ.get("DOUBAO_API_KEY"))
     force_google_only = os.environ.get("FORCE_GOOGLE_ONLY", "").strip().lower() in {"1", "true", "yes"}
 
     if has_google and force_google_only:
         return (
-            f"Google Imagen 4 Ultra {'双 Key ' if has_google_backup else ''}强制模式（模型: {GOOGLE_MODEL}）",
+            f"Google Imagen 4 Ultra 强制模式（模型: {GOOGLE_MODEL}，Key: {google_key_label}）",
             f"Google Imagen 4 Ultra，{GOOGLE_ASPECT_RATIO}，{GOOGLE_IMAGE_SIZE}"
         )
 
     if has_google and has_doubao:
         return (
-            f"Google Imagen 4 Ultra {'双 Key 主力' if has_google_backup else '主力'} + 豆包 Seedream 4.5 备选（Google: {GOOGLE_MODEL}）",
+            f"Google Imagen 4 Ultra 主力 + 豆包 Seedream 4.5 备选（Google: {GOOGLE_MODEL}，Key: {google_key_label}）",
             f"Google Imagen 4 Ultra 主力，{GOOGLE_ASPECT_RATIO}，{GOOGLE_IMAGE_SIZE}"
         )
 
     if has_google:
         return (
-            f"Google Imagen 4 Ultra {'双 Key ' if has_google_backup else ''}单引擎（模型: {GOOGLE_MODEL}）",
+            f"Google Imagen 4 Ultra 单引擎（模型: {GOOGLE_MODEL}，Key: {google_key_label}）",
             f"Google Imagen 4 Ultra，{GOOGLE_ASPECT_RATIO}，{GOOGLE_IMAGE_SIZE}"
         )
 
@@ -1332,7 +1333,7 @@ def generate_custom(prompt: str, count: int = 1) -> dict:
     prompt = clean_manual_prompt(prompt)
 
     if not os.environ.get("DOUBAO_API_KEY") and not _has_google_key_configured():
-        log("错误: 请设置 GOOGLE_API_KEY / GOOGLE_API_KEY_BACKUP 或 DOUBAO_API_KEY 环境变量", "ERROR")
+        log("错误: 请设置 GEMINI_API_KEY（兼容 GOOGLE_API_KEY）或 DOUBAO_API_KEY 环境变量", "ERROR")
         return {"success": False, "count": 0, "total": count, "character": {}, "images": []}
 
     log("=" * 60)
@@ -1409,7 +1410,7 @@ def generate_series(count: int = 3,
     """生成系列图片"""
 
     if not os.environ.get("DOUBAO_API_KEY") and not _has_google_key_configured():
-        log("错误: 请设置 GOOGLE_API_KEY / GOOGLE_API_KEY_BACKUP 或 DOUBAO_API_KEY 环境变量", "ERROR")
+        log("错误: 请设置 GEMINI_API_KEY（兼容 GOOGLE_API_KEY）或 DOUBAO_API_KEY 环境变量", "ERROR")
         return {"success": False, "count": 0, "total": count, "character": {}, "images": []}
 
     engine_title, generation_desc = _describe_runtime_engine()
@@ -1581,8 +1582,8 @@ def main():
 
     # 检查 API Key（预览和列表模式不需要）
     if not args.preview and not _has_google_key_configured() and not os.environ.get("DOUBAO_API_KEY"):
-        print("错误: 请设置 GOOGLE_API_KEY / GOOGLE_API_KEY_BACKUP 或 DOUBAO_API_KEY 环境变量")
-        print("Google: export GOOGLE_API_KEY='your-api-key'")
+        print("错误: 请设置 GEMINI_API_KEY（兼容 GOOGLE_API_KEY）或 DOUBAO_API_KEY 环境变量")
+        print("Google: export GEMINI_API_KEY='your-api-key'")
         print("豆包:   export DOUBAO_API_KEY='your-api-key'")
         return 1
 

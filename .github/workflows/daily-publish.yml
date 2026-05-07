@@ -115,8 +115,7 @@ jobs:
         if: steps.dedupe.outputs.should_run == 'true'
         env:
           FORCE_GOOGLE_ONLY: ${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.force_google_only == 'false') && '0' || '1' }}
-          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
-          GOOGLE_API_KEY_BACKUP: ${{ secrets.GOOGLE_API_KEY_BACKUP }}
+          GEMINI_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
           IMGBB_API_KEY: ${{ secrets.IMGBB_API_KEY }}
           WECHAT_API_KEY: ${{ secrets.WECHAT_API_KEY }}
           DOUBAO_API_KEY: ${{ secrets.DOUBAO_API_KEY }}

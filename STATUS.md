@@ -1,8 +1,9 @@
-# beauty-generator STATUS — 2026-05-01
+# beauty-generator STATUS — 2026-05-07
 
 ## 当前状态
-- **版本：v12.44.0**（2026-05-01：自动文生图固定为性感系/相近吸引力写真风格）
-- 主链路：Google Imagen 4 Ultra 生成；连接或生成失败时自动回退到豆包 Seedream 4.5
+- **版本：v12.45.0**（2026-05-07：文生图统一 Gemini Key，模型确认继续使用 Imagen 4 Ultra）
+- 主链路：Google Imagen 4 Ultra `imagen-4.0-ultra-generate-001` 生成；连接或生成失败时自动回退到豆包 Seedream 4.5
+- Key 策略：运行时优先读取 `GEMINI_API_KEY`；本地兼容旧 `GOOGLE_API_KEY`；不再读取 `GOOGLE_API_KEY_BACKUP`
 - 发布链路：`publish_wechat.py` 负责标题、开场文案、内容组装与公众号草稿箱发布
 - 自动风格：`性感系 / 性感`，旧 `style / emotion` 入参会被规范化，不再轮换其他风格
 - 自动场景：只保留 `室内 / 城市 / 特殊`，避免国风/职场/居家等旧场景把画面带回其他风格
@@ -11,7 +12,12 @@
 - 自动去重：自动触发前先检查 GitHub Actions 当日成功记录，再回查远端 `workflow_logs`
 - 测试模式：`--test` 只生成不发布，不要求 `WECHAT_API_KEY`
 
-## 断点（2026-05-01）
+## 断点（2026-05-07）
+- **v12.45.0**（2026-05-07）：文生图模型与 Key 链路整理
+  - 确认纯文生图继续使用 `imagen-4.0-ultra-generate-001`，这是当前 Imagen 4 Ultra 高质量路径
+  - runtime key 改为 `GEMINI_API_KEY`，旧 `GOOGLE_API_KEY` 仅本地兼容
+  - GitHub Actions 复用现有 secret `GOOGLE_API_KEY`，但注入环境变量为 `GEMINI_API_KEY`
+  - 删除 `GOOGLE_API_KEY_BACKUP` 运行时分支与文档说明，避免主备 Key 混乱
 - **本次完成**：v12.44.0 自动文生图固定性感系/相近吸引力写真
   - workflow 固定 `STYLE=性感系`、`EMOTION=性感`
   - `generate_beauty.py` 自动模式规范 style/emotion，`ALL_STYLES` 与策略只开放性感系
@@ -28,7 +34,7 @@
 - **v12.42.0**（同日）：闭眼防御 — 锁死「双眼全开」硬约束
 - **v12.41.0**（同日）：图启思考哲思短文 + LLM 标题 + plan B 排版（去 `>` 引用块）
 - **v12.40.0**（同日）：LLM 文案永不重复 + 图文匹配（保留作 fallback 链路）
-- **下一步**：下一次自动发布使用 v12.44 固定性感系策略（每天 3 次贴图，闭眼防御 + SSL 严格 + 重试稳健）
+- **下一步**：下一次自动发布使用 v12.45 固定性感系策略与统一 Gemini Key（每天 3 次贴图，闭眼防御 + SSL 严格 + 重试稳健）
 
 ## V12.40 关键变更（2026-04-28）
 - 新链路 `lib/llm_caption.py`（500+ 行）
@@ -41,7 +47,7 @@
 ## 环境
 - 仓库：https://github.com/lairulan/beauty-generator.git
 - 定时：UTC 12:00 = 北京时间 20:00（GitHub Actions schedule，今天保留）
-- API：Google Imagen 4 Ultra（主）+ 豆包 Seedream 4.5（兜底）+ imgbb（图床）+ Qwen-VL Plus（看图）+ DeepSeek（文案）
+- API：Google Imagen 4 Ultra `imagen-4.0-ultra-generate-001`（主，`GEMINI_API_KEY`）+ 豆包 Seedream 4.5（兜底）+ imgbb（图床）+ Qwen-VL Plus（看图）+ DeepSeek（文案）
 - 发布：三更熟公众号 (AppID: wx287cdb9d78a498aa)
 - 历史库：`logs/caption_history.jsonl`（与 i2i 互查防撞文）
 
@@ -53,6 +59,6 @@
 - LLM 文案 `_BANNED_WORDS`（已规避陈词滥调）
 
 ## 已知限制
-- Google Imagen 主 key 受"Imagen 3 paid plans only"限制，依赖 backup key
+- Google Imagen 4 Ultra 需要可用的付费 Gemini API Key；本地若只设置旧 `GOOGLE_API_KEY` 仍可兼容运行
 - `FORCE_GOOGLE_ONLY=1` 模式下豆包不兜底（生产 daily-publish.yml 默认开启）
 - LLM 文案历史库永久增长（每条 < 1KB，10 年也才几 MB，无需清理）
