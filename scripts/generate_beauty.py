@@ -27,7 +27,7 @@ from datetime import date, datetime
 from pathlib import Path
 
 
-VERSION = "12.45.0"
+VERSION = "12.45.1"
 
 
 # ─── 风格枚举常量（避免散字符串） ─────────────────────────────

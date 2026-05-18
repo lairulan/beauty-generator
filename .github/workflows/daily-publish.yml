@@ -23,10 +23,10 @@ on:
         required: false
         default: ''
       force_google_only:
-        description: 'Google 限流时是否禁用豆包兜底（默认 true 保持生产行为）'
+        description: 'Google 限流时是否禁用豆包兜底（默认 false，允许豆包补位）'
         required: false
         type: boolean
-        default: true
+        default: false
 
   repository_dispatch:
     types: [daily-beauty]
@@ -114,7 +114,7 @@ jobs:
       - name: 文生图·每日3次贴图
         if: steps.dedupe.outputs.should_run == 'true'
         env:
-          FORCE_GOOGLE_ONLY: ${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.force_google_only == 'false') && '0' || '1' }}
+          FORCE_GOOGLE_ONLY: ${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.force_google_only == 'true') && '1' || '0' }}
           GEMINI_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
           IMGBB_API_KEY: ${{ secrets.IMGBB_API_KEY }}
           WECHAT_API_KEY: ${{ secrets.WECHAT_API_KEY }}

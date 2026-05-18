@@ -1,12 +1,12 @@
 ---
 name: beauty-generator
-version: 12.45.0
+version: 12.45.1
 description: 独立文生图写真仓库。Google Imagen 4 Ultra (`imagen-4.0-ultra-generate-001`) 主力，统一使用 GEMINI_API_KEY（本地兼容旧 GOOGLE_API_KEY），Doubao Seedream 4.5 回退，自动文生图和自动发布固定为性感系/相近吸引力写真风格，支持 22-23 岁年轻成人女性写真 prompt、东方审美原则、明亮清透中国东方审美脸部档案、高键清透但避免平面证件照、冷中性白里透红/奶白东亚肤色、近乎透明淡婴儿粉水润唇、凤眼感杏眼/狐狸杏眼、眼尾上扬、强 catchlight 回看镜头眼神吸引力、自然发缝/碎发/轻微毛躁/真实发丝密度、鹅蛋瓜子脸/窄颌柔下巴、小巧高鼻梁和小鼻翼小鼻孔、颧骨弧线、鼻梁高光、鼻侧微阴影、清晰但年轻的下颌转折、五官和谐漂亮、有生活背景和活力姿态、轻薄或结构化 fully dressed 性感艺术照式丰满但非露骨胸腰轮廓、无遮挡构图、场景/情绪控制、手动 prompt、手动模板提示词库、公众号草稿箱发布。Use when user asks to generate beauty images ("生成美女", "每日美女", "发布美女", "艺术写真", "文生图美女").
 author: rulanlai
 tags: [image-generation, beauty, wechat, google, doubao, seedream]
 ---
 
-# Beauty Generator - 文生图写真 V12.45
+# Beauty Generator - 文生图写真 V12.45.1
 
 纯文生图模式：Google Imagen 4 Ultra（主力）+ 豆包 Seedream 4.5（兜底）。自动模式固定为性感系/相近吸引力写真，从元素库随机组合人物、场景、穿搭、光线和艺术风格，生成高质量年轻成熟女性艺术写真，并可直接发布到微信公众号草稿箱。
 
@@ -36,6 +36,7 @@ tags: [image-generation, beauty, wechat, google, doubao, seedream]
 - **Google Imagen 4 Ultra（主路径）不接收 negative_prompt** — 所有肤色/唇色/比例/排他约束都必须在正向 prompt 前半段硬约束。
 - **豆包 Seedream 4.5（fallback）使用 negative_prompt** — V12.39 起按 pose/style 分类拼接，避免单串被截断。
 - **`FORCE_GOOGLE_ONLY=1`** 模式下豆包不兜底，Google 失败即返回错误，适合需要严格保证主路径成功率的场景。
+- 生产 workflow 默认 `FORCE_GOOGLE_ONLY=0`，Google 限流或失败时会启用豆包兜底；手动运行仍可勾选 `force_google_only=true` 临时禁用兜底。
 - **图床默认仅 imgbb 单点**（`config/constants.json` 中 `image_hosts` 默认配置）。需要双图床冗余时可在配置里加 `sm.ms`，代码已支持。
 
 ## 与 beauty-img2img（图生图）的区别

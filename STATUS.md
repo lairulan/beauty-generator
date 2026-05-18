@@ -1,7 +1,7 @@
-# beauty-generator STATUS — 2026-05-07
+# beauty-generator STATUS — 2026-05-18
 
 ## 当前状态
-- **版本：v12.45.0**（2026-05-07：文生图统一 Gemini Key，模型确认继续使用 Imagen 4 Ultra）
+- **版本：v12.45.1**（2026-05-18：生产 workflow 默认启用豆包兜底）
 - 主链路：Google Imagen 4 Ultra `imagen-4.0-ultra-generate-001` 生成；连接或生成失败时自动回退到豆包 Seedream 4.5
 - Key 策略：运行时优先读取 `GEMINI_API_KEY`；本地兼容旧 `GOOGLE_API_KEY`；不再读取 `GOOGLE_API_KEY_BACKUP`
 - 发布链路：`publish_wechat.py` 负责标题、开场文案、内容组装与公众号草稿箱发布
@@ -13,6 +13,10 @@
 - 测试模式：`--test` 只生成不发布，不要求 `WECHAT_API_KEY`
 
 ## 断点（2026-05-07）
+- **v12.45.1**（2026-05-18）：生产兜底恢复
+  - `force_google_only` 手动输入默认改为 `false`
+  - 生产 workflow 默认 `FORCE_GOOGLE_ONLY=0`，Google 429/失败时自动回退 Doubao Seedream 4.5
+  - 仍可在 workflow_dispatch 中显式传 `force_google_only=true` 临时禁用兜底
 - **v12.45.0**（2026-05-07）：文生图模型与 Key 链路整理
   - 确认纯文生图继续使用 `imagen-4.0-ultra-generate-001`，这是当前 Imagen 4 Ultra 高质量路径
   - runtime key 改为 `GEMINI_API_KEY`，旧 `GOOGLE_API_KEY` 仅本地兼容
@@ -60,5 +64,5 @@
 
 ## 已知限制
 - Google Imagen 4 Ultra 需要可用的付费 Gemini API Key；本地若只设置旧 `GOOGLE_API_KEY` 仍可兼容运行
-- `FORCE_GOOGLE_ONLY=1` 模式下豆包不兜底（生产 daily-publish.yml 默认开启）
+- `FORCE_GOOGLE_ONLY=1` 模式下豆包不兜底；生产默认关闭该模式，仅手动排障时启用
 - LLM 文案历史库永久增长（每条 < 1KB，10 年也才几 MB，无需清理）

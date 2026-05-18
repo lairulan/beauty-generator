@@ -114,6 +114,10 @@ beauty-generator/
 
 ## 版本
 
+**V12.45.1** - 2026-05-18
+
+生产 workflow 默认恢复豆包兜底：`force_google_only=false`、`FORCE_GOOGLE_ONLY=0`，Google 429/失败时自动回退 Doubao Seedream 4.5；手动运行仍可显式开启 Google-only 排障。
+
 **V12.45.0** - 2026-05-07
 
 文生图确认继续使用 `imagen-4.0-ultra-generate-001`，并统一改用 `GEMINI_API_KEY` 作为运行时 Key；旧 `GOOGLE_API_KEY` 仅保留本地兼容。
